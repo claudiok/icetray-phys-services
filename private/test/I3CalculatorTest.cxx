@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.9 2004/12/03 20:19:56 dule Exp $
+    $Id: I3CalculatorTest.cxx,v 1.10 2004/12/08 17:46:51 pretz Exp $
 
-    @version $Revision: 1.9 $
-    @date $Date: 2004/12/03 20:19:56 $
+    @version $Revision: 1.10 $
+    @date $Date: 2004/12/08 17:46:51 $
     @author pretz
 
     @todo
@@ -49,8 +49,6 @@ namespace tut
    * Make sure that the changing of coordinate systems works well
    */
   void object::test<1>(){
-    Double_t pi = 3.14159265358979323846;
-
     cout <<"Creating I3Position p,q,r..."<<endl;
     I3Position p(1,1,1);
     I3Position q(2,2,2);

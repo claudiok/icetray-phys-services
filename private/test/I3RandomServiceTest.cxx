@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3RandomServiceTest.cxx,v 1.2 2004/11/02 02:24:38 pretz Exp $
+    $Id: I3RandomServiceTest.cxx,v 1.3 2004/12/08 17:46:51 pretz Exp $
 
-    @version $Revision: 1.2 $
-    @date $Date: 2004/11/02 02:24:38 $
+    @version $Revision: 1.3 $
+    @date $Date: 2004/12/08 17:46:51 $
     @author pretz
 
     @todo
@@ -47,7 +47,7 @@ namespace tut
 		      double expected_stddev)
   {
     double sum = 0;
-    for(int i = 0 ; i < values.size() ; i++)
+    for(unsigned int i = 0 ; i < values.size() ; i++)
       {
 	sum += values[i];
       }
@@ -57,7 +57,7 @@ namespace tut
     vector<double> differences;
     differences.resize(values.size());
     
-    for(int i = 0 ; i < values.size() ; i++)
+    for(unsigned int i = 0 ; i < values.size() ; i++)
       {
 	differences[i] = 
 	  (values[i] - measured_average) * 
@@ -67,7 +67,7 @@ namespace tut
     
     sum = 0;
     
-    for(int i = 0; i < values.size() ; i++)
+    for(unsigned int i = 0; i < values.size() ; i++)
       {
 	sum += differences[i];
       }
