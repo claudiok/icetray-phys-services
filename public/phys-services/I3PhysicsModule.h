@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.8 2004/10/20 12:12:15 pretz Exp $
+ * $Id: I3PhysicsModule.h,v 1.9 2004/11/10 20:07:06 tmccauley Exp $
  *
  * @file I3PhysicsModule.h
- * @version $Revision: 1.8 $
- * @date $Date: 2004/10/20 12:12:15 $
+ * @version $Revision: 1.9 $
+ * @date $Date: 2004/11/10 20:07:06 $
  * @author pretz
  */
 
@@ -17,6 +17,7 @@
 #include "dataclasses/I3MCEvent.h"
 #include "dataclasses/I3MCEventHeader.h"
 #include "dataclasses/I3Geometry.h"
+#include "dataclasses/I3Calibration.h"
 #include "dataclasses/I3GeometryHeader.h"
 #include "icetray/I3FrameAccess.h"
 #include "I3ParticleDataService.h"
@@ -246,6 +247,33 @@ class I3PhysicsModule : public I3Module
   {
     return I3FrameAccess<I3EventHeader>::Put(frame,header,name);
   }
+
+  /**
+   * Method to check for calibration in frame
+   */
+  Bool_t HasCalibration(I3Frame& frame, const string& name = "Calibration")
+  {
+      return I3FrameAccess<I3Calibration>::Exists(frame,name);
+  }
+    
+  /**
+   * Method to put calibration into frame
+   */
+  Bool_t PutCalibration(I3Frame& frame,
+			I3CalibPtr calib,
+			const string& name = "Calibration")
+  {
+      return I3FrameAccess<I3Calibration>::Put(frame,calib,name);
+  }
+   
+  /**
+   * Method to get calibration from frame
+   */
+  I3Calibration& GetCalibration(I3Frame& frame, const string& name = "Calibration")
+  {
+      return I3FrameAccess<I3Calibration>::Get(frame,name);
+  }
+    
 
   /**
    * Checks to see if a frame has a geometry in it
