@@ -1,7 +1,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.2.2.1 2004/04/10 17:10:40 troy Exp $
+ * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.2.2.2 2004/04/13 10:32:05 troy Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -22,7 +22,7 @@ ClassImp(I3ParticleDataServiceFactory);
 
 // Constructors
 
-// FIXME: string! string! string!
+// FIXME: use std::string
 I3ParticleDataServiceFactory::I3ParticleDataServiceFactory(const char* name)
   : I3ServiceFactory(name)
 {
