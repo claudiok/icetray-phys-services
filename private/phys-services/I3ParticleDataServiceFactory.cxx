@@ -1,7 +1,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.1 2004/02/17 21:17:14 pretz Exp $
+ * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.2 2004/04/02 20:13:29 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -25,7 +25,7 @@ ClassImp(I3ParticleDataServiceFactory);
 I3ParticleDataServiceFactory::I3ParticleDataServiceFactory(const char* name)
   : I3ServiceFactory(name)
 {
-  if (0 == GetServiceName()) {
+  if (!IsNameSet()) {
     SetServiceName(I3ParticleDataService::DefaultName());
   }
 }
@@ -46,5 +46,5 @@ I3ParticleDataServiceFactory::InstallService(I3Services& services,
   I3ParticleDataService* pds = new I3ParticleDataService();
   return I3ServicesAccess<I3ParticleDataService>::Put(services,
 						      pds,
-						      GetServiceName());
+						      GetServiceName().c_str());
 }
