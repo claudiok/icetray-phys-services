@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorImpl.cxx,v 1.7 2004/09/14 15:28:59 dule Exp $
+    $Id: I3CalculatorImpl.cxx,v 1.8 2004/11/25 05:59:08 dule Exp $
 
-    @version $Revision: 1.7 $
-    @date $Date: 2004/09/14 15:28:59 $
+    @version $Revision: 1.8 $
+    @date $Date: 2004/11/25 05:59:08 $
     @author
 
     @todo
@@ -206,8 +206,8 @@ Bool_t I3CalculatorImpl::IsOnTrack(I3TrackPtr track,
 
 //--------------------------------------------------------------
 // Return the distance of closets approach from I3Track to I3Position
-  Double_t I3CalculatorImpl::ClosestApproachDistance(I3TrackPtr track,
-						     I3Position& pos)
+Double_t I3CalculatorImpl::ClosestApproachDistance(I3TrackPtr track,
+						   I3Position& pos)
 {
   I3Position appos,chpos;
   Double_t apdist,chtime,chdist;
@@ -217,9 +217,9 @@ Bool_t I3CalculatorImpl::IsOnTrack(I3TrackPtr track,
 
 //--------------------------------------------------------------
 // Return the time for Cherenkov photon from I3Track to I3Position
-  Double_t I3CalculatorImpl::CherenkovTime(I3TrackPtr track,
-					   I3Position& pos,
-					   Double_t IndexRef)
+Double_t I3CalculatorImpl::CherenkovTime(I3TrackPtr track,
+					 I3Position& pos,
+					 Double_t IndexRef)
 {
   I3Position appos,chpos;
   Double_t apdist,chtime,chdist;
@@ -229,8 +229,8 @@ Bool_t I3CalculatorImpl::IsOnTrack(I3TrackPtr track,
 
 //--------------------------------------------------------------
 // Return the time for Cherenkov photon from I3Track to I3Position
-  Double_t I3CalculatorImpl::CherenkovDistance(I3TrackPtr track,
-					       I3Position& pos)
+Double_t I3CalculatorImpl::CherenkovDistance(I3TrackPtr track,
+					     I3Position& pos)
 {
   I3Position appos,chpos;
   Double_t apdist,chtime,chdist;
@@ -241,9 +241,9 @@ Bool_t I3CalculatorImpl::IsOnTrack(I3TrackPtr track,
 //--------------------------------------------------------------
 // Return angle between incident Cherenkov direction onto the DOM
 // and the -z axis, at I3Position (DOM)
-  Double_t I3CalculatorImpl::CherenkovAngle(I3TrackPtr track,
-					    I3Position& pos,
-					    I3OMGeo::EOrientation orient)
+Double_t I3CalculatorImpl::CherenkovAngle(I3TrackPtr track,
+					  I3Position& pos,
+					  I3OMGeo::EOrientation orient)
 {
   I3Position appos,chpos;
   Double_t apdist,chtime,chdist;
@@ -257,9 +257,9 @@ Bool_t I3CalculatorImpl::IsOnTrack(I3TrackPtr track,
 
 //--------------------------------------------------------------
 // Return the time for photon from I3Cascade to I3Position
-  Double_t I3CalculatorImpl::CascadeTime(I3CascadePtr cascade,
-					 I3Position& pos,
-					 Double_t IndexRef)
+Double_t I3CalculatorImpl::CascadeTime(I3CascadePtr cascade,
+				       I3Position& pos,
+				       Double_t IndexRef)
 {
   Double_t speed=c/IndexRef;
   return pos.CalcDistance(cascade->GetPos())/speed;
@@ -267,10 +267,22 @@ Bool_t I3CalculatorImpl::IsOnTrack(I3TrackPtr track,
 
 //--------------------------------------------------------------
 // Return the distance from I3Cascade to I3Position
-  Double_t I3CalculatorImpl::CascadeDistance(I3CascadePtr cascade,
-					     I3Position& pos)
+Double_t I3CalculatorImpl::CascadeDistance(I3CascadePtr cascade,
+					   I3Position& pos)
 {
   return pos.CalcDistance(cascade->GetPos());
+}
+
+//--------------------------------------------------------------
+// Return the angle between two tracks
+Double_t I3CalculatorImpl::AngleDiff(I3TrackPtr track1,
+				     I3TrackPtr track2)
+{
+  I3Direction dir1(track1->GetDir());
+  I3Direction dir2(track2->GetDir());
+  dir1.RotateZ(-dir2.CalcPhi());
+  dir1.RotateY(-dir2.CalcTheta());
+  return dir1.CalcTheta();
 }
 
 //--------------------------------------------------------------

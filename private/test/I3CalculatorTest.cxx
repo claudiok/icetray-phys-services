@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.4 2004/10/25 11:50:04 troy Exp $
+    $Id: I3CalculatorTest.cxx,v 1.5 2004/11/25 05:59:09 dule Exp $
 
-    @version $Revision: 1.4 $
-    @date $Date: 2004/10/25 11:50:04 $
+    @version $Revision: 1.5 $
+    @date $Date: 2004/11/25 05:59:09 $
     @author pretz
 
     @todo
@@ -231,6 +231,18 @@ namespace tut
 
     ensure_distance("CascadeDistance failed",calc.CascadeDistance(cascptr,r),
 		    2.*sqrt(3.),0.001);
+
+    cout <<"AngleDiff..."<<endl; //-------------------------
+
+    ensure_distance("AngleDiff failed",calc.AngleDiff(track_inf,muon)/deg,
+		    90*deg,0.001);
+
+    I3BasicMuonPtr track1 (new I3BasicMuon);
+    track1->SetDir(0,1,-1);
+    I3BasicMuonPtr track2 (new I3BasicMuon);
+    track2->SetDir(1,0,-1);
+    ensure_distance("AngleDiff failed",calc.AngleDiff(track1,track2)/deg,
+		    60*deg,0.001);
 
   }
 }

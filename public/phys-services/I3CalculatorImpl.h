@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3CalculatorImpl.h,v 1.4 2004/09/14 15:30:38 dule Exp $
+ * $Id: I3CalculatorImpl.h,v 1.5 2004/11/25 05:59:09 dule Exp $
  *
  * @file I3CalculatorImpl.h
- * @version $Revision: 1.4 $
- * @date $Date: 2004/09/14 15:30:38 $
+ * @version $Revision: 1.5 $
+ * @date $Date: 2004/11/25 05:59:09 $
  * @author dule
  */
 #ifndef I3CALCULATORIMPL_H
@@ -174,6 +174,15 @@ class I3CalculatorImpl : public I3Calculator
    */
   Double_t CascadeDistance(I3CascadePtr cascade,
 			   I3Position& pos);
+
+  /**
+   * Output the 3D angle between two tracks
+   *
+   * @param track1 first track
+   * @param track2 second track
+   */
+  Double_t AngleDiff(I3TrackPtr track1,
+		     I3TrackPtr track2);
 
 
  protected:
