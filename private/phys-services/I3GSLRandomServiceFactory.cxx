@@ -1,7 +1,7 @@
 /*
  * class: I3GSLRandomServiceFactory
  *
- * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.2 2004/10/20 12:12:15 pretz Exp $
+ * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.3 2005/03/09 19:12:24 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -26,9 +26,6 @@ I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(I3Context& context)
   : I3ServiceFactory(context),
     random(0)
 {
-  if (!IsNameSet()) {
-    SetServiceName(I3GSLRandomService::DefaultName());
-  }
 }
 
 // Destructors
@@ -46,5 +43,5 @@ I3GSLRandomServiceFactory::InstallService(I3Services& services)
     random = I3RandomServicePtr(new I3GSLRandomService());
   return I3ServicesAccess<I3RandomService>::Put(services,
 						random,
-						GetServiceName().c_str());
+						I3RandomService::DefaultName());
 }

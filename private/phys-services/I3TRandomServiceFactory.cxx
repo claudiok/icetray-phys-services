@@ -1,7 +1,7 @@
 /*
  * class: I3TRandomServiceFactory
  *
- * Version $Id: I3TRandomServiceFactory.cxx,v 1.7 2004/10/20 12:12:15 pretz Exp $
+ * Version $Id: I3TRandomServiceFactory.cxx,v 1.8 2005/03/09 19:12:24 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -25,9 +25,6 @@ ClassImp(I3TRandomServiceFactory);
 I3TRandomServiceFactory::I3TRandomServiceFactory(const I3Context& context)
   : I3ServiceFactory(context)
 {
-  if (!IsNameSet()) {
-    SetServiceName(I3TRandomService::DefaultName());
-  }
 }
 
 // Destructors
@@ -44,5 +41,5 @@ I3TRandomServiceFactory::InstallService(I3Services& services)
   I3RandomServicePtr random ( new I3TRandomService());
   return I3ServicesAccess<I3RandomService>::Put(services,
 						random,
-						GetServiceName().c_str());
+						I3RandomService::DefaultName());
 }
