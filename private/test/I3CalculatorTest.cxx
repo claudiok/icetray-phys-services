@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.3 2004/10/11 07:02:11 troy Exp $
+    $Id: I3CalculatorTest.cxx,v 1.4 2004/10/25 11:50:04 troy Exp $
 
-    @version $Revision: 1.3 $
-    @date $Date: 2004/10/11 07:02:11 $
+    @version $Revision: 1.4 $
+    @date $Date: 2004/10/25 11:50:04 $
     @author pretz
 
     @todo
@@ -101,8 +101,7 @@ namespace tut
 
     cout <<" distance inftrack-pos: "<<calc.StartDistance(inftrackptr,r)<<
       " <-- this should be nan!"<<endl;
-    ensure_equals("StartDistance(InfTrack,Pos) failed",
-		  isnan(calc.StartDistance(inftrackptr,r)),1);
+    ensure("StartDistance(InfTrack,Pos) failed", isnan(calc.StartDistance(inftrackptr,r)));
 
     cout <<"ShiftAlongTrack..."<<endl; //-------------------------
 
@@ -152,8 +151,7 @@ namespace tut
     cout<<" cherenkov-time(start,[0,0,0]): "
 	<<calc.CherenkovTime(starttrackptr,a1)/ns
 	<<" <-- this should be nan!"<<endl;
-    ensure_equals("CherenkovTime failed",
-		  isnan(calc.CherenkovTime(starttrackptr,a1)),1);
+    ensure("CherenkovTime failed", isnan(calc.CherenkovTime(starttrackptr,a1)));
 
     a1.SetPosition(1,0,-1);
     cout<<" cherenkov-time(start,[1,0,-1]): "
@@ -179,8 +177,7 @@ namespace tut
     cout<<" cherenkov-distance(start,[0,0,0]): "
 	<<calc.CherenkovDistance(starttrackptr,a1)
 	<<" <-- this should be nan!"<<endl;
-    ensure_equals("CherenkovDistance(starttrack,[0,0,0]) failed",
-		  isnan(calc.CherenkovDistance(starttrackptr,a1)),1);
+    ensure("CherenkovDistance(starttrack,[0,0,0]) failed", isnan(calc.CherenkovDistance(starttrackptr,a1)));
 
     a1.SetPosition(1,0,-1);
     cout<<" cherenkov-distance(start,[1,0,-1]): "
