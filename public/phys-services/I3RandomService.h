@@ -1,25 +1,36 @@
-#ifndef I3RANDOMSERVICE_H
-#define I3RANDOMSERVICE_H
-
-#include "Rtypes.h"
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3RandomService.h,v 1.6 2004/10/18 14:21:42 pretz Exp $
+ * $Id: I3RandomService.h,v 1.7 2004/10/20 12:12:15 pretz Exp $
  *
- * @brief This class provides an interface to random numbers suitable for use by
- * icetray modules.  
  *
  * This class is just the interface.  The names chosen
  * reflect ROOT's TRandom interface.  Indeed TRandom could be used to 
  * trivially fill this interface
  *
- * @version $Revision: 1.6 $
- * @date $Date: 2004/10/18 14:21:42 $
+ * @version $Revision: 1.7 $
+ * @date $Date: 2004/10/20 12:12:15 $
  * @author pretz
  *
  * @todo 
  */
+
+#ifndef I3RANDOMSERVICE_H
+#define I3RANDOMSERVICE_H
+
+#include "Rtypes.h"
+#include "dataclasses/StoragePolicy.h"
+
+/**
+ * @brief This class provides an interface to random numbers suitable for use
+ * by icetray modules.
+ *
+ * This class is just the interface.  The names chosen
+ * reflect ROOT's TRandom interface.  Indeed TRandom could be used to 
+ * trivially fill this interface
+ *
+ */
+
 class I3RandomService {
  public:
   /**
@@ -84,5 +95,6 @@ class I3RandomService {
   ClassDef(I3RandomService,0);
 };
 
+typedef PtrPolicy<I3RandomService>::ThePolicy I3RandomServicePtr;
 
 #endif //I3RANDOMSERVICE_H

@@ -1,7 +1,7 @@
 /*
  * class: I3GSLRandomServiceFactory
  *
- * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.1 2004/10/18 14:21:42 pretz Exp $
+ * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.2 2004/10/20 12:12:15 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -22,8 +22,8 @@ ClassImp(I3GSLRandomServiceFactory);
 
 // Constructors
 
-I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(const char* name)
-  : I3ServiceFactory(name),
+I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(I3Context& context)
+  : I3ServiceFactory(context),
     random(0)
 {
   if (!IsNameSet()) {
@@ -40,13 +40,11 @@ I3GSLRandomServiceFactory::~I3GSLRandomServiceFactory()
 // Member functions
 
 Bool_t
-I3GSLRandomServiceFactory::InstallService(I3Services& services,
-				   const I3Context& context,
-				   const char* moduleName)
+I3GSLRandomServiceFactory::InstallService(I3Services& services)
 {
   if(!random)
-    random = new I3GSLRandomService();
-  return I3ServicesAccess<I3RandomService>::Lend(services,
+    random = I3RandomServicePtr(new I3GSLRandomService());
+  return I3ServicesAccess<I3RandomService>::Put(services,
 						random,
 						GetServiceName().c_str());
 }

@@ -3,7 +3,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.h,v 1.3 2004/05/10 15:57:54 pretz Exp $
+ * Version $Id: I3ParticleDataServiceFactory.h,v 1.4 2004/10/20 12:12:15 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -32,7 +32,7 @@ using namespace std;
 /**
  * @brief Installs a I3ParticleDataService.
  *
- * @version $Id: I3ParticleDataServiceFactory.h,v 1.3 2004/05/10 15:57:54 pretz Exp $
+ * @version $Id: I3ParticleDataServiceFactory.h,v 1.4 2004/10/20 12:12:15 pretz Exp $
  * @author pretz
  */
 class I3ParticleDataServiceFactory
@@ -42,7 +42,7 @@ class I3ParticleDataServiceFactory
 
   // Constructors and destructor
 
-  I3ParticleDataServiceFactory(const char* name = 0);
+  I3ParticleDataServiceFactory(const I3Context& context);
 
   virtual ~I3ParticleDataServiceFactory();
 
@@ -57,9 +57,7 @@ class I3ParticleDataServiceFactory
    * being installed.
    * @return true if the services is successfully installed.
    */
-  virtual Bool_t InstallService(I3Services& services,
-				const I3Context& context,
-				const char* moduleName);
+  virtual Bool_t InstallService(I3Services& services);
 
  private:
 

@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.7 2004/09/17 21:12:02 pretz Exp $
+ * $Id: I3PhysicsModule.h,v 1.8 2004/10/20 12:12:15 pretz Exp $
  *
  * @file I3PhysicsModule.h
- * @version $Revision: 1.7 $
- * @date $Date: 2004/09/17 21:12:02 $
+ * @version $Revision: 1.8 $
+ * @date $Date: 2004/10/20 12:12:15 $
  * @author pretz
  */
 
@@ -121,7 +121,7 @@ class I3PhysicsModule : public I3Module
    * @param name the name of the event in the frame.  Defaults to 'Physics'
    * @return true if it is successful, false if otherwise
    */
-  Bool_t PutMCEvent(I3Frame& frame,I3MCEvent* event,
+  Bool_t PutMCEvent(I3Frame& frame,I3MCEventPtr event,
 		    const string& name="Physics")
     {
       return I3FrameAccess<I3MCEvent>::Put(frame,event,name);
@@ -157,7 +157,7 @@ class I3PhysicsModule : public I3Module
    * @param name the name of the event in the frame.  Defaults to 'Physics'
    * @return true if it is successful, false if otherwise
    */
-  Bool_t PutEvent(I3Frame& frame,I3Event* event,const string& name="Physics")
+  Bool_t PutEvent(I3Frame& frame,I3EventPtr event,const string& name="Physics")
   {
     return I3FrameAccess<I3Event>::Put(frame,event,name);
   }
@@ -198,7 +198,7 @@ class I3PhysicsModule : public I3Module
    * @return true if it is successful, false if otherwise
    */
   Bool_t PutMCEventHeader(I3Frame& frame,
-                        I3MCEventHeader* header,
+                        I3MCEventHeaderPtr header,
                         const string& name="PhysicsHeader")
     {
       return I3FrameAccess<I3MCEventHeader>::Put(frame,header,name);
@@ -241,7 +241,7 @@ class I3PhysicsModule : public I3Module
    * @return true if it is successful, false if otherwise
    */
   Bool_t PutEventHeader(I3Frame& frame,
-			I3EventHeader* header,
+			I3EventHeaderPtr header,
 			const string& name="PhysicsHeader")
   {
     return I3FrameAccess<I3EventHeader>::Put(frame,header,name);
@@ -277,7 +277,7 @@ class I3PhysicsModule : public I3Module
    * @return true if it is successful, false if otherwise
    */
   Bool_t PutGeometry(I3Frame& frame,
-		     I3Geometry* geometry,
+		     I3GeometryPtr geometry,
 		     const string& name="Geometry")
     {
       return I3FrameAccess<I3Geometry>::Put(frame,geometry,name);
@@ -318,7 +318,7 @@ class I3PhysicsModule : public I3Module
    * @return true if it is successful, false if otherwise
    */
   Bool_t PutEventHeader(I3Frame& frame,
-			I3GeometryHeader* header,
+			I3GeometryHeaderPtr header,
 			const string& name="GeometryHeader")
   {
     return I3FrameAccess<I3GeometryHeader>::Put(frame,header,name);

@@ -1,7 +1,7 @@
 /*
  * class: I3TRandomServiceFactory
  *
- * Version $Id: I3TRandomServiceFactory.cxx,v 1.6 2004/09/17 21:12:02 pretz Exp $
+ * Version $Id: I3TRandomServiceFactory.cxx,v 1.7 2004/10/20 12:12:15 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -22,8 +22,8 @@ ClassImp(I3TRandomServiceFactory);
 
 // Constructors
 
-I3TRandomServiceFactory::I3TRandomServiceFactory(const char* name)
-  : I3ServiceFactory(name)
+I3TRandomServiceFactory::I3TRandomServiceFactory(const I3Context& context)
+  : I3ServiceFactory(context)
 {
   if (!IsNameSet()) {
     SetServiceName(I3TRandomService::DefaultName());
@@ -39,12 +39,10 @@ I3TRandomServiceFactory::~I3TRandomServiceFactory()
 // Member functions
 
 Bool_t
-I3TRandomServiceFactory::InstallService(I3Services& services,
-				   const I3Context& context,
-				   const char* moduleName)
+I3TRandomServiceFactory::InstallService(I3Services& services)
 {
-  I3TRandomService* pds = new I3TRandomService();
+  I3RandomServicePtr random ( new I3TRandomService());
   return I3ServicesAccess<I3RandomService>::Put(services,
-						pds,
+						random,
 						GetServiceName().c_str());
 }

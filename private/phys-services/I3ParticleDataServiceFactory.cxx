@@ -1,7 +1,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.5 2004/09/17 21:12:02 pretz Exp $
+ * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.6 2004/10/20 12:12:15 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -23,8 +23,8 @@ ClassImp(I3ParticleDataServiceFactory);
 // Constructors
 
 // FIXME: use std::string
-I3ParticleDataServiceFactory::I3ParticleDataServiceFactory(const char* name)
-  : I3ServiceFactory(name)
+I3ParticleDataServiceFactory::I3ParticleDataServiceFactory(const I3Context& context)
+  : I3ServiceFactory(context)
 {
   if (!IsNameSet()) {
   SetServiceName(I3ParticleDataService::DefaultName());
@@ -40,11 +40,9 @@ I3ParticleDataServiceFactory::~I3ParticleDataServiceFactory()
 // Member functions
 
 Bool_t
-I3ParticleDataServiceFactory::InstallService(I3Services& services,
-				   const I3Context& context,
-				   const char* moduleName)
+I3ParticleDataServiceFactory::InstallService(I3Services& services)
 {
-  I3ParticleDataService* pds = new I3ParticleDataService();
+  I3ParticleDataServicePtr pds(new I3ParticleDataService());
   return I3ServicesAccess<I3ParticleDataService>::Put(services,
 						      pds,
 						      GetServiceName().c_str());

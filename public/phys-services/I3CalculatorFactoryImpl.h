@@ -3,7 +3,7 @@
 /*
  * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3CalculatorFactoryImpl.h,v 1.3 2004/09/17 21:12:02 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.h,v 1.4 2004/10/20 12:12:15 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -16,11 +16,12 @@
 #include "icetray/I3types"
 #endif // I3TYPE
 
+#include "phys-services/I3Calculator.h"
+
 // forward declarations
 
 class I3Context;
 class I3Services;
-class I3Calculator;
 
 // superclasses
 
@@ -33,7 +34,7 @@ using namespace std;
 /**
  * This class installs a I3CalculatorFactoryImpl.
  *
- * @version $Id: I3CalculatorFactoryImpl.h,v 1.3 2004/09/17 21:12:02 pretz Exp $
+ * @version $Id: I3CalculatorFactoryImpl.h,v 1.4 2004/10/20 12:12:15 pretz Exp $
  * @author pretz
  */
 class I3CalculatorFactoryImpl
@@ -43,7 +44,7 @@ class I3CalculatorFactoryImpl
 
   // Constructors and destructor
 
-  I3CalculatorFactoryImpl(const char* name = 0);
+  I3CalculatorFactoryImpl(const I3Context& context);
 
   virtual ~I3CalculatorFactoryImpl();
 
@@ -58,9 +59,7 @@ class I3CalculatorFactoryImpl
    * being installed.
    * @return true if the services is successfully installed.
    */
-  virtual Bool_t InstallService(I3Services& services,
-				const I3Context& context,
-				const char* moduleName);
+  virtual Bool_t InstallService(I3Services& services);
 
  private:
 
@@ -73,7 +72,7 @@ class I3CalculatorFactoryImpl
 
   // instance member data
 
-  I3Calculator* fCalculator;
+  I3CalculatorPtr fCalculator;
 
   // ROOT macros
   ClassDef(I3CalculatorFactoryImpl,0);
