@@ -19,6 +19,9 @@ class I3DummyGeoOrigin : public I3GeometryOrigin
       GeometryPair p;
       p.geometry = I3GeometryPtr(new I3Geometry());
       p.header = I3GeometryHeaderPtr(new I3GeometryHeader());
+      I3TimeRange range = GetGeometryValidityRange(time);
+      p.header->SetStartTime(range.lower);
+      p.header->SetEndTime(range.upper);
       return p;
     }
   

@@ -39,6 +39,8 @@ class I3DummyEventOrigin : public I3EventOrigin
       e.header = I3EventHeaderPtr(new I3EventHeader());
       currentTime_.SetDaqTime(currentTime_.GetUTCYear(),
 			      currentTime_.GetUTCDaqTime() + 10000);
+      e.header->SetStartTime(currentTime_);
+      e.header->SetEndTime(currentTime_);
       return e;
     };
   

@@ -7,7 +7,6 @@
 #include "root-icetray/RootI3Tray.h"
 
 #include "phys-source/I3UberSource.h"
-#include "I3UberSourceClientTest.h"
 
 #include "phys-source/I3DummyEventOriginFactory.h"
 #include "phys-source/I3DummyGeoOriginFactory.h"
@@ -62,6 +61,12 @@ namespace tut
 		I3FrameAccess<I3CalibrationHeader>::
 		Exists(frame,
 		       "CalibrationHeader"));
+    tut::ensure("calibration frame has geometry",
+		I3FrameAccess<I3Geometry>::Exists(frame,
+						  "Geometry"));
+    tut::ensure("calibration frame has geometry header",
+		I3FrameAccess<I3GeometryHeader>::Exists(frame,
+							"GeometryHeader"));
     cout<<I3FrameAccess<I3CalibrationHeader>::Get(frame,
 						  "CalibrationHeader")
 	<<endl;
@@ -72,41 +77,47 @@ namespace tut
 
   void Client::CheckFrame<2>(I3Frame& frame)
   {
-//       tut::ensure("event frame has geometry",
-// 		  HasGeometry(frame));
-//       tut::ensure("event frame has geometry header",
-// 		  HasGeometryHeader(frame));
+    tut::ensure("event frame has geometry",
+		I3FrameAccess<I3Geometry>::Exists(frame,"Geometry"));
+    tut::ensure("event frame has geometry header",
+		I3FrameAccess<I3GeometryHeader>::
+		Exists(frame,"GeometryHeader"));
     tut::ensure("event frame has calibration",
 		I3FrameAccess<I3Calibration>::Exists(frame,
 						     "Calibration"));
     tut::ensure("event frame has calibration header",
-		I3FrameAccess<I3CalibrationHeader>::Exists(frame,
-							   "CalibrationHeader"));
-    //       tut::ensure("event frame has event",
-		   // 		  HasEvent(frame));
-//       tut::ensure("event frame has event header",
-// 		  HasEventHeader(frame));
-//       cout<<GetEventHeader(frame)<<endl;
-//       cout<<GetEvent(frame)<<endl;
+		I3FrameAccess<I3CalibrationHeader>
+		::Exists(frame,
+			 "CalibrationHeader"));
+    tut::ensure("event frame has event",
+		I3FrameAccess<I3Event>::Exists(frame,"Physics"));
+    tut::ensure("event frame has event header",
+		I3FrameAccess<I3EventHeader>::Exists(frame,"PhysicsHeader"));
+    cout<<I3FrameAccess<I3EventHeader>::Get(frame,"PhysicsHeader")<<endl;
+    cout<<I3FrameAccess<I3Event>::Get(frame,"Physics")<<endl;
+
   }
 
   void Client::CheckFrame<3>(I3Frame& frame)
   {
-//       tut::ensure("event frame has geometry",
-// 		  HasGeometry(frame));
-//       tut::ensure("event frame has geometry header",
-// 		  HasGeometryHeader(frame));
+    tut::ensure("event frame has geometry",
+		I3FrameAccess<I3Geometry>::Exists(frame,"Geometry"));
+    tut::ensure("event frame has geometry header",
+		I3FrameAccess<I3GeometryHeader>::
+		Exists(frame,"GeometryHeader"));
     tut::ensure("event frame has calibration",
 		I3FrameAccess<I3Calibration>::Exists(frame,"Calibration"));
     tut::ensure("event frame has calibration header",
-		I3FrameAccess<I3CalibrationHeader>::Exists(frame,
-							   "CalibrationHeader"));
-//       tut::ensure("event frame has event",
-// 		  HasEvent(frame));
-//       tut::ensure("event frame has event header",
-// 		  HasEventHeader(frame));
-//       cout<<GetEventHeader(frame)<<endl;
-//       cout<<GetEvent(frame)<<endl;
+		I3FrameAccess<I3CalibrationHeader>::
+		Exists(frame,
+		       "CalibrationHeader"));
+
+    tut::ensure("event frame has event",
+		I3FrameAccess<I3Event>::Exists(frame,"Physics"));
+    tut::ensure("event frame has event header",
+		I3FrameAccess<I3EventHeader>::Exists(frame,"PhysicsHeader"));
+    cout<<I3FrameAccess<I3EventHeader>::Get(frame,"PhysicsHeader")<<endl;
+    cout<<I3FrameAccess<I3Event>::Get(frame,"Physics")<<endl;
   }
 
 

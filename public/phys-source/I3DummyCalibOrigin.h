@@ -20,6 +20,9 @@ class I3DummyCalibOrigin : public I3CalibrationOrigin
       CalibrationPair p;
       p.calibration = I3CalibPtr(new I3Calibration());
       p.header = I3CalibrationHeaderPtr(new I3CalibrationHeader());
+      I3TimeRange range = GetCalibrationValidityRange(time);
+      p.header->SetStartTime(range.lower);
+      p.header->SetEndTime(range.upper);
       return p;
     }
   
