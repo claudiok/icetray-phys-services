@@ -13,7 +13,7 @@ I3DummyCalibOriginFactory::~I3DummyCalibOriginFactory()
 {
 }
 
-Bool_t
+bool
 I3DummyCalibOriginFactory::InstallService(I3Services& services)
 {
   if(!eventOrigin_)

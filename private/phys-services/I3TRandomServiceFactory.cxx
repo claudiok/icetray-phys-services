@@ -1,7 +1,7 @@
 /*
  * class: I3TRandomServiceFactory
  *
- * Version $Id: I3TRandomServiceFactory.cxx,v 1.8 2005/03/09 19:12:24 pretz Exp $
+ * Version $Id: I3TRandomServiceFactory.cxx,v 1.9 2005/04/04 18:40:39 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -35,7 +35,7 @@ I3TRandomServiceFactory::~I3TRandomServiceFactory()
 
 // Member functions
 
-Bool_t
+bool
 I3TRandomServiceFactory::InstallService(I3Services& services)
 {
   I3RandomServicePtr random ( new I3TRandomService());

@@ -21,7 +21,7 @@ class I3DummyEventOriginFactory
 
   virtual ~I3DummyEventOriginFactory();
 
-  virtual Bool_t InstallService(I3Services& services);
+  virtual bool InstallService(I3Services& services);
 
  private:
   I3DummyEventOriginPtr eventOrigin_;

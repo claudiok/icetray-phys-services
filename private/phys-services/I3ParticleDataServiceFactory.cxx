@@ -1,7 +1,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.7 2005/03/09 19:12:24 pretz Exp $
+ * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.8 2005/04/04 18:40:39 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -36,7 +36,7 @@ I3ParticleDataServiceFactory::~I3ParticleDataServiceFactory()
 
 // Member functions
 
-Bool_t
+bool
 I3ParticleDataServiceFactory::InstallService(I3Services& services)
 {
   I3ParticleDataServicePtr pds(new I3ParticleDataService());

@@ -13,7 +13,7 @@ I3DummyEventOriginFactory::~I3DummyEventOriginFactory()
 {
 }
 
-Bool_t
+bool
 I3DummyEventOriginFactory::InstallService(I3Services& services)
 {
   if(!eventOrigin_)

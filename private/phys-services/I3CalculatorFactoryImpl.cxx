@@ -1,7 +1,7 @@
 /**
  * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.6 2005/03/09 19:12:24 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.7 2005/04/04 18:40:39 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -37,7 +37,7 @@ I3CalculatorFactoryImpl::~I3CalculatorFactoryImpl()
 /**
  * @todo implement a fatal call if the tables don't load
  */
-Bool_t
+bool
 I3CalculatorFactoryImpl::InstallService(I3Services& services)
 {
   if(!fCalculator)

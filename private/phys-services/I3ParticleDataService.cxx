@@ -15,27 +15,27 @@ I3ParticleDataService::~I3ParticleDataService()
 {
 }
 
-I3Particle::ParticleType I3ParticleDataService::TranslateFromF2k(Int_t f2kid)
+I3Particle::ParticleType I3ParticleDataService::TranslateFromF2k(int f2kid)
 {
   return (I3Particle::ParticleType)f2kid;
 }
 
-I3Particle::ParticleType I3ParticleDataService::TranslateFromString(const Char_t* name)
+I3Particle::ParticleType I3ParticleDataService::TranslateFromString(const char* name)
 {
   return I3Track::Unknown;
 }
 
-I3Particle::ParticleType I3ParticleDataService::TranslateFromPDG(Int_t pdgid)
+I3Particle::ParticleType I3ParticleDataService::TranslateFromPDG(int pdgid)
 {
   return I3Track::Unknown;
 }
 
-I3Particle::ParticleType I3ParticleDataService::TranslateFromCorsika(Int_t corsika_id)
+I3Particle::ParticleType I3ParticleDataService::TranslateFromCorsika(int corsika_id)
 {
   return I3Track::Unknown;
 }
 
-Double_t I3ParticleDataService::Mass(I3Particle::ParticleType type)
+double I3ParticleDataService::Mass(I3Particle::ParticleType type)
 {
   if(type ==I3Track::Null)
     return -1.0;
@@ -116,7 +116,7 @@ Double_t I3ParticleDataService::Mass(I3Particle::ParticleType type)
   return -1.0;
 }
 
-Double_t I3ParticleDataService::LifeTime(I3Particle::ParticleType type)
+double I3ParticleDataService::LifeTime(I3Particle::ParticleType type)
 {
   if(type ==I3Track::Null)
     return -1.0;
@@ -188,7 +188,7 @@ Double_t I3ParticleDataService::LifeTime(I3Particle::ParticleType type)
   return -1.0;
 }
 
-Bool_t I3ParticleDataService::Stable(I3Particle::ParticleType type)
+bool I3ParticleDataService::Stable(I3Particle::ParticleType type)
 {
   if(type ==I3Track::Null)
     return kFALSE;
@@ -257,7 +257,7 @@ Bool_t I3ParticleDataService::Stable(I3Particle::ParticleType type)
   return kTRUE;
 }
 
-Double_t I3ParticleDataService::Charge(I3Particle::ParticleType type)
+double I3ParticleDataService::Charge(I3Particle::ParticleType type)
 {
   if(type ==I3Track::Null)
     return 0;
@@ -409,7 +409,7 @@ std::string I3ParticleDataService::ToString(I3Particle::ParticleType type)
   return "Unknown";
 }
 
-Int_t I3ParticleDataService::LightType(I3Particle::ParticleType particle){
+int I3ParticleDataService::LightType(I3Particle::ParticleType particle){
   if(particle == I3Track::EPlus)
     return 1;
   if(particle == I3Track::EMinus)
@@ -432,7 +432,7 @@ Int_t I3ParticleDataService::LightType(I3Particle::ParticleType particle){
 }
 
 //FIXME: string! string! string!  return by value.
-const Char_t* I3ParticleDataService::DefaultName()
+const char* I3ParticleDataService::DefaultName()
 {
   return "ParticleData";
 }

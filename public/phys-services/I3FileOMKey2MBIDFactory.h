@@ -18,7 +18,7 @@ class I3FileOMKey2MBIDFactory
 
   virtual ~I3FileOMKey2MBIDFactory(){}
 
-  Bool_t InstallService(I3Services& services);
+  bool InstallService(I3Services& services);
 
   void Configure();
 

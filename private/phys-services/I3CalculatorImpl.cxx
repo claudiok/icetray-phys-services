@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorImpl.cxx,v 1.11 2005/03/30 14:59:02 pretz Exp $
+    $Id: I3CalculatorImpl.cxx,v 1.12 2005/04/04 18:40:39 pretz Exp $
 
-    @version $Revision: 1.11 $
-    @date $Date: 2005/03/30 14:59:02 $
+    @version $Revision: 1.12 $
+    @date $Date: 2005/04/04 18:40:39 $
     @author
 
     @todo
@@ -200,7 +200,7 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
 
 //--------------------------------------------------------------
 // Is a given position on a track
-Bool_t I3CalculatorImpl::IsOnTrack(I3TrackPtr track, I3Position& pos,
+bool I3CalculatorImpl::IsOnTrack(I3TrackPtr track, I3Position& pos,
 											  double Precision)
 {
   I3Position appos,chpos;

@@ -21,7 +21,7 @@ class I3DummyGeoOriginFactory
 
   virtual ~I3DummyGeoOriginFactory();
 
-  virtual Bool_t InstallService(I3Services& services);
+  virtual bool InstallService(I3Services& services);
 
  private:
   I3DummyGeoOriginPtr eventOrigin_;

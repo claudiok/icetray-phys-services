@@ -21,7 +21,7 @@ class I3DummyCalibOriginFactory
 
   virtual ~I3DummyCalibOriginFactory();
 
-  virtual Bool_t InstallService(I3Services& services);
+  virtual bool InstallService(I3Services& services);
 
  private:
   I3DummyCalibOriginPtr eventOrigin_;

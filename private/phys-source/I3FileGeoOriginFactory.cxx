@@ -27,7 +27,7 @@ void I3FileGeoOriginFactory::Configure()
   GetParameter("IceCubeGeoFile",icecubeGeoFile_);
 }
 
-Bool_t
+bool
 I3FileGeoOriginFactory::InstallService(I3Services& services)
 {
   if(!origin_)

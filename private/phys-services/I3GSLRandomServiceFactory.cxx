@@ -1,7 +1,7 @@
 /*
  * class: I3GSLRandomServiceFactory
  *
- * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.4 2005/03/29 21:12:15 pretz Exp $
+ * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.5 2005/04/04 18:40:39 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -36,7 +36,7 @@ I3GSLRandomServiceFactory::~I3GSLRandomServiceFactory()
 
 // Member functions
 
-Bool_t
+bool
 I3GSLRandomServiceFactory::InstallService(I3Services& services)
 {
   if(!random)

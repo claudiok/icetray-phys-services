@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.11 2005/03/11 15:28:44 dule Exp $
+ * $Id: I3Calculator.h,v 1.12 2005/04/04 18:40:39 pretz Exp $
  *
  * @file I3TrackImpl.h
- * @version $Revision: 1.11 $
- * @date $Date: 2005/03/11 15:28:44 $
+ * @version $Revision: 1.12 $
+ * @date $Date: 2005/04/04 18:40:39 $
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -90,7 +90,7 @@ class I3Calculator
    * simpler.  If processing time becomes an issue, we can make these routines 
    * more efficient.
    */
-  virtual Bool_t IsOnTrack(I3TrackPtr track, 
+  virtual bool IsOnTrack(I3TrackPtr track, 
 									I3Position& pos,
 									double Precision=0.1*I3Units::meter) = 0;
    
@@ -179,7 +179,7 @@ class I3Calculator
   /**
    * Gives a default name for this service.  Defaults to "Calculator"
    */
-  static const Char_t* DefaultName(){return "Calculator";}
+  static const char* DefaultName(){return "Calculator";}
   
  protected:
 

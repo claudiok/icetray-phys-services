@@ -13,7 +13,7 @@ I3DummyGeoOriginFactory::~I3DummyGeoOriginFactory()
 {
 }
 
-Bool_t
+bool
 I3DummyGeoOriginFactory::InstallService(I3Services& services)
 {
   if(!eventOrigin_)

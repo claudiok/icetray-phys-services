@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3CalculatorImpl.h,v 1.6 2005/03/11 15:28:44 dule Exp $
+ * $Id: I3CalculatorImpl.h,v 1.7 2005/04/04 18:40:40 pretz Exp $
  *
  * @file I3CalculatorImpl.h
- * @version $Revision: 1.6 $
- * @date $Date: 2005/03/11 15:28:44 $
+ * @version $Revision: 1.7 $
+ * @date $Date: 2005/04/04 18:40:40 $
  * @author dule
  */
 #ifndef I3CALCULATORIMPL_H
@@ -112,7 +112,7 @@ class I3CalculatorImpl : public I3Calculator
    * simpler.  If processing time becomes an issue, we can make these routines 
    * more efficient.
    */
-  Bool_t IsOnTrack(I3TrackPtr track, 
+  bool IsOnTrack(I3TrackPtr track, 
 						 I3Position& pos,
 						 double Precision=0.1*I3Units::meter);
 
