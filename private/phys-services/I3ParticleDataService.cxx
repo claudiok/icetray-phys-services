@@ -256,7 +256,7 @@ Bool_t I3ParticleDataService::Stable(I3Track::Type type)
   return kTRUE;
 }
 
-Double_t I3ParticleDataService::Charge(I3Track::Type particle)
+Double_t I3ParticleDataService::Charge(I3Track::Type type)
 {
   if(type ==I3Track::Null)
     return 0;
@@ -267,13 +267,13 @@ Double_t I3ParticleDataService::Charge(I3Track::Type particle)
   else if(type == I3Track::EPlus)
     return 1 * I3Units::eplus;
   else if(type == I3Track::EMinus)
-    return -1 * I3Units::eplus
+    return -1 * I3Units::eplus;
   else if(type == I3Track::Nu)
     return 0;
   else if(type == I3Track::MuPlus)
     return I3Units::eplus;
   else if(type == I3Track::MuMinus)
-    return -1 * I3Units::eplus
+    return -1 * I3Units::eplus;
   else if(type == I3Track::Pi0)
     return 0;
   else if(type == I3Track::PiPlus)
