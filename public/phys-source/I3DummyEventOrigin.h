@@ -19,35 +19,13 @@ class I3DummyEventOrigin : public I3EventOrigin
  public:
   virtual ~I3DummyEventOrigin(){}
 
-  I3DummyEventOrigin() 
-    {
-      currentTime_.SetDaqTime(2005,0);
-      maxTime_.SetDaqTime(2005,100000);
-    }
+  I3DummyEventOrigin();
 
-  bool MoreEvents()
-    {
-      if(currentTime_ < maxTime_)
-	return true;
-      return false;
-    }
+  bool MoreEvents();
 
-  EventPair PopEvent()
-    {
-      EventPair e;
-      e.event = I3EventPtr(new I3Event());
-      e.header = I3EventHeaderPtr(new I3EventHeader());
-      currentTime_.SetDaqTime(currentTime_.GetUTCYear(),
-			      currentTime_.GetUTCDaqTime() + 10000);
-      e.header->SetStartTime(currentTime_);
-      e.header->SetEndTime(currentTime_);
-      return e;
-    };
+  EventPair PopEvent();
   
-  I3Time NextEventTime()
-    {
-      return currentTime_;
-    }
+  I3Time NextEventTime();
 };
 
 typedef PtrPolicy<I3DummyEventOrigin>::ThePolicy I3DummyEventOriginPtr;
