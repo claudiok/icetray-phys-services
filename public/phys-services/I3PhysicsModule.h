@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.4 2004/08/06 14:56:02 pretz Exp $
+ * $Id: I3PhysicsModule.h,v 1.5 2004/08/06 15:06:09 pretz Exp $
  *
  * @file I3PhysicsModule.h
- * @version $Revision: 1.4 $
- * @date $Date: 2004/08/06 14:56:02 $
+ * @version $Revision: 1.5 $
+ * @date $Date: 2004/08/06 15:06:09 $
  * @author pretz
  */
 
@@ -14,8 +14,8 @@
 
 #include "icetray/I3Module.h"
 #include "icetray/I3ContextAccess.h"
-#include "dataclasses/I3Event.h"
-#include "dataclasses/I3EventHeader.h"
+#include "dataclasses/I3MCEvent.h"
+#include "dataclasses/I3MCEventHeader.h"
 #include "dataclasses/I3Geometry.h"
 #include "dataclasses/I3GeometryHeader.h"
 #include "icetray/I3FrameAccess.h"
@@ -90,6 +90,44 @@ class I3PhysicsModule : public I3Module
     }
 
   /**
+   * checks to see if the frame has a monte-carlo event in it.
+   * @return true if an event is present, false if not
+   * @param frame the frame we want to check
+   * @param name the name of the event in the frame.  Defaults to 'Physics'
+   */
+  Bool_t HasMCEvent(I3Frame& frame, const string& name = "Physics")
+    {
+      return I3FrameAccess<I3MCEvent>::Exists(frame,name);
+    }
+
+  /**
+   * Gets a monte-carlo event out of a frame.  Just a helper method to 
+   * simplify the
+   * syntax.
+   * @return an I3MCEvent that is in the frame
+   * @param frame the frame that you want the event out of.
+   * @param name the name of the event in the frame, defaults to "Physics"
+   */
+  I3MCEvent& GetMCEvent(I3Frame& frame,const string& name = "Physics")
+    {
+      return I3FrameAccess<I3MCEvent>::Get(frame,name);
+    }
+
+  /**
+   * Puts a monte-carlo event in the frame.  
+   * Just a helper method to simplify the syntax
+   * @param frame the frame to put the event into
+   * @param event the event to put into the frame
+   * @param name the name of the event in the frame.  Defaults to 'Physics'
+   * @return true if it is successful, false if otherwise
+   */
+  Bool_t PutMCEvent(I3Frame& frame,I3MCEvent* event,
+		    const string& name="Physics")
+    {
+      return I3FrameAccess<I3MCEvent>::Put(frame,event,name);
+    }
+
+   /**
    * checks to see if the frame has an event in it.
    * @return true if an event is present, false if not
    * @param frame the frame we want to check
@@ -123,6 +161,49 @@ class I3PhysicsModule : public I3Module
   {
     return I3FrameAccess<I3Event>::Put(frame,event,name);
   }
+
+  /**
+   * checks to see if the frame has a monte-carlo event headerin it.
+   * @return true if an event headeris present, false if not
+   * @param frame the frame we want to check
+   * @param name the name of the event header in the frame.  Defaults to
+   * 'PhysicsHeader'
+   */
+  Bool_t HasMCEventHeader(I3Frame& frame,const string& name="PhysicsHeader")
+    {
+      return I3FrameAccess<I3MCEventHeader>::Exists(frame,name);
+    }
+
+  /**
+   * Gets an monte-carlo event header out of a frame.  Just a helper method 
+   * to simplify syntax
+   * @return the event header in the frame
+   * @param frame the frame that you want the event header out of.
+   * @param name the name of the event header in the frame.  Defaults to
+   * 'PhysicsHeader'
+   */
+  I3MCEventHeader& GetMCEventHeader(I3Frame& frame,
+                                const string& name="PhysicsHeader")
+    {
+      return I3FrameAccess<I3MCEventHeader>::Get(frame,name);
+    }
+
+  /**
+   * Puts an event header in the frame.  Just a helper method to
+   * simplify the syntax
+   * @param frame the frame to put the event header into
+   * @param header the event header to put into the frame
+   * @param name the name of the header in the frame.
+   * Defaults to 'PhysicsHeader'
+   * @return true if it is successful, false if otherwise
+   */
+  Bool_t PutMCEventHeader(I3Frame& frame,
+                        I3MCEventHeader* header,
+                        const string& name="PhysicsHeader")
+    {
+      return I3FrameAccess<I3MCEventHeader>::Put(frame,header,name);
+    }
+
 
   /**
    * checks to see if the frame has an event headerin it.
