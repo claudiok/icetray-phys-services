@@ -7,7 +7,7 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3ParticleDataService.h,v 1.2 2004/03/16 19:20:30 pretz Exp $
+ * $Id: I3ParticleDataService.h,v 1.3 2004/03/24 15:29:38 pretz Exp $
  *
  * This class provides frequently needed operations on the Particle types.
  * Stuff like convering them between systems, and finding physical 
@@ -15,8 +15,8 @@
  * conventions, so to get a lifetime in ns for instance you'd do
  * Lifetime(I3Track::MuMinus)/I3Units::ns
  *
- * @version $Revision: 1.2 $
- * @date $Date: 2004/03/16 19:20:30 $
+ * @version $Revision: 1.3 $
+ * @date $Date: 2004/03/24 15:29:38 $
  * @author pretz
  *
  * @todo implment the TranslateFromPDG and TranslateFromCorsika methods
@@ -98,6 +98,13 @@ class I3ParticleDataService {
    * @return a string identifying that particle
    */
   std::string ToString(I3Track::Type particle);
+
+  /**
+   * Gives the 'photonics id' of the particle type.  
+   * '0' for muons, '1' for em-showers, '2' for hadronic showers
+   * '-1' if its unknown
+   */
+  Int_t LightType(I3Track::Type particle);
 
   /**
    * a default name for the service.  
