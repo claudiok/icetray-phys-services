@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.2 2004/09/14 15:29:58 dule Exp $
+    $Id: I3CalculatorTest.cxx,v 1.3 2004/10/11 07:02:11 troy Exp $
 
-    @version $Revision: 1.2 $
-    @date $Date: 2004/09/14 15:29:58 $
+    @version $Revision: 1.3 $
+    @date $Date: 2004/10/11 07:02:11 $
     @author pretz
 
     @todo
@@ -38,7 +38,7 @@ namespace tut
 
 namespace
 {
-  tut::factory t("I3CalculatorTest");
+  static tut::factory t("I3CalculatorTest");
 }
 
 namespace tut
