@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.5 2004/09/14 15:30:38 dule Exp $
+ * $Id: I3Calculator.h,v 1.6 2004/09/14 15:32:23 dule Exp $
  *
  * @file I3TrackImpl.h
- * @version $Revision: 1.5 $
- * @date $Date: 2004/09/14 15:30:38 $
+ * @version $Revision: 1.6 $
+ * @date $Date: 2004/09/14 15:32:23 $
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -23,6 +23,9 @@
 /**
  * @brief A class for the service that calculates various distances 
  * between a track and a position.
+ * One must create an I3Calculator object to do any kind of calculation:
+ * I3Calculator calc;
+ * calc.CherenkovTime(...);
  *
  * This class is intended to be a service, separate from dataclasses.
  * 
