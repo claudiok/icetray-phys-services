@@ -15,9 +15,11 @@
 #pragma link C++ class I3RandomService;
 #pragma link C++ class I3TRandomService;
 #pragma link C++ class I3TRandomServiceFactory;
+#pragma link C++ class I3FileOMKey2MBIDFactory;
 #pragma link C++ class I3PhysicsSource;
 #pragma link C++ class I3DummyEventOriginFactory;
 #pragma link C++ class I3DummyGeoOriginFactory;
 #pragma link C++ class I3DummyCalibOriginFactory;
+#pragma link C++ class I3FileGeoOriginFactory;
 
 #endif
