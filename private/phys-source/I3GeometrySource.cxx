@@ -10,20 +10,36 @@ I3GeometrySource::I3GeometrySource(I3Context& context) :
 
 void I3GeometrySource::Physics(I3Frame& frame)
 {
+  log_debug("Entering I3GeometrySource::Physics()");
   I3Time eventTime = GetEventHeader(frame).GetStartTime();
   if(!IsGeometryCurrent(eventTime))
-    currentGeometry_ = GetGeometryFactory().GetGeometry(eventTime);
-  SendGeometry(eventTime);
+    {
+      SendGeometry(eventTime);
+    }
+  I3FrameAccess<I3Geometry>::Put(frame,
+				 currentGeometry_.geometry,
+				 "Geometry");
+  I3FrameAccess<I3GeometryHeader>::Put(frame,
+				       currentGeometry_.header,
+				       "GeometryHeader");
   PushFrame(frame,"OutBox");
 }
 
-void I3GeometrySource::Calibration(I3Frame & frame)
+void I3GeometrySource::Calibration(I3Frame& frame)
 {
+  log_debug("Entering I3GeometrySource::Calibration()");
   I3Time calibTime = GetCalibrationHeader(frame).GetStartTime();
   if(!IsGeometryCurrent(calibTime))
-    currentGeometry_ = GetGeometryFactory().GetGeometry(calibTime);
-  SendGeometry(calibTime);
-  PushFrame(frame,"OutBox");
+    {
+      SendGeometry(calibTime);
+    }
+  I3FrameAccess<I3Geometry>::Put(frame,
+				 currentGeometry_.geometry,
+				 "Geometry");
+  I3FrameAccess<I3GeometryHeader>::Put(frame,
+				       currentGeometry_.header,
+				       "GeometryHeader");
+
 }
 
 void I3GeometrySource::Geometry(I3Frame& frame)
@@ -35,7 +51,7 @@ void I3GeometrySource::Geometry(I3Frame& frame)
 
 void I3GeometrySource::SendGeometry(I3Time nextEvent)
 {
-  log_debug("Entering I3UberSource::SendGeometry()");
+  log_debug("Entering IGeometrySource::SendGeometry()");
   currentGeometry_ = GetGeometryFactory().GetGeometry(nextEvent);
   currentGeometryRange_ 
     = GetGeometryFactory().GetGeometryValidityRange(nextEvent);

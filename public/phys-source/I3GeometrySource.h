@@ -15,6 +15,7 @@ class I3GeometrySource : public I3PhysicsModule
   void Geometry(I3Frame& frame);
 
   void Calibration(I3Frame& frame);
+
  private:
   void SendGeometry(I3Time time);
   

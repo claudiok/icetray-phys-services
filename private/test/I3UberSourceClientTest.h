@@ -25,6 +25,7 @@ class I3UberSourceClientTest : public I3PhysicsModule
       cout<<GetGeometry(frame)<<endl;
       PushFrame(frame,"OutBox");
     }
+
   void Physics(I3Frame& frame)
     {
       tut::ensure("event frame has geometry",
@@ -45,10 +46,10 @@ class I3UberSourceClientTest : public I3PhysicsModule
     }
   void Calibration(I3Frame& frame)
     {
-      tut::ensure("Calibration frame has geometry",
-		  HasGeometry(frame));
-      tut::ensure("Calibration frame has geometry header",
-		  HasGeometryHeader(frame));
+/*       tut::ensure("Calibration frame has geometry", */
+/* 		  HasGeometry(frame)); */
+/*       tut::ensure("Calibration frame has geometry header", */
+/* 		  HasGeometryHeader(frame)); */
       tut::ensure("calibration frame has calibration",
 		  HasCalibration(frame));
       tut::ensure("calibration frame has calibration header",

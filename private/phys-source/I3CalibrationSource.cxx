@@ -1,5 +1,6 @@
 #include "phys-source/I3CalibrationSource.h"
 #include "services/I3Execution.h"
+#include "dataclasses/I3Time.h"
 
 I3CalibrationSource::I3CalibrationSource(I3Context& context) : 
   I3PhysicsModule(context)
@@ -9,15 +10,24 @@ I3CalibrationSource::I3CalibrationSource(I3Context& context) :
 
 void I3CalibrationSource::Physics(I3Frame& frame)
 {
+  log_debug("Entering I3CalibrationSource::Physics");
   I3Time eventTime = GetEventHeader(frame).GetStartTime();
   if(!IsCalibrationCurrent(eventTime))
-    currentCalibration_ = GetCalibrationFactory().GetCalibration(eventTime);
-  SendCalibration(eventTime);
+    {
+      SendCalibration(eventTime);
+    }
+  I3FrameAccess<I3Calibration>::Put(frame,
+				    currentCalibration_.calibration,
+				    "Calibration");
+  I3FrameAccess<I3CalibrationHeader>::Put(frame,
+					  currentCalibration_.header,
+					  "CalibrationHeader");
   PushFrame(frame,"OutBox");
 }
 
 void I3CalibrationSource::Calibration(I3Frame& frame)
 {
+  log_debug("Entering I3CalibrationSource::Calibration()");
   log_warn("Somebody upstream of I3CalibrationSource is putting "
 	   "Calibration frames into the system.  What's up with that");
   PushFrame(frame,"OutBox");
@@ -25,7 +35,7 @@ void I3CalibrationSource::Calibration(I3Frame& frame)
 
 void I3CalibrationSource::SendCalibration(I3Time nextEvent)
 {
-  log_debug("Entering I3UberSource::SendCalibration()");
+  log_debug("Entering I3CalibrationSource::SendCalibration()");
   currentCalibration_ = GetCalibrationFactory().GetCalibration(nextEvent);
   currentCalibrationRange_ 
     = GetCalibrationFactory().GetCalibrationValidityRange(nextEvent);
