@@ -125,10 +125,10 @@ void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry,
   I3GeoInFile.close();
   
   //Integrate into DB Access part too?
-  log_warn("I3Db::FillFileGeometry: ATTENTION: No date set in header or date set to 0.")
-    GeometryHeader.SetJulianDay(0);
-  GeometryHeader.SetSec(0);
-  GeometryHeader.SetNanoSec(0);  
+  log_warn("I3Db::FillFileGeometry: ATTENTION: No date set in header or date set to 0.");
+  
+  I3Time time(0,0,0.0);
+  GeometryHeader.SetTime(time);
   GeometryHeader.SetArrayName("FullIceCube+Amanda");
 }
 
