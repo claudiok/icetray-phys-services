@@ -1,7 +1,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.2 2004/04/02 20:13:29 pretz Exp $
+ * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.2.2.1 2004/04/10 17:10:40 troy Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -22,11 +22,12 @@ ClassImp(I3ParticleDataServiceFactory);
 
 // Constructors
 
+// FIXME: string! string! string!
 I3ParticleDataServiceFactory::I3ParticleDataServiceFactory(const char* name)
   : I3ServiceFactory(name)
 {
   if (!IsNameSet()) {
-    SetServiceName(I3ParticleDataService::DefaultName());
+  SetServiceName(I3ParticleDataService::DefaultName());
   }
 }
 
