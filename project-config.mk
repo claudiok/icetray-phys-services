@@ -16,7 +16,7 @@ ROOT_TEMPLATES :=
 USES_PROJECTS := dataclasses icetray  
 
 # same as above, but for external tools.  Paths found in config.mk
-USES_TOOLS := root roost log4cplus TUT
+USES_TOOLS := root roost log4cplus TUT gsl
 
 # this is now globally "root" by default
 BUILD_FLAVOR := root
