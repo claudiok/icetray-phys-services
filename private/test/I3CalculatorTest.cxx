@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.8 2004/12/02 15:51:36 dule Exp $
+    $Id: I3CalculatorTest.cxx,v 1.9 2004/12/03 20:19:56 dule Exp $
 
-    @version $Revision: 1.8 $
-    @date $Date: 2004/12/02 15:51:36 $
+    @version $Revision: 1.9 $
+    @date $Date: 2004/12/03 20:19:56 $
     @author pretz
 
     @todo
@@ -16,6 +16,7 @@
 #include "dataclasses/I3BasicMuon.h"
 #include "dataclasses/I3StartingMuon.h"
 #include "dataclasses/I3BasicCascade.h"
+#include "dataclasses/I3DirectionalCascade.h"
 #include "dataclasses/I3Position.h"
 #include "dataclasses/I3Direction.h"
 #include "TFile.h"
