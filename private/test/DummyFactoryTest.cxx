@@ -6,6 +6,9 @@
 #include "root-icetray/RootI3Tray.h"
 #include "phys-source/I3PhysicsSource.h"
 #include "I3PhysicsSourceClientTest.h"
+#include "phys-source/I3DummyEventOriginFactory.h"
+#include "phys-source/I3DummyGeoOriginFactory.h"
+#include "phys-source/I3DummyCalibOriginFactory.h"
 
 namespace tut
 {
@@ -29,6 +32,11 @@ namespace tut
   void object::test<1>() 
   {
     RootI3Tray tray;
+ 
+    tray.AddService<I3DummyEventOriginFactory>("events");
+    tray.AddService<I3DummyGeoOriginFactory>("geo");
+    tray.AddService<I3DummyCalibOriginFactory>("calib");
+
     tray.AddModule<I3PhysicsSource>("source");
     tray.AddModule<I3PhysicsSourceClientTest>("client");
 

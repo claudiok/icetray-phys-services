@@ -22,4 +22,7 @@ phys-services/I3TRandomService.h \
 phys-services/I3GSLRandomServiceFactory.h \
 phys-services/I3TRandomServiceFactory.h\
 phys-services/I3ParticleDataService.h \
-phys-source/I3PhysicsSource.h
+phys-source/I3PhysicsSource.h \
+phys-source/I3DummyEventOriginFactory.h \
+phys-source/I3DummyGeoOriginFactory.h \
+phys-source/I3DummyCalibOriginFactory.h
