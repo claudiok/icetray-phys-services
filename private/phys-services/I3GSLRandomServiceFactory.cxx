@@ -1,7 +1,7 @@
 /*
  * class: I3GSLRandomServiceFactory
  *
- * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.3 2005/03/09 19:12:24 pretz Exp $
+ * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.4 2005/03/29 21:12:15 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -24,7 +24,7 @@ ClassImp(I3GSLRandomServiceFactory);
 
 I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(I3Context& context)
   : I3ServiceFactory(context),
-    random(0)
+    random()
 {
 }
 
