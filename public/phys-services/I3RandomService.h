@@ -5,15 +5,17 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3RandomService.h,v 1.2 2004/03/16 19:20:30 pretz Exp $
+ * $Id: I3RandomService.h,v 1.3 2004/05/10 15:57:54 pretz Exp $
  *
- * This class provides an interface to random numbers suitable for use by
- * icetray modules.  This class is just the interface.  The names chosen
+ * @brief This class provides an interface to random numbers suitable for use by
+ * icetray modules.  
+ *
+ * This class is just the interface.  The names chosen
  * reflect ROOT's TRandom interface.  Indeed TRandom could be used to 
  * trivially fill this interface
  *
- * @version $Revision: 1.2 $
- * @date $Date: 2004/03/16 19:20:30 $
+ * @version $Revision: 1.3 $
+ * @date $Date: 2004/05/10 15:57:54 $
  * @author pretz
  *
  * @todo 

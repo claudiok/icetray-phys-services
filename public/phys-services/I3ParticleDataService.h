@@ -7,16 +7,18 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3ParticleDataService.h,v 1.5 2004/04/22 16:16:26 pretz Exp $
+ * $Id: I3ParticleDataService.h,v 1.6 2004/05/10 15:57:54 pretz Exp $
  *
- * This class provides frequently needed operations on the Particle types.
+ * @brief This class provides frequently needed operations on the Particle 
+ * types.
+ *
  * Stuff like convering them between systems, and finding physical 
  * parameters of them.  Note that the physical parameters uses the I3Units
  * conventions, so to get a lifetime in ns for instance you'd do
  * Lifetime(I3Track::MuMinus)/I3Units::ns
  *
- * @version $Revision: 1.5 $
- * @date $Date: 2004/04/22 16:16:26 $
+ * @version $Revision: 1.6 $
+ * @date $Date: 2004/05/10 15:57:54 $
  * @author pretz
  *
  * @todo implment the TranslateFromPDG and TranslateFromCorsika methods
