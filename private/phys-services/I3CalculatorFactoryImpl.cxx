@@ -1,7 +1,7 @@
 /**
  * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.2.2.1 2004/09/17 20:55:53 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.2.2.2 2004/09/24 19:12:24 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -21,8 +21,8 @@ ClassImp(I3CalculatorFactoryImpl);
 
 // Constructors
 
-I3CalculatorFactoryImpl::I3CalculatorFactoryImpl(const char* name)
-  : I3ServiceFactory(name)
+I3CalculatorFactoryImpl::I3CalculatorFactoryImpl(const I3Context& context)
+  : I3ServiceFactory(context)
 {
   if ("" == GetServiceName()) {
     SetServiceName("Calculator");
@@ -41,9 +41,7 @@ I3CalculatorFactoryImpl::~I3CalculatorFactoryImpl()
  * @todo implement a fatal call if the tables don't load
  */
 Bool_t
-I3CalculatorFactoryImpl::InstallService(I3Services& services,
-				   const I3Context& context,
-				   const char* moduleName)
+I3CalculatorFactoryImpl::InstallService(I3Services& services)
 {
   if(!fCalculator)
     {

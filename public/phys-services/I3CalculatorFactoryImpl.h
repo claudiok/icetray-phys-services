@@ -3,7 +3,7 @@
 /*
  * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3CalculatorFactoryImpl.h,v 1.1.2.1 2004/09/17 20:55:53 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.h,v 1.1.2.2 2004/09/24 19:12:24 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -34,7 +34,7 @@ using namespace std;
 /**
  * This class installs a I3CalculatorFactoryImpl.
  *
- * @version $Id: I3CalculatorFactoryImpl.h,v 1.1.2.1 2004/09/17 20:55:53 pretz Exp $
+ * @version $Id: I3CalculatorFactoryImpl.h,v 1.1.2.2 2004/09/24 19:12:24 pretz Exp $
  * @author pretz
  */
 class I3CalculatorFactoryImpl
@@ -44,7 +44,7 @@ class I3CalculatorFactoryImpl
 
   // Constructors and destructor
 
-  I3CalculatorFactoryImpl(const char* name = 0);
+  I3CalculatorFactoryImpl(const I3Context& context);
 
   virtual ~I3CalculatorFactoryImpl();
 
@@ -59,9 +59,7 @@ class I3CalculatorFactoryImpl
    * being installed.
    * @return true if the services is successfully installed.
    */
-  virtual Bool_t InstallService(I3Services& services,
-				const I3Context& context,
-				const char* moduleName);
+  virtual Bool_t InstallService(I3Services& services);
 
  private:
 
