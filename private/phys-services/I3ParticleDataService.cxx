@@ -110,7 +110,8 @@ Double_t I3ParticleDataService::Mass(I3Particle::ParticleType type)
   else if(type == I3Track::Elph)
     // A rough approximation (I guess we'll have to wait for LHC to be sure):
     // 6 tons = 12000 lbs ~ 5500 kg = 5500 c * c  J/c^2 = 4.95e20 J/c^2 
-    return 4.95e20 * I3Units::joule;
+    // ~1e39 eV / c^2
+    return 1e39 * I3Units::eV;
 
   return -1.0;
 }
@@ -265,29 +266,29 @@ Double_t I3ParticleDataService::Charge(I3Particle::ParticleType type)
   else if(type == I3Track::Gamma)
     return 0;
   else if(type == I3Track::EPlus)
-    return 1 * I3Units::eplus;
+    return 1;
   else if(type == I3Track::EMinus)
-    return -1 * I3Units::eplus;
+    return -1;
   else if(type == I3Track::Nu)
     return 0;
   else if(type == I3Track::MuPlus)
-    return I3Units::eplus;
+    return 1;
   else if(type == I3Track::MuMinus)
-    return -1 * I3Units::eplus;
+    return -1 ;
   else if(type == I3Track::Pi0)
     return 0;
   else if(type == I3Track::PiPlus)
-    return I3Units::eplus;
+    return 1;
   else if(type == I3Track::PiMinus)
-    return -1 * I3Units::eplus;
+    return -1;
   else if(type == I3Track::PPlus)
-    return I3Units::eplus;
+    return 1;
   else if(type == I3Track::PMinus)
-    return -1 * I3Units::eplus;
+    return -1;
   else if(type == I3Track::TauPlus)
-    return I3Units::eplus;
+    return 1;
   else if(type == I3Track::TauMinus)
-    return -2 * I3Units::eplus;
+    return -1 ;
   else if(type == I3Track::NuE)
     return 0;
   else if(type == I3Track::NuMu)
@@ -317,7 +318,7 @@ Double_t I3ParticleDataService::Charge(I3Particle::ParticleType type)
   else if(type == I3Track::YAGLaser)
     return 0;
   else if(type >= I3Track::ZPrimary && type <=I3Track::ZPrimary+400)
-    // is this right???
+    // @todo is this right???
     return (type - I3Track::ZPrimary);
   else if(type >= I3Track::APrimary && type <= I3Track::APrimary+400)
     // just approximatin' here
