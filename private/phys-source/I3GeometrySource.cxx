@@ -39,6 +39,7 @@ void I3GeometrySource::Calibration(I3Frame& frame)
   I3FrameAccess<I3GeometryHeader>::Put(frame,
 				       currentGeometry_.header,
 				       "GeometryHeader");
+  PushFrame(frame,"OutBox");
 
 }
 
@@ -59,11 +60,11 @@ void I3GeometrySource::SendGeometry(I3Time nextEvent)
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Geometry"));
   I3FrameAccess<I3Geometry>::Put(frame,
-				    currentGeometry_.geometry,
-				    "Geometry");
+				 currentGeometry_.geometry,
+				 "Geometry");
   I3FrameAccess<I3GeometryHeader>::Put(frame,
-					  currentGeometry_.header,
-					  "GeometryHeader");
+				       currentGeometry_.header,
+				       "GeometryHeader");
   PushFrame(frame,"OutBox");
 }
 
