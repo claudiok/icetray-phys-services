@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorImpl.cxx,v 1.10 2005/03/11 15:28:44 dule Exp $
+    $Id: I3CalculatorImpl.cxx,v 1.11 2005/03/30 14:59:02 pretz Exp $
 
-    @version $Revision: 1.10 $
-    @date $Date: 2005/03/11 15:28:44 $
+    @version $Revision: 1.11 $
+    @date $Date: 2005/03/30 14:59:02 $
     @author
 
     @todo
@@ -47,9 +47,9 @@ double I3CalculatorImpl::StartDistance(I3TrackPtr track, I3Position& pos)
  {
   if (track->IsStarting()) {
     if (track->IsStopping()) {
-     return pos.CalcDistance((roost::dynamic_pointer_cast<I3Contained>(track))->GetStartPos());
+     return pos.CalcDistance((boost::dynamic_pointer_cast<I3Contained>(track))->GetStartPos());
     } else {
-     return pos.CalcDistance((roost::dynamic_pointer_cast<I3Starting>(track))->GetStartPos());
+     return pos.CalcDistance((boost::dynamic_pointer_cast<I3Starting>(track))->GetStartPos());
     }
   }
   return NAN;
@@ -61,9 +61,9 @@ double I3CalculatorImpl::StopDistance(I3TrackPtr track, I3Position& pos)
 {
   if (track->IsStopping()) {
     if (track->IsStarting()) {
-      return pos.CalcDistance((roost::dynamic_pointer_cast<I3Contained>(track))->GetStopPos());
+      return pos.CalcDistance((boost::dynamic_pointer_cast<I3Contained>(track))->GetStopPos());
     } else {
-      return pos.CalcDistance((roost::dynamic_pointer_cast<I3Stopping>(track))->GetStopPos());
+      return pos.CalcDistance((boost::dynamic_pointer_cast<I3Stopping>(track))->GetStopPos());
     }
   }
   return NAN;
@@ -134,12 +134,12 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
       //-contained track...............................
 	if (TA<0) {
 	  // if A is before STARTING position
-	  appos = (roost::dynamic_pointer_cast<I3Contained>(track))
+	  appos = (boost::dynamic_pointer_cast<I3Contained>(track))
 	    ->GetStartPos();
 	  apdist = pos.CalcDistance(appos);
 	} else if (TA>track->GetLength()) {
 	  // if A is beyond STOPPING position
-	  appos = (roost::dynamic_pointer_cast<I3Contained>(track))
+	  appos = (boost::dynamic_pointer_cast<I3Contained>(track))
 	    ->GetStopPos();
 	  apdist = pos.CalcDistance(appos);
 	}
@@ -158,7 +158,7 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
       //-starting track................................
 	if (TA<0) {
 	  // if A is before STARTING position
-	  appos = (roost::dynamic_pointer_cast<I3Starting>(track))
+	  appos = (boost::dynamic_pointer_cast<I3Starting>(track))
 	    ->GetStartPos();
 	  apdist = pos.CalcDistance(appos);
 	}
@@ -174,7 +174,7 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
       //-stopping track................................
 	if (TA>0) {
 	  // if A is beyond STOPPING position
-	  appos = (roost::dynamic_pointer_cast<I3Stopping>(track))
+	  appos = (boost::dynamic_pointer_cast<I3Stopping>(track))
 	    ->GetStopPos();
 	  apdist = pos.CalcDistance(appos);
 	}

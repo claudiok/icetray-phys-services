@@ -4,7 +4,7 @@
 #include "phys-source/I3GeometryOrigin.h"
 #include <string>
 #include <fstream>
-#include <roost/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 using namespace std;
 
@@ -34,6 +34,6 @@ class I3FileGeoOrigin : public I3GeometryOrigin
   void FillGeometryFromFile(I3Geometry& geo, I3GeometryHeader& header);
 };
 
-typedef roost::shared_ptr<I3FileGeoOrigin> I3FileGeoOriginPtr;
+typedef boost::shared_ptr<I3FileGeoOrigin> I3FileGeoOriginPtr;
 
 #endif

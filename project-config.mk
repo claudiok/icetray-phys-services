@@ -8,7 +8,7 @@ CXX_EXCLUDE_SRCS :=
 USES_PROJECTS := dataclasses icetray root-icetray 
 
 # same as above, but for external tools.  Paths found in config.mk
-USES_TOOLS := root roost log4cplus TUT gsl boost
+USES_TOOLS := root log4cplus TUT gsl boost
 
 ROOT_DICTIONARY_HEADERS := \
 phys-services/I3Calculator.h \

@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.10 2004/12/08 17:46:51 pretz Exp $
+    $Id: I3CalculatorTest.cxx,v 1.11 2005/03/30 14:59:03 pretz Exp $
 
-    @version $Revision: 1.10 $
-    @date $Date: 2004/12/08 17:46:51 $
+    @version $Revision: 1.11 $
+    @date $Date: 2005/03/30 14:59:03 $
     @author pretz
 
     @todo
@@ -60,27 +60,27 @@ namespace tut
 
     cout <<"Creating Infinite track..."<<endl;
     I3BasicMuonPtr track_inf (new I3BasicMuon);
-    I3TrackPtr inftrackptr = roost::dynamic_pointer_cast<I3Track>(track_inf);
+    I3TrackPtr inftrackptr = boost::dynamic_pointer_cast<I3Track>(track_inf);
     track_inf->SetPos(r);
     track_inf->SetDir(e);
     track_inf->SetT(10);
 
     cout <<"Creating Starting track..."<<endl;
     I3StartingMuonPtr track_start (new I3StartingMuon);
-    I3TrackPtr starttrackptr=roost::dynamic_pointer_cast<I3Track>(track_start);
+    I3TrackPtr starttrackptr=boost::dynamic_pointer_cast<I3Track>(track_start);
     track_start->SetStartPos(p);
     track_start->SetDir(d);
     track_start->SetStartT(10);
 
     cout <<"Creating BasiMuon"<<endl;
     I3BasicMuonPtr muon (new I3BasicMuon);
-    I3TrackPtr muonptr = roost::dynamic_pointer_cast<I3Track>(muon);
+    I3TrackPtr muonptr = boost::dynamic_pointer_cast<I3Track>(muon);
     muon->SetPos(10,0,0);
     muon->SetDir(90*deg,0); // muon moving toward -x axis
 
     cout <<"Creating a cascade..."<<endl;
     I3BasicCascadePtr casc_bas (new I3BasicCascade);
-    I3CascadePtr cascptr = roost::dynamic_pointer_cast<I3Cascade>(casc_bas);
+    I3CascadePtr cascptr = boost::dynamic_pointer_cast<I3Cascade>(casc_bas);
     casc_bas->SetPos(q);
 
     cout <<"Creating a directional cascade..."<<endl;

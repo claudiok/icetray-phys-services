@@ -18,6 +18,6 @@ class I3OMKey2MBID
   static const char* DefaultName() { return "OMKey2MBID";}
 };
 
-typedef roost::shared_ptr<I3OMKey2MBID> I3OMKey2MBIDPtr;
+typedef boost::shared_ptr<I3OMKey2MBID> I3OMKey2MBIDPtr;
 
 #endif
