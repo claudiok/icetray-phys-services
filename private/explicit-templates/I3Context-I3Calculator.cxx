@@ -1,7 +1,7 @@
 /*
  * class: I3ContextAccess
  *
- * Version $Id: I3Context-I3Calculator.cxx,v 1.1 2004/06/24 14:27:55 pretz Exp $
+ * Version $Id: I3Context-I3Calculator.cxx,v 1.2 2004/12/09 17:11:42 troy Exp $
  *
  * Date: 29 Sept 2003
  *
@@ -25,4 +25,4 @@ template I3ServicesAccess<I3Calculator>;
 template I3ContextElement<I3Calculator>;
 template I3ContextElementFactory<I3Calculator>;
 
-const I3ContextElementFactory<I3Calculator>* I3ContextElementFactory<I3Calculator>::factoryImpl = 0;
+//const I3ContextElementFactory<I3Calculator>* I3ContextElementFactory<I3Calculator>::factoryImpl = 0;
