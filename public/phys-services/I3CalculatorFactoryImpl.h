@@ -1,9 +1,9 @@
-#ifndef I3STDCALCULATORFACTORY_H
-#define I3STDCALCULATORFACTORY_H
+#ifndef I3CALCULATORFACTORYIMPL_H
+#define I3CALCULATORFACTORYIMPL_H
 /*
- * class: I3StdCalculatorFactory
+ * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3StdCalculatorFactory.h,v 1.1 2004/06/24 14:27:55 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.h,v 1.1 2004/06/24 15:04:54 dule Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -31,21 +31,21 @@ class I3Calculator;
 using namespace std;
 
 /**
- * This class installs a I3StdCalculatorFactory.
+ * This class installs a I3CalculatorFactoryImpl.
  *
- * @version $Id: I3StdCalculatorFactory.h,v 1.1 2004/06/24 14:27:55 pretz Exp $
+ * @version $Id: I3CalculatorFactoryImpl.h,v 1.1 2004/06/24 15:04:54 dule Exp $
  * @author pretz
  */
-class I3StdCalculatorFactory
+class I3CalculatorFactoryImpl
 : public I3ServiceFactory
 {
  public:
 
   // Constructors and destructor
 
-  I3StdCalculatorFactory(const char* name = 0);
+  I3CalculatorFactoryImpl(const char* name = 0);
 
-  virtual ~I3StdCalculatorFactory();
+  virtual ~I3CalculatorFactoryImpl();
 
   // public member functions
 
@@ -66,17 +66,17 @@ class I3StdCalculatorFactory
 
   // private constructors, destructor and assignment
 
-  I3StdCalculatorFactory
-    (const I3StdCalculatorFactory& rhs); // stop default
-  I3StdCalculatorFactory operator=
-    (const I3StdCalculatorFactory& rhs); // stop default
+  I3CalculatorFactoryImpl
+    (const I3CalculatorFactoryImpl& rhs); // stop default
+  I3CalculatorFactoryImpl operator=
+    (const I3CalculatorFactoryImpl& rhs); // stop default
 
   // instance member data
 
   I3Calculator* fCalculator;
 
   // ROOT macros
-  ClassDef(I3StdCalculatorFactory,0);
+  ClassDef(I3CalculatorFactoryImpl,0);
 };
 
 #endif // ROOTI3BOXESFACTORY_H

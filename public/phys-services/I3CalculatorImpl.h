@@ -1,15 +1,15 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3StdCalculator.h,v 1.1 2004/06/24 14:27:55 pretz Exp $
+ * $Id: I3CalculatorImpl.h,v 1.1 2004/06/24 15:04:54 dule Exp $
  *
- * @file I3TrackImpl.h
+ * @file I3CalculatorImpl.h
  * @version $Revision: 1.1 $
- * @date $Date: 2004/06/24 14:27:55 $
+ * @date $Date: 2004/06/24 15:04:54 $
  * @author dule
  */
-#ifndef I3STDCALCULATOR_H
-#define I3STDCALCULATOR_H
+#ifndef I3CALCULATORIMPL_H
+#define I3CALCULATORIMPL_H
 
 #include <TObject.h>
 #include <cmath>
@@ -27,19 +27,19 @@
  * 
  * @todo Migrate this whole class out of dataclasses and into services.
  */
-class I3StdCalculator : public I3Calculator
+class I3CalculatorImpl : public I3Calculator
 {
 
  public:
   /**
    * constructor
    */
-  I3StdCalculator() {};
+  I3CalculatorImpl() {};
 
   /**
    * destructor
    */
-  virtual ~I3StdCalculator() {};
+  virtual ~I3CalculatorImpl() {};
 
   /**
    * Distance between position P and position Pos() on track
@@ -134,7 +134,7 @@ class I3StdCalculator : public I3Calculator
  protected:
 
   // ROOT macro
-  ClassDef(I3StdCalculator,1);
+  ClassDef(I3CalculatorImpl,1);
 };
 
 

@@ -1,7 +1,7 @@
 /**
- * class: I3StdCalculatorFactory
+ * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3StdCalculatorFactory.cxx,v 1.1 2004/06/24 14:27:55 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.1 2004/06/24 15:04:54 dule Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -10,9 +10,9 @@
 
 // Class header files
 
-#include "phys-services/I3StdCalculatorFactory.h"
+#include "phys-services/I3CalculatorFactoryImpl.h"
 
-ClassImp(I3StdCalculatorFactory);
+ClassImp(I3CalculatorFactoryImpl);
 
 // Other header files
 
@@ -22,7 +22,7 @@ ClassImp(I3StdCalculatorFactory);
 
 // Constructors
 
-I3StdCalculatorFactory::I3StdCalculatorFactory(const char* name)
+I3CalculatorFactoryImpl::I3CalculatorFactoryImpl(const char* name)
   : I3ServiceFactory(name),
     fCalculator(0)
 {
@@ -33,7 +33,7 @@ I3StdCalculatorFactory::I3StdCalculatorFactory(const char* name)
 
 // Destructors
 
-I3StdCalculatorFactory::~I3StdCalculatorFactory()
+I3CalculatorFactoryImpl::~I3CalculatorFactoryImpl()
 {
 }
 
@@ -43,7 +43,7 @@ I3StdCalculatorFactory::~I3StdCalculatorFactory()
  * @todo implement a fatal call if the tables don't load
  */
 Bool_t
-I3StdCalculatorFactory::InstallService(I3Services& services,
+I3CalculatorFactoryImpl::InstallService(I3Services& services,
 				   const I3Context& context,
 				   const char* moduleName)
 {

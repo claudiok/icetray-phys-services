@@ -1,16 +1,16 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3StdCalculator.cxx,v 1.1 2004/06/24 14:27:55 pretz Exp $
+    $Id: I3CalculatorImpl.cxx,v 1.1 2004/06/24 15:04:54 dule Exp $
 
     @version $Revision: 1.1 $
-    @date $Date: 2004/06/24 14:27:55 $
+    @date $Date: 2004/06/24 15:04:54 $
     @author
 
     @todo
 
 */
-#include "phys-services/I3StdCalculator.h"
+#include "phys-services/I3CalculatorImpl.h"
 #include "dataclasses/I3Constants.h"
 #include <iostream>
 
@@ -19,14 +19,14 @@ using namespace I3Constants;
 
 //--------------------------------------------------------------
 // Calculate distance to position Pos() on track
-Double_t I3StdCalculator::Distance(I3Track* track, I3Position& pos)
+Double_t I3CalculatorImpl::Distance(I3Track* track, I3Position& pos)
 {
   return pos.CalcDistance(track->Pos());
 }
 
 //--------------------------------------------------------------
 // Calculate distance to START position on track
-Double_t I3StdCalculator::StartDistance(I3Track* track, I3Position& pos)
+Double_t I3CalculatorImpl::StartDistance(I3Track* track, I3Position& pos)
 {
   if (track->IsStarting() || track->IsContained()) {
     return pos.CalcDistance(track->StartPos());
@@ -36,7 +36,7 @@ Double_t I3StdCalculator::StartDistance(I3Track* track, I3Position& pos)
 
 //--------------------------------------------------------------
 // Calculate distance to STOP position on track
-Double_t I3StdCalculator::StopDistance(I3Track* track, I3Position& pos)
+Double_t I3CalculatorImpl::StopDistance(I3Track* track, I3Position& pos)
 {
   if (track->IsStopping() || track->IsContained()) {
     return pos.CalcDistance(track->StopPos());
@@ -47,7 +47,7 @@ Double_t I3StdCalculator::StopDistance(I3Track* track, I3Position& pos)
 //--------------------------------------------------------------
 // Calculate a position on track, which is a distance 'dist' 
 // away from track.Pos().
-I3Position I3StdCalculator::ShiftAlongTrack(I3Track* track, Double_t dist)
+I3Position I3CalculatorImpl::ShiftAlongTrack(I3Track* track, Double_t dist)
 {
   I3Position p;
   Double_t x,y,z;
@@ -60,7 +60,7 @@ I3Position I3StdCalculator::ShiftAlongTrack(I3Track* track, Double_t dist)
 
 //--------------------------------------------------------------
 // Calculate distance to CLOSEST APPROACH to track
-void I3StdCalculator::CherenkovCalc(I3TrackPtr track,   // input
+void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
 			       I3Position& pos,    // input
 			       I3Position& appos,  // output 
 			       Double_t& apdist,   // output
@@ -147,7 +147,7 @@ void I3StdCalculator::CherenkovCalc(I3TrackPtr track,   // input
 
     //--Don't calculate if track does not have direction
   } else {
-    cout <<"I3StdCalculator::CherenkovLight - Track has no direction. Not calculating.\n";
+    cout <<"I3CalculatorImpl::CherenkovLight - Track has no direction. Not calculating.\n";
     appos.NullPosition();
     apdist=NAN;
     chpos.NullPosition();
@@ -157,7 +157,7 @@ void I3StdCalculator::CherenkovCalc(I3TrackPtr track,   // input
 
 //--------------------------------------------------------------
 // Is a given position on a track
-Bool_t I3StdCalculator::IsOnTrack(I3Track* track, 
+Bool_t I3CalculatorImpl::IsOnTrack(I3Track* track, 
 			     I3Position& pos, 
 			     Double_t Precision)
 {
@@ -170,7 +170,7 @@ Bool_t I3StdCalculator::IsOnTrack(I3Track* track,
 
 //--------------------------------------------------------------
 // Return the time for Cherenkov photon from I3Track to I3Position
-  Double_t I3StdCalculator::CherenkovTime(I3TrackPtr track,
+  Double_t I3CalculatorImpl::CherenkovTime(I3TrackPtr track,
 				     I3Position& pos,
 				     Double_t ChAngle)
 {
@@ -182,7 +182,7 @@ Bool_t I3StdCalculator::IsOnTrack(I3Track* track,
 
 //--------------------------------------------------------------
 // Return the distance of closets approach from I3Track to I3Position
-  Double_t I3StdCalculator::ClosestApproachDistance(I3TrackPtr track,
+  Double_t I3CalculatorImpl::ClosestApproachDistance(I3TrackPtr track,
 					       I3Position& pos)
 {
   I3Position appos,chpos;
