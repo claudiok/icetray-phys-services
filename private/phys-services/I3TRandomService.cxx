@@ -22,11 +22,6 @@ UInt_t I3TRandomService::Integer(UInt_t imax)
   return fRand.Integer(imax);
 }
 
-Double_t I3TRandomService::Landau(Double_t mean, Double_t sigma)
-{
-  return fRand.Landau(mean,sigma);
-}
-
 Int_t I3TRandomService::Poisson(Double_t mean)
 {
   return fRand.Poisson(mean);
@@ -35,11 +30,6 @@ Int_t I3TRandomService::Poisson(Double_t mean)
 Double_t I3TRandomService::PoissonD(Double_t mean)
 {
   return fRand.PoissonD(mean);
-}
-
-Double_t I3TRandomService::Rndm(Int_t i)
-{
-  return fRand.Rndm(i);
 }
 
 Double_t I3TRandomService::Uniform(Double_t x1)

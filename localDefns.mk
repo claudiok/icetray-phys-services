@@ -1,2 +1,3 @@
 CXX_SRC_SUFFIX := cxx
 DUMMY_TOOLS += roost TUT
+XTRA_LOAD_LIBS += gsl

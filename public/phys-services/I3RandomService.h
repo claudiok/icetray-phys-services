@@ -5,7 +5,7 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3RandomService.h,v 1.5 2004/09/17 21:12:02 pretz Exp $
+ * $Id: I3RandomService.h,v 1.6 2004/10/18 14:21:42 pretz Exp $
  *
  * @brief This class provides an interface to random numbers suitable for use by
  * icetray modules.  
@@ -14,8 +14,8 @@
  * reflect ROOT's TRandom interface.  Indeed TRandom could be used to 
  * trivially fill this interface
  *
- * @version $Revision: 1.5 $
- * @date $Date: 2004/09/17 21:12:02 $
+ * @version $Revision: 1.6 $
+ * @date $Date: 2004/10/18 14:21:42 $
  * @author pretz
  *
  * @todo 
@@ -51,11 +51,6 @@ class I3RandomService {
   virtual UInt_t Integer(UInt_t imax)=0;
 
   /**
-   * a number drawn from a Landau distribution
-   */
-  virtual Double_t Landau(Double_t mean = 0, Double_t sigma = 1)=0;
-
-  /**
    * An integer drawn from a Poisson distribution
    */
   virtual Int_t Poisson(Double_t mean)=0;
@@ -64,12 +59,6 @@ class I3RandomService {
    * A number drawn from a Poisson distribution, as a double
    */
   virtual Double_t PoissonD(Double_t mean)=0;
-
-  /**
-   * Uniform Double_t on the interval (0,1).  You got me what that integer
-   * is for.  Near as I can figure it's useless, and the ROOT doc's don't say
-   */
-  virtual Double_t Rndm(Int_t i = 0)=0;
 
   /**
    * a Double_t drawn from a uniform distribution (0,x1)

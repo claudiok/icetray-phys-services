@@ -11,10 +11,13 @@ provided:
 
 @li <b>I3RandomService</b> is patterned off of ROOT's TRandom, and provides access to random numbers drawn from several possible distributions.  The 
 I3RandomService is an abstract interface, which can be serviced by any of
-several implementations.  Currently the only implementation is the 
-I3TRandomService which uses a private instance of TRandom to create its random
-numbers.  The advantage of having an I3RandomService interface between us and
-TRandom is that we can swap out implementations of TRandom dynamically later on.
+several implementations.  Currently there are two implementations of this
+interface.  I3TRandomService uses a private instance of a TRandom to create
+the random numbers.  I3GSLRandomServices uses the gnu scientific library
+to generate random numbers. 
+The advantage of having an I3RandomService interface between us and the 
+random number generator.  We can dynamically switch between any
+implementations of I3RandomSerivce.
 
 
 @li <b>I3ParticleDataService</b> is a service dealing with the 

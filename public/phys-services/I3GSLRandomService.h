@@ -1,44 +1,38 @@
-#ifndef I3TRANDOMSERVICE_H
-#define I3TRANDOMSERVICE_H
+#ifndef I3GSLRANDOMSERVICE_H
+#define I3GSLRANDOMSERVICE_H
 
 #include "phys-services/I3RandomService.h"
-#include "TRandom.h"
+
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_test.h>
 
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3TRandomService.h,v 1.4 2004/10/18 14:21:42 pretz Exp $
+ * $Id: I3GSLRandomService.h,v 1.1 2004/10/18 14:21:42 pretz Exp $
  *
  * @brief An implementation of the I3RandomService interface.  
  * 
- * Just uses
- * a private TRandom to implement the methods of I3RandomService.
+ * Uses the gsl library for the random numbers
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  * @date $Date: 2004/10/18 14:21:42 $
  * @author pretz
  *
  * @todo 
  */
-class I3TRandomService : public I3RandomService{
+class I3GSLRandomService : public I3RandomService{
  public:
   /**
    * default constructor
-   * Builds the private TRandom in the default way.
    */
-  I3TRandomService(){};
-
-  /**
-   * constructor
-   * Builds the private TRandom with the indicated seed
-   * @param seed the seed value you want for the TRandom
-   */
-  I3TRandomService(UInt_t seed) : fRand(seed){}
+  I3GSLRandomService();
 
   /**
    * destructor
    */
-  virtual ~I3TRandomService(){};
+  virtual ~I3GSLRandomService(){};
 
   /**
    * a number drawn from a binomial distribution
@@ -78,10 +72,11 @@ class I3TRandomService : public I3RandomService{
    */
   virtual Double_t Uniform(Double_t x1, Double_t x2);
  private:
-  TRandom fRand;
 
-  ClassDef(I3TRandomService,0);
+  gsl_rng* r;
+
+  ClassDef(I3GSLRandomService,0);
 };
 
 
-#endif //I3TRANDOMSERVICE_H
+#endif //I3GSLRANDOMSERVICE_H
