@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.2 2004/06/25 18:44:36 dule Exp $
+ * $Id: I3Calculator.h,v 1.3 2004/07/30 19:55:07 dule Exp $
  *
  * @file I3TrackImpl.h
- * @version $Revision: 1.2 $
- * @date $Date: 2004/06/25 18:44:36 $
+ * @version $Revision: 1.3 $
+ * @date $Date: 2004/07/30 19:55:07 $
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -97,21 +97,51 @@ class I3Calculator
    * 
    * @param track input track
    * @param pos input position
-   * @param ChAngle input Cherenkov angle with a default value of 41 deg.
+   * @param IndexRef input Index of Refraction with default value of 1.31
    */
   virtual Double_t CherenkovTime(I3TrackPtr track,
 	           		 I3Position& pos,
 				 Double_t IndexRef=1.31) = 0;
 
  /**
+   * Output distance from origin of Cherenkov light from I3Track to I3Position.
+   * This method simply uses CherenkovCalc for the calculation.
+   * 
+   * @param track input track
+   * @param pos input position
+   */
+  virtual Double_t CherenkovDistance(I3TrackPtr track,
+				     I3Position& pos) = 0;
+
+ /**
+   * Output angle between Cherenkov path and the z-axis of the I3Position (DOM)
+   * This method simply uses CherenkovCalc for the calculation.
+   * 
+   * @param track input track
+   * @param pos input position
+   */
+  virtual Double_t CherenkovAngle(I3TrackPtr track,
+				  I3Position& pos) = 0;
+
+ /**
    * Output time of arrival of Cherenkov light from I3Cascade to I3Position.
    * 
    * @param cascade input cascade position
    * @param pos input position
+   * @param IndexRef input Index of Refraction with default value of 1.31
    */
   virtual Double_t CascadeTime(I3CascadePtr cascade,
 			       I3Position& pos,
 			       Double_t IndexRef=1.31) = 0;
+
+ /**
+   * Output distance from center of I3Cascade to I3Position.
+   * 
+   * @param cascade input cascade position
+   * @param pos input position
+   */
+  virtual Double_t CascadeDistance(I3CascadePtr cascade,
+				   I3Position& pos) = 0;
 
 
  protected:
