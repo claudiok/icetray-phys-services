@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.6 2004/11/28 17:06:54 pretz Exp $
+    $Id: I3CalculatorTest.cxx,v 1.7 2004/11/29 19:48:51 dule Exp $
 
-    @version $Revision: 1.6 $
-    @date $Date: 2004/11/28 17:06:54 $
+    @version $Revision: 1.7 $
+    @date $Date: 2004/11/29 19:48:51 $
     @author pretz
 
     @todo
@@ -224,25 +224,32 @@ namespace tut
 
     cout <<"CascadeTime..."<<endl; //-------------------------
 
-    ensure_distance("CascadeTime failed",calc.CascadeTime(cascptr,r)/ns,
-		    15.137,0.001);
+    cout<<" cascade-time(cascade,[0,0,0]): "
+	<<calc.CascadeTime(cascptr,r)/ns<<endl;
+    ensure_distance("CascadeTime(cascade,[0,0,0]) failed",
+		    calc.CascadeTime(cascptr,r)/ns,15.137,0.001);
 
     cout <<"CascadeDistance..."<<endl; //-------------------------
 
-    ensure_distance("CascadeDistance failed",calc.CascadeDistance(cascptr,r),
-		    2.*sqrt(3.),0.001);
+    cout<<" cascade-distance(cascade,[0,0,0]): "
+	<<calc.CascadeDistance(cascptr,r)<<endl;
+    ensure_distance("CascadeDistance(cascade,[0,0,0]) failed",
+		    calc.CascadeDistance(cascptr,r),2.*sqrt(3.),0.001);
 
     cout <<"AngleDiff..."<<endl; //-------------------------
 
-    ensure_distance("AngleDiff failed",calc.AngleDiff(track_inf,muon),
-		    90*deg,0.001);
-
+    cout<<" angle-diff(track_inf,muon): "
+	<<calc.AngleDiff(track_inf,muon)/deg<<endl;
+    ensure_distance("AngleDiff(track_inf,muon) failed",
+		    calc.AngleDiff(track_inf,muon)/deg,90.,0.001);
+    
     I3BasicMuonPtr track1 (new I3BasicMuon);
     track1->SetDir(0,1,-1);
     I3BasicMuonPtr track2 (new I3BasicMuon);
     track2->SetDir(1,0,-1);
-    ensure_distance("AngleDiff failed",calc.AngleDiff(track1,track2),
-		    60*deg,0.001);
-
+    cout<<" angle-diff(track1[0,1,-1],track2[1,0,-1]): "
+	<<calc.AngleDiff(track1,track2)/deg<<endl;
+    ensure_distance("AngleDiff(track1[0,1,-1],track2[1,0,-1] failed",
+		    calc.AngleDiff(track1,track2)/deg,60.,0.001);
   }
 }
