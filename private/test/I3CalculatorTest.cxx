@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.5 2004/11/25 05:59:09 dule Exp $
+    $Id: I3CalculatorTest.cxx,v 1.6 2004/11/28 17:06:54 pretz Exp $
 
-    @version $Revision: 1.5 $
-    @date $Date: 2004/11/25 05:59:09 $
+    @version $Revision: 1.6 $
+    @date $Date: 2004/11/28 17:06:54 $
     @author pretz
 
     @todo
@@ -234,14 +234,14 @@ namespace tut
 
     cout <<"AngleDiff..."<<endl; //-------------------------
 
-    ensure_distance("AngleDiff failed",calc.AngleDiff(track_inf,muon)/deg,
+    ensure_distance("AngleDiff failed",calc.AngleDiff(track_inf,muon),
 		    90*deg,0.001);
 
     I3BasicMuonPtr track1 (new I3BasicMuon);
     track1->SetDir(0,1,-1);
     I3BasicMuonPtr track2 (new I3BasicMuon);
     track2->SetDir(1,0,-1);
-    ensure_distance("AngleDiff failed",calc.AngleDiff(track1,track2)/deg,
+    ensure_distance("AngleDiff failed",calc.AngleDiff(track1,track2),
 		    60*deg,0.001);
 
   }
