@@ -35,6 +35,7 @@ struct GeometryPair
 class I3GeometryFactory
 {
  public:
+  static const char* DefaultName() { return "GeometryFactory";}
   virtual GeometryPair GetGeometry(Time time) = 0;
   virtual Time NextGeometryTime() = 0;
 };

@@ -28,11 +28,11 @@ class I3PhysicsSource : public I3Source
   
   void Process();
 
-  virtual I3EventFactory& GetEventFactory() = 0;
+  I3EventFactory& GetEventFactory();
 
-  virtual I3GeometryFactory& GetGeometryFactory() = 0;
+  I3GeometryFactory& GetGeometryFactory();
 
-  virtual I3CalibrationFactory& GetCalibrationFactory() = 0;
+  I3CalibrationFactory& GetCalibrationFactory();
 
  private:
   Stream NextStream();

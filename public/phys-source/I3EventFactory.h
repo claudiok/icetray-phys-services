@@ -35,6 +35,7 @@ struct EventPair
 class I3EventFactory
 {
  public:
+  static const char* DefaultName() { return "EventFactory";}
   virtual bool MoreEvents() = 0;
   virtual EventPair PopEvent() = 0;
   virtual Time NextEventTime() = 0;

@@ -35,6 +35,7 @@ struct CalibrationPair
 class I3CalibrationFactory
 {
  public:
+  static const char* DefaultName() { return "CalibrationFactory";}
   virtual CalibrationPair GetCalibration(Time time) = 0;
   virtual Time NextCalibrationTime() = 0;
 };
