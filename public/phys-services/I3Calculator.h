@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.1 2004/06/24 14:27:55 pretz Exp $
+ * $Id: I3Calculator.h,v 1.2 2004/06/25 18:44:36 dule Exp $
  *
  * @file I3TrackImpl.h
- * @version $Revision: 1.1 $
- * @date $Date: 2004/06/24 14:27:55 $
+ * @version $Revision: 1.2 $
+ * @date $Date: 2004/06/25 18:44:36 $
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -14,6 +14,7 @@
 #include <TObject.h>
 #include <cmath>
 #include "dataclasses/I3Track.h"
+#include "dataclasses/I3Cascade.h"
 #include "dataclasses/I3Units.h"
 
 #include <iostream>
@@ -38,11 +39,16 @@ class I3Calculator
    * destructor
    */
   virtual ~I3Calculator() {};
-  
+
   /**
    * Distance between position P and position Pos() on track
    */
   virtual Double_t Distance(I3TrackPtr track, I3Position& pos) = 0;
+  
+  /**
+   * Distance between position P and position Pos() of cascade
+   */
+  virtual Double_t Distance(I3CascadePtr cascade, I3Position& pos) = 0;
   
   /**
    * Distance between position P and start position on track
@@ -73,19 +79,7 @@ class I3Calculator
   virtual Bool_t IsOnTrack(I3TrackPtr track, 
 			   I3Position& pos,
 			   Double_t Precision=0.1*I3Units::meter) = 0;
-  
-  /**
-   * Output time of arrival of Cherenkov light from I3Track to I3Position.
-   * This method simply uses CherenkovCalc for the calculation.
-   * 
-   * @param track input track
-   * @param pos input position
-   * @param ChAngle input Cherenkov angle with a default value of 41 deg.
-   */
-  virtual Double_t CherenkovTime(I3TrackPtr track,
-	           		 I3Position& pos,
-				 Double_t ChAngle=41*I3Units::degree) = 0;
-  
+   
   /**
    * Output distance of closest approach from I3Track to I3Position.
    * This method simply uses CherenkovCalc for the calculation.
@@ -95,6 +89,29 @@ class I3Calculator
    */
   virtual Double_t ClosestApproachDistance(I3TrackPtr track,
 					   I3Position& pos) = 0;
+
+
+ /**
+   * Output time of arrival of Cherenkov light from I3Track to I3Position.
+   * This method simply uses CherenkovCalc for the calculation.
+   * 
+   * @param track input track
+   * @param pos input position
+   * @param ChAngle input Cherenkov angle with a default value of 41 deg.
+   */
+  virtual Double_t CherenkovTime(I3TrackPtr track,
+	           		 I3Position& pos,
+				 Double_t IndexRef=1.31) = 0;
+
+ /**
+   * Output time of arrival of Cherenkov light from I3Cascade to I3Position.
+   * 
+   * @param cascade input cascade position
+   * @param pos input position
+   */
+  virtual Double_t CascadeTime(I3CascadePtr cascade,
+			       I3Position& pos,
+			       Double_t IndexRef=1.31) = 0;
 
 
  protected:

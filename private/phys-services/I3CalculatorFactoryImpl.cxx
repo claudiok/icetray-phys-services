@@ -1,7 +1,7 @@
 /**
  * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.1 2004/06/24 15:04:54 dule Exp $
+ * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.2 2004/06/25 18:44:25 dule Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -17,8 +17,7 @@ ClassImp(I3CalculatorFactoryImpl);
 // Other header files
 
 #include "icetray/I3ServicesAccess.h"
-
-#include "phys-services/I3StdCalculator.h"
+#include "phys-services/I3CalculatorImpl.h"
 
 // Constructors
 
@@ -49,7 +48,7 @@ I3CalculatorFactoryImpl::InstallService(I3Services& services,
 {
   if(!fCalculator)
     {
-      fCalculator = new I3StdCalculator();
+      fCalculator = new I3CalculatorImpl();
     }
   return I3ServicesAccess<I3Calculator>::Put(services,
 					    fCalculator,

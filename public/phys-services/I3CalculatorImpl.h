@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3CalculatorImpl.h,v 1.1 2004/06/24 15:04:54 dule Exp $
+ * $Id: I3CalculatorImpl.h,v 1.2 2004/06/25 18:44:36 dule Exp $
  *
  * @file I3CalculatorImpl.h
- * @version $Revision: 1.1 $
- * @date $Date: 2004/06/24 15:04:54 $
+ * @version $Revision: 1.2 $
+ * @date $Date: 2004/06/25 18:44:36 $
  * @author dule
  */
 #ifndef I3CALCULATORIMPL_H
@@ -47,6 +47,11 @@ class I3CalculatorImpl : public I3Calculator
   Double_t Distance(I3TrackPtr track, I3Position& pos);
 
   /**
+   * Distance between position P and position Pos() of cascade
+   */
+  Double_t Distance(I3CascadePtr cascade, I3Position& pos);
+
+  /**
    * Distance between position P and start position on track
    */
   Double_t StartDistance(I3TrackPtr track, I3Position& pos);
@@ -72,7 +77,7 @@ class I3CalculatorImpl : public I3Calculator
    * I3Position
    * @param chdist output time of Cherenkov light from position Pos() of the
    * input I3Track to the input I3Position
-   * @param ChAngle input angle of Cherenkov cone (default = 41 deg)
+   * @param IndexRef input index of refraction (default=1.31)
    *
    * @todo Right now, CherenkovCalc calculates "closest approach" AND 
    * "cherenkov distances".  This is good for simplicity and non-repetitiveness
@@ -81,12 +86,12 @@ class I3CalculatorImpl : public I3Calculator
    * complicating and repeating the code.
    */
   void CherenkovCalc(I3TrackPtr track,
-		      I3Position& pos,
-		      I3Position& appos,
-		      Double_t& apdist,
-		      I3Position& chpos,
-		      Double_t& chtime,
-		      Double_t ChAngle=41*I3Units::degree);
+		     I3Position& pos,
+		     I3Position& appos,
+		     Double_t& apdist,
+		     I3Position& chpos,
+		     Double_t& chtime,
+		     Double_t IndexRef=1.31);
 
   /**
    * Calculate a position on track, which is a distance 'dist'
@@ -109,18 +114,6 @@ class I3CalculatorImpl : public I3Calculator
 		   Double_t Precision=0.1*I3Units::meter);
 
   /**
-   * Output time of arrival of Cherenkov light from I3Track to I3Position.
-   * This method simply uses CherenkovCalc for the calculation.
-   * 
-   * @param track input track
-   * @param pos input position
-   * @param ChAngle input Cherenkov angle with a default value of 41 deg.
-   */
-  Double_t CherenkovTime(I3TrackPtr track,
-			 I3Position& pos,
-			 Double_t ChAngle=41*I3Units::degree);
-
-  /**
    * Output distance of closest approach from I3Track to I3Position.
    * This method simply uses CherenkovCalc for the calculation.
    * 
@@ -129,6 +122,28 @@ class I3CalculatorImpl : public I3Calculator
    */
   Double_t ClosestApproachDistance(I3TrackPtr track,
 				   I3Position& pos);
+
+
+  /**
+   * Output time of arrival of Cherenkov light from I3Track to I3Position.
+   * This method simply uses CherenkovCalc for the calculation.
+   * 
+   * @param track input track
+   * @param pos input position
+   */
+  Double_t CherenkovTime(I3TrackPtr track,
+			 I3Position& pos,
+			 Double_t IndexRef=1.31);
+  /**
+   * Output time of arrival of Cherenkov light from I3Cascade to I3Position.
+   * 
+   * @param cascade input cascade
+   * @param pos input position
+   * @param IndexRef input index of refraction (default=1.31).
+   */
+  Double_t CascadeTime(I3CascadePtr cascade,
+		       I3Position& pos,
+		       Double_t IndexRef=1.31);
 
 
  protected:
