@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorImpl.cxx,v 1.6 2004/09/14 00:58:11 dule Exp $
+    $Id: I3CalculatorImpl.cxx,v 1.7 2004/09/14 15:28:59 dule Exp $
 
-    @version $Revision: 1.6 $
-    @date $Date: 2004/09/14 00:58:11 $
+    @version $Revision: 1.7 $
+    @date $Date: 2004/09/14 15:28:59 $
     @author
 
     @todo
@@ -118,7 +118,7 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
     chtime = TC/c + CP/speed; //travel time:track Pos->I3Position
     chdist = CP; // distance between origin of Cherenkov light to I3Position
           // total photon time from T (on track) through C to P.
-          // TC - particle is going at c, but CP - photon is going at c/n.
+          // TC - particle's speed is c, but CP - photon's speed is c/n.
 
     //--Is point of closest approach (A) on track?
     //--Is Cherenkov origin point (C) on track?
@@ -140,10 +140,12 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
 	  // if C is before STARTING position
 	  chpos.NullPosition();
 	  chtime = NAN;
+	  chdist = NAN;
 	} else if (TC>track->GetLength()) {
 	  // if C is beyond STOPPING position
 	  chpos.NullPosition();                                               
           chtime = NAN;
+	  chdist = NAN;
 	}
       } else {
       //-starting track................................
@@ -157,6 +159,7 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
 	  // if C is before STARTING position
 	  chpos.NullPosition();
 	  chtime = NAN;
+	  chdist = NAN;
 	}
       }
     else
@@ -172,6 +175,7 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
 	  // if C is beyond STOPPING position
 	  chpos.NullPosition();
 	  chtime = NAN;
+	  chdist = NAN;
 	}
       } else {
       //-infitine track................................
@@ -235,16 +239,20 @@ Bool_t I3CalculatorImpl::IsOnTrack(I3TrackPtr track,
 }
 
 //--------------------------------------------------------------
-// Return angle between Cherenkov path and z-axis at I3Position (DOM)
+// Return angle between incident Cherenkov direction onto the DOM
+// and the -z axis, at I3Position (DOM)
   Double_t I3CalculatorImpl::CherenkovAngle(I3TrackPtr track,
-					    I3Position& pos)
+					    I3Position& pos,
+					    I3OMGeo::EOrientation orient)
 {
   I3Position appos,chpos;
   Double_t apdist,chtime,chdist;
   CherenkovCalc(track,pos,appos,apdist,chpos,chtime,chdist);
-  I3Position P(pos);          // position (P) of a DOM or whatnot
-  P.ShiftCoordSystem(chpos);  // get coordinates when C is origin.
-  return P.GetTheta();        // return theta of new P
+  I3Position P(pos);             // position (P) of a DOM or whatnot
+  P.ShiftCoordSystem(chpos);     // get coordinates when C is origin.
+  Double_t angle = P.GetTheta(); // return theta of new P
+  if (orient==I3OMGeo::Up) { angle = pi-angle; } // in case OM points UP
+  return angle;
 }
 
 //--------------------------------------------------------------
