@@ -69,7 +69,7 @@ void I3PhysicsSource::SendEvent()
 void I3PhysicsSource::SendCalibration()
 {
   log_debug("Entering I3PhysicsSource::SendCalibration()");
-  Time nextEvent = GetEventFactory().NextEventTime();
+  I3Time nextEvent = GetEventFactory().NextEventTime();
   currentCalibration_ = GetCalibrationFactory().GetCalibration(nextEvent);
   currentCalibrationRange_ 
     = GetCalibrationFactory().GetCalibrationValidityRange(nextEvent);
@@ -82,7 +82,7 @@ void I3PhysicsSource::SendCalibration()
 void I3PhysicsSource::SendGeometry()
 {
   log_debug("Entering I3PhysicsSource::SendGeometry()");
-  Time nextEvent = GetEventFactory().NextEventTime();
+  I3Time nextEvent = GetEventFactory().NextEventTime();
   currentGeometry_ = GetGeometryFactory().GetGeometry(nextEvent);
   currentGeometryRange_ = 
     GetGeometryFactory().GetGeometryValidityRange(nextEvent);
@@ -131,7 +131,7 @@ I3PhysicsSource::Stream I3PhysicsSource::NextStream()
   if(!GetEventFactory().MoreEvents())
     return NONE;
 
-  Time eventTime = GetEventFactory().NextEventTime();
+  I3Time eventTime = GetEventFactory().NextEventTime();
   if(!IsGeometryCurrent(eventTime))
     return GEOMETRY;
   if(!IsCalibrationCurrent(eventTime))
@@ -139,17 +139,14 @@ I3PhysicsSource::Stream I3PhysicsSource::NextStream()
   return EVENT;
 }
 
-bool I3PhysicsSource::IsGeometryCurrent(Time time)
+bool I3PhysicsSource::IsGeometryCurrent(I3Time time)
 {
   if(!currentGeometry_)
     {
       log_debug("Geometry isn't current 'cause it hasn't been issued yet")
       return false;
     }
-  log_debug("Next event time: %f and the current Geometry Range: %s",
-	    time,
-	    currentGeometryRange_.ToString().c_str())
-  if(currentGeometryRange_.lower < time && currentGeometryRange_.upper > time)
+  if(currentGeometryRange_.lower < time && time < currentGeometryRange_.upper)
     {
       log_debug("Geometry is current, no worries");
       return true;
@@ -158,18 +155,15 @@ bool I3PhysicsSource::IsGeometryCurrent(Time time)
   return false;
 }
 
-bool I3PhysicsSource::IsCalibrationCurrent(Time time)
+bool I3PhysicsSource::IsCalibrationCurrent(I3Time time)
 {
   if(!currentCalibration_)
     {
       log_debug("Calibration isn't current 'cause it hasn't been issued yet");
       return false;
     }
-  log_debug("Next event time: %f and the current Calibration Range: %s",
-	    time,
-	    currentCalibrationRange_.ToString().c_str())
   if(currentCalibrationRange_.lower < time &&
-     currentCalibrationRange_.upper > time)
+     time < currentCalibrationRange_.upper)
     {
       log_debug("Calibration is current, no worries!");
       return true;

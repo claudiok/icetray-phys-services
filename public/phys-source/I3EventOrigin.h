@@ -1,10 +1,10 @@
 #ifndef I3EVENTORIGIN_H
 #define I3EVENTORIGIN_H
 
-#include "Time.h"
 #include "dataclasses/I3Event.h"
 #include "dataclasses/I3EventHeader.h"
 #include "dataclasses/StoragePolicy.h"
+#include "dataclasses/I3Time.h"
 
 /**
  * @brief Dumb struct for holding an I3Event and its I3EventHeader
@@ -40,7 +40,7 @@ class I3EventOrigin
   static const char* DefaultName() { return "EventOrigin";}
   virtual bool MoreEvents() = 0;
   virtual EventPair PopEvent() = 0;
-  virtual Time NextEventTime() = 0;
+  virtual I3Time NextEventTime() = 0;
 };
 
 typedef PtrPolicy<I3EventOrigin>::ThePolicy I3EventOriginPtr;

@@ -1,7 +1,7 @@
 #ifndef I3CALIBRATIONORIGIN_H
 #define I3CALIBRATIONORIGIN_H
 
-#include "Time.h"
+#include "I3TimeRange.h"
 #include "dataclasses/I3Calibration.h"
 #include "dataclasses/I3CalibrationHeader.h"
 #include "dataclasses/StoragePolicy.h"
@@ -38,8 +38,8 @@ class I3CalibrationOrigin
 {
  public:
   static const char* DefaultName() { return "CalibrationOrigin";}
-  virtual CalibrationPair GetCalibration(Time time) = 0;
-  virtual TimeRange GetCalibrationValidityRange(Time time) = 0;
+  virtual CalibrationPair GetCalibration(I3Time time) = 0;
+  virtual I3TimeRange GetCalibrationValidityRange(I3Time time) = 0;
 };
 
 typedef PtrPolicy<I3CalibrationOrigin>::ThePolicy I3CalibrationOriginPtr;

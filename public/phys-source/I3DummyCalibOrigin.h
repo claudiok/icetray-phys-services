@@ -15,7 +15,7 @@
 class I3DummyCalibOrigin : public I3CalibrationOrigin
 {
  public:
-  CalibrationPair GetCalibration(Time time)
+  CalibrationPair GetCalibration(I3Time time)
     {
       CalibrationPair p;
       p.calibration = I3CalibPtr(new I3Calibration());
@@ -23,9 +23,13 @@ class I3DummyCalibOrigin : public I3CalibrationOrigin
       return p;
     }
   
-  TimeRange GetCalibrationValidityRange(Time time)
+  I3TimeRange GetCalibrationValidityRange(I3Time time)
     {
-      return TimeRange(-INFINITY,INFINITY);
+      I3Time lower;
+      lower.SetDaqTime(0,0);
+      I3Time upper;
+      upper.SetDaqTime(3000,0);
+      return I3TimeRange(lower,upper);
     }
 };
 

@@ -11,12 +11,16 @@ void I3FileGeoOrigin::Fatal(const string& message)
   throw I3TrayException();
 }
 
-TimeRange I3FileGeoOrigin::GetGeometryValidityRange(Time time)
+I3TimeRange I3FileGeoOrigin::GetGeometryValidityRange(I3Time time)
 {
-  return TimeRange(-INFINITY,INFINITY);
+  I3Time lower;
+  lower.SetDaqTime(0,0);
+  I3Time upper;
+  upper.SetDaqTime(3000,0);
+  return I3TimeRange(lower,upper);
 }
 
-GeometryPair I3FileGeoOrigin::GetGeometry(Time time)
+GeometryPair I3FileGeoOrigin::GetGeometry(I3Time time)
 {
   GeometryPair p;
   p.geometry = I3GeometryPtr(new I3Geometry());

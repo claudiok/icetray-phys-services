@@ -13,15 +13,21 @@
  */
 class I3DummyEventOrigin : public I3EventOrigin
 {
-  Time currentTime_;
-
+  I3Time currentTime_;
+  I3Time maxTime_;
 
  public:
-  I3DummyEventOrigin() : currentTime_(0.0){}
+  virtual ~I3DummyEventOrigin(){}
+
+  I3DummyEventOrigin() 
+    {
+      currentTime_.SetDaqTime(2005,0);
+      maxTime_.SetDaqTime(2005,100000);
+    }
 
   bool MoreEvents()
     {
-      if(currentTime_ < 10.0)
+      if(currentTime_ < maxTime_)
 	return true;
       return false;
     }
@@ -31,11 +37,12 @@ class I3DummyEventOrigin : public I3EventOrigin
       EventPair e;
       e.event = I3EventPtr(new I3Event());
       e.header = I3EventHeaderPtr(new I3EventHeader());
-      currentTime_ += 1.0;
+      currentTime_.SetDaqTime(currentTime_.GetUTCYear(),
+			      currentTime_.GetUTCDaqTime() + 10000);
       return e;
     };
   
-  Time NextEventTime()
+  I3Time NextEventTime()
     {
       return currentTime_;
     }

@@ -14,7 +14,7 @@
 class I3DummyGeoOrigin : public I3GeometryOrigin
 {
  public:
-  GeometryPair GetGeometry(Time time)
+  GeometryPair GetGeometry(I3Time time)
     {
       GeometryPair p;
       p.geometry = I3GeometryPtr(new I3Geometry());
@@ -22,9 +22,13 @@ class I3DummyGeoOrigin : public I3GeometryOrigin
       return p;
     }
   
-  TimeRange GetGeometryValidityRange(Time time)
+  I3TimeRange GetGeometryValidityRange(I3Time time)
     {
-      return TimeRange(-INFINITY,INFINITY);
+      I3Time lower;
+      lower.SetDaqTime(0,0);
+      I3Time upper;
+      upper.SetDaqTime(3000,0);
+      return I3TimeRange(lower,upper);
     }
 };
  

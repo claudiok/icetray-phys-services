@@ -7,6 +7,9 @@
 
 #include "icetray/I3Source.h"
 
+#include "dataclasses/I3Time.h"
+#include "I3TimeRange.h"
+
 /**
  * @brief An I3Source which uses abstract factory
  * interfaces to get events, calibration and geometries
@@ -46,15 +49,15 @@ class I3PhysicsSource : public I3Source
 
   void SendAll(I3Frame& frame);
 
-  bool IsGeometryCurrent(Time time);
+  bool IsGeometryCurrent(I3Time time);
   
-  bool IsCalibrationCurrent(Time time);
+  bool IsCalibrationCurrent(I3Time time);
  private:
   EventPair currentEvent_;
   GeometryPair currentGeometry_;
-  TimeRange currentGeometryRange_;
+  I3TimeRange currentGeometryRange_;
   CalibrationPair currentCalibration_;
-  TimeRange currentCalibrationRange_;
+  I3TimeRange currentCalibrationRange_;
 };
 
 
