@@ -14,23 +14,19 @@
  */
 class I3DummyCalibOrigin : public I3CalibrationOrigin
 {
-  double nextTime_;
  public:
   CalibrationPair GetCalibration(Time time)
     {
       CalibrationPair p;
       p.calibration = I3CalibPtr(new I3Calibration());
       p.header = I3CalibrationHeaderPtr(new I3CalibrationHeader());
-      nextTime_ = INFINITY;
       return p;
     }
   
-  Time NextCalibrationTime()
+  TimeRange GetCalibrationValidityRange(Time time)
     {
-      return nextTime_;
+      return TimeRange(-INFINITY,INFINITY);
     }
-
-  I3DummyCalibOrigin() : nextTime_(-INFINITY){}
 };
 
 typedef PtrPolicy<I3DummyCalibOrigin>::ThePolicy I3DummyCalibOriginPtr;

@@ -17,19 +17,17 @@ using namespace std;
  */
 class I3FileGeoOrigin : public I3GeometryOrigin
 {
-  Time nextTime_;
   string fAmaGeoInputFile;
   string fI3GeoInputFile;
  public:
   I3FileGeoOrigin(const string& amafile,const string& icefile) :
-    nextTime_(-INFINITY),
     fAmaGeoInputFile(amafile),
     fI3GeoInputFile(icefile) 
     {}
   virtual ~I3FileGeoOrigin(){}
 
   GeometryPair GetGeometry(Time time);
-  Time NextGeometryTime();
+  TimeRange GetGeometryValidityRange(Time time);
  private:
   void Fatal(const string& message);
 

@@ -13,26 +13,19 @@
  */
 class I3DummyGeoOrigin : public I3GeometryOrigin
 {
-  double nextTime_;
  public:
   GeometryPair GetGeometry(Time time)
     {
       GeometryPair p;
       p.geometry = I3GeometryPtr(new I3Geometry());
       p.header = I3GeometryHeaderPtr(new I3GeometryHeader());
-      nextTime_ = INFINITY;
       return p;
     }
   
-  Time NextGeometryTime()
+  TimeRange GetGeometryValidityRange(Time time)
     {
-      return nextTime_;
+      return TimeRange(-INFINITY,INFINITY);
     }
-
-  I3DummyGeoOrigin() : nextTime_(-INFINITY){}
-
-
-
 };
  
 typedef PtrPolicy<I3DummyGeoOrigin>::ThePolicy I3DummyGeoOriginPtr;

@@ -9,9 +9,9 @@ void I3FileGeoOrigin::Fatal(const string& message)
   throw I3TrayException();
 }
 
-Time I3FileGeoOrigin::NextGeometryTime()
+TimeRange I3FileGeoOrigin::GetGeometryValidityRange(Time time)
 {
-  return nextTime_;
+  return TimeRange(-INFINITY,INFINITY);
 }
 
 GeometryPair I3FileGeoOrigin::GetGeometry(Time time)
@@ -20,7 +20,6 @@ GeometryPair I3FileGeoOrigin::GetGeometry(Time time)
   p.geometry = I3GeometryPtr(new I3Geometry());
   p.header = I3GeometryHeaderPtr(new I3GeometryHeader());
   FillGeometryFromFile(*p.geometry,*p.header);
-  nextTime_ = INFINITY;
   return p;
 }
 

@@ -39,7 +39,7 @@ class I3GeometryOrigin
  public:
   static const char* DefaultName() { return "GeometryOrigin";}
   virtual GeometryPair GetGeometry(Time time) = 0;
-  virtual Time NextGeometryTime() = 0;
+  virtual TimeRange GetGeometryValidityRange(Time time) = 0;
 };
 
 typedef PtrPolicy<I3GeometryOrigin>::ThePolicy I3GeometryOriginPtr;

@@ -46,10 +46,15 @@ class I3PhysicsSource : public I3Source
 
   void SendAll(I3Frame& frame);
 
+  bool IsGeometryCurrent(Time time);
+  
+  bool IsCalibrationCurrent(Time time);
  private:
   EventPair currentEvent_;
   GeometryPair currentGeometry_;
+  TimeRange currentGeometryRange_;
   CalibrationPair currentCalibration_;
+  TimeRange currentCalibrationRange_;
 };
 
 
