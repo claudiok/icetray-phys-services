@@ -154,7 +154,7 @@ bool I3PhysicsSource::IsGeometryCurrent(Time time)
       log_debug("Geometry is current, no worries");
       return true;
     }
-  log_debug("Calibration needs updating.");
+  log_debug("Geometry needs updating.");
   return false;
 }
 
