@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorImpl.cxx,v 1.2 2004/06/25 18:44:25 dule Exp $
+    $Id: I3CalculatorImpl.cxx,v 1.3 2004/07/13 14:23:57 pretz Exp $
 
-    @version $Revision: 1.2 $
-    @date $Date: 2004/06/25 18:44:25 $
+    @version $Revision: 1.3 $
+    @date $Date: 2004/07/13 14:23:57 $
     @author
 
     @todo
@@ -21,14 +21,14 @@ using namespace I3Constants;
 // Calculate distance between I3Position and Pos() of I3Track
 Double_t I3CalculatorImpl::Distance(I3TrackPtr track, I3Position& pos)
 {
-  return pos.CalcDistance(track->Pos());
+  return pos.CalcDistance(track->GetPos());
 }
 
 //--------------------------------------------------------------
 // Calculate distance between I3Position and Pos() of I3Cascade
 Double_t I3CalculatorImpl::Distance(I3CascadePtr cascade, I3Position& pos)
 {
-  return pos.CalcDistance(cascade->Pos());
+  return pos.CalcDistance(cascade->GetPos());
 }
 
 //--------------------------------------------------------------
@@ -36,7 +36,7 @@ Double_t I3CalculatorImpl::Distance(I3CascadePtr cascade, I3Position& pos)
 Double_t I3CalculatorImpl::StartDistance(I3TrackPtr track, I3Position& pos)
 {
   if (track->IsStarting() || track->IsContained()) {
-    return pos.CalcDistance(track->StartPos());
+    return pos.CalcDistance(track->GetStartPos());
   }
   return NAN;
 }
@@ -46,7 +46,7 @@ Double_t I3CalculatorImpl::StartDistance(I3TrackPtr track, I3Position& pos)
 Double_t I3CalculatorImpl::StopDistance(I3TrackPtr track, I3Position& pos)
 {
   if (track->IsStopping() || track->IsContained()) {
-    return pos.CalcDistance(track->StopPos());
+    return pos.CalcDistance(track->GetStopPos());
   }
   return NAN;
 }
@@ -58,9 +58,12 @@ I3Position I3CalculatorImpl::ShiftAlongTrack(I3TrackPtr track, Double_t dist)
 {
   I3Position p;
   Double_t x,y,z;
-  x = track->Pos().X() + dist*sin(track->Zenith())*cos(track->Azimuth());
-  y = track->Pos().Y() + dist*sin(track->Zenith())*sin(track->Azimuth());
-  z = track->Pos().Z() + dist*cos(track->Zenith());
+  x = track->GetPos().GetX() 
+    + dist*sin(track->GetZenith())*cos(track->GetAzimuth());
+  y = track->GetPos().GetY() 
+    + dist*sin(track->GetZenith())*sin(track->GetAzimuth());
+  z = track->GetPos().GetZ() 
+    + dist*cos(track->GetZenith());
   p.SetPosition(x,y,z,I3Position::car);
   return p;
 }
@@ -82,11 +85,11 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
     Double_t speed=I3Constants::c/IndexRef;
 
     //--Calculate position and distance of closest approach
-    Double_t PT = P.CalcDistance(track->Pos()); // T=track->Pos()
-    P.ShiftCoordSystem(track->Pos());
-    P.RotateZ(-(track->Azimuth()));
-    P.RotateY(pi/2-(track->Zenith()));
-    Double_t TA = P.X();
+    Double_t PT = P.CalcDistance(track->GetPos()); // T=track->Pos()
+    P.ShiftCoordSystem(track->GetPos());
+    P.RotateZ(-(track->GetAzimuth()));
+    P.RotateY(pi/2-(track->GetZenith()));
+    Double_t TA = P.GetX();
     Double_t PA = sqrt(PT*PT-TA*TA);
 
     //--Return position and distance of closest approach
@@ -109,18 +112,18 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
       //-contained track...............................
 	if (TA<0) {
 	  // if A is before STARTING position
-	  appos = track->StartPos();
-	  apdist = P.CalcDistance(track->StartPos());
-	} else if (TA>track->Length()) {
+	  appos = track->GetStartPos();
+	  apdist = P.CalcDistance(track->GetStartPos());
+	} else if (TA>track->GetLength()) {
 	  // if A is beyond STOPPING position
-	  appos = track->StopPos();
-	  apdist = P.CalcDistance(track->StopPos());
+	  appos = track->GetStopPos();
+	  apdist = P.CalcDistance(track->GetStopPos());
 	}
 	if (TC<0) {
 	  // if C is before STARTING position
 	  chpos.NullPosition();
 	  chtime = NAN;
-	} else if (TC>track->Length()) {
+	} else if (TC>track->GetLength()) {
 	  // if C is beyond STOPPING position
 	  chpos.NullPosition();                                               
           chtime = NAN;
@@ -129,8 +132,8 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
       //-starting track................................
 	if (TA<0) {
 	  // if A is before STARTING position
-	  appos = track->StartPos();
-	  apdist = P.CalcDistance(track->StartPos());
+	  appos = track->GetStartPos();
+	  apdist = P.CalcDistance(track->GetStartPos());
 	}
 	if (TC<0) {
 	  // if C is before STARTING position
@@ -143,8 +146,8 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
       //-stopping track................................
 	if (TA>0) {
 	  // if A is beyond STOPPING position
-	  appos = track->StopPos();
-	  apdist = P.CalcDistance(track->StopPos());
+	  appos = track->GetStopPos();
+	  apdist = P.CalcDistance(track->GetStopPos());
 	}
 	if (TC>0) {
 	  // if C is beyond STOPPING position
