@@ -1,21 +1,21 @@
 /**
- @page phys-services-phys-source Using the I3PhysicsSource 
+ @page phys-services-phys-source Using the I3UberSource 
 
  @author <a href="http://icecube.umd.edu/pretz">John Pretz</a>
 
  @section phys-services-phys-source-intro Introduction
 
- The I3PhysicsSource is an experimental way to get the whole processing
+ The I3UberSource is an experimental way to get the whole processing
  chain of IceTray modules started.  
 
- The idea is that the I3PhysicsSource module has three interfaces available
+ The idea is that the I3UberSource module has three interfaces available
  to it for getting the Geometry, the Calibration and some Events.  Those
  interfaces are the I3EventFactory, I3GeometryFactory, and 
  I3CalibrationFactory.  These three are abstract interfaces which allow
- the I3PhysicsSource to decide in which order Frames should be issued 
+ the I3UberSource to decide in which order Frames should be issued 
  and what data they should contain.
 
- The idea is that when it comes time for a frame, the I3PhysicsSource
+ The idea is that when it comes time for a frame, the I3UberSource
  looks at each of these three interfaces and gets the next Time for each.
  If a geometry stop is next, then it gets an I3Geometry and I3GeometryHeader
  from the interfaces and puts these in a frame.  Same for the I3Event and 

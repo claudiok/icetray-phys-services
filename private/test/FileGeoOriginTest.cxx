@@ -4,8 +4,8 @@
 #include "phys-source/I3EventOrigin.h"
 #include "phys-source/I3CalibrationOrigin.h"
 #include "root-icetray/RootI3Tray.h"
-#include "phys-source/I3PhysicsSource.h"
-#include "I3PhysicsSourceClientTest.h"
+#include "phys-source/I3UberSource.h"
+#include "I3UberSourceClientTest.h"
 #include "phys-source/I3DummyEventOriginFactory.h"
 #include "phys-source/I3FileGeoOriginFactory.h"
 #include "phys-source/I3DummyCalibOriginFactory.h"
@@ -47,8 +47,8 @@ namespace tut
     
     tray.AddService<I3DummyCalibOriginFactory>("calib");
 
-    tray.AddModule<I3PhysicsSource>("source");
-    tray.AddModule<I3PhysicsSourceClientTest>("client");
+    tray.AddModule<I3UberSource>("source");
+    tray.AddModule<I3UberSourceClientTest>("client");
 
     tray.ConnectBoxes("source","OutBox","client");
 
