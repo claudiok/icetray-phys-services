@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorImpl.cxx,v 1.5 2004/08/06 00:46:53 pretz Exp $
+    $Id: I3CalculatorImpl.cxx,v 1.6 2004/09/14 00:58:11 dule Exp $
 
-    @version $Revision: 1.5 $
-    @date $Date: 2004/08/06 00:46:53 $
+    @version $Revision: 1.6 $
+    @date $Date: 2004/09/14 00:58:11 $
     @author
 
     @todo
@@ -63,18 +63,18 @@ Double_t I3CalculatorImpl::StopDistance(I3TrackPtr track, I3Position& pos)
 }
 
 //--------------------------------------------------------------
-// Calculate a position on track, which is a distance 'dist' 
+// Calculate a position on track, which is a distance +/-dist 
 // away from track.Pos().
 I3Position I3CalculatorImpl::ShiftAlongTrack(I3TrackPtr track, Double_t dist)
 {
   I3Position p;
   Double_t x,y,z;
   x = track->GetPos().GetX() 
-    + dist*sin(track->GetZenith())*cos(track->GetAzimuth());
+    - dist*sin(track->GetDir().GetZenith())*cos(track->GetDir().GetAzimuth());
   y = track->GetPos().GetY() 
-    + dist*sin(track->GetZenith())*sin(track->GetAzimuth());
+    - dist*sin(track->GetDir().GetZenith())*sin(track->GetDir().GetAzimuth());
   z = track->GetPos().GetZ() 
-    + dist*cos(track->GetZenith());
+    - dist*cos(track->GetDir().GetZenith());
   p.SetPosition(x,y,z,I3Position::car);
   return p;
 }
@@ -93,14 +93,16 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
   //--Only calculate if track has direction
   if (track->HasDirection()) {
     I3Position P(pos);   // position (P) of a DOM or whatnot
-    Double_t changle=acos(1/IndexRef); // calculate Cherenkov angle
-    Double_t speed=I3Constants::c/IndexRef;
+    Double_t theta = pi - track->GetZenith();
+    Double_t phi = track->GetAzimuth() - pi;
+    Double_t changle = acos(1/IndexRef); // calculate Cherenkov angle
+    Double_t speed = c/IndexRef;
 
     //--Calculate position and distance of closest approach
     Double_t PT = P.CalcDistance(track->GetPos()); // T=track->Pos()
     P.ShiftCoordSystem(track->GetPos());
-    P.RotateZ(-(track->GetAzimuth()));
-    P.RotateY(pi/2-(track->GetZenith()));
+    P.RotateZ(-phi);
+    P.RotateY(pi/2-theta);
     Double_t TA = P.GetX();
     Double_t PA = sqrt(PT*PT-TA*TA);
 
@@ -113,7 +115,7 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
     Double_t CP = PA/sin(changle);
     Double_t TC = TA-CA;
     chpos = ShiftAlongTrack(track,TC); // origin of Cherenkov light (C)
-    chtime = TC/I3Constants::c + CP/speed; //travel time:track Pos->I3Position
+    chtime = TC/c + CP/speed; //travel time:track Pos->I3Position
     chdist = CP; // distance between origin of Cherenkov light to I3Position
           // total photon time from T (on track) through C to P.
           // TC - particle is going at c, but CP - photon is going at c/n.
@@ -125,12 +127,14 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
       //-contained track...............................
 	if (TA<0) {
 	  // if A is before STARTING position
-	  appos = (roost::dynamic_pointer_cast<I3Contained>(track))->GetStartPos();
-	  apdist = P.CalcDistance((roost::dynamic_pointer_cast<I3Contained>(track))->GetStartPos());
+	  appos = (roost::dynamic_pointer_cast<I3Contained>(track))
+	    ->GetStartPos();
+	  apdist = pos.CalcDistance(appos);
 	} else if (TA>track->GetLength()) {
 	  // if A is beyond STOPPING position
-	  appos = (roost::dynamic_pointer_cast<I3Contained>(track))->GetStopPos();
-	  apdist = P.CalcDistance((roost::dynamic_pointer_cast<I3Contained>(track))->GetStopPos());
+	  appos = (roost::dynamic_pointer_cast<I3Contained>(track))
+	    ->GetStopPos();
+	  apdist = pos.CalcDistance(appos);
 	}
 	if (TC<0) {
 	  // if C is before STARTING position
@@ -145,8 +149,9 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
       //-starting track................................
 	if (TA<0) {
 	  // if A is before STARTING position
-	  appos = (roost::dynamic_pointer_cast<I3Starting>(track))->GetStartPos();
-	  apdist = P.CalcDistance((roost::dynamic_pointer_cast<I3Starting>(track))->GetStartPos());
+	  appos = (roost::dynamic_pointer_cast<I3Starting>(track))
+	    ->GetStartPos();
+	  apdist = pos.CalcDistance(appos);
 	}
 	if (TC<0) {
 	  // if C is before STARTING position
@@ -159,8 +164,9 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
       //-stopping track................................
 	if (TA>0) {
 	  // if A is beyond STOPPING position
-	  appos = (roost::dynamic_pointer_cast<I3Stopping>(track))->GetStopPos();
-	  apdist = P.CalcDistance((roost::dynamic_pointer_cast<I3Stopping>(track))->GetStopPos());
+	  appos = (roost::dynamic_pointer_cast<I3Stopping>(track))
+	    ->GetStopPos();
+	  apdist = pos.CalcDistance(appos);
 	}
 	if (TC>0) {
 	  // if C is beyond STOPPING position
@@ -247,7 +253,7 @@ Bool_t I3CalculatorImpl::IsOnTrack(I3TrackPtr track,
 					 I3Position& pos,
 					 Double_t IndexRef)
 {
-  Double_t speed=I3Constants::c/IndexRef;
+  Double_t speed=c/IndexRef;
   return pos.CalcDistance(cascade->GetPos())/speed;
 }
 
