@@ -3,7 +3,7 @@
 /*
  * class: I3GSLRandomServiceFactory
  *
- * Version $Id: I3GSLRandomServiceFactory.h,v 1.2 2004/10/20 12:12:15 pretz Exp $
+ * Version $Id: I3GSLRandomServiceFactory.h,v 1.3 2005/03/16 10:42:53 troy Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -12,9 +12,6 @@
 
 // Header files
 
-#ifndef I3TYPES
-#include "icetray/I3types"
-#endif // I3TYPE
 
 // forward declarations
 
@@ -33,7 +30,7 @@ using namespace std;
 /**
  * @brief This class installs a I3GSLRandomService.
  *
- * @version $Id: I3GSLRandomServiceFactory.h,v 1.2 2004/10/20 12:12:15 pretz Exp $
+ * @version $Id: I3GSLRandomServiceFactory.h,v 1.3 2005/03/16 10:42:53 troy Exp $
  * @author pretz
  */
 class I3GSLRandomServiceFactory
@@ -58,7 +55,7 @@ class I3GSLRandomServiceFactory
    * being installed.
    * @return true if the services is successfully installed.
    */
-  virtual Bool_t InstallService(I3Services& services);
+  virtual bool InstallService(I3Services& services);
 
  private:
 
