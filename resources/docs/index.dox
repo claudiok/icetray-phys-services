@@ -1,6 +1,8 @@
 /**
 @mainpage The 'phys-services' Project
 
+This project contains some basic "service modules.  Here are some docs
+
 @li @ref phys-services
 
 @li @ref physics-module
