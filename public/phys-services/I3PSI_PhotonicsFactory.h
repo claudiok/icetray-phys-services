@@ -1,9 +1,9 @@
-#ifndef I3PSIDUMMYSERVICEFACTORY_H
-#define I3PSIDUMMYSERVICEFACTORY_H
+#ifndef I3PSIPHOTONICSSERVICEFACTORY_H
+#define I3PSIPHOTONICSSERVICEFACTORY_H
 /*
- * class: I3PSI_DummyFactory
+ * class: I3PSI_PhotonicsFactory
  *
- * Version $Id: I3PSI_DummyFactory.h.save,v 1.1 2004/02/20 20:44:09 pretz Exp $
+ * Version $Id: I3PSI_PhotonicsFactory.h,v 1.3 2004/03/04 19:04:34 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -20,7 +20,7 @@
 
 class I3Context;
 class I3Services;
-class PSI_Dummy;
+class PSI_Photonics;
 
 // superclasses
 
@@ -31,21 +31,21 @@ class PSI_Dummy;
 using namespace std;
 
 /**
- * This class installs a I3PSI_DummyFactory.
+ * This class installs a I3PSI_PhotonicsFactory.
  *
- * @version $Id: I3PSI_DummyFactory.h.save,v 1.1 2004/02/20 20:44:09 pretz Exp $
+ * @version $Id: I3PSI_PhotonicsFactory.h,v 1.3 2004/03/04 19:04:34 pretz Exp $
  * @author pretz
  */
-class I3PSI_DummyFactory
+class I3PSI_PhotonicsFactory
 : public I3ServiceFactory
 {
  public:
 
   // Constructors and destructor
 
-  I3PSI_DummyFactory(const char* name = 0);
+  I3PSI_PhotonicsFactory(const char* name = 0);
 
-  virtual ~I3PSI_DummyFactory();
+  virtual ~I3PSI_PhotonicsFactory();
 
   // public member functions
 
@@ -66,17 +66,17 @@ class I3PSI_DummyFactory
 
   // private constructors, destructor and assignment
 
-  I3PSI_DummyFactory
-    (const I3PSI_DummyFactory& rhs); // stop default
-  I3PSI_DummyFactory operator=
-    (const I3PSI_DummyFactory& rhs); // stop default
+  I3PSI_PhotonicsFactory
+    (const I3PSI_PhotonicsFactory& rhs); // stop default
+  I3PSI_PhotonicsFactory operator=
+    (const I3PSI_PhotonicsFactory& rhs); // stop default
 
   // instance member data
 
-  PSI_Dummy* fPhotonics;
+  PSI_Photonics* fPhotonics;
 
   // ROOT macros
-  ClassDef(I3PSI_DummyFactory,0);
+  ClassDef(I3PSI_PhotonicsFactory,0);
 };
 
 #endif // ROOTI3BOXESFACTORY_H

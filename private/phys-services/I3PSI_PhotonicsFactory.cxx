@@ -1,7 +1,7 @@
 /*
  * class: I3PSI_PhotonicsFactory
  *
- * Version $Id: I3PSI_PhotonicsFactory.cxx.save,v 1.1 2004/02/20 20:44:08 pretz Exp $
+ * Version $Id: I3PSI_PhotonicsFactory.cxx,v 1.3 2004/03/04 19:04:34 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -20,6 +20,7 @@ ClassImp(I3PSI_PhotonicsFactory);
 
 #include "PSI_Photonics.h"
 #include "PSInterface.h"
+#include <cstdlib>
 
 // Constructors
 
@@ -45,8 +46,13 @@ I3PSI_PhotonicsFactory::InstallService(I3Services& services,
 				   const I3Context& context,
 				   const char* moduleName)
 {
-  if(!fPhotonics)
+  if(!fPhotonics){
     fPhotonics = new PSI_Photonics();
+    if(!fPhotonics->LoadTables(0,"level1_table.list","level2_table.list",0)){
+      cout<<"loading photonics tables failed.  Aborting"<<endl;
+      exit(1);
+    }
+  }
   return I3ServicesAccess<PSInterface>::Put(services,
 					    fPhotonics,
 					    GetServiceName());

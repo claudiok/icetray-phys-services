@@ -1,7 +1,7 @@
 /*
  * class: I3PSI_DummyFactory
  *
- * Version $Id: I3PSI_DummyFactory.cxx.save,v 1.1 2004/02/20 20:44:08 pretz Exp $
+ * Version $Id: I3PSI_DummyFactory.cxx,v 1.3 2004/03/04 19:04:34 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
