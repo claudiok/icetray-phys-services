@@ -18,6 +18,7 @@
  *
  * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
  * WANTING SOMETHING PERFECTLY STABLE
+ * @ingroup experimentalphysservices
  */
 class I3PhysicsSource : public I3Source
 {

@@ -6,6 +6,13 @@
 
 using namespace std;
 
+/**
+ * @brief A simple class to install the I3DummyEventOrigin class into the
+ * framework
+ * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
+ * WANTING SOMETHING PERFECTLY STABLE
+ * @ingroup experimentalphysservices
+ */
 class I3DummyEventOriginFactory
 : public I3ServiceFactory
 {
