@@ -1,1 +1,2 @@
 CXX_SRC_SUFFIX := cxx
+DUMMY_TOOLS += roost TUT
