@@ -6,7 +6,7 @@
 
 The <code>phys-services</code> project is a collection of common IceTray 
 services
-for use in icetray modules.  Currently there are two types of services
+for use in icetray modules.  Currently there are three types of services
 provided:
 
 @li <b>I3RandomService</b> is patterned off of ROOT's TRandom, and provides access to random numbers drawn from several possible distributions.  The 
@@ -27,16 +27,12 @@ I3Particle::ParticleType into a std::string.  The conversion of Geant and PDG
 particle types has yet to be implemented.  There are probably several important
 features that should be in this class that are not yet implemented.
 
-These are the only two services implemented at this point, but a few more are 
-anticipated:
+@li <b> I3Calculator </b> is a service which handles standard calculations.
+Right now these are mostly routines for calcuating geometrical quantities of
+tracks, but this interface should be expanded as the software develops.
 
-@li I expect we will have a <b>'Standard Calculations'</b> service of some kind.
-This idea is not fully flushed out, but I picture some kind of service which 
-will
-calculate the 'delay times' or 'direct hits' of a track given an set of OM 
-responses.  I imagine that all these 'standard calculations' would be included
-here so that they can be accessible to all the modules, but can be swapped
-out dynamically.
+These are the only three services implemented at this point, but a few more are 
+anticipated:
 
 @li I picture the possibility for a <b>'Minimization Service'</b> so that we 
 can modularize the minimization process as distinct from the physics.  
