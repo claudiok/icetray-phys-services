@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.9 2004/11/10 20:07:06 tmccauley Exp $
+ * $Id: I3PhysicsModule.h,v 1.10 2004/12/16 13:57:06 pretz Exp $
  *
  * @file I3PhysicsModule.h
- * @version $Revision: 1.9 $
- * @date $Date: 2004/11/10 20:07:06 $
+ * @version $Revision: 1.10 $
+ * @date $Date: 2004/12/16 13:57:06 $
  * @author pretz
  */
 
@@ -19,6 +19,8 @@
 #include "dataclasses/I3Geometry.h"
 #include "dataclasses/I3Calibration.h"
 #include "dataclasses/I3GeometryHeader.h"
+#include "dataclasses/I3DetectorStatus.h"
+#include "dataclasses/I3DetectorStatusHeader.h"
 #include "icetray/I3FrameAccess.h"
 #include "I3ParticleDataService.h"
 #include "I3Calculator.h"
@@ -35,8 +37,6 @@ using namespace std;
  * methods
  *
  * @author pretz
- * @todo provide default 'names' for each service to match the default names
- * the services are created with
  * @todo add methods to access other stream objects when they are defined
  */
 class I3PhysicsModule : public I3Module
@@ -98,7 +98,14 @@ class I3PhysicsModule : public I3Module
    */
   Bool_t HasMCEvent(I3Frame& frame, const string& name = "Physics")
     {
-      return I3FrameAccess<I3MCEvent>::Exists(frame,name);
+      if(I3FrameAccess<I3Event>::Exists(frame,name))
+	{
+	  I3Event& event = I3FrameAccess<I3Event>::Get(frame,name);
+	  I3MCEvent* mcevent = dynamic_cast<I3MCEvent*>(&event);
+	  if(mcevent)
+	    return true;
+	}
+      return false;
     }
 
   /**
@@ -337,7 +344,7 @@ class I3PhysicsModule : public I3Module
     }
 
   /**
-   * Puts a geometry header in the frame.  Just a helper method to 
+   * Puts a evemt header in the frame.  Just a helper method to 
    * simplify the syntax
    * @param frame the frame to put the geometry header into
    * @param header the geometry header to put into the frame
@@ -345,12 +352,99 @@ class I3PhysicsModule : public I3Module
    * Defaults to 'GeometryHeader'
    * @return true if it is successful, false if otherwise
    */
-  Bool_t PutEventHeader(I3Frame& frame,
+  Bool_t PutGeometryHeader(I3Frame& frame,
 			I3GeometryHeaderPtr header,
 			const string& name="GeometryHeader")
   {
     return I3FrameAccess<I3GeometryHeader>::Put(frame,header,name);
   }
+
+  /**
+   * checks to see if the frame has a detector status in it.
+   * @return true if an detector status is present, false if not
+   * @param frame the frame we want to check
+   * @param name the name of the detector status in the frame.  
+   * Defaults to 'DetectorStatus'
+   */
+  Bool_t HasDetectorStatus(I3Frame& frame, 
+			   const string& name = "DetectorStatus")
+    {
+      return I3FrameAccess<I3DetectorStatus>::Exists(frame,name);
+    }
+
+  /**
+   * Gets a  detector status out of a frame.  Just a helper method to 
+   * simplify the
+   * syntax.
+   * @return an I3DetectorStatus that is in the frame
+   * @param frame the frame that you want the detector status out of.
+   * @param name the name of the detector status in the frame, 
+   * defaults to "DetectorStatus"
+   */
+  I3DetectorStatus& GetDetectorStatus(I3Frame& frame,
+				      const string& name = "DetectorStatus")
+    {
+      return I3FrameAccess<I3DetectorStatus>::Get(frame,name);
+    }
+
+  /**
+   * Puts a  detector status in the frame.  
+   * Just a helper method to simplify the syntax
+   * @param frame the frame to put the detector status into
+   * @param detector status the detector status to put into the frame
+   * @param name the name of the detector status in the frame.  
+   * Defaults to 'DetectorStatus'
+   * @return true if it is successful, false if otherwise
+   */
+  Bool_t PutDetectorStatus(I3Frame& frame,I3DetectorStatusPtr status,
+		    const string& name="DetectorStatus")
+    {
+      return I3FrameAccess<I3DetectorStatus>::Put(frame,status,name);
+    }
+
+  /**
+   * checks to see if the frame has a  detector status headerin it.
+   * @return true if an detector status headeris present, false if not
+   * @param frame the frame we want to check
+   * @param name the name of the detector status header in the frame.  Defaults to
+   * 'DetectorStatusHeader'
+   */
+  Bool_t HasDetectorStatusHeader(I3Frame& frame,
+			  const string& name="DetectorStatusHeader")
+    {
+      return I3FrameAccess<I3DetectorStatusHeader>::Exists(frame,name);
+    }
+
+  /**
+   * Gets an detector status header out of a frame.  Just a helper method 
+   * to simplify syntax
+   * @return the detector status header in the frame
+   * @param frame the frame that you want the detector status header out of.
+   * @param name the name of the detector status header in the frame.  Defaults to
+   * 'DetectorStatusHeader'
+   */
+  I3DetectorStatusHeader& GetDetectorStatusHeader(I3Frame& frame,
+				    const string& name="DetectorStatusHeader")
+    {
+      return I3FrameAccess<I3DetectorStatusHeader>::Get(frame,name);
+    }
+
+  /**
+   * Puts an detector status header in the frame.  Just a helper method to
+   * simplify the syntax
+   * @param frame the frame to put the detector status header into
+   * @param header the detector status header to put into the frame
+   * @param name the name of the header in the frame.
+   * Defaults to 'DetectorStatusHeader'
+   * @return true if it is successful, false if otherwise
+   */
+  Bool_t PutDetectorStatusHeader(I3Frame& frame,
+			  I3DetectorStatusHeaderPtr header,
+			  const string& name="DetectorStatusHeader")
+    {
+      return I3FrameAccess<I3DetectorStatusHeader>::Put(frame,header,name);
+    }
+
 
  private:
 
