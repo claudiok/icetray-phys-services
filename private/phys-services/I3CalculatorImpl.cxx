@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorImpl.cxx,v 1.8 2004/11/25 05:59:08 dule Exp $
+    $Id: I3CalculatorImpl.cxx,v 1.9 2004/11/29 19:37:14 dule Exp $
 
-    @version $Revision: 1.8 $
-    @date $Date: 2004/11/25 05:59:08 $
+    @version $Revision: 1.9 $
+    @date $Date: 2004/11/29 19:37:14 $
     @author
 
     @todo
@@ -282,7 +282,8 @@ Double_t I3CalculatorImpl::AngleDiff(I3TrackPtr track1,
   I3Direction dir2(track2->GetDir());
   dir1.RotateZ(-dir2.CalcPhi());
   dir1.RotateY(-dir2.CalcTheta());
-  return dir1.CalcTheta();
+  Double_t theta = dir1.CalcTheta();
+  return theta;
 }
 
 //--------------------------------------------------------------
