@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.3 2004/07/26 14:02:22 pretz Exp $
+ * $Id: I3PhysicsModule.h,v 1.4 2004/08/06 14:56:02 pretz Exp $
  *
  * @file I3PhysicsModule.h
- * @version $Revision: 1.3 $
- * @date $Date: 2004/07/26 14:02:22 $
+ * @version $Revision: 1.4 $
+ * @date $Date: 2004/08/06 14:56:02 $
  * @author pretz
  */
 
@@ -58,7 +58,8 @@ class I3PhysicsModule : public I3Module
    * using 
    * @param name the name of the instance of the service requested.
    */
-  I3ParticleDataService& GetParticleData(const string& name)
+  I3ParticleDataService& GetParticleData(const string& name=
+					 I3ParticleDataService::DefaultName())
     {
       return I3ContextAccess<I3ParticleDataService>::
 	GetService(GetContext(),name);
@@ -70,7 +71,8 @@ class I3PhysicsModule : public I3Module
    * module is using
    * @param name the name of the instance of the service requested
    */
-  I3Calculator& GetCalculator(const string& name)
+  I3Calculator& GetCalculator(const string& name=
+			      I3Calculator::DefaultName())
     {
       return I3ContextAccess<I3Calculator>::
 	GetService(GetContext(),name);
@@ -81,7 +83,7 @@ class I3PhysicsModule : public I3Module
    * @return a reference to the random number service
    * @param name the name of the service to find
    */
-  I3RandomService& GetRandom(const string& name)
+  I3RandomService& GetRandom(const string& name=I3RandomService::DefaultName())
     {
       return I3ContextAccess<I3RandomService>::
 	GetService(GetContext(),name);

@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.3 2004/07/30 19:55:07 dule Exp $
+ * $Id: I3Calculator.h,v 1.4 2004/08/06 14:56:02 pretz Exp $
  *
  * @file I3TrackImpl.h
- * @version $Revision: 1.3 $
- * @date $Date: 2004/07/30 19:55:07 $
+ * @version $Revision: 1.4 $
+ * @date $Date: 2004/08/06 14:56:02 $
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -143,7 +143,11 @@ class I3Calculator
   virtual Double_t CascadeDistance(I3CascadePtr cascade,
 				   I3Position& pos) = 0;
 
-
+  /**
+   * Gives a default name for this service.  Defaults to "Calculator"
+   */
+  static const Char_t* DefaultName(){return "Calculator";}
+  
  protected:
 
   // ROOT macro
