@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.11 2004/12/16 14:06:50 pretz Exp $
+ * $Id: I3PhysicsModule.h,v 1.12 2005/02/07 21:45:01 tmccauley Exp $
  *
  * @file I3PhysicsModule.h
- * @version $Revision: 1.11 $
- * @date $Date: 2004/12/16 14:06:50 $
+ * @version $Revision: 1.12 $
+ * @date $Date: 2005/02/07 21:45:01 $
  * @author pretz
  */
 
@@ -18,6 +18,7 @@
 #include "dataclasses/I3MCEventHeader.h"
 #include "dataclasses/I3Geometry.h"
 #include "dataclasses/I3Calibration.h"
+#include "dataclasses/I3CalibrationHeader.h"
 #include "dataclasses/I3GeometryHeader.h"
 #include "dataclasses/I3DetectorStatus.h"
 #include "dataclasses/I3DetectorStatusHeader.h"
@@ -331,6 +332,7 @@ class I3PhysicsModule : public I3Module
       return I3FrameAccess<I3GeometryHeader>::Exists(frame,name);
     }
 
+   
   /**
    * Gets the geometry header out of the frame.  Just a helper method to 
    * simplify the syntax.  
@@ -360,6 +362,35 @@ class I3PhysicsModule : public I3Module
   {
     return I3FrameAccess<I3GeometryHeader>::Put(frame,header,name);
   }
+
+
+  /**
+   * Does frame have a calibration header?
+   */
+  Bool_t HasCalibrationHeader(I3Frame& frame,const string& name="CalibrationHeader")
+	{
+	    return I3FrameAccess<I3CalibrationHeader>::Exists(frame,name);
+	}
+
+      
+  /**
+   * Get the calibration header out of the frame.
+   */
+  I3CalibrationHeader& GetCalibrationHeader(I3Frame& frame, 
+					    const string& name="CalibrationHeader")
+	{
+	    return I3FrameAccess<I3CalibrationHeader>::Get(frame,name);
+	}
+
+  /**
+   * Put the calibration header into the frame
+   */
+  Bool_t PutCalibrationHeader(I3Frame& frame,
+			      I3CalibrationHeaderPtr header,
+			      const string& name="CalibrationHeader")
+	{
+	    return I3FrameAccess<I3CalibrationHeader>::Put(frame,header,name);
+	}
 
   /**
    * checks to see if the frame has a detector status in it.
