@@ -1,0 +1,97 @@
+/**
+ @page physics-module The Use of I3PhysicsModule
+
+ @section description-of-physics-module Description
+
+ IceTray modules must inherit from the I3Module class of the @c icetray project.
+ In some places the syntax  to be able to access data
+ or services is cumbersome and not intuitive.  I3PhysicsModule inherits from
+ I3Module and defines a number of helper methods to simplify the syntax.  
+ Modules may inherit from I3PhysicsModule instead of I3Module directly to
+ gain access to these helper methods.
+
+ @section accessing-services-physics-module Accessing Standard Services with I3PhysicsModule
+ 
+ The syntax that IceTray requires to access an external service is not 
+ intuitive.  For example to access a service I3RandomService, the correct
+ code is
+ @code
+ {
+ I3RandomService& random = I3ContextAccess<I3RandomService>::Get(GetContext(),I3RandomService::DefaultName());
+ }
+ @endcode
+
+ I3PhysicsModule defines a method I3PhysicsModule::GetRandom() which does
+ just this, so that the syntax is simplified to
+ @code
+ {
+ I3RandomService& random = GetRandom();
+ }
+ @endcode
+
+ I3PhysicsModule does this for all the 'standard' services that are incldued
+ in the @c phys-services project so that these are all legal calls:
+ @code
+ {
+ I3RandomService& random = GetRandom(); 
+ I3Calculator& calc = GetCalculator();
+ I3ParticleDataService& particledata = GetParticleData();
+ }
+ @endcode
+
+ It is expected that as the number of standard services available in 
+ @phys-services increases that helper methods to access all of them will
+ be put into I3PhysicsModule to simplify access to them.
+
+ @section frame-access-physics-module Accessing Objects in the Frame
+
+ IceTray has the concept of an I3Frame which contains the event (and related)
+ data.  IceTray modules operate on an I3Frame, get the data out, manipulate it
+ and return the data to the frame.
+
+ The syntax for this is cumbersome, and so I3PhysicsModule defines some helper
+ methods to get standard objects out of the frame.
+
+ To get an I3Event and the I3EventHeader out of the frame, this is the syntax
+ @code
+ void Physics(I3Frame& frame){
+   I3Event& event = I3FrameAccess<I3Event>::Get(frame,"Physics");
+   I3EventHeader& header = I3FrameAccess<I3Event>::Get(frame,"PhysicsHeader");
+ }
+ @endcode
+ 
+ The problem with this - besides being ugly and cumbersome - is that the user 
+ is required to know what the character string name of the event is.  It would
+ be much nicer - since there is normally only one event at a time - for the 
+ user to just be able to type 'GetEvent' and get the event they want to look
+ at.
+ 
+ This is exactly what I3PhysicsModule does.  There is a method 
+ 'I3PhysicsModule::GetEvent(I3Frame&)' which returns the standard event 
+ in the frame.
+
+ So the syntax is changed - for modules that inherit from I3PhysicsModule - to:
+ @code
+ void Physics(I3Frame& frame){
+    I3Event& event = GetEvent(frame);
+    I3EventHeader header = GetEventHeader(frame);
+ }
+ @endcode
+
+ The same approach is used by other objects that will appear in the frame, so
+ all these are legal calls:
+ @code
+ void Physics(I3Frame& frame){
+    I3Event& event = GetEvent(frame);
+    I3EventHeader& event-header = GetEventHeader(frame);
+
+    I3MCEvent& mcevent = GetMCEvent(frame);
+    I3MCEventHeader& mcevent-header = GetMCEventHeader(frame);
+ 
+    I3Geometry& geometry = GetGeometry(frame);
+    I3GeometryHeader& geometry-header = GetGeometryHeader(frame); 
+ }
+ @endcode
+
+
+*/
