@@ -17,7 +17,7 @@ I3ParticleDataService::~I3ParticleDataService()
 
 I3Track::Type I3ParticleDataService::TranslateFromF2k(Int_t f2kid)
 {
-  return f2kid;
+  return (I3Track::Type)f2kid;
 }
 
 I3Track::Type I3ParticleDataService::TranslateFromString(const Char_t* name)
