@@ -23,7 +23,9 @@ class I3DummyEventOriginFactory
 
   virtual bool InstallService(I3Services& services);
 
+  void Configure();
  private:
+  int maxEvents_;
   I3DummyEventOriginPtr eventOrigin_;
 
   I3DummyEventOriginFactory (const I3DummyEventOriginFactory& rhs); 

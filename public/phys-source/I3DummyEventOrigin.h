@@ -13,13 +13,13 @@
  */
 class I3DummyEventOrigin : public I3EventOrigin
 {
-  I3Time currentTime_;
-  I3Time maxTime_;
+  int maxEvents_;
+  int currentEvent_;
 
  public:
   virtual ~I3DummyEventOrigin(){}
 
-  I3DummyEventOrigin();
+  I3DummyEventOrigin(int eventsToReturn);
 
   bool MoreEvents();
 
