@@ -7,7 +7,7 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3ParticleDataService.h,v 1.3 2004/03/24 15:29:38 pretz Exp $
+ * $Id: I3ParticleDataService.h,v 1.4 2004/03/24 15:33:40 pretz Exp $
  *
  * This class provides frequently needed operations on the Particle types.
  * Stuff like convering them between systems, and finding physical 
@@ -15,8 +15,8 @@
  * conventions, so to get a lifetime in ns for instance you'd do
  * Lifetime(I3Track::MuMinus)/I3Units::ns
  *
- * @version $Revision: 1.3 $
- * @date $Date: 2004/03/24 15:29:38 $
+ * @version $Revision: 1.4 $
+ * @date $Date: 2004/03/24 15:33:40 $
  * @author pretz
  *
  * @todo implment the TranslateFromPDG and TranslateFromCorsika methods

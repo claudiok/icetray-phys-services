@@ -408,6 +408,28 @@ std::string I3ParticleDataService::ToString(I3Track::Type type)
   return "Unknown";
 }
 
+Int_t I3ParticleDataService::LightType(I3Track::Type particle){
+  if(particle == I3Track::EPlus)
+    return 1;
+  if(particle == I3Track::EMinus)
+    return 1;
+  if(particle == I3Track::MuPlus)
+    return 0;
+  if(particle == I3Track::MuMinus)
+    return 0;
+  if(particle == I3Track::Brems)
+    return 1;
+  if(particle == I3Track::DeltaE)
+    return 1;
+  if(particle == I3Track::PairProd)
+    return 1;
+  if(particle == I3Track::NuclInt)
+    return 2;
+  if(particle == I3Track::Hadrons)
+    return 2;
+  return -1;
+}
+
 const Char_t* I3ParticleDataService::DefaultName()
 {
   return "ParticleData";
