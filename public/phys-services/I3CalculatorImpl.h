@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3CalculatorImpl.h,v 1.5 2004/11/25 05:59:09 dule Exp $
+ * $Id: I3CalculatorImpl.h,v 1.5.4.1 2005/03/11 15:09:50 dule Exp $
  *
  * @file I3CalculatorImpl.h
- * @version $Revision: 1.5 $
- * @date $Date: 2004/11/25 05:59:09 $
+ * @version $Revision: 1.5.4.1 $
+ * @date $Date: 2005/03/11 15:09:50 $
  * @author dule
  */
 #ifndef I3CALCULATORIMPL_H
@@ -42,22 +42,27 @@ class I3CalculatorImpl : public I3Calculator
   /**
    * Distance between position P and position Pos() on track
    */
-  Double_t Distance(I3TrackPtr track, I3Position& pos);
+  double Distance(I3TrackPtr track, I3Position& pos);
 
   /**
    * Distance between position P and position Pos() of cascade
    */
-  Double_t Distance(I3CascadePtr cascade, I3Position& pos);
+  double Distance(I3CascadePtr cascade, I3Position& pos);
 
+  /**
+   * Distance between position Pos() of two cascades
+   */
+  double Distance(I3CascadePtr casc1, I3CascadePtr casc2);
+  
   /**
    * Distance between position P and start position on track
    */
-  Double_t StartDistance(I3TrackPtr track, I3Position& pos);
+  double StartDistance(I3TrackPtr track, I3Position& pos);
 
   /**
    * Distance between position P and stop position on track
    */
-  Double_t StopDistance(I3TrackPtr track, I3Position& pos);
+  double StopDistance(I3TrackPtr track, I3Position& pos);
 
   /**
    * Distance between position P and closest approach position on track
@@ -84,20 +89,19 @@ class I3CalculatorImpl : public I3Calculator
    * complicating and repeating the code.
    */
   void CherenkovCalc(I3TrackPtr track,
-		     I3Position& pos,
-		     I3Position& appos,
-		     Double_t& apdist,
-		     I3Position& chpos,
-		     Double_t& chtime,
-		     Double_t& chdist,
-		     Double_t IndexRef=1.31);
+							I3Position& pos,
+							I3Position& appos,
+							double& apdist,
+							I3Position& chpos,
+							double& chtime,
+							double& chdist,
+							double IndexRef=1.31);
 
   /**
    * Calculate a position on track, which is a distance 'dist'
    * away from track.Pos().
    */
-  I3Position ShiftAlongTrack(I3TrackPtr track, 
-			     Double_t dist);
+  I3Position ShiftAlongTrack(I3TrackPtr track, double dist);
 
   /**
    * Check is Position is on Track within the given Precision.
@@ -109,8 +113,8 @@ class I3CalculatorImpl : public I3Calculator
    * more efficient.
    */
   Bool_t IsOnTrack(I3TrackPtr track, 
-		   I3Position& pos,
-		   Double_t Precision=0.1*I3Units::meter);
+						 I3Position& pos,
+						 double Precision=0.1*I3Units::meter);
 
   /**
    * Return distance of closest approach from I3Track to I3Position.
@@ -119,8 +123,7 @@ class I3CalculatorImpl : public I3Calculator
    * @param track input track
    * @param pos input position
    */
-  Double_t ClosestApproachDistance(I3TrackPtr track,
-				   I3Position& pos);
+  double ClosestApproachDistance(I3TrackPtr track, I3Position& pos);
 
   /**
    * Return time of arrival of Cherenkov light from I3Track to I3Position.
@@ -129,9 +132,9 @@ class I3CalculatorImpl : public I3Calculator
    * @param track input track
    * @param pos input position
    */
-  Double_t CherenkovTime(I3TrackPtr track,
-			 I3Position& pos,
-			 Double_t IndexRef=1.31);
+  double CherenkovTime(I3TrackPtr track, 
+							  I3Position& pos,
+							  double IndexRef=1.31);
 
  /**
    * Return distance from origin of Cherenkov light from I3Track to I3Position.
@@ -140,8 +143,7 @@ class I3CalculatorImpl : public I3Calculator
    * @param track input track
    * @param pos input position
    */
-  Double_t CherenkovDistance(I3TrackPtr track,
-			     I3Position& pos);
+  double CherenkovDistance(I3TrackPtr track, I3Position& pos);
 
  /**
    * Return angle between incident Cherenkov direction onto the DOM
@@ -151,9 +153,9 @@ class I3CalculatorImpl : public I3Calculator
    * @param track input track
    * @param pos input position
    */
-  Double_t CherenkovAngle(I3TrackPtr track,
-			  I3Position& pos,
-			  I3OMGeo::EOrientation orient=I3OMGeo::Down);
+  double CherenkovAngle(I3TrackPtr track,
+								I3Position& pos,
+								I3OMGeo::EOrientation orient=I3OMGeo::Down);
 
   /**
    * Return time of arrival of Cherenkov light from I3Cascade to I3Position.
@@ -162,9 +164,9 @@ class I3CalculatorImpl : public I3Calculator
    * @param pos input position
    * @param IndexRef input index of refraction (default=1.31).
    */
-  Double_t CascadeTime(I3CascadePtr cascade,
-		       I3Position& pos,
-		       Double_t IndexRef=1.31);
+  double CascadeTime(I3CascadePtr cascade,
+							I3Position& pos,
+							double IndexRef=1.31);
 
  /**
    * Return distance from center of I3Cascade to I3Position.
@@ -172,8 +174,7 @@ class I3CalculatorImpl : public I3Calculator
    * @param cascade input cascade position
    * @param pos input position
    */
-  Double_t CascadeDistance(I3CascadePtr cascade,
-			   I3Position& pos);
+  double CascadeDistance(I3CascadePtr cascade, I3Position& pos);
 
   /**
    * Output the 3D angle between two tracks
@@ -181,9 +182,14 @@ class I3CalculatorImpl : public I3Calculator
    * @param track1 first track
    * @param track2 second track
    */
-  Double_t AngleDiff(I3TrackPtr track1,
-		     I3TrackPtr track2);
+  double AngleDiff(I3TrackPtr track1, I3TrackPtr track2);
 
+  /**
+	* Calculate the number of direct hits from a given track.
+	* The moethod counts the hits with small time residuals (between t1, t2)
+	* (t1~=-15ns, t2~=25ns..150ns)
+	*/
+  int Ndir(I3TrackPtr track, I3Position& pos, double time);
 
  protected:
 
