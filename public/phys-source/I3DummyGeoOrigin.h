@@ -1,16 +1,16 @@
-#ifndef SIMPLEGEOFACTORY_H
-#define SIMPLEGEOFACTORY_H
+#ifndef I3DUMMYGEOORIGIN_H
+#define I3DUMMYGEOORIGIN_H
 
-#include "phys-source/I3GeometryFactory.h"
+#include "phys-source/I3GeometryOrigin.h"
 #include <cmath>
 /**
- * @brief A simple implemetation of the I3GeometryFactory which serves
+ * @brief A simple implemetation of the I3GeometryOrigin which serves
  * up one (empty) geometry
  *
  * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
  * WANTING SOMETHING PERFECTLY STABLE
  */
-class I3DummyGeoFactory : public I3GeometryFactory
+class I3DummyGeoOrigin : public I3GeometryOrigin
 {
   double nextTime_;
  public:
@@ -28,12 +28,12 @@ class I3DummyGeoFactory : public I3GeometryFactory
       return nextTime_;
     }
 
-  I3DummyGeoFactory() : nextTime_(-INFINITY){}
+  I3DummyGeoOrigin() : nextTime_(-INFINITY){}
 
 
 
 };
  
-typedef PtrPolicy<I3DummyGeoFactory>::ThePolicy I3DummyGeoFactoryPtr;
+typedef PtrPolicy<I3DummyGeoOrigin>::ThePolicy I3DummyGeoOriginPtr;
 
 #endif

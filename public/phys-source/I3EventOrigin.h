@@ -1,5 +1,5 @@
-#ifndef I3EVENTFACTORY_H
-#define I3EVENTFACTORY_H
+#ifndef I3EVENTORIGIN_H
+#define I3EVENTORIGIN_H
 
 #include "Time.h"
 #include "dataclasses/I3Event.h"
@@ -32,15 +32,15 @@ struct EventPair
  * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
  * WANTING SOMETHING PERFECTLY STABLE
  */
-class I3EventFactory
+class I3EventOrigin
 {
  public:
-  static const char* DefaultName() { return "EventFactory";}
+  static const char* DefaultName() { return "EventOrigin";}
   virtual bool MoreEvents() = 0;
   virtual EventPair PopEvent() = 0;
   virtual Time NextEventTime() = 0;
 };
 
-typedef PtrPolicy<I3EventFactory>::ThePolicy I3EventFactoryPtr;
+typedef PtrPolicy<I3EventOrigin>::ThePolicy I3EventOriginPtr;
 
 #endif

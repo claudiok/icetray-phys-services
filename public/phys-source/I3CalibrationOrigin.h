@@ -1,5 +1,5 @@
-#ifndef I3CALIBRATIONFACTORY_H
-#define I3CALIBRATIONFACTORY_H
+#ifndef I3CALIBRATIONORIGIN_H
+#define I3CALIBRATIONORIGIN_H
 
 #include "Time.h"
 #include "dataclasses/I3Calibration.h"
@@ -32,14 +32,14 @@ struct CalibrationPair
  * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
  * WANTING SOMETHING PERFECTLY STABLE
  */
-class I3CalibrationFactory
+class I3CalibrationOrigin
 {
  public:
-  static const char* DefaultName() { return "CalibrationFactory";}
+  static const char* DefaultName() { return "CalibrationOrigin";}
   virtual CalibrationPair GetCalibration(Time time) = 0;
   virtual Time NextCalibrationTime() = 0;
 };
 
-typedef PtrPolicy<I3CalibrationFactory>::ThePolicy I3CalibrationFactoryPtr;
+typedef PtrPolicy<I3CalibrationOrigin>::ThePolicy I3CalibrationOriginPtr;
 
 #endif

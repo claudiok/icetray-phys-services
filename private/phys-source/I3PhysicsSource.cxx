@@ -35,25 +35,25 @@ void I3PhysicsSource::Process()
       }
 }
 
-I3EventFactory& I3PhysicsSource::GetEventFactory()
+I3EventOrigin& I3PhysicsSource::GetEventFactory()
 {
   return 
-    I3ContextAccess<I3EventFactory>::GetService(GetContext(),
-						I3EventFactory::DefaultName());
+    I3ContextAccess<I3EventOrigin>::GetService(GetContext(),
+						I3EventOrigin::DefaultName());
 }
 
-I3GeometryFactory& I3PhysicsSource::GetGeometryFactory()
+I3GeometryOrigin& I3PhysicsSource::GetGeometryFactory()
 {
-  return I3ContextAccess<I3GeometryFactory>::
+  return I3ContextAccess<I3GeometryOrigin>::
     GetService(GetContext(),
-	       I3GeometryFactory::DefaultName());
+	       I3GeometryOrigin::DefaultName());
 }
 
-I3CalibrationFactory& I3PhysicsSource::GetCalibrationFactory()
+I3CalibrationOrigin& I3PhysicsSource::GetCalibrationFactory()
 {
-  return I3ContextAccess<I3CalibrationFactory>::
+  return I3ContextAccess<I3CalibrationOrigin>::
     GetService(GetContext(),
-	       I3CalibrationFactory::DefaultName());
+	       I3CalibrationOrigin::DefaultName());
 }
 
 void I3PhysicsSource::SendEvent()

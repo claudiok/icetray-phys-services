@@ -1,8 +1,8 @@
 #include "TUT/tut.h"
 
-#include "phys-source/I3GeometryFactory.h"
-#include "phys-source/I3EventFactory.h"
-#include "phys-source/I3CalibrationFactory.h"
+#include "phys-source/I3GeometryOrigin.h"
+#include "phys-source/I3EventOrigin.h"
+#include "phys-source/I3CalibrationOrigin.h"
 #include "root-icetray/RootI3Tray.h"
 #include "phys-source/I3PhysicsSource.h"
 #include "I3PhysicsSourceClientTest.h"

@@ -1,5 +1,5 @@
-#ifndef I3GEOMETRYFACTORY_H
-#define I3GEOMETRYFACTORY_H
+#ifndef I3GEOMETRYORIGIN_H
+#define I3GEOMETRYORIGIN_H
 
 #include "Time.h"
 #include "dataclasses/I3Geometry.h"
@@ -32,15 +32,15 @@ struct GeometryPair
  * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
  * WANTING SOMETHING PERFECTLY STABLE
  */
-class I3GeometryFactory
+class I3GeometryOrigin
 {
  public:
-  static const char* DefaultName() { return "GeometryFactory";}
+  static const char* DefaultName() { return "GeometryOrigin";}
   virtual GeometryPair GetGeometry(Time time) = 0;
   virtual Time NextGeometryTime() = 0;
 };
 
-typedef PtrPolicy<I3GeometryFactory>::ThePolicy I3GeometryFactoryPtr;
+typedef PtrPolicy<I3GeometryOrigin>::ThePolicy I3GeometryOriginPtr;
 
 
 #endif

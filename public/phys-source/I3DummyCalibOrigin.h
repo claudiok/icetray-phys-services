@@ -1,17 +1,17 @@
-#ifndef I3DUMMYCALIBFACTORY_H
-#define I3DUMMYCALIBFACTORY_H
+#ifndef I3DUMMYCALIBORIGIN_H
+#define I3DUMMYCALIBORIGIN_H
 
-#include "phys-source/I3CalibrationFactory.h"
+#include "phys-source/I3CalibrationOrigin.h"
 #include <cmath>
 
 /**
- * @brief An implementation of the I3CalibrationFactory which 
+ * @brief An implementation of the I3CalibrationOrigin which 
  * just serves up one calibration which is empty.
  *
  * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
  * WANTING SOMETHING PERFECTLY STABLE
  */
-class I3DummyCalibFactory : public I3CalibrationFactory
+class I3DummyCalibOrigin : public I3CalibrationOrigin
 {
   double nextTime_;
  public:
@@ -29,10 +29,10 @@ class I3DummyCalibFactory : public I3CalibrationFactory
       return nextTime_;
     }
 
-  I3DummyCalibFactory() : nextTime_(-INFINITY){}
+  I3DummyCalibOrigin() : nextTime_(-INFINITY){}
 };
 
-typedef PtrPolicy<I3DummyCalibFactory>::ThePolicy I3DummyCalibFactoryPtr;
+typedef PtrPolicy<I3DummyCalibOrigin>::ThePolicy I3DummyCalibOriginPtr;
 
 
 #endif

@@ -1,9 +1,9 @@
 #ifndef I3PHYSICSSOURCE_H
 #define I3PHYSICSSOURCE_H
 
-#include "I3EventFactory.h"
-#include "I3CalibrationFactory.h"
-#include "I3GeometryFactory.h"
+#include "I3EventOrigin.h"
+#include "I3CalibrationOrigin.h"
+#include "I3GeometryOrigin.h"
 
 #include "icetray/I3Source.h"
 
@@ -28,11 +28,11 @@ class I3PhysicsSource : public I3Source
   
   void Process();
 
-  I3EventFactory& GetEventFactory();
+  I3EventOrigin& GetEventFactory();
 
-  I3GeometryFactory& GetGeometryFactory();
+  I3GeometryOrigin& GetGeometryFactory();
 
-  I3CalibrationFactory& GetCalibrationFactory();
+  I3CalibrationOrigin& GetCalibrationFactory();
 
  private:
   Stream NextStream();
