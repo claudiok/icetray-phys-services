@@ -1,7 +1,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.4 2004/09/17 20:50:54 pretz Exp $
+ * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.5 2004/09/17 21:12:02 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -44,7 +44,7 @@ I3ParticleDataServiceFactory::InstallService(I3Services& services,
 				   const I3Context& context,
 				   const char* moduleName)
 {
-  I3ParticleDataServicePtr pds(new I3ParticleDataService());
+  I3ParticleDataService* pds = new I3ParticleDataService();
   return I3ServicesAccess<I3ParticleDataService>::Put(services,
 						      pds,
 						      GetServiceName().c_str());

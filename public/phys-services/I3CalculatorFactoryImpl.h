@@ -3,7 +3,7 @@
 /*
  * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3CalculatorFactoryImpl.h,v 1.2 2004/09/17 20:50:54 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.h,v 1.3 2004/09/17 21:12:02 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -16,12 +16,11 @@
 #include "icetray/I3types"
 #endif // I3TYPE
 
-#include "phys-services/I3Calculator.h"
-
 // forward declarations
 
 class I3Context;
 class I3Services;
+class I3Calculator;
 
 // superclasses
 
@@ -34,7 +33,7 @@ using namespace std;
 /**
  * This class installs a I3CalculatorFactoryImpl.
  *
- * @version $Id: I3CalculatorFactoryImpl.h,v 1.2 2004/09/17 20:50:54 pretz Exp $
+ * @version $Id: I3CalculatorFactoryImpl.h,v 1.3 2004/09/17 21:12:02 pretz Exp $
  * @author pretz
  */
 class I3CalculatorFactoryImpl
@@ -74,7 +73,7 @@ class I3CalculatorFactoryImpl
 
   // instance member data
 
-  I3CalculatorPtr fCalculator;
+  I3Calculator* fCalculator;
 
   // ROOT macros
   ClassDef(I3CalculatorFactoryImpl,0);

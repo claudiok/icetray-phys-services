@@ -1,7 +1,7 @@
 /**
  * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.3 2004/09/17 20:50:54 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.4 2004/09/17 21:12:02 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -22,7 +22,8 @@ ClassImp(I3CalculatorFactoryImpl);
 // Constructors
 
 I3CalculatorFactoryImpl::I3CalculatorFactoryImpl(const char* name)
-  : I3ServiceFactory(name)
+  : I3ServiceFactory(name),
+    fCalculator(0)
 {
   if ("" == GetServiceName()) {
     SetServiceName("Calculator");
@@ -47,7 +48,7 @@ I3CalculatorFactoryImpl::InstallService(I3Services& services,
 {
   if(!fCalculator)
     {
-      fCalculator = I3CalculatorPtr(new I3CalculatorImpl());
+      fCalculator = new I3CalculatorImpl();
     }
   return I3ServicesAccess<I3Calculator>::Put(services,
 					    fCalculator,
