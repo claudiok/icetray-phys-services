@@ -1,7 +1,7 @@
 /*
  * class: I3TRandomServiceFactory
  *
- * Version $Id: I3TRandomServiceFactory.cxx,v 1.1 2004/02/19 13:31:35 pretz Exp $
+ * Version $Id: I3TRandomServiceFactory.cxx,v 1.2 2004/02/19 22:53:44 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -44,7 +44,7 @@ I3TRandomServiceFactory::InstallService(I3Services& services,
 				   const char* moduleName)
 {
   I3TRandomService* pds = new I3TRandomService();
-  return I3ServicesAccess<I3TRandomService>::Put(services,
+  return I3ServicesAccess<I3RandomService>::Put(services,
 						      pds,
 						      GetServiceName());
 }
