@@ -3,7 +3,7 @@
 /*
  * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3CalculatorFactoryImpl.h,v 1.4 2004/10/20 12:12:15 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.h,v 1.4.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -12,10 +12,7 @@
 
 // Header files
 
-#ifndef I3TYPES
-#include "icetray/I3types"
-#endif // I3TYPE
-
+#include <icetray/Policies.h>
 #include "phys-services/I3Calculator.h"
 
 // forward declarations
@@ -34,7 +31,7 @@ using namespace std;
 /**
  * This class installs a I3CalculatorFactoryImpl.
  *
- * @version $Id: I3CalculatorFactoryImpl.h,v 1.4 2004/10/20 12:12:15 pretz Exp $
+ * @version $Id: I3CalculatorFactoryImpl.h,v 1.4.2.1 2005/02/05 01:45:15 troy Exp $
  * @author pretz
  */
 class I3CalculatorFactoryImpl
@@ -75,7 +72,7 @@ class I3CalculatorFactoryImpl
   I3CalculatorPtr fCalculator;
 
   // ROOT macros
-  ClassDef(I3CalculatorFactoryImpl,0);
+  //  ClassDef(I3CalculatorFactoryImpl,0);
 };
 
 #endif // ROOTI3BOXESFACTORY_H

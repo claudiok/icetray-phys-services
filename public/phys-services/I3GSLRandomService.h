@@ -10,14 +10,14 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3GSLRandomService.h,v 1.3 2004/11/02 02:24:38 pretz Exp $
+ * $Id: I3GSLRandomService.h,v 1.3.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * @brief An implementation of the I3RandomService interface.  
  * 
  * Uses the gsl library for the random numbers
  *
- * @version $Revision: 1.3 $
- * @date $Date: 2004/11/02 02:24:38 $
+ * @version $Revision: 1.3.2.1 $
+ * @date $Date: 2005/02/05 01:45:15 $
  * @author pretz
  *
  * @todo 
@@ -82,7 +82,7 @@ class I3GSLRandomService : public I3RandomService{
 
   gsl_rng* r;
 
-  ClassDef(I3GSLRandomService,0);
+  //  ClassDef(I3GSLRandomService,0);
 };
 
 typedef PtrPolicy<I3GSLRandomService>::ThePolicy I3GSLRandomServicePtr;

@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3CalculatorImpl.h,v 1.5 2004/11/25 05:59:09 dule Exp $
+ * $Id: I3CalculatorImpl.h,v 1.5.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * @file I3CalculatorImpl.h
- * @version $Revision: 1.5 $
- * @date $Date: 2004/11/25 05:59:09 $
+ * @version $Revision: 1.5.2.1 $
+ * @date $Date: 2005/02/05 01:45:15 $
  * @author dule
  */
 #ifndef I3CALCULATORIMPL_H
@@ -188,7 +188,7 @@ class I3CalculatorImpl : public I3Calculator
  protected:
 
   // ROOT macro
-  ClassDef(I3CalculatorImpl,1);
+  //  ClassDef(I3CalculatorImpl,1);
 };
 
 

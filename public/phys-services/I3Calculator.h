@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.10 2004/11/25 05:59:09 dule Exp $
+ * $Id: I3Calculator.h,v 1.10.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * @file I3TrackImpl.h
- * @version $Revision: 1.10 $
- * @date $Date: 2004/11/25 05:59:09 $
+ * @version $Revision: 1.10.2.1 $
+ * @date $Date: 2005/02/05 01:45:15 $
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -165,7 +165,7 @@ class I3Calculator
  protected:
 
   // ROOT macro
-  ClassDef(I3Calculator,1);
+  //  ClassDef(I3Calculator,1);
 };
 
 typedef PtrPolicy<I3Calculator>::ThePolicy I3CalculatorPtr;

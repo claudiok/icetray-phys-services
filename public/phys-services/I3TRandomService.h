@@ -7,15 +7,15 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3TRandomService.h,v 1.5 2004/11/02 02:24:38 pretz Exp $
+ * $Id: I3TRandomService.h,v 1.5.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * @brief An implementation of the I3RandomService interface.  
  * 
  * Just uses
  * a private TRandom to implement the methods of I3RandomService.
  *
- * @version $Revision: 1.5 $
- * @date $Date: 2004/11/02 02:24:38 $
+ * @version $Revision: 1.5.2.1 $
+ * @date $Date: 2005/02/05 01:45:15 $
  * @author pretz
  *
  * @todo 
@@ -86,7 +86,7 @@ class I3TRandomService : public I3RandomService{
  private:
   TRandom fRand;
 
-  ClassDef(I3TRandomService,0);
+  //  ClassDef(I3TRandomService,0);
 };
 
 

@@ -1,3 +1,3 @@
 #include "phys-services/I3PhysicsModule.h"
 
-ClassImp(I3PhysicsModule);
+//ClassImp(I3PhysicsModule);

@@ -1,20 +1,14 @@
 /*
  * class: I3TRandomServiceFactory
  *
- * Version $Id: I3TRandomServiceFactory.cxx,v 1.7 2004/10/20 12:12:15 pretz Exp $
+ * Version $Id: I3TRandomServiceFactory.cxx,v 1.7.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * Date: 17 Feb 2004
  *
  * (c) IceCube Collaboration
  */
 
-// Class header files
-
 #include "phys-services/I3TRandomServiceFactory.h"
-
-ClassImp(I3TRandomServiceFactory);
-
-// Other header files
 
 #include "icetray/I3ServicesAccess.h"
 

@@ -1,7 +1,7 @@
 /**
  * class: I3CalculatorFactoryImpl
  *
- * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.5 2004/10/20 12:12:15 pretz Exp $
+ * Version $Id: I3CalculatorFactoryImpl.cxx,v 1.5.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -12,7 +12,7 @@
 
 #include "phys-services/I3CalculatorFactoryImpl.h"
 
-ClassImp(I3CalculatorFactoryImpl);
+//ClassImp(I3CalculatorFactoryImpl);
 
 // Other header files
 
@@ -40,7 +40,7 @@ I3CalculatorFactoryImpl::~I3CalculatorFactoryImpl()
 /**
  * @todo implement a fatal call if the tables don't load
  */
-Bool_t
+  Bool_t
 I3CalculatorFactoryImpl::InstallService(I3Services& services)
 {
   if(!fCalculator)

@@ -13,10 +13,10 @@ ROOT_TEMPLATES :=
 
 # public directories for these projects are added to #include path,
 # and libraries are added to link.
-USES_PROJECTS := dataclasses icetray  
+USES_PROJECTS := dataclasses icetray root-icetray
 
 # same as above, but for external tools.  Paths found in config.mk
-USES_TOOLS := root roost log4cplus TUT gsl boost
+USES_TOOLS := root log4cplus TUT gsl boost
 
 # this is now globally "root" by default
 BUILD_FLAVOR := root

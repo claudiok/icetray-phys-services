@@ -5,7 +5,7 @@
 #include <string>
 #include <cstdio>
 
-ClassImp(I3ParticleDataService);
+//ClassImp(I3ParticleDataService);
 
 I3ParticleDataService::I3ParticleDataService() 
 {

@@ -1,7 +1,7 @@
 /*
  * class: I3GSLRandomServiceFactory
  *
- * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.2 2004/10/20 12:12:15 pretz Exp $
+ * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.2.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -12,7 +12,7 @@
 
 #include "phys-services/I3GSLRandomServiceFactory.h"
 
-ClassImp(I3GSLRandomServiceFactory);
+//ClassImp(I3GSLRandomServiceFactory);
 
 // Other header files
 
@@ -23,8 +23,7 @@ ClassImp(I3GSLRandomServiceFactory);
 // Constructors
 
 I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(I3Context& context)
-  : I3ServiceFactory(context),
-    random(0)
+  : I3ServiceFactory(context)
 {
   if (!IsNameSet()) {
     SetServiceName(I3GSLRandomService::DefaultName());

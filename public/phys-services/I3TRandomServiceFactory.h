@@ -3,7 +3,7 @@
 /*
  * class: I3TRandomServiceFactory
  *
- * Version $Id: I3TRandomServiceFactory.h,v 1.4 2004/10/20 12:12:15 pretz Exp $
+ * Version $Id: I3TRandomServiceFactory.h,v 1.4.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -11,10 +11,6 @@
  */
 
 // Header files
-
-#ifndef I3TYPES
-#include "icetray/I3types"
-#endif // I3TYPE
 
 // forward declarations
 
@@ -32,7 +28,7 @@ using namespace std;
 /**
  * @brief This class installs a I3TRandomService.
  *
- * @version $Id: I3TRandomServiceFactory.h,v 1.4 2004/10/20 12:12:15 pretz Exp $
+ * @version $Id: I3TRandomServiceFactory.h,v 1.4.2.1 2005/02/05 01:45:15 troy Exp $
  * @author pretz
  */
 class I3TRandomServiceFactory
@@ -57,7 +53,7 @@ class I3TRandomServiceFactory
    * being installed.
    * @return true if the services is successfully installed.
    */
-  virtual Bool_t InstallService(I3Services& services);
+  virtual bool InstallService(I3Services& services);
 
  private:
 
@@ -70,8 +66,6 @@ class I3TRandomServiceFactory
 
   // instance member data
 
-  // ROOT macros
-  ClassDef(I3TRandomServiceFactory,0);
 };
 
 #endif // ROOTI3BOXESFACTORY_H

@@ -1,6 +1,6 @@
 #include "phys-services/I3TRandomService.h"
 
-ClassImp(I3TRandomService);
+//ClassImp(I3TRandomService);
 
 Int_t I3TRandomService::Binomial(Int_t ntot, Double_t prob)
 {

@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.11 2004/12/16 14:06:50 pretz Exp $
+ * $Id: I3PhysicsModule.h,v 1.11.2.1 2005/02/05 01:45:15 troy Exp $
  *
  * @file I3PhysicsModule.h
- * @version $Revision: 1.11 $
- * @date $Date: 2004/12/16 14:06:50 $
+ * @version $Revision: 1.11.2.1 $
+ * @date $Date: 2005/02/05 01:45:15 $
  * @author pretz
  */
 
@@ -537,7 +537,7 @@ class I3PhysicsModule : public I3Module
   I3PhysicsModule operator=(const I3PhysicsModule&);
 
   // ROOT macro
-  ClassDef(I3PhysicsModule,0);
+  //  ClassDef(I3PhysicsModule,0);
 };
 
 
