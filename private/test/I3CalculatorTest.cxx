@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.7 2004/11/29 19:48:51 dule Exp $
+    $Id: I3CalculatorTest.cxx,v 1.8 2004/12/02 15:51:36 dule Exp $
 
-    @version $Revision: 1.7 $
-    @date $Date: 2004/11/29 19:48:51 $
+    @version $Revision: 1.8 $
+    @date $Date: 2004/12/02 15:51:36 $
     @author pretz
 
     @todo
@@ -83,6 +83,10 @@ namespace tut
     I3BasicCascadePtr casc_bas (new I3BasicCascade);
     I3CascadePtr cascptr = roost::dynamic_pointer_cast<I3Cascade>(casc_bas);
     casc_bas->SetPos(q);
+
+    cout <<"Creating a directional cascade..."<<endl;
+    I3DirectionalCascadePtr casc_dir (new I3DirectionalCascade);
+    casc_dir->SetPos(0,0,4);
 
     cout <<"Creating a new I3Calculator object..."<<endl;
     I3CalculatorImpl calc;
@@ -232,9 +236,9 @@ namespace tut
     cout <<"CascadeDistance..."<<endl; //-------------------------
 
     cout<<" cascade-distance(cascade,[0,0,0]): "
-	<<calc.CascadeDistance(cascptr,r)<<endl;
-    ensure_distance("CascadeDistance(cascade,[0,0,0]) failed",
-		    calc.CascadeDistance(cascptr,r),2.*sqrt(3.),0.001);
+	<<calc.CascadeDistance(casc_dir,r)<<endl;
+    ensure_distance("CascadeDistance(directional-cascade,[0,0,0]) failed",
+		    calc.CascadeDistance(casc_dir,r),4.,0.001);
 
     cout <<"AngleDiff..."<<endl; //-------------------------
 
