@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.4 2004/08/06 14:56:02 pretz Exp $
+ * $Id: I3Calculator.h,v 1.5 2004/09/14 15:30:38 dule Exp $
  *
  * @file I3TrackImpl.h
- * @version $Revision: 1.4 $
- * @date $Date: 2004/08/06 14:56:02 $
+ * @version $Revision: 1.5 $
+ * @date $Date: 2004/09/14 15:30:38 $
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -16,6 +16,7 @@
 #include "dataclasses/I3Track.h"
 #include "dataclasses/I3Cascade.h"
 #include "dataclasses/I3Units.h"
+#include "dataclasses/I3OMGeo.h"
 
 #include <iostream>
 
@@ -121,7 +122,8 @@ class I3Calculator
    * @param pos input position
    */
   virtual Double_t CherenkovAngle(I3TrackPtr track,
-				  I3Position& pos) = 0;
+				  I3Position& pos,
+			      I3OMGeo::EOrientation orient=I3OMGeo::Down) = 0;
 
  /**
    * Output time of arrival of Cherenkov light from I3Cascade to I3Position.

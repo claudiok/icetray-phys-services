@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3CalculatorImpl.h,v 1.3 2004/07/30 19:55:07 dule Exp $
+ * $Id: I3CalculatorImpl.h,v 1.4 2004/09/14 15:30:38 dule Exp $
  *
  * @file I3CalculatorImpl.h
- * @version $Revision: 1.3 $
- * @date $Date: 2004/07/30 19:55:07 $
+ * @version $Revision: 1.4 $
+ * @date $Date: 2004/09/14 15:30:38 $
  * @author dule
  */
 #ifndef I3CALCULATORIMPL_H
@@ -13,8 +13,6 @@
 
 #include <TObject.h>
 #include <cmath>
-#include "dataclasses/I3Track.h"
-#include "dataclasses/I3Units.h"
 #include "phys-services/I3Calculator.h"
 
 #include <iostream>
@@ -115,7 +113,7 @@ class I3CalculatorImpl : public I3Calculator
 		   Double_t Precision=0.1*I3Units::meter);
 
   /**
-   * Output distance of closest approach from I3Track to I3Position.
+   * Return distance of closest approach from I3Track to I3Position.
    * This method simply uses CherenkovCalc for the calculation.
    * 
    * @param track input track
@@ -125,7 +123,7 @@ class I3CalculatorImpl : public I3Calculator
 				   I3Position& pos);
 
   /**
-   * Output time of arrival of Cherenkov light from I3Track to I3Position.
+   * Return time of arrival of Cherenkov light from I3Track to I3Position.
    * This method simply uses CherenkovCalc for the calculation.
    * 
    * @param track input track
@@ -136,7 +134,7 @@ class I3CalculatorImpl : public I3Calculator
 			 Double_t IndexRef=1.31);
 
  /**
-   * Output distance from origin of Cherenkov light from I3Track to I3Position.
+   * Return distance from origin of Cherenkov light from I3Track to I3Position.
    * This method simply uses CherenkovCalc for the calculation.
    * 
    * @param track input track
@@ -146,17 +144,19 @@ class I3CalculatorImpl : public I3Calculator
 			     I3Position& pos);
 
  /**
-   * Output angle between Cherenkov path and the z-axis of the I3Position (DOM)
+   * Return angle between incident Cherenkov direction onto the DOM
+   * and the -z axis, at the I3Position (DOM)
    * This method simply uses CherenkovCalc for the calculation.
    * 
    * @param track input track
    * @param pos input position
    */
   Double_t CherenkovAngle(I3TrackPtr track,
-			  I3Position& pos);
+			  I3Position& pos,
+			  I3OMGeo::EOrientation orient=I3OMGeo::Down);
 
   /**
-   * Output time of arrival of Cherenkov light from I3Cascade to I3Position.
+   * Return time of arrival of Cherenkov light from I3Cascade to I3Position.
    * 
    * @param cascade input cascade
    * @param pos input position
@@ -167,7 +167,7 @@ class I3CalculatorImpl : public I3Calculator
 		       Double_t IndexRef=1.31);
 
  /**
-   * Output distance from center of I3Cascade to I3Position.
+   * Return distance from center of I3Cascade to I3Position.
    * 
    * @param cascade input cascade position
    * @param pos input position
