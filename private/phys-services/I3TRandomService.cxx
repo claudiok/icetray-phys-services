@@ -41,3 +41,8 @@ Double_t I3TRandomService::Uniform(Double_t x1, Double_t x2)
 {
   return fRand.Uniform(x1,x2);
 }
+
+Double_t I3TRandomService::Gaus(Double_t mean,Double_t stddev)
+{
+  return fRand.Gaus(mean,stddev);
+}

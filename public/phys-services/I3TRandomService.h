@@ -7,15 +7,15 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3TRandomService.h,v 1.4 2004/10/18 14:21:42 pretz Exp $
+ * $Id: I3TRandomService.h,v 1.5 2004/11/02 02:24:38 pretz Exp $
  *
  * @brief An implementation of the I3RandomService interface.  
  * 
  * Just uses
  * a private TRandom to implement the methods of I3RandomService.
  *
- * @version $Revision: 1.4 $
- * @date $Date: 2004/10/18 14:21:42 $
+ * @version $Revision: 1.5 $
+ * @date $Date: 2004/11/02 02:24:38 $
  * @author pretz
  *
  * @todo 
@@ -77,6 +77,12 @@ class I3TRandomService : public I3RandomService{
    * a Double_t drawn from a uniform distribution (x1,x2)
    */
   virtual Double_t Uniform(Double_t x1, Double_t x2);
+
+  /**
+   * a Double_t drawn from a Gaussian distribution with given
+   * mean and standard deviation
+   */
+  virtual Double_t Gaus(Double_t mean, Double_t stddev);
  private:
   TRandom fRand;
 

@@ -42,3 +42,8 @@ Double_t I3GSLRandomService::Uniform(Double_t x1, Double_t x2)
 {
   return gsl_ran_flat(r,x1,x2);
 }
+
+Double_t I3GSLRandomService::Gaus(Double_t mean,Double_t stddev)
+{
+  return mean + gsl_ran_gaussian(r,stddev);
+}

@@ -1,15 +1,15 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3RandomService.h,v 1.7 2004/10/20 12:12:15 pretz Exp $
+ * $Id: I3RandomService.h,v 1.8 2004/11/02 02:24:38 pretz Exp $
  *
  *
  * This class is just the interface.  The names chosen
  * reflect ROOT's TRandom interface.  Indeed TRandom could be used to 
  * trivially fill this interface
  *
- * @version $Revision: 1.7 $
- * @date $Date: 2004/10/20 12:12:15 $
+ * @version $Revision: 1.8 $
+ * @date $Date: 2004/11/02 02:24:38 $
  * @author pretz
  *
  * @todo 
@@ -80,6 +80,12 @@ class I3RandomService {
    * a Double_t drawn from a uniform distribution (x1,x2)
    */
   virtual Double_t Uniform(Double_t x1, Double_t x2)=0;
+
+  /**
+   * a Double_t drawn from a Gaussian distribution with given
+   * mean and standard deviation
+   */
+  virtual Double_t Gaus(Double_t mean,Double_t stddev) = 0;
 
   /**
    * gives a default name for this service

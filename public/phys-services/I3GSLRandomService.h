@@ -10,14 +10,14 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3GSLRandomService.h,v 1.2 2004/10/20 12:12:15 pretz Exp $
+ * $Id: I3GSLRandomService.h,v 1.3 2004/11/02 02:24:38 pretz Exp $
  *
  * @brief An implementation of the I3RandomService interface.  
  * 
  * Uses the gsl library for the random numbers
  *
- * @version $Revision: 1.2 $
- * @date $Date: 2004/10/20 12:12:15 $
+ * @version $Revision: 1.3 $
+ * @date $Date: 2004/11/02 02:24:38 $
  * @author pretz
  *
  * @todo 
@@ -71,6 +71,13 @@ class I3GSLRandomService : public I3RandomService{
    * a Double_t drawn from a uniform distribution (x1,x2)
    */
   virtual Double_t Uniform(Double_t x1, Double_t x2);
+
+  /**
+   * a Double_t drawn from a Gaussian distribution with given
+   * mean and standard deviation
+   */
+  virtual Double_t Gaus(Double_t mean, Double_t stddev);
+
  private:
 
   gsl_rng* r;

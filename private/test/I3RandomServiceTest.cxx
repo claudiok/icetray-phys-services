@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3RandomServiceTest.cxx,v 1.1 2004/11/01 22:06:46 pretz Exp $
+    $Id: I3RandomServiceTest.cxx,v 1.2 2004/11/02 02:24:38 pretz Exp $
 
-    @version $Revision: 1.1 $
-    @date $Date: 2004/11/01 22:06:46 $
+    @version $Revision: 1.2 $
+    @date $Date: 2004/11/02 02:24:38 $
     @author pretz
 
     @todo
@@ -14,6 +14,7 @@
 
 #include "phys-services/I3RandomService.h"
 #include "phys-services/I3TRandomService.h"
+#include "phys-services/I3GSLRandomService.h"
 
 #include <string>
 #include <vector>
@@ -72,7 +73,10 @@ namespace tut
       }
     
     double measured_stddev = sqrt(sum / (double) differences.size());
-    ensure_distance("testing stdev",measured_stddev,expected_stddev,0.01);
+    ensure_distance("testing stdev",
+		    measured_stddev,
+		    expected_stddev,
+		    0.01);
 	
 	
   }
@@ -96,19 +100,37 @@ namespace tut
     values.resize(samples);
     for(int i = 0; i< samples ; i++)
       values[i] = r.Exp(1.0);
-    testMeanStddev(values,1.0,0.0);
+    testMeanStddev(values,1.0,1.0);
   }
+  
+  template <int samples,class Random>
+  void testGaussian(Random& random)
+  {
+    vector<double> values;
+    values.resize(samples);
+    for(int i = 0 ; i<samples ; i++)
+      values[i] = random.Gaus(5,1.0);
+    testMeanStddev(values,5,1.0);
+  }
+
 
   template <int samples,class Random>
   void testRandomService(Random& random)
   {
     testUniform<samples,Random>(random);
     testExp<samples,Random>(random);
+    testGaussian<samples,Random>(random);
   }
 
   void object::test<1>()
   {
     I3TRandomService random;
-    testRandomService<10000,I3TRandomService>(random);
+    testRandomService<100000,I3TRandomService>(random);
+  }
+  
+  void object::test<2>()
+  {
+    I3GSLRandomService random;
+    testRandomService<100000,I3GSLRandomService>(random);
   }
 }
