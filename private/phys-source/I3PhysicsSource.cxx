@@ -15,6 +15,7 @@ I3PhysicsSource::I3PhysicsSource(I3Context& context) : I3Source(context)
 
 void I3PhysicsSource::Process()
 {
+  log_debug("Entering I3PhysicsSource::Process()");
   Stream next = NextStream();
   switch (next)
       {
@@ -58,6 +59,7 @@ I3CalibrationOrigin& I3PhysicsSource::GetCalibrationFactory()
 
 void I3PhysicsSource::SendEvent()
 {
+  log_debug("Entering I3PhysicsSource::SendEvent()");
   currentEvent_ = GetEventFactory().PopEvent();
   assert(currentEvent_);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Physics"));
@@ -66,6 +68,7 @@ void I3PhysicsSource::SendEvent()
 
 void I3PhysicsSource::SendCalibration()
 {
+  log_debug("Entering I3PhysicsSource::SendCalibration()");
   Time nextEvent = GetEventFactory().NextEventTime();
   currentCalibration_ = GetCalibrationFactory().GetCalibration(nextEvent);
   assert(currentCalibration_);
@@ -75,6 +78,7 @@ void I3PhysicsSource::SendCalibration()
 
 void I3PhysicsSource::SendGeometry()
 {
+  log_debug("Entering I3PhysicsSource::SendGeometry()");
   Time nextEvent = GetEventFactory().NextEventTime();
   currentGeometry_ = GetGeometryFactory().GetGeometry(nextEvent);
   assert(currentGeometry_);
@@ -84,6 +88,7 @@ void I3PhysicsSource::SendGeometry()
 
 void I3PhysicsSource::SendAll(I3Frame& frame)
 {
+  log_debug("Entering I3PhysicsSource::SendAll()");
   if(currentEvent_)
     {
       I3FrameAccess<I3Event>::Put(frame,
