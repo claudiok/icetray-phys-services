@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.10 2004/12/16 13:57:06 pretz Exp $
+ * $Id: I3PhysicsModule.h,v 1.11 2004/12/16 14:06:50 pretz Exp $
  *
  * @file I3PhysicsModule.h
- * @version $Revision: 1.10 $
- * @date $Date: 2004/12/16 13:57:06 $
+ * @version $Revision: 1.11 $
+ * @date $Date: 2004/12/16 14:06:50 $
  * @author pretz
  */
 
@@ -21,6 +21,8 @@
 #include "dataclasses/I3GeometryHeader.h"
 #include "dataclasses/I3DetectorStatus.h"
 #include "dataclasses/I3DetectorStatusHeader.h"
+#include "dataclasses/I3Monitoring.h"
+#include "dataclasses/I3MonitoringHeader.h"
 #include "icetray/I3FrameAccess.h"
 #include "I3ParticleDataService.h"
 #include "I3Calculator.h"
@@ -445,9 +447,90 @@ class I3PhysicsModule : public I3Module
       return I3FrameAccess<I3DetectorStatusHeader>::Put(frame,header,name);
     }
 
-
+  /**
+   * Checks to see if a frame has a monitoring in it
+   * @param frame the frame we want to check
+   * @param name the name of the monitoring in the frame
+   * @return true if the frame has a monitoring, false if otherwise
+   */
+  Bool_t HasMonitoring(I3Frame& frame,const string& name="Monitoring")
+    {
+      return I3FrameAccess<I3Monitoring>::Exists(frame,name);
+    }
+  
+  /**
+   * Gets the monitoring out of the frame.  Just a helper method to 
+   * simplify the
+   * syntax
+   * @return an I3Monitoring that is in the frame
+   * @param frame the frame that you want the monitoring out of
+   */
+  I3Monitoring& GetMonitoring(I3Frame& frame,const string& name="Monitoring")
+    {
+      return I3FrameAccess<I3Monitoring>::Get(frame,name);
+    }
+  
+  /**
+   * Puts a monitoring in the frame.  Just a helper method to simplify 
+   * the syntax
+   * @param frame the frame to put the monitoring into
+   * @param monitoring the monitoring to put into the frame
+   * @param name the name of the monitoring in the frame.  Defaults to 
+   * 'Monitoring'
+   * @return true if it is successful, false if otherwise
+   */
+  Bool_t PutMonitoring(I3Frame& frame,
+		       I3MonitoringPtr monitoring,
+		       const string& name="Monitoring")
+    {
+      return I3FrameAccess<I3Monitoring>::Put(frame,monitoring,name);
+    }
+  
+  /*
+   * Checks to see if a frame has a monitoring headerin it
+   * @param frame the frame we want to check
+   * @param name the name of the monitoring header in the frame
+   * @return true if the frame has a monitoring header, false if otherwise
+   */
+  Bool_t HasMonitoringHeader(I3Frame& frame,
+			     const string& name="MonitoringHeader")
+    {
+      return I3FrameAccess<I3MonitoringHeader>::Exists(frame,name);
+    }
+  
+  /**
+   * Gets the monitoring header out of the frame.  Just a helper method to 
+   * simplify the syntax.  
+   * @return an I3MonitoringHeader that is in the frame
+   * @param frame the frame that you want the monitoring header out of.
+   * @param name the name of the monitoring header in the frame.  Defaults
+   * to 'MonitoringHeader'
+   */
+  I3MonitoringHeader& GetMonitoringHeader(I3Frame& frame, 
+					  const string& name=
+					  "MonitoringHeader")
+    {
+      return I3FrameAccess<I3MonitoringHeader>::Get(frame,name);
+    }
+  
+  /**
+   * Puts a evemt header in the frame.  Just a helper method to 
+   * simplify the syntax
+   * @param frame the frame to put the monitoring header into
+   * @param header the monitoring header to put into the frame
+   * @param name the name of the header in the frame.  
+   * Defaults to 'MonitoringHeader'
+   * @return true if it is successful, false if otherwise
+   */
+  Bool_t PutMonitoringHeader(I3Frame& frame,
+			     I3MonitoringHeaderPtr header,
+			     const string& name="MonitoringHeader")
+    {
+      return I3FrameAccess<I3MonitoringHeader>::Put(frame,header,name);
+    }
+  
  private:
-
+  
   // default, copy and assignment private
   I3PhysicsModule();
   I3PhysicsModule(const I3PhysicsModule&);
