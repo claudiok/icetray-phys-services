@@ -3,7 +3,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.h,v 1.1 2004/02/17 21:17:15 pretz Exp $
+ * Version $Id: I3ParticleDataServiceFactory.h,v 1.2 2004/03/16 19:20:30 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -30,9 +30,9 @@ class I3Services;
 using namespace std;
 
 /**
- * This class installs a I3ParticleDataServiceFactory.
+ * This class installs a I3ParticleDataService.
  *
- * @version $Id: I3ParticleDataServiceFactory.h,v 1.1 2004/02/17 21:17:15 pretz Exp $
+ * @version $Id: I3ParticleDataServiceFactory.h,v 1.2 2004/03/16 19:20:30 pretz Exp $
  * @author pretz
  */
 class I3ParticleDataServiceFactory

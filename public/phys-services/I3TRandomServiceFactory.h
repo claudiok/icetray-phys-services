@@ -3,7 +3,7 @@
 /*
  * class: I3TRandomServiceFactory
  *
- * Version $Id: I3TRandomServiceFactory.h,v 1.1 2004/02/19 13:31:35 pretz Exp $
+ * Version $Id: I3TRandomServiceFactory.h,v 1.2 2004/03/16 19:20:30 pretz Exp $
  *
  * Date: 17 Feb 2004
  *
@@ -30,9 +30,9 @@ class I3Services;
 using namespace std;
 
 /**
- * This class installs a I3TRandomServiceFactory.
+ * This class installs a I3TRandomService.
  *
- * @version $Id: I3TRandomServiceFactory.h,v 1.1 2004/02/19 13:31:35 pretz Exp $
+ * @version $Id: I3TRandomServiceFactory.h,v 1.2 2004/03/16 19:20:30 pretz Exp $
  * @author pretz
  */
 class I3TRandomServiceFactory
