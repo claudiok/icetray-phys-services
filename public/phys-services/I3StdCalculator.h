@@ -1,0 +1,141 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id: I3StdCalculator.h,v 1.1 2004/06/24 14:27:55 pretz Exp $
+ *
+ * @file I3TrackImpl.h
+ * @version $Revision: 1.1 $
+ * @date $Date: 2004/06/24 14:27:55 $
+ * @author dule
+ */
+#ifndef I3STDCALCULATOR_H
+#define I3STDCALCULATOR_H
+
+#include <TObject.h>
+#include <cmath>
+#include "dataclasses/I3Track.h"
+#include "dataclasses/I3Units.h"
+#include "phys-services/I3Calculator.h"
+
+#include <iostream>
+
+/**
+ * @brief A class for the service that calculates various distances 
+ * between a track and a position.
+ *
+ * This class is intended to be a service, separate from dataclasses.
+ * 
+ * @todo Migrate this whole class out of dataclasses and into services.
+ */
+class I3StdCalculator : public I3Calculator
+{
+
+ public:
+  /**
+   * constructor
+   */
+  I3StdCalculator() {};
+
+  /**
+   * destructor
+   */
+  virtual ~I3StdCalculator() {};
+
+  /**
+   * Distance between position P and position Pos() on track
+   */
+  Double_t Distance(I3TrackPtr track, I3Position& pos);
+
+  /**
+   * Distance between position P and start position on track
+   */
+  Double_t StartDistance(I3TrackPtr track, I3Position& pos);
+
+  /**
+   * Distance between position P and stop position on track
+   */
+  Double_t StopDistance(I3TrackPtr track, I3Position& pos);
+
+  /**
+   * Distance between position P and closest approach position on track
+   * Input a position 'pos' and a track 'track', and output 
+   * position of closest approach: 'appos'
+   * distance of closest approach: 'apdist'
+   * position of origin of Cherenkov photon: 'chpos'
+   * time of photon from track Pos() until the Position (pos): 'chtime'
+   *
+   * @param track input I3Track
+   * @param pos input I3Position
+   * @param appos output I3Position of closest approach
+   * @param apdist output closest approach distance
+   * @param chpos output I3Position of origin of Cherenkov light to the input
+   * I3Position
+   * @param chdist output time of Cherenkov light from position Pos() of the
+   * input I3Track to the input I3Position
+   * @param ChAngle input angle of Cherenkov cone (default = 41 deg)
+   *
+   * @todo Right now, CherenkovCalc calculates "closest approach" AND 
+   * "cherenkov distances".  This is good for simplicity and non-repetitiveness
+   * of the code, but it is not the most efficient.  If processing time becomes
+   * an issue, we can make these things more efficient at the expence of
+   * complicating and repeating the code.
+   */
+  void CherenkovCalc(I3TrackPtr track,
+		      I3Position& pos,
+		      I3Position& appos,
+		      Double_t& apdist,
+		      I3Position& chpos,
+		      Double_t& chtime,
+		      Double_t ChAngle=41*I3Units::degree);
+
+  /**
+   * Calculate a position on track, which is a distance 'dist'
+   * away from track.Pos().
+   */
+  I3Position ShiftAlongTrack(I3TrackPtr track, 
+			     Double_t dist);
+
+  /**
+   * Check is Position is on Track within the given Precision.
+   * Default Precision is 10cm, but can be given by user.
+   * 
+   * @todo IsOnTrack uses CherenkovCalc for calculating "distance of closest
+   * approach".  This method is not the most efficient, but makes the code much
+   * simpler.  If processing time becomes an issue, we can make these routines 
+   * more efficient.
+   */
+  Bool_t IsOnTrack(I3TrackPtr track, 
+		   I3Position& pos,
+		   Double_t Precision=0.1*I3Units::meter);
+
+  /**
+   * Output time of arrival of Cherenkov light from I3Track to I3Position.
+   * This method simply uses CherenkovCalc for the calculation.
+   * 
+   * @param track input track
+   * @param pos input position
+   * @param ChAngle input Cherenkov angle with a default value of 41 deg.
+   */
+  Double_t CherenkovTime(I3TrackPtr track,
+			 I3Position& pos,
+			 Double_t ChAngle=41*I3Units::degree);
+
+  /**
+   * Output distance of closest approach from I3Track to I3Position.
+   * This method simply uses CherenkovCalc for the calculation.
+   * 
+   * @param track input track
+   * @param pos input position
+   */
+  Double_t ClosestApproachDistance(I3TrackPtr track,
+				   I3Position& pos);
+
+
+ protected:
+
+  // ROOT macro
+  ClassDef(I3StdCalculator,1);
+};
+
+
+#endif
