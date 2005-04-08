@@ -1,6 +1,7 @@
 #include "phys-source/I3GeometrySource.h"
 #include "services/I3Execution.h"
 #include "dataclasses/I3Time.h"
+#include "icetray/I3TrayHeaders.h"
 
 I3GeometrySource::I3GeometrySource(I3Context& context) : 
   I3PhysicsModule(context)

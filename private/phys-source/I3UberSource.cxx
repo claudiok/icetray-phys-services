@@ -1,5 +1,6 @@
 #include "phys-source/I3UberSource.h"
 #include <map>
+#include "icetray/I3TrayHeaders.h"
 
 I3UberSource::I3UberSource(I3Context& context) : I3Source(context)
 {

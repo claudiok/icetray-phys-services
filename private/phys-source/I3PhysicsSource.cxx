@@ -1,5 +1,6 @@
 #include "phys-source/I3PhysicsSource.h"
 #include "icetray/I3Context.h"
+#include "icetray/I3TrayHeaders.h"
 
 I3PhysicsSource::I3PhysicsSource(I3Context& context) : I3Source(context)
 {

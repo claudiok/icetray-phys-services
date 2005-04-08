@@ -1,6 +1,7 @@
 #include "phys-source/I3CalibrationSource.h"
 #include "services/I3Execution.h"
 #include "dataclasses/I3Time.h"
+#include "icetray/I3TrayHeaders.h"
 
 I3CalibrationSource::I3CalibrationSource(I3Context& context) : 
   I3PhysicsModule(context)
