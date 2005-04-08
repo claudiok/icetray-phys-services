@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.12 2005/04/04 18:40:39 pretz Exp $
+ * $Id: I3Calculator.h,v 1.13 2005/04/08 20:19:57 dule Exp $
  *
  * @file I3TrackImpl.h
- * @version $Revision: 1.12 $
- * @date $Date: 2005/04/04 18:40:39 $
+ * @version $Revision: 1.13 $
+ * @date $Date: 2005/04/08 20:19:57 $
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -17,8 +17,10 @@
 #include "dataclasses/I3Cascade.h"
 #include "dataclasses/I3Units.h"
 #include "dataclasses/I3OMGeo.h"
+#include "dataclasses/I3OMResponseMap.h"
+#include "dataclasses/I3Geometry.h"
 
-#include <iostream>
+using namespace I3Units;
 
 /**
  * @brief A class for the service that calculates various distances 
@@ -172,9 +174,12 @@ class I3Calculator
 	* The moethod counts the hits with small time residuals (between t1, t2)
 	* (t1~=-15ns, t2~=25ns..150ns)
 	*/
-  virtual int Ndir(I3TrackPtr track, 
-						 I3Position& pos,
-						 double time) = 0;
+  virtual double Ndir(I3TrackPtr track, 
+						 I3OMResponseMap& ommap, 
+						 I3Geometry& geom, 
+						 string hitseries = "Hits",
+						 double t1 = -15*ns, 
+						 double t2 = +25*ns) = 0;
 
   /**
    * Gives a default name for this service.  Defaults to "Calculator"

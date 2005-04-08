@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.11 2005/03/30 14:59:03 pretz Exp $
+    $Id: I3CalculatorTest.cxx,v 1.12 2005/04/08 20:19:56 dule Exp $
 
-    @version $Revision: 1.11 $
-    @date $Date: 2005/03/30 14:59:03 $
+    @version $Revision: 1.12 $
+    @date $Date: 2005/04/08 20:19:56 $
     @author pretz
 
     @todo
@@ -13,8 +13,7 @@
 #include "TUT/tut.h"
 
 #include "phys-services/I3CalculatorImpl.h"
-#include "dataclasses/I3BasicMuon.h"
-#include "dataclasses/I3StartingMuon.h"
+#include "dataclasses/I3BasicTrack.h"
 #include "dataclasses/I3BasicCascade.h"
 #include "dataclasses/I3DirectionalCascade.h"
 #include "dataclasses/I3Position.h"
@@ -26,6 +25,12 @@ using std::string;
 using std::cout;
 using std::endl;
 using namespace I3Units;
+
+#include "dataclasses/I3Starting.h"
+#include "dataclasses/I3NonEnergetic.h"
+#include "dataclasses/I3Composite.h"
+typedef I3TrackImpl<I3Starting, I3NonEnergetic, I3Composite> I3StartingMuon;
+typedef PtrPolicy<I3StartingMuon>::ThePolicy I3StartingMuonPtr;
 
 namespace tut
 {
@@ -59,7 +64,7 @@ namespace tut
     I3Direction e(0,1,1); // direction along y-z plane, at 45 deg
 
     cout <<"Creating Infinite track..."<<endl;
-    I3BasicMuonPtr track_inf (new I3BasicMuon);
+    I3BasicTrackPtr track_inf (new I3BasicTrack);
     I3TrackPtr inftrackptr = boost::dynamic_pointer_cast<I3Track>(track_inf);
     track_inf->SetPos(r);
     track_inf->SetDir(e);
@@ -73,7 +78,7 @@ namespace tut
     track_start->SetStartT(10);
 
     cout <<"Creating BasiMuon"<<endl;
-    I3BasicMuonPtr muon (new I3BasicMuon);
+    I3BasicTrackPtr muon (new I3BasicTrack);
     I3TrackPtr muonptr = boost::dynamic_pointer_cast<I3Track>(muon);
     muon->SetPos(10,0,0);
     muon->SetDir(90*deg,0); // muon moving toward -x axis
@@ -246,9 +251,9 @@ namespace tut
     ensure_distance("AngleDiff(track_inf,muon) failed",
 		    calc.AngleDiff(track_inf,muon)/deg,90.,0.001);
     
-    I3BasicMuonPtr track1 (new I3BasicMuon);
+    I3BasicTrackPtr track1 (new I3BasicTrack);
     track1->SetDir(0,1,-1);
-    I3BasicMuonPtr track2 (new I3BasicMuon);
+    I3BasicTrackPtr track2 (new I3BasicTrack);
     track2->SetDir(1,0,-1);
     cout<<" angle-diff(track1[0,1,-1],track2[1,0,-1]): "
 	<<calc.AngleDiff(track1,track2)/deg<<endl;

@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3CalculatorImpl.h,v 1.7 2005/04/04 18:40:40 pretz Exp $
+ * $Id: I3CalculatorImpl.h,v 1.8 2005/04/08 20:19:57 dule Exp $
  *
  * @file I3CalculatorImpl.h
- * @version $Revision: 1.7 $
- * @date $Date: 2005/04/04 18:40:40 $
+ * @version $Revision: 1.8 $
+ * @date $Date: 2005/04/08 20:19:57 $
  * @author dule
  */
 #ifndef I3CALCULATORIMPL_H
@@ -14,8 +14,8 @@
 #include <TObject.h>
 #include <cmath>
 #include "phys-services/I3Calculator.h"
-
-#include <iostream>
+#include "TH1F.h"
+#include "TFile.h"
 
 /**
  * @brief A class for the service that calculates various distances 
@@ -32,12 +32,12 @@ class I3CalculatorImpl : public I3Calculator
   /**
    * constructor
    */
-  I3CalculatorImpl() {};
+	I3CalculatorImpl() { };
 
   /**
    * destructor
    */
-  virtual ~I3CalculatorImpl() {};
+  virtual ~I3CalculatorImpl() { };
 
   /**
    * Distance between position P and position Pos() on track
@@ -189,7 +189,9 @@ class I3CalculatorImpl : public I3Calculator
 	* The moethod counts the hits with small time residuals (between t1, t2)
 	* (t1~=-15ns, t2~=25ns..150ns)
 	*/
-  int Ndir(I3TrackPtr track, I3Position& pos, double time);
+  double Ndir(I3TrackPtr track, I3OMResponseMap& ommap, 
+			  I3Geometry& geom, string hitseries = "Hits",
+			  double t1 = -15*ns, double t2 = +25*ns);
 
  protected:
 

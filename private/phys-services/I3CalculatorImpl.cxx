@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorImpl.cxx,v 1.12 2005/04/04 18:40:39 pretz Exp $
+    $Id: I3CalculatorImpl.cxx,v 1.13 2005/04/08 20:19:56 dule Exp $
 
-    @version $Revision: 1.12 $
-    @date $Date: 2005/04/04 18:40:39 $
+    @version $Revision: 1.13 $
+    @date $Date: 2005/04/08 20:19:56 $
     @author
 
     @todo
@@ -15,7 +15,8 @@
 #include "dataclasses/I3Starting.h"
 #include "dataclasses/I3Stopping.h"
 #include "dataclasses/I3Contained.h"
-#include <iostream>
+#include "dataclasses/I3OMResponse.h"
+#include "dataclasses/I3AMANDAAnalogReadout.h"
 
 using namespace std;
 using namespace I3Constants;
@@ -190,7 +191,7 @@ void I3CalculatorImpl::CherenkovCalc(I3TrackPtr track,   // input
 
     //--Don't calculate if track does not have direction
   } else {
-    cout <<"I3CalculatorImpl::CherenkovLight - Track has no direction. Not calculating.\n";
+    log_info("I3CalculatorImpl::CherenkovLight - Track has no direction. Not calculating.");
     appos.NullPosition();
     apdist=NAN;
     chpos.NullPosition();
@@ -288,9 +289,54 @@ double I3CalculatorImpl::AngleDiff(I3TrackPtr track1, I3TrackPtr track2)
 
 //--------------------------------------------------------------
 // Return the number of direct hits
-int I3CalculatorImpl::Ndir(I3TrackPtr track, I3Position& pos, double time)
+double I3CalculatorImpl::Ndir(I3TrackPtr track, I3OMResponseMap& ommap, 
+									I3Geometry& geom, string hitseries,
+									double t1, double t2)
 {
-	return 1;
+	int ndir = 0;
+	int tot = 0; //####
+	double Ttrack = track->GetT();
+	double Thit, Tarr, Tres;
+	I3OMResponseMap::iterator om;
+	for (om=ommap.begin(); om!=ommap.end(); om++) {
+		I3OMResponsePtr omr_p = om->second;
+		if (omr_p->GetRecoHitSeriesDict().find(hitseries)!=
+			 omr_p->GetRecoHitSeriesDict().end()) {
+			I3RecoHitSeriesDict& dict = omr_p->GetRecoHitSeriesDict();
+			I3RecoHitSeriesPtr hits = dict[hitseries];
+// 		if (omr_p->GetDataReadoutDict().find(hitseries)!=
+// 			 omr_p->GetDataReadoutDict().end()) {
+// 			I3DataReadoutDict& dict = omr_p->GetDataReadoutDict();
+// 			I3DataReadoutPtr readout_ptr = dict[hitseries];
+// 			I3AMANDAAnalogReadoutPtr aarp = 
+// 				roost::dynamic_pointer_cast<I3AMANDAAnalogReadout>(readout_ptr);
+
+			I3Position ompos = 
+				geom.GetInIceGeometry()[om->first]->GetPos();
+			Tarr = CherenkovTime(track, ompos);
+
+			Thit = hits->GetFirstHitTime();
+// 			for (unsigned i=0; i<hits->size(); i++) {
+// 				Thit = hits->Get(i)->GetTime();
+// 			for (unsigned int i=0; i<aarp->GetLEs().size(); i++) { 
+// 				Thit = aarp->GetLEs()[i];
+			Tres = Thit - Tarr - Ttrack;
+			if (Tres>t1 && Tres<t2) ndir+=1;
+			if (Thit>-2000 && Thit<4500) tot+=1;
+
+				//cout<<"Time: "<<Thit<<" - "<<Tarr<<" = "<<Tres<<endl;//#########
+				//double dist = ompos.CalcDistance(track->GetPos());//####
+
+				//cout<<track->GetPos().GetX()<<" "<<track->GetPos().GetY()<<" "<<track->GetPos().GetZ()<<" ... "<<ompos.GetX()<<" "<<ompos.GetY()<<" "<<ompos.GetZ()<<endl;//####
+				//cout<<"=====> "<<Ttrack<<"   "<<Tarr<<"   "<<dist<<"   "<<Thit<<"   "<<Tres<<endl;//#####
+// 			}
+		}
+	}
+	//track->ToStream(cout);//#####
+	//cout<<"NDIR: "<<ndir<<endl;//#########
+
+// 	return ndir;
+	return (double)ndir/(double)tot;
 }
 
 //--------------------------------------------------------------
