@@ -40,7 +40,6 @@ class I3EventOrigin
   static const char* DefaultName() { return "EventOrigin";}
   virtual bool MoreEvents() = 0;
   virtual EventPair PopEvent() = 0;
-  virtual I3Time NextEventTime() = 0;
 };
 
 typedef PtrPolicy<I3EventOrigin>::ThePolicy I3EventOriginPtr;

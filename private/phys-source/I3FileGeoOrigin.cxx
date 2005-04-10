@@ -11,26 +11,23 @@ void I3FileGeoOrigin::Fatal(const string& message)
   throw I3TrayException();
 }
 
-I3TimeRange I3FileGeoOrigin::GetGeometryValidityRange(I3Time time)
-{
-  I3Time lower;
-  lower.SetDaqTime(0,0);
-  I3Time upper;
-  upper.SetDaqTime(3000,0);
-  return I3TimeRange(lower,upper);
-}
-
 GeometryPair I3FileGeoOrigin::GetGeometry(I3Time time)
 {
   GeometryPair p;
   p.geometry = I3GeometryPtr(new I3Geometry());
   p.header = I3GeometryHeaderPtr(new I3GeometryHeader());
   FillGeometryFromFile(*p.geometry,*p.header);
+  I3Time start;
+  start.SetDaqTime(0,0);
+  I3Time end;
+  end.SetDaqTime(3000,0);
+  p.header->SetStartTime(start);
+  p.header->SetEndTime(end);
   return p;
 }
 
 void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry, 
-						 I3GeometryHeader& GeometryHeader){
+					   I3GeometryHeader& GeometryHeader){
   //
   // NB: This code was cut and pasted with minor tweaks from the I3Db code.
   // The author is Georges Kohnen

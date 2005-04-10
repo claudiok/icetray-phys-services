@@ -15,9 +15,6 @@ class I3DummyGeoOrigin : public I3GeometryOrigin
 {
  public:
   GeometryPair GetGeometry(I3Time time);
-  
-  I3TimeRange GetGeometryValidityRange(I3Time time);
-
 };
  
 typedef PtrPolicy<I3DummyGeoOrigin>::ThePolicy I3DummyGeoOriginPtr;

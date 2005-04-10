@@ -8,6 +8,7 @@ I3DummyEventOrigin::I3DummyEventOrigin(int eventsToReturn)
 
 bool I3DummyEventOrigin::MoreEvents()
 {
+  log_debug("current event %d of %d to send",currentEvent_,maxEvents_);
   if(currentEvent_ >= maxEvents_)
     return false;
   return true;
@@ -32,9 +33,3 @@ EventPair I3DummyEventOrigin::PopEvent()
   return e;
 }
 
-I3Time I3DummyEventOrigin::NextEventTime()
-{
-  I3Time eventTime;
-  eventTime.SetDaqTime(2005,0);
-  return eventTime;
-}

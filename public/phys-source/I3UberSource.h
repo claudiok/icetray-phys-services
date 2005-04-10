@@ -52,6 +52,10 @@ class I3UberSource : public I3Source
   bool IsGeometryCurrent(I3Time time);
   
   bool IsCalibrationCurrent(I3Time time);
+
+  void QueueUpEvent();
+  
+  I3Time NextEventTime();
  private:
   EventPair currentEvent_;
   GeometryPair currentGeometry_;

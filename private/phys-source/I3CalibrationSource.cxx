@@ -39,7 +39,8 @@ void I3CalibrationSource::SendCalibration(I3Time nextEvent)
   log_debug("Entering I3CalibrationSource::SendCalibration()");
   currentCalibration_ = GetCalibrationFactory().GetCalibration(nextEvent);
   currentCalibrationRange_ 
-    = GetCalibrationFactory().GetCalibrationValidityRange(nextEvent);
+    = I3TimeRange(currentCalibration_.header->GetStartTime(),
+		  currentCalibration_.header->GetEndTime()); 
   assert(currentCalibration_);
   assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Calibration"));

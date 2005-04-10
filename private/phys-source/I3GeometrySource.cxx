@@ -55,8 +55,8 @@ void I3GeometrySource::SendGeometry(I3Time nextEvent)
 {
   log_debug("Entering IGeometrySource::SendGeometry()");
   currentGeometry_ = GetGeometryFactory().GetGeometry(nextEvent);
-  currentGeometryRange_ 
-    = GetGeometryFactory().GetGeometryValidityRange(nextEvent);
+  currentGeometryRange_ = I3TimeRange(currentGeometry_.header->GetStartTime(),
+				      currentGeometry_.header->GetEndTime());
   assert(currentGeometry_);
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Geometry"));

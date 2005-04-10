@@ -39,7 +39,6 @@ class I3CalibrationOrigin
  public:
   static const char* DefaultName() { return "CalibrationOrigin";}
   virtual CalibrationPair GetCalibration(I3Time time) = 0;
-  virtual I3TimeRange GetCalibrationValidityRange(I3Time time) = 0;
 };
 
 typedef PtrPolicy<I3CalibrationOrigin>::ThePolicy I3CalibrationOriginPtr;

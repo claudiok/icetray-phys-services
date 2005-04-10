@@ -16,8 +16,6 @@ class I3DummyCalibOrigin : public I3CalibrationOrigin
 {
  public:
   CalibrationPair GetCalibration(I3Time time);
-  
-  I3TimeRange GetCalibrationValidityRange(I3Time time);
 };
 
 typedef PtrPolicy<I3DummyCalibOrigin>::ThePolicy I3DummyCalibOriginPtr;

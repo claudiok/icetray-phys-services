@@ -24,8 +24,6 @@ class I3DummyEventOrigin : public I3EventOrigin
   bool MoreEvents();
 
   EventPair PopEvent();
-  
-  I3Time NextEventTime();
 };
 
 typedef PtrPolicy<I3DummyEventOrigin>::ThePolicy I3DummyEventOriginPtr;

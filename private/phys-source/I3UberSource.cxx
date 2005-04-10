@@ -61,19 +61,22 @@ I3CalibrationOrigin& I3UberSource::GetCalibrationFactory()
 void I3UberSource::SendEvent()
 {
   log_debug("Entering I3UberSource::SendEvent()");
-  currentEvent_ = GetEventFactory().PopEvent();
+  QueueUpEvent();
   assert(currentEvent_);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Physics"));
   SendAll(frame);
+  currentEvent_.header = I3EventHeaderPtr();
+  currentEvent_.event = I3EventPtr();
 }
 
 void I3UberSource::SendCalibration()
 {
   log_debug("Entering I3UberSource::SendCalibration()");
-  I3Time nextEvent = GetEventFactory().NextEventTime();
+  I3Time nextEvent = NextEventTime();
   currentCalibration_ = GetCalibrationFactory().GetCalibration(nextEvent);
   currentCalibrationRange_ 
-    = GetCalibrationFactory().GetCalibrationValidityRange(nextEvent);
+    = I3TimeRange(currentCalibration_.header->GetStartTime(),
+		  currentCalibration_.header->GetEndTime());
   assert(currentCalibration_);
   assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Calibration"));
@@ -83,10 +86,11 @@ void I3UberSource::SendCalibration()
 void I3UberSource::SendGeometry()
 {
   log_debug("Entering I3UberSource::SendGeometry()");
-  I3Time nextEvent = GetEventFactory().NextEventTime();
+  I3Time nextEvent = NextEventTime();
   currentGeometry_ = GetGeometryFactory().GetGeometry(nextEvent);
   currentGeometryRange_ = 
-    GetGeometryFactory().GetGeometryValidityRange(nextEvent);
+    I3TimeRange(currentGeometry_.header->GetStartTime(),
+		currentGeometry_.header->GetEndTime());
   assert(currentGeometry_);
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Geometry"));
@@ -132,7 +136,7 @@ I3UberSource::Stream I3UberSource::NextStream()
   if(!GetEventFactory().MoreEvents())
     return NONE;
 
-  I3Time eventTime = GetEventFactory().NextEventTime();
+  I3Time eventTime = NextEventTime();
   if(!IsGeometryCurrent(eventTime))
     return GEOMETRY;
   if(!IsCalibrationCurrent(eventTime))
@@ -171,4 +175,19 @@ bool I3UberSource::IsCalibrationCurrent(I3Time time)
     }
   log_debug("Calibration needs updating");
   return false;
+}
+
+void I3UberSource::QueueUpEvent()
+{
+  if(!currentEvent_)
+    {
+      assert(GetEventFactory().MoreEvents());
+      currentEvent_ = GetEventFactory().PopEvent();
+    }
+}
+
+I3Time I3UberSource::NextEventTime()
+{
+  QueueUpEvent();
+  return currentEvent_.header->GetStartTime();
 }

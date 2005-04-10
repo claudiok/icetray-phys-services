@@ -27,7 +27,6 @@ class I3FileGeoOrigin : public I3GeometryOrigin
   virtual ~I3FileGeoOrigin(){}
 
   GeometryPair GetGeometry(I3Time time);
-  I3TimeRange GetGeometryValidityRange(I3Time time);
  private:
   void Fatal(const string& message);
 
