@@ -4,6 +4,7 @@
 #include "I3EventOrigin.h"
 #include "I3CalibrationOrigin.h"
 #include "I3GeometryOrigin.h"
+#include "I3DetectorStatusOrigin.h"
 
 #include "icetray/I3Source.h"
 
@@ -28,15 +29,17 @@ class I3UberSource : public I3Source
  public:
   I3UberSource(I3Context& ctx);
 
-  enum Stream {NONE,EVENT,GEOMETRY,CALIBRATION};
+  enum Stream {NONE,EVENT,GEOMETRY,CALIBRATION,DETECTORSTATUS};
   
   void Process();
 
-  I3EventOrigin& GetEventFactory();
+  I3EventOrigin& GetEventOrigin();
 
-  I3GeometryOrigin& GetGeometryFactory();
+  I3GeometryOrigin& GetGeometryOrigin();
 
-  I3CalibrationOrigin& GetCalibrationFactory();
+  I3CalibrationOrigin& GetCalibrationOrigin();
+  
+  I3DetectorStatusOrigin& GetDetectorStatusOrigin();
 
  private:
   Stream NextStream();
@@ -47,11 +50,15 @@ class I3UberSource : public I3Source
 
   void SendCalibration();
 
+  void SendDetectorStatus();
+
   void SendAll(I3Frame& frame);
 
   bool IsGeometryCurrent(I3Time time);
   
   bool IsCalibrationCurrent(I3Time time);
+
+  bool IsDetectorStatusCurrent(I3Time time);
 
   void QueueUpEvent();
   
@@ -62,6 +69,8 @@ class I3UberSource : public I3Source
   I3TimeRange currentGeometryRange_;
   CalibrationPair currentCalibration_;
   I3TimeRange currentCalibrationRange_;
+  DetectorStatusPair currentDetectorStatus_;
+  I3TimeRange currentDetectorStatusRange_;
 };
 
 

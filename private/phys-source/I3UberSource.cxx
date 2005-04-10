@@ -12,6 +12,8 @@ I3UberSource::I3UberSource(I3Context& context) : I3Source(context)
     I3Stream::AddStream("Geometry","Geometry Stream");
   if(!I3Stream::StreamExists("Calibration"))
     I3Stream::AddStream("Calibration","Calibration Stream");
+  if(!I3Stream::StreamExists("DetectorStatus"))
+    I3Stream::AddStream("DetectorStatus","DetectorStatus Stream");
 }
 
 void I3UberSource::Process()
@@ -29,6 +31,9 @@ void I3UberSource::Process()
       case CALIBRATION:
 	SendCalibration();
 	return;
+      case DETECTORSTATUS:
+	SendDetectorStatus();
+	return;
       case NONE:
 	RequestSuspension();
 	return;
@@ -37,25 +42,32 @@ void I3UberSource::Process()
       }
 }
 
-I3EventOrigin& I3UberSource::GetEventFactory()
+I3EventOrigin& I3UberSource::GetEventOrigin()
 {
   return 
     I3ContextAccess<I3EventOrigin>::GetService(GetContext(),
 						I3EventOrigin::DefaultName());
 }
 
-I3GeometryOrigin& I3UberSource::GetGeometryFactory()
+I3GeometryOrigin& I3UberSource::GetGeometryOrigin()
 {
   return I3ContextAccess<I3GeometryOrigin>::
     GetService(GetContext(),
 	       I3GeometryOrigin::DefaultName());
 }
 
-I3CalibrationOrigin& I3UberSource::GetCalibrationFactory()
+I3CalibrationOrigin& I3UberSource::GetCalibrationOrigin()
 {
   return I3ContextAccess<I3CalibrationOrigin>::
     GetService(GetContext(),
 	       I3CalibrationOrigin::DefaultName());
+}
+
+I3DetectorStatusOrigin& I3UberSource::GetDetectorStatusOrigin()
+{
+  return I3ContextAccess<I3DetectorStatusOrigin>::
+    GetService(GetContext(),
+	       I3DetectorStatusOrigin::DefaultName());
 }
 
 void I3UberSource::SendEvent()
@@ -73,7 +85,7 @@ void I3UberSource::SendCalibration()
 {
   log_debug("Entering I3UberSource::SendCalibration()");
   I3Time nextEvent = NextEventTime();
-  currentCalibration_ = GetCalibrationFactory().GetCalibration(nextEvent);
+  currentCalibration_ = GetCalibrationOrigin().GetCalibration(nextEvent);
   currentCalibrationRange_ 
     = I3TimeRange(currentCalibration_.header->GetStartTime(),
 		  currentCalibration_.header->GetEndTime());
@@ -83,11 +95,27 @@ void I3UberSource::SendCalibration()
   SendAll(frame);
 }
 
+void I3UberSource::SendDetectorStatus()
+{
+  log_debug("Entering I3UberSource::SendDetectorStatus()");
+  I3Time nextEvent = NextEventTime();
+  currentDetectorStatus_ = 
+    GetDetectorStatusOrigin().GetDetectorStatus(nextEvent);
+  currentDetectorStatusRange_ 
+    = I3TimeRange(currentDetectorStatus_.header->GetStartTime(),
+		  currentDetectorStatus_.header->GetEndTime());
+  assert(currentDetectorStatus_);
+  assert(currentDetectorStatusRange_.lower < 
+	 currentDetectorStatusRange_.upper);
+  I3Frame& frame = CreateFrame(I3Stream::FindStream("DetectorStatus"));
+  SendAll(frame);
+}
+
 void I3UberSource::SendGeometry()
 {
   log_debug("Entering I3UberSource::SendGeometry()");
   I3Time nextEvent = NextEventTime();
-  currentGeometry_ = GetGeometryFactory().GetGeometry(nextEvent);
+  currentGeometry_ = GetGeometryOrigin().GetGeometry(nextEvent);
   currentGeometryRange_ = 
     I3TimeRange(currentGeometry_.header->GetStartTime(),
 		currentGeometry_.header->GetEndTime());
@@ -127,13 +155,22 @@ void I3UberSource::SendAll(I3Frame& frame)
 					   currentCalibration_.header,
 					   "CalibrationHeader");
     }
+  if(currentDetectorStatus_)
+    {
+      I3FrameAccess<I3DetectorStatus>::Put(frame,
+				     currentDetectorStatus_.status,
+				     "DetectorStatus");
+      I3FrameAccess<I3DetectorStatusHeader>::Put(frame,
+					   currentDetectorStatus_.header,
+					   "DetectorStatusHeader");
+    }
 
   PushFrame(frame,"OutBox");
 }
 
 I3UberSource::Stream I3UberSource::NextStream()
 {
-  if(!GetEventFactory().MoreEvents())
+  if(!GetEventOrigin().MoreEvents())
     return NONE;
 
   I3Time eventTime = NextEventTime();
@@ -141,6 +178,8 @@ I3UberSource::Stream I3UberSource::NextStream()
     return GEOMETRY;
   if(!IsCalibrationCurrent(eventTime))
     return CALIBRATION;
+  if(!IsDetectorStatusCurrent(eventTime))
+    return DETECTORSTATUS;
   return EVENT;
 }
 
@@ -177,12 +216,30 @@ bool I3UberSource::IsCalibrationCurrent(I3Time time)
   return false;
 }
 
+bool I3UberSource::IsDetectorStatusCurrent(I3Time time)
+{
+  if(!currentDetectorStatus_)
+    {
+      log_debug("DetectorStatus isn't current 'cause it "
+		"hasn't been issued yet");
+      return false;
+    }
+  if(currentDetectorStatusRange_.lower < time &&
+     time < currentDetectorStatusRange_.upper)
+    {
+      log_debug("DetectorStatus is current, no worries!");
+      return true;
+    }
+  log_debug("DetectorStatus needs updating");
+  return false;
+}
+
 void I3UberSource::QueueUpEvent()
 {
   if(!currentEvent_)
     {
-      assert(GetEventFactory().MoreEvents());
-      currentEvent_ = GetEventFactory().PopEvent();
+      assert(GetEventOrigin().MoreEvents());
+      currentEvent_ = GetEventOrigin().PopEvent();
     }
 }
 
