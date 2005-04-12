@@ -41,7 +41,7 @@ class I3GeometryOrigin
   virtual GeometryPair GetGeometry(I3Time time) = 0;
 };
 
-typedef PtrPolicy<I3GeometryOrigin>::ThePolicy I3GeometryOriginPtr;
+typedef shared_ptr<I3GeometryOrigin> I3GeometryOriginPtr;
 
 
 #endif

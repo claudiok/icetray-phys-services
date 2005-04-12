@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.12 2005/04/08 20:19:56 dule Exp $
+    $Id: I3CalculatorTest.cxx,v 1.13 2005/04/12 18:43:58 pretz Exp $
 
-    @version $Revision: 1.12 $
-    @date $Date: 2005/04/08 20:19:56 $
+    @version $Revision: 1.13 $
+    @date $Date: 2005/04/12 18:43:58 $
     @author pretz
 
     @todo
@@ -30,7 +30,7 @@ using namespace I3Units;
 #include "dataclasses/I3NonEnergetic.h"
 #include "dataclasses/I3Composite.h"
 typedef I3TrackImpl<I3Starting, I3NonEnergetic, I3Composite> I3StartingMuon;
-typedef PtrPolicy<I3StartingMuon>::ThePolicy I3StartingMuonPtr;
+typedef shared_ptr<I3StartingMuon> I3StartingMuonPtr;
 
 namespace tut
 {

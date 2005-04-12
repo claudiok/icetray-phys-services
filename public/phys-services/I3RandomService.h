@@ -1,15 +1,15 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3RandomService.h,v 1.9 2005/04/04 18:40:40 pretz Exp $
+ * $Id: I3RandomService.h,v 1.10 2005/04/12 18:43:58 pretz Exp $
  *
  *
  * This class is just the interface.  The names chosen
  * reflect ROOT's TRandom interface.  Indeed TRandom could be used to 
  * trivially fill this interface
  *
- * @version $Revision: 1.9 $
- * @date $Date: 2005/04/04 18:40:40 $
+ * @version $Revision: 1.10 $
+ * @date $Date: 2005/04/12 18:43:58 $
  * @author pretz
  *
  * @todo 
@@ -101,6 +101,6 @@ class I3RandomService {
   ClassDef(I3RandomService,0);
 };
 
-typedef PtrPolicy<I3RandomService>::ThePolicy I3RandomServicePtr;
+typedef shared_ptr<I3RandomService> I3RandomServicePtr;
 
 #endif //I3RANDOMSERVICE_H

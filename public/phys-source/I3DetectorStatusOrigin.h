@@ -41,6 +41,6 @@ class I3DetectorStatusOrigin
   virtual DetectorStatusPair GetDetectorStatus(I3Time time) = 0;
 };
 
-typedef PtrPolicy<I3DetectorStatusOrigin>::ThePolicy I3DetectorStatusOriginPtr;
+typedef shared_ptr<I3DetectorStatusOrigin> I3DetectorStatusOriginPtr;
 
 #endif

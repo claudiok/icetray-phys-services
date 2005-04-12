@@ -17,6 +17,6 @@ class I3DummyGeoOrigin : public I3GeometryOrigin
   GeometryPair GetGeometry(I3Time time);
 };
  
-typedef PtrPolicy<I3DummyGeoOrigin>::ThePolicy I3DummyGeoOriginPtr;
+typedef shared_ptr<I3DummyGeoOrigin> I3DummyGeoOriginPtr;
 
 #endif

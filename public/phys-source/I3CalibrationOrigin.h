@@ -41,6 +41,6 @@ class I3CalibrationOrigin
   virtual CalibrationPair GetCalibration(I3Time time) = 0;
 };
 
-typedef PtrPolicy<I3CalibrationOrigin>::ThePolicy I3CalibrationOriginPtr;
+typedef shared_ptr<I3CalibrationOrigin> I3CalibrationOriginPtr;
 
 #endif

@@ -17,7 +17,7 @@ class I3DummyDetectorStatusOrigin : public I3DetectorStatusOrigin
   DetectorStatusPair GetDetectorStatus(I3Time time);
 };
  
-typedef PtrPolicy<I3DummyDetectorStatusOrigin>::ThePolicy 
+typedef shared_ptr<I3DummyDetectorStatusOrigin> 
 I3DummyDetectorStatusOriginPtr;
 
 #endif

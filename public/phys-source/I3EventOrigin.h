@@ -42,6 +42,6 @@ class I3EventOrigin
   virtual EventPair PopEvent() = 0;
 };
 
-typedef PtrPolicy<I3EventOrigin>::ThePolicy I3EventOriginPtr;
+typedef shared_ptr<I3EventOrigin> I3EventOriginPtr;
 
 #endif

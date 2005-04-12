@@ -26,6 +26,6 @@ class I3DummyEventOrigin : public I3EventOrigin
   EventPair PopEvent();
 };
 
-typedef PtrPolicy<I3DummyEventOrigin>::ThePolicy I3DummyEventOriginPtr;
+typedef shared_ptr<I3DummyEventOrigin> I3DummyEventOriginPtr;
 
 #endif
