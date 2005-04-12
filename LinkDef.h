@@ -5,8 +5,6 @@
 #pragma link off all functions;
 
 #pragma link C++ class I3Calculator;
-#pragma link C++ class I3CalculatorFactoryImpl;
-#pragma link C++ class I3CalculatorImpl;
 #pragma link C++ class I3GSLRandomService;
 #pragma link C++ class I3GSLRandomServiceFactory;
 #pragma link C++ class I3ParticleDataService;

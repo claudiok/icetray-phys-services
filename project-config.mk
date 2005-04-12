@@ -13,9 +13,7 @@ USES_TOOLS := root log4cplus TUT gsl boost
 ROOT_DICTIONARY_HEADERS := \
 phys-services/I3Calculator.h \
 phys-services/I3ParticleDataServiceFactory.h\
-phys-services/I3CalculatorFactoryImpl.h \
 phys-services/I3PhysicsModule.h \
-phys-services/I3CalculatorImpl.h \
 phys-services/I3RandomService.h \
 phys-services/I3GSLRandomService.h \
 phys-services/I3TRandomService.h \
