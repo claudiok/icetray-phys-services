@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.15 2005/04/13 14:02:55 dule Exp $
+ * $Id: I3Calculator.h,v 1.16 2005/04/13 14:27:04 dule Exp $
  *
  * @file I3TrackImpl.h
- * @version $Revision: 1.15 $
- * @date $Date: 2005/04/13 14:02:55 $
+ * @version $Revision: 1.16 $
+ * @date $Date: 2005/04/13 14:27:04 $
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -195,7 +195,5 @@ namespace I3Calculator
 	      double t2 = +25*ns);
 
 };
-
-typedef shared_ptr<I3Calculator> I3CalculatorPtr;
 
 #endif
