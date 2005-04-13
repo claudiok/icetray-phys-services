@@ -43,7 +43,7 @@ namespace tut
     RootI3Tray tray;
  
     tray.AddService<I3DummyEventOriginFactory>("events");
-    tray.AddService<I3DummyDetectorStatusOriginFactory>("status");
+    //tray.AddService<I3DummyDetectorStatusOriginFactory>("status");
     tray.AddService<I3DummyGeoOriginFactory>("geo");
     tray.AddService<I3DummyCalibOriginFactory>("calib");
 
