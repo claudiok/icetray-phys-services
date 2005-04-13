@@ -13,7 +13,7 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3SPRNGRandomService.h,v 1.1 2005/04/13 16:29:34 juancarlos Exp $
+ * $Id: I3SPRNGRandomService.h,v 1.2 2005/04/13 18:19:05 pretz Exp $
  *
  * @brief SPRNG Implementation of the I3RandomService interface.  
  * This implementation uses a combination of SPRNG and GSL to generate
@@ -23,8 +23,8 @@
  * The code for this class is based on John Pretz's implementation of
  * I3GSLRandomService.
  * 
- * @version $Revision: 1.1 $
- * @date $Date: 2005/04/13 16:29:34 $
+ * @version $Revision: 1.2 $
+ * @date $Date: 2005/04/13 18:19:05 $
  * @author juancarlos
  *
  * @todo Add ability to save state of rng after run is complete
@@ -100,6 +100,6 @@ class I3SPRNGRandomService : public I3RandomService{
   ClassDef(I3SPRNGRandomService,0);
 };
 
-typedef PtrPolicy<I3SPRNGRandomService>::ThePolicy I3SPRNGRandomServicePtr;
+typedef shared_ptr<I3SPRNGRandomService> I3SPRNGRandomServicePtr;
 
 #endif // I3SPRNGRANDOMSERVICE_H

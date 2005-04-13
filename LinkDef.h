@@ -20,5 +20,7 @@
 #pragma link C++ class I3DummyCalibOriginFactory;
 #pragma link C++ class I3DummyDetectorStatusOriginFactory;
 #pragma link C++ class I3FileGeoOriginFactory;
+#pragma link C++ class I3SPRNGRandomService;
+#pragma link C++ class I3SPRNGRandomServiceFactory;
 
 #endif

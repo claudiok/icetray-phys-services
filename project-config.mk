@@ -24,4 +24,6 @@ phys-source/I3DummyEventOriginFactory.h \
 phys-source/I3DummyGeoOriginFactory.h \
 phys-source/I3DummyDetectorStatusOriginFactory.h \
 phys-source/I3DummyCalibOriginFactory.h \
-phys-source/I3FileGeoOriginFactory.h
+phys-source/I3FileGeoOriginFactory.h \
+phys-services/I3SPRNGRandomServiceFactory.h \
+phys-services/I3SPRNGRandomService.h
