@@ -1,13 +1,9 @@
-TEST_SRCDIR_NAMES := test
+TEST_SRCDIR_NAMES := test new-test
 
-# Anything you don't want to compile (must be full path?)
-CXX_EXCLUDE_SRCS :=
+CXX_BIN_SRCDIR_NAMES := 
 
-# public directories for these projects are added to #include path,
-# and libraries are added to link.
 USES_PROJECTS := dataclasses icetray root-icetray 
 
-# same as above, but for external tools.  Paths found in config.mk
 USES_TOOLS := root log4cplus TUT gsl boost
 
 ROOT_DICTIONARY_HEADERS := \
