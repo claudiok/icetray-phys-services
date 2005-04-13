@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.14 2005/04/08 09:59:33 pretz Exp $
+ * $Id: I3PhysicsModule.h,v 1.15 2005/04/13 14:16:58 dule Exp $
  *
  * @file I3PhysicsModule.h
- * @version $Revision: 1.14 $
- * @date $Date: 2005/04/08 09:59:33 $
+ * @version $Revision: 1.15 $
+ * @date $Date: 2005/04/13 14:16:58 $
  * @author pretz
  */
 
@@ -26,7 +26,6 @@
 //#include "dataclasses/I3MonitoringHeader.h"
 #include "icetray/I3FrameAccess.h"
 #include "I3ParticleDataService.h"
-#include "I3Calculator.h"
 #include "I3RandomService.h"
 
 using namespace std;
@@ -66,19 +65,6 @@ class I3PhysicsModule : public I3Module
 					 I3ParticleDataService::DefaultName())
     {
       return I3ContextAccess<I3ParticleDataService>::
-	GetService(GetContext(),name);
-    }
-
-  /**
-   * returns a reference to the calculator service
-   * @return a reference to the calculator service that this
-   * module is using
-   * @param name the name of the instance of the service requested
-   */
-  I3Calculator& GetCalculator(const string& name=
-			      I3Calculator::DefaultName())
-    {
-      return I3ContextAccess<I3Calculator>::
 	GetService(GetContext(),name);
     }
 
