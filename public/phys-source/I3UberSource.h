@@ -15,10 +15,6 @@
  * @brief An I3Source which uses abstract factory
  * interfaces to get events, calibration and geometries
  * from.
- * 
- * Since this class is abstract, one has to write a subclass
- * with the pure virtual methods overridden to get something that
- * works
  *
  * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
  * WANTING SOMETHING PERFECTLY STABLE
