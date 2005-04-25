@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3Calculator.cxx,v 1.1 2005/04/13 14:16:05 dule Exp $
+    $Id$
 
     @version $Revision: 1.1 $
-    @date $Date: 2005/04/13 14:16:05 $
+    @date $Date$
     @author
 
     @todo
@@ -21,68 +21,16 @@
 using namespace std;
 using namespace I3Constants;
 
-//--------------------------------------------------------------
-double I3Calculator::Distance(I3TrackPtr track, I3Position& pos)
-{
-  return pos.CalcDistance(track->GetPos());
-}
-
-
-//--------------------------------------------------------------
-double I3Calculator::Distance(I3CascadePtr cascade, I3Position& pos)
-{
-  return pos.CalcDistance(cascade->GetPos());
-}
-
-
-//--------------------------------------------------------------
-double I3Calculator::Distance(I3CascadePtr casc1, I3CascadePtr casc2)
-{
-	return casc1->GetPos().CalcDistance(casc2->GetPos());
-}
-
-
-//--------------------------------------------------------------
-double I3Calculator::StartDistance(I3TrackPtr track, I3Position& pos)
-{
-	if (track->IsStarting()) {
-		if (track->IsStopping()) {
-			return pos.CalcDistance((dynamic_pointer_cast<I3Contained>(track))
-											->GetStartPos());
-		} else {
-			return pos.CalcDistance((dynamic_pointer_cast<I3Starting>(track))
-											->GetStartPos());
-		}
-	}
-	return NAN;
-}
-
-
-//--------------------------------------------------------------
-double I3Calculator::StopDistance(I3TrackPtr track, I3Position& pos)
-{
-	if (track->IsStopping()) {
-		if (track->IsStarting()) {
-			return pos.CalcDistance((dynamic_pointer_cast<I3Contained>(track))
-											->GetStopPos());
-		} else {
-			return pos.CalcDistance((dynamic_pointer_cast<I3Stopping>(track))
-											->GetStopPos());
-		}
-	}
-	return NAN;
-}
-
 
 //--------------------------------------------------------------
 void I3Calculator::CherenkovCalc(I3TrackPtr track,   // input
-						 I3Position& pos,    // input
-						 I3Position& appos,  // output 
-						 double& apdist,     // output
-						 I3Position& chpos,  // output
-						 double& chtime,     // output
-						 double& chdist,     // output
-						 double IndexRef)    // input
+				 I3Position& pos,    // input
+				 I3Position& appos,  // output 
+				 double& apdist,     // output
+				 I3Position& chpos,  // output
+				 double& chtime,     // output
+				 double& chdist,     // output
+				 double IndexRef)    // input
 {
   //--Only calculate if track has direction
   if (track->HasDirection()) {
@@ -224,16 +172,6 @@ double I3Calculator::ClosestApproachDistance(I3TrackPtr track, I3Position& pos)
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovTime(I3TrackPtr track, I3Position& pos, double IndexRef)
-{
-  I3Position appos,chpos;
-  double apdist,chtime,chdist;
-  CherenkovCalc(track,pos,appos,apdist,chpos,chtime,chdist,IndexRef);
-  return chtime;
-}
-
-
-//--------------------------------------------------------------
 double I3Calculator::CherenkovDistance(I3TrackPtr track, I3Position& pos)
 {
   I3Position appos,chpos;
@@ -244,8 +182,19 @@ double I3Calculator::CherenkovDistance(I3TrackPtr track, I3Position& pos)
 
 
 //--------------------------------------------------------------
+double I3Calculator::CherenkovTime(I3TrackPtr track, I3Position& pos, 
+				   double IndexRef)
+{
+  I3Position appos,chpos;
+  double apdist,chtime,chdist;
+  CherenkovCalc(track,pos,appos,apdist,chpos,chtime,chdist,IndexRef);
+  return chtime;
+}
+
+
+//--------------------------------------------------------------
 double I3Calculator::CherenkovAngle(I3TrackPtr track, I3Position& pos,
-							 I3OMGeo::EOrientation orient)
+				    I3OMGeo::EOrientation orient)
 {
   I3Position appos,chpos;
   double apdist,chtime,chdist;
@@ -259,9 +208,24 @@ double I3Calculator::CherenkovAngle(I3TrackPtr track, I3Position& pos,
 
 
 //--------------------------------------------------------------
-double I3Calculator::CascadeTime(I3CascadePtr cascade, I3Position& pos, double IndexRef)
+double I3Calculator::CascadeDistance(I3CascadePtr cascade, I3Position& pos)
 {
-  double speed=c/IndexRef;
+  return pos.CalcDistance(cascade->GetPos());
+}
+
+
+//--------------------------------------------------------------
+double I3Calculator::CascadeDistance(I3CascadePtr casc1, I3CascadePtr casc2)
+{
+  return casc1->GetPos().CalcDistance(casc2->GetPos());
+}
+
+
+//--------------------------------------------------------------
+double I3Calculator::CascadeTime(I3CascadePtr cascade, I3Position& pos, 
+				 double IndexRef)
+{
+  double speed = c/IndexRef;
   return pos.CalcDistance(cascade->GetPos())/speed;
 }
 
@@ -280,47 +244,78 @@ double I3Calculator::AngleDiff(I3TrackPtr track1, I3TrackPtr track2)
 
 //--------------------------------------------------------------
 double I3Calculator::Ndir(I3TrackPtr track, I3OMResponseMap& ommap, 
-				I3Geometry& geom, string hitseries,	double t1, double t2)
+			  I3Geometry& geom, string hitseries,	
+			  double t1, double t2)
 {
-	int ndir = 0;
-	int tot = 0; //####
-	double Ttrack = track->GetT();
-	double Thit, Tarr, Tres;
-	I3OMResponseMap::iterator om;
-	for (om=ommap.begin(); om!=ommap.end(); om++) {
-		I3OMResponsePtr omr_p = om->second;
-		if (omr_p->GetRecoHitSeriesDict().find(hitseries)!=
-			 omr_p->GetRecoHitSeriesDict().end()) {
-			I3RecoHitSeriesDict& dict = omr_p->GetRecoHitSeriesDict();
-			I3RecoHitSeriesPtr hits = dict[hitseries];
-// 		if (omr_p->GetDataReadoutDict().find(hitseries)!=
-// 			 omr_p->GetDataReadoutDict().end()) {
-// 			I3DataReadoutDict& dict = omr_p->GetDataReadoutDict();
-// 			I3DataReadoutPtr readout_ptr = dict[hitseries];
-// 			I3AMANDAAnalogReadoutPtr aarp = 
-// 				roost::dynamic_pointer_cast<I3AMANDAAnalogReadout>(readout_ptr);
+  int ndir = 0;
+  int tot = 0; //####
+  double Ttrack = track->GetT();
+  double Thit, Tarr, Tres;
+  I3OMResponseMap::iterator om;
+  for (om=ommap.begin(); om!=ommap.end(); om++) {
+    I3OMResponsePtr omr_p = om->second;
+    if (omr_p->GetRecoHitSeriesDict().find(hitseries)!=
+	omr_p->GetRecoHitSeriesDict().end()) {
+      I3RecoHitSeriesDict& dict = omr_p->GetRecoHitSeriesDict();
+      I3RecoHitSeriesPtr hits = dict[hitseries];
+//     if (omr_p->GetDataReadoutDict().find(hitseries)!=
+// 	omr_p->GetDataReadoutDict().end()) {
+//       I3DataReadoutDict& dict = omr_p->GetDataReadoutDict();
+//       I3DataReadoutPtr readout_ptr = dict[hitseries];
+//       I3AMANDAAnalogReadoutPtr aarp = 
+// 	roost::dynamic_pointer_cast<I3AMANDAAnalogReadout>(readout_ptr);
+      
+      I3Position ompos = geom.GetInIceGeometry()[om->first]->GetPos();
+      Tarr = CherenkovTime(track, ompos);
+      Thit = hits->GetFirstHitTime();
+      Tres = Thit - Tarr - Ttrack;
+      //cout<<Thit;//###
+      if (Thit>-2000 && Thit<4500) {
+	tot+=1;//###
+	//cout<<"  <-- count in total";//@###
+      }
+      if (Tres>t1 && Tres<t2) {
+	ndir+=1;
+	//cout<<"  <-- direct hit";//###
+      }
+      //cout<<endl;//####
+      
+    }
+  }
+  //cout<<tot<<"  "<<ndir<<"  "<<(double)ndir/(double)tot<<endl;//###
 
-			I3Position ompos = geom.GetInIceGeometry()[om->first]->GetPos();
-			Tarr = CherenkovTime(track, ompos);
-			Thit = hits->GetFirstHitTime();
-			Tres = Thit - Tarr - Ttrack;
-			//cout<<Thit;//###
-			if (Thit>-2000 && Thit<4500) {
-				tot+=1;//###
-				//cout<<"  <-- count in total";//@###
-			}
-			if (Tres>t1 && Tres<t2) {
-				ndir+=1;
-				//cout<<"  <-- direct hit";//###
-			}
-			//cout<<endl;//####
-
-		}
-	}
-	//cout<<tot<<"  "<<ndir<<"  "<<(double)ndir/(double)tot<<endl;//###
-
-// 	return ndir;
-	return (double)ndir/(double)tot;
+  // 	return ndir;
+  return (double)ndir/(double)tot;
 }
 
 //--------------------------------------------------------------
+double I3Calculator::Ndir(I3TrackPtr track, I3OMResponseMap& ommap, 
+			  I3Geometry& geom, string hitseries, 
+			  NdirWindow window)
+{
+  double t1 = -15*ns;
+  double t2;
+  switch (window) {
+  case A:
+    t2 = 15*ns;
+    break;
+    
+  case B:
+    t2 = 25*ns;
+    break;
+    
+  case C:
+    t2 = 75*ns;
+    break;
+    
+  case D:
+    t2 = 150*ns;
+    break;
+
+  default:
+    t2 = 25*ns; // this is B
+    break;
+  }
+  
+  return Ndir(track, ommap, geom, hitseries, t1, t2);
+}

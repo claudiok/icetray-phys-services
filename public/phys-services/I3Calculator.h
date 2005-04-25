@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3Calculator.h,v 1.16 2005/04/13 14:27:04 dule Exp $
+ * $Id$
  *
  * @file I3TrackImpl.h
  * @version $Revision: 1.16 $
- * @date $Date: 2005/04/13 14:27:04 $
+ * @date $Date$
  * @author pretz
  */
 #ifndef I3CALCULATOR_H
@@ -36,36 +36,8 @@ using namespace I3Units;
 namespace I3Calculator
 {
 
-  /**
-   * Distance between I3Position and position Pos() on I3Track
-   */
-  double Distance(I3TrackPtr track, 
-		  I3Position& pos);
-  
-  /**
-   * Distance between I3Position and position Pos() of I3Cascade
-   */
-  double Distance(I3CascadePtr cascade, 
-		  I3Position& pos);
-  
-  /**
-   * Distance between position Pos() of two I3Cascades
-   */
-  double Distance(I3CascadePtr casc1, 
-		  I3CascadePtr casc2);
-  
-  /**
-   * Distance between position P and start position on track
-   */
-  double StartDistance(I3TrackPtr track, 
-		       I3Position& pos);
-  
-  /**
-   * Distance between position P and stop position on track
-   */
-  double StopDistance(I3TrackPtr track, 
-		      I3Position& pos);
-  
+  enum NdirWindow { A, B, C, D };
+
   /**
    * Distance between position P and closest approach position on track
    * Input a position 'pos' and a track 'track', and output 
@@ -100,8 +72,9 @@ namespace I3Calculator
 		     double IndexRef=I3Constants::n_ice);
 
   /**
-   * Calculate a position on track, which is a distance 'dist'
-   * away from track.Pos().
+   * Return a position on track, which is a distance 'dist' away 
+   * from track.Pos().
+   * 'dist' can be both positive and negative...
    */
   I3Position ShiftAlongTrack(I3TrackPtr track, 
 			     double dist);
@@ -122,62 +95,54 @@ namespace I3Calculator
   /**
    * Output distance of closest approach from I3Track to I3Position.
    * This method simply uses CherenkovCalc for the calculation.
-   * 
-   * @param track input track
-   * @param pos input position
    */
   double ClosestApproachDistance(I3TrackPtr track,
 				 I3Position& pos);
 
  /**
+   * Output distance from origin of Cherenkov light from I3Track to I3Position.
+   * This method simply uses CherenkovCalc for the calculation.
+   */
+  double CherenkovDistance(I3TrackPtr track,
+			   I3Position& pos);
+
+ /**
    * Output time of arrival of Cherenkov light from I3Track to I3Position.
    * This method simply uses CherenkovCalc for the calculation.
-   * 
-   * @param track input track
-   * @param pos input position
-   * @param IndexRef input Index of Refraction with default value of 1.31
    */
   double CherenkovTime(I3TrackPtr track,
 		       I3Position& pos,
 		       double IndexRef=I3Constants::n_ice);
 
  /**
-   * Output distance from origin of Cherenkov light from I3Track to I3Position.
+   * Return angle between Cherenkov path and the z-axis of the I3Position (DOM)
    * This method simply uses CherenkovCalc for the calculation.
-   * 
-   * @param track input track
-   * @param pos input position
-   */
-  double CherenkovDistance(I3TrackPtr track,
-			   I3Position& pos);
-
- /**
-   * Output angle between Cherenkov path and the z-axis of the I3Position (DOM)
-   * This method simply uses CherenkovCalc for the calculation.
-   * 
-   * @param track input track
-   * @param pos input position
    */
   double CherenkovAngle(I3TrackPtr track,
 			I3Position& pos,
 			I3OMGeo::EOrientation orient=I3OMGeo::Down);
 
+  /**
+   * Return distance between I3Position and position Pos() of I3Cascade
+   */
+  double CascadeDistance(I3CascadePtr cascade, 
+			 I3Position& pos);
+  
+  /**
+   * Return distance between position Pos() of two I3Cascades
+   */
+  double CascadeDistance(I3CascadePtr casc1, 
+			 I3CascadePtr casc2);
+  
  /**
-   * Output time of arrival of Cherenkov light from I3Cascade to I3Position.
-   * 
-   * @param cascade input cascade position
-   * @param pos input position
-   * @param IndexRef input Index of Refraction with default value of 1.31
+   * Return time of arrival of Cherenkov light from I3Cascade to I3Position.
    */
   double CascadeTime(I3CascadePtr cascade,
 		     I3Position& pos,
 		     double IndexRef=I3Constants::n_ice);
 
   /**
-   * Output the 3D angle between two tracks
-   *
-   * @param track1 first track
-   * @param track2 second track
+   * Return the spatial angle between two tracks
    */
   double AngleDiff(I3TrackPtr track1,
 		   I3TrackPtr track2);
@@ -185,14 +150,26 @@ namespace I3Calculator
   /**
    * Calculate the number of direct hits from a given track.
    * The moethod counts the hits with small time residuals (between t1, t2)
-   * (t1~=-15ns, t2~=25ns..150ns)
+   *  - t1~=-15ns, t2~=15ns..150ns
    */
   double Ndir(I3TrackPtr track, 
 	      I3OMResponseMap& ommap, 
 	      I3Geometry& geom, 
-	      string hitseries = "Hits",
+	      string hitseries,
 	      double t1 = -15*ns, 
 	      double t2 = +25*ns);
+
+  /**
+   * Calculate the number of direct hits from a given track.
+   * The moethod counts the hits with small time residuals (between t1, t2)
+   *  - t1 is preset to the default, which is -15ns
+   *  - t2 can be set as: A, B, C, or D  (A=15ns, B=25ns, C=75ns, D=150ns)
+   */
+  double Ndir(I3TrackPtr track, 
+	      I3OMResponseMap& ommap, 
+	      I3Geometry& geom, 
+	      string hitseries,
+	      NdirWindow window);
 
 };
 
