@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx,v 1.2 2005/04/13 14:26:44 dule Exp $
+    $Id$
 
     @version $Revision: 1.2 $
-    @date $Date: 2005/04/13 14:26:44 $
+    @date $Date$
     @author dule
 
     @todo
@@ -29,215 +29,186 @@ using namespace I3Units;
 #include "dataclasses/I3Starting.h"
 #include "dataclasses/I3NonEnergetic.h"
 #include "dataclasses/I3Composite.h"
-typedef I3TrackImpl<I3Starting, I3NonEnergetic, I3Composite> I3StartingMuon;
-typedef shared_ptr<I3StartingMuon> I3StartingMuonPtr;
+typedef I3TrackImpl<I3Starting, I3NonEnergetic, I3Composite> I3StartingTrack;
+typedef shared_ptr<I3StartingTrack> I3StartingTrackPtr;
 
 using namespace I3Calculator;
 
-TEST_GROUP(I3Calculator);
+static I3BasicTrackPtr inftrack()
+{
+  I3BasicTrackPtr inftrack (new I3BasicTrack);
+  inftrack->SetPos(0,0,0);
+  inftrack->SetDir(0,1,1);
+  return inftrack;
+}
 
-TEST(I3Calculator)
+static I3BasicTrackPtr muon()
+{
+  I3BasicTrackPtr muon (new I3BasicTrack);
+  muon->SetPos(10,0,0);
+  muon->SetDir(90*deg,0); // muon moving toward -x axis
+  return muon;
+}
+
+static I3StartingTrackPtr starttrack()
+{
+  I3StartingTrackPtr starttrack (new I3StartingTrack);
+  starttrack->SetStartPos(1,1,1);
+  starttrack->SetDir(0,0);
+  return starttrack;
+}
+
+static I3Position p(1,1,1);
+static I3Position q(2,2,2);
+static I3Position r(0,0,0);
+static I3Position a1;
+
+
+TEST_GROUP(I3Calculator)
+
+TEST(ShiftAlongTrack)
+{
+  I3Position n = ShiftAlongTrack(inftrack(),sqrt(2.));
+
+  ENSURE_DISTANCE(n.GetX(),0.,0.0001);
+  ENSURE_DISTANCE(n.GetY(),1.,0.0001);
+  ENSURE_DISTANCE(n.GetZ(),1.,0.0001);
+
+  ENSURE_DISTANCE(ShiftAlongTrack(muon(),15).GetX(),-5.,0.0001);
+}
+
+TEST(IsOnTrack)
+{
+  I3Position on(2,0.09*m,0);
+  ENSURE(IsOnTrack(muon(),on,0.1*m));
+
+  I3Position n = ShiftAlongTrack(inftrack(),2.38);
+  ENSURE(IsOnTrack(inftrack(),n,0.1*m));
+
+  ENSURE(!IsOnTrack(starttrack(),on,0.1*m));
+
+  on.SetPosition(1,1,1.1);
+  ENSURE(!IsOnTrack(starttrack(),on,0.1*m));
+
+}
+
+TEST(ClosestApproachDistance)
+{
+  ENSURE_DISTANCE(ClosestApproachDistance(inftrack(),p),1.,0.0001);
+
+  ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),q),sqrt(3.),0.0001);
+
+  a1.SetPosition(1,0,-7);
+  ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),a1),1.,0.0001);
+
+  a1.SetPosition(1,1,0);
+  ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),a1),0.,0.0001);
+
+  a1.SetPosition(1,1,2);
+  ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),a1),1.,0.0001);
+
+  a1.SetPosition(1,0,2);
+  ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),a1),sqrt(2.0),0.0001);
+}
+
+TEST(CherenkovDistance)
+{
+  a1.SetPosition(1,0,0);
+  ENSURE(isnan(CherenkovDistance(starttrack(),a1)));
+
+  a1.SetPosition(1,0,-1);
+  ENSURE_DISTANCE(CherenkovDistance(starttrack(),a1),1.54805,0.0001);
+
+  a1.SetPosition(1,0,-11);
+  ENSURE_DISTANCE(CherenkovDistance(starttrack(),a1),1.54805,0.0001);
+
+  a1.SetPosition(-2,1,0);
+  ENSURE_DISTANCE(CherenkovDistance(muon(),a1),1.54805,0.0001);
+
+  ENSURE_DISTANCE(CherenkovDistance(muon(),q),4.37854,0.0001);
+}
+
+TEST(CherenkovTime)
 { 
-	cout <<"Creating I3Position p,q,r..."<<endl;
-	I3Position p(1,1,1);
-	I3Position q(2,2,2);
-	I3Position r(0,0,0);
-	q.ToStream(cout);//#####
+  a1.SetPosition(0,0,0);
+  ENSURE(isnan(CherenkovTime(starttrack(),a1)));
 
-    cout <<"Creating I3Direction d,e..."<<endl;
-    I3Direction d(0,0); // direction straight down -- zenith=0 ==> theta=180
-    I3Direction e(0,1,1); // direction along y-z plane, at 45 deg
+  a1.SetPosition(1,0,-1);
+  ENSURE_DISTANCE(CherenkovTime(starttrack(),a1)/ns,9.49399,0.0001);
 
-    cout <<"Creating Infinite track..."<<endl;
-    I3BasicTrackPtr track_inf (new I3BasicTrack);
-    I3TrackPtr inftrackptr = boost::dynamic_pointer_cast<I3Track>(track_inf);
-    track_inf->SetPos(r);
-    track_inf->SetDir(e);
-    track_inf->SetT(10);
+  a1.SetPosition(1,0,-11);
+  ENSURE_DISTANCE(CherenkovTime(starttrack(),a1)/ns,42.8504,0.0001);
 
-    cout <<"Creating Starting track..."<<endl;
-    I3StartingMuonPtr track_start (new I3StartingMuon);
-    I3TrackPtr starttrackptr=boost::dynamic_pointer_cast<I3Track>(track_start);
-    track_start->SetStartPos(p);
-    track_start->SetDir(d);
-    track_start->SetStartT(10);
+  a1.SetPosition(-2,1,0);
+  ENSURE_DISTANCE(CherenkovTime(muon(),a1)/ns,42.8504,0.0001);
+}
 
-    cout <<"Creating BasiMuon"<<endl;
-    I3BasicTrackPtr muon (new I3BasicTrack);
-    I3TrackPtr muonptr = boost::dynamic_pointer_cast<I3Track>(muon);
-    muon->SetPos(10,0,0);
-    muon->SetDir(90*deg,0); // muon moving toward -x axis
+TEST(CherenkovAngle)
+{ 
+  a1.SetPosition(0,1,0);
+  ENSURE_DISTANCE(CherenkovAngle(muon(),a1)/deg,90.0,0.0001);
 
-    cout <<"Creating a cascade..."<<endl;
-    I3BasicCascadePtr casc_bas (new I3BasicCascade);
-    I3CascadePtr cascptr = boost::dynamic_pointer_cast<I3Cascade>(casc_bas);
-    casc_bas->SetPos(q);
+  a1.SetPosition(0,0,1);
+  ENSURE_DISTANCE(CherenkovAngle(muon(),a1)/deg,49.7612,0.0001);
 
-    cout <<"Creating a directional cascade..."<<endl;
-    I3DirectionalCascadePtr casc_dir (new I3DirectionalCascade);
-    casc_dir->SetPos(0,0,4);
+  ENSURE_DISTANCE(CherenkovAngle(muon(),p,I3OMGeo::Up)/deg,117.179,0.0001);
+}
 
-    cout <<"Distance..."<<endl; //-------------------------
+TEST(CascadeDistance)
+{ 
+  I3BasicCascadePtr casc (new I3BasicCascade);
+  casc->SetPos(2,2,2);
+  I3BasicCascadePtr casc2 (new I3BasicCascade);
+  casc2->SetPos(2,2,7);
 
-    //cout <<" distance starttrack-pos: "<<Distance(starttrackptr,r)<<endl;
-    ENSURE_DISTANCE(Distance(starttrackptr,r),2.7320508,0.0001);
+  ENSURE_DISTANCE(CascadeDistance(casc,r),3.46410,0.0001);
 
-    //cout <<" distance casc-pos: "<<Distance(cascptr,r)<<endl;
-    ENSURE_DISTANCE(Distance(cascptr,r),3.46410,0.0001);
-#if 0
+  ENSURE_DISTANCE(CascadeDistance(casc,casc2),5.0,0.0001);
+}
 
-    cout <<"StartDistance..."<<endl; //-------------------------
+TEST(CascadeTime)
+{
+  I3BasicCascadePtr casc (new I3BasicCascade);
+  casc->SetPos(2,2,2);
 
-    cout <<" distance inftrack-pos: "<<StartDistance(inftrackptr,r)
-			<<" <-- this should be nan!"<<endl;
-    ENSURE("StartDistance(InfTrack,Pos) failed", 
-			  isnan(StartDistance(inftrackptr,r)));
+  ENSURE_DISTANCE(CascadeTime(casc,r)/ns,15.137,0.001);
+}
 
-    cout <<"ShiftAlongTrack..."<<endl; //-------------------------
-
-    I3Position n = ShiftAlongTrack(inftrackptr,sqrt(2.));
-    cout<<n;
-    ENSURE_DISTANCE("ShiftAlongTrack.X failed",n.GetX(),0.,0.0001);
-    ENSURE_DISTANCE("ShiftAlongTrack.Y failed",n.GetY(),1.,0.0001);
-    ENSURE_DISTANCE("ShiftAlongTrack.Z failed",n.GetZ(),1.,0.0001);
-
-    ENSURE_DISTANCE("ShiftAlongTrack.X failed",
-		    ShiftAlongTrack(muonptr,15).GetX(),-5.,0.0001);
-
-    cout <<"IsOnTrack..."<<endl; //-------------------------
-
-    I3Position on(2,0.09*m,0);
-    ensure("IsOnTrack.muon/yes/ failed",IsOnTrack(muonptr,on,0.1*m));
-    ensure("IsOnTrack.inf/yes/ failed",IsOnTrack(inftrackptr,n,0.1*m));
-    ensure("IsOnTrack.1/no/ failed",!IsOnTrack(starttrackptr,on,0.1*m));
-    on.SetPosition(1,1,1.1);
-    ensure("IsOnTrack.2/no/ failed",!IsOnTrack(starttrackptr,on,0.1*m));
-
-    cout <<"ClosestApproachDistance..."<<endl; //-------------------------
-
-    I3Position a1;
-    ENSURE_DISTANCE("ClosestApproachDistance(inftrack,p) failed",
-		    ClosestApproachDistance(inftrackptr,p),1.,0.0001);
-    ENSURE_DISTANCE("ClosestApproachDistance(starttrack,q) failed",
-		    ClosestApproachDistance(starttrackptr,q),
-		    sqrt(3.),0.0001);
-    a1.SetPosition(1,0,-7);
-    ENSURE_DISTANCE("ClosestApproachDistance(starttrack,[1,0,-7]) failed",
-		    ClosestApproachDistance(starttrackptr,a1),1.,0.0001);
-    a1.SetPosition(1,1,0);
-    ENSURE_DISTANCE("ClosestApproachDistance(starttrack,[1,1,0]) failed",
-		    ClosestApproachDistance(starttrackptr,a1),0.,0.0001);
-    a1.SetPosition(1,1,2);
-    ENSURE_DISTANCE("ClosestApproachDistance(starttrack,[1,1,2]) failed",
-		    ClosestApproachDistance(starttrackptr,a1),1.,0.0001);
-    a1.SetPosition(1,0,2);
-    ENSURE_DISTANCE("ClosestApproachDistance(starttrack,[1,0,2]) failed",
-		    ClosestApproachDistance(starttrackptr,a1),
-		    sqrt(2.),0.0001);
-
-    cout <<"CherenkovTime..."<<endl; //-------------------------
-
-    a1.SetPosition(0,0,0);
-    cout<<" cherenkov-time(start,[0,0,0]): "
-		  <<CherenkovTime(starttrackptr,a1)/ns
-		  <<" <-- this should be nan!"<<endl;
-    ensure("CherenkovTime failed", isnan(CherenkovTime(starttrackptr,a1)));
-
-    a1.SetPosition(1,0,-1);
-    cout<<" cherenkov-time(start,[1,0,-1]): "
-		  <<CherenkovTime(starttrackptr,a1)/ns<<endl;
-    ENSURE_DISTANCE("CherenkovTime(starttrack,[1,0,-1]) failed",
-		    CherenkovTime(starttrackptr,a1)/ns,9.49399,0.0001);
-
-    a1.SetPosition(1,0,-11);
-    cout<<" cherenkov-time(start,[1,0,-11]): "
-		  <<CherenkovTime(starttrackptr,a1)/ns<<endl;
-    ENSURE_DISTANCE("CherenkovTime(starttrack,[1,0,-11]) failed",
-		    CherenkovTime(starttrackptr,a1)/ns,42.8504,0.0001);
-
-    a1.SetPosition(-2,1,0);
-    cout<<" cherenkov-time(muon,[-2,1,0]): "
-		  <<CherenkovTime(muonptr,a1)/ns<<endl;
-    ENSURE_DISTANCE("CherenkovTime(muon,[-2,1,0]) failed",
-		    CherenkovTime(muonptr,a1)/ns,42.8504,0.0001);
-
-    cout <<"CherenkovDistance..."<<endl; //-------------------------
-
-    a1.SetPosition(1,0,0);
-    cout<<" cherenkov-distance(start,[0,0,0]): "
-		  <<CherenkovDistance(starttrackptr,a1)
-		  <<" <-- this should be nan!"<<endl;
-    ensure("CherenkovDistance(starttrack,[0,0,0]) failed", isnan(CherenkovDistance(starttrackptr,a1)));
-
-    a1.SetPosition(1,0,-1);
-    cout<<" cherenkov-distance(start,[1,0,-1]): "
-		  <<CherenkovDistance(starttrackptr,a1)<<endl;
-    ENSURE_DISTANCE("CherenkovDistance(starttrack,[1,0,-1]) failed",
-		   CherenkovDistance(starttrackptr,a1),1.54805,0.0001);
-
-    a1.SetPosition(1,0,-11);
-    cout<<" cherenkov-distance(start,[1,0,-11]): "
-		  <<CherenkovDistance(starttrackptr,a1)<<endl;
-    ENSURE_DISTANCE("CherenkovDistance(starttrack,[1,0,-11]) failed",
-		   CherenkovDistance(starttrackptr,a1),1.54805,0.0001);
-
-    a1.SetPosition(-2,1,0);
-    cout<<" cherenkov-distance(muon,[-2,1,0]): "
-		  <<CherenkovDistance(muonptr,a1)<<endl;
-    ENSURE_DISTANCE("CherenkovDistance(muon,[-2,1,0]) failed",
-		    CherenkovDistance(muonptr,a1),1.54805,0.0001);
-
-    cout<<" cherenkov-distance(muon,[2,2,2]): "
-		  <<CherenkovDistance(muonptr,q)<<endl;
-    ENSURE_DISTANCE("CherenkovDistance(muon,[2,2,2]) failed",
-		    CherenkovDistance(muonptr,q),4.37854,0.0001);
-
-    cout <<"CherenkovAngle..."<<endl; //-------------------------
-
-    a1.SetPosition(0,1,0);
-    cout<<" cherenkov-angle(muon,[0,1,0]): "
-		  <<CherenkovAngle(muonptr,a1)/deg<<endl;
-    ENSURE_DISTANCE("CherenkovAngle(muon,[0,1,0]) failed",
-		    CherenkovAngle(muonptr,a1)/deg,90.0,0.0001);
-
-    a1.SetPosition(0,0,1);
-    cout<<" cherenkov-angle(muon,[0,0,1]): "
-		  <<CherenkovAngle(muonptr,a1)/deg<<endl;
-    ENSURE_DISTANCE("CherenkovAngle(muon,[0,0,1]) failed",
-		    CherenkovAngle(muonptr,a1)/deg,49.7612,0.0001);
-
-    cout<<" cherenkov-angle(muon,[1,1,1]): "
-		  <<CherenkovAngle(muonptr,p,I3OMGeo::Up)/deg<<endl;
-    ENSURE_DISTANCE("CherenkovAngle(muon,[1,1,1]) failed",
-		    CherenkovAngle(muonptr,p,I3OMGeo::Up)/deg,
-		    117.179,0.0001);
-
-    cout <<"CascadeTime..."<<endl; //-------------------------
-
-    cout<<" cascade-time(cascade,[0,0,0]): "<<CascadeTime(cascptr,r)/ns<<endl;
-    ENSURE_DISTANCE("CascadeTime(cascade,[0,0,0]) failed",
-		    CascadeTime(cascptr,r)/ns,15.137,0.001);
-
-    cout <<"CascadeDistance..."<<endl; //-------------------------
-
-    cout<<" cascade-distance(cascade,[0,0,0]): "
-		  <<CascadeDistance(casc_dir,r)<<endl;
-    ENSURE_DISTANCE("CascadeDistance(directional-cascade,[0,0,0]) failed",
-		    CascadeDistance(casc_dir,r),4.,0.001);
-
-    cout <<"AngleDiff..."<<endl; //-------------------------
-
-    cout<<" angle-diff(track_inf,muon): "<<AngleDiff(track_inf,muon)/deg<<endl;
-    ENSURE_DISTANCE("AngleDiff(track_inf,muon) failed",
-						  AngleDiff(track_inf,muon)/deg,90.,0.001);
+TEST(AngleDiff)
+{
+  ENSURE_DISTANCE(AngleDiff(inftrack(),muon())/deg,90.,0.001);
     
-    I3BasicTrackPtr track1 (new I3BasicTrack);
-    track1->SetDir(0,1,-1);
-    I3BasicTrackPtr track2 (new I3BasicTrack);
-    track2->SetDir(1,0,-1);
-    cout<<" angle-diff(track1[0,1,-1],track2[1,0,-1]): "
-		  <<AngleDiff(track1,track2)/deg<<endl;
-    ENSURE_DISTANCE("AngleDiff(track1[0,1,-1],track2[1,0,-1] failed",
-		    AngleDiff(track1,track2)/deg,60.,0.001);
-#endif
+  I3BasicTrackPtr track1 (new I3BasicTrack);
+  track1->SetDir(0,1,-1);
+  I3BasicTrackPtr track2 (new I3BasicTrack);
+  track2->SetDir(1,0,-1);
+
+  ENSURE_DISTANCE(AngleDiff(track1,track2)/deg,60.,0.001);
+}
+
+TEST(pos)
+{
+  cout<<endl;
+  I3BasicTrackPtr track (new I3BasicTrack);
+  track->SetPos(0,0,0);
+  track->SetDir(0,0);
+  double ang = 180*deg-acos(1/1.31);
+  //ang = 135*deg;
+  I3Position aa(10,ang,45*deg,I3Position::sph);
+  I3Position bb(5,ang,-30*deg,I3Position::sph);
+  I3Position cc(20,ang,45*deg,I3Position::sph); cc.SetZ(cc.GetZ()-100);
+  I3Position dd(50,ang,180*deg,I3Position::sph); dd.SetZ(dd.GetZ()+50);
+  aa.ToStream(cout);
+  bb.ToStream(cout);
+  cc.ToStream(cout);
+  dd.ToStream(cout);
+  double A = 1.31/(c*sin(acos(1/1.31)));
+  double ta = sqrt(pow(aa.GetX(),2)+pow(aa.GetY(),2))*A + 7*ns;
+  double tb = sqrt(pow(bb.GetX(),2)+pow(bb.GetY(),2))*A - 9*ns;
+  double tc = sqrt(pow(cc.GetX(),2)+pow(cc.GetY(),2))*A + 5*ns;
+  double td = sqrt(pow(dd.GetX(),2)+pow(dd.GetY(),2))*A - 3*ns;
+  cout<<ta-CherenkovTime(track,aa)<<endl;
+  cout<<tb-CherenkovTime(track,bb)<<endl;
+  cout<<tc-(-100*1.31/c)-CherenkovTime(track,cc)<<" "<<sqrt(pow(aa.GetX(),2)+pow(aa.GetY(),2))<<" "<<track->GetPos().GetZ()<<endl;
+  cout<<td-(50*1.31/c)-CherenkovTime(track,dd)<<endl;
 }
