@@ -33,6 +33,7 @@ template<> template<>
 inline void Client::CheckFrame<0>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
+  tut::ensure(DumpStop(frame) == "Geometry");
   tut::ensure("geometry frame has geometry",
 	      I3FrameAccess<I3Geometry>::Exists(frame,
 						"Geometry"));
@@ -46,6 +47,7 @@ inline void Client::CheckFrame<0>(I3Frame& frame)
 inline void Client::CheckFrame<1>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
+  tut::ensure(DumpStop(frame) == "Calibration");
   tut::ensure("calibration frame has calibration",
 	      I3FrameAccess<I3Calibration>::Exists(frame,"Calibration"));
   tut::ensure("calibration frame has calibration header",
@@ -69,6 +71,7 @@ inline void Client::CheckFrame<1>(I3Frame& frame)
 inline void Client::CheckFrame<2>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
+  tut::ensure(DumpStop(frame) == "DetectorStatus");
   tut::ensure("detector status frame has geometry",
 	      I3FrameAccess<I3Geometry>::Exists(frame,
 						"Geometry"));
@@ -102,6 +105,7 @@ inline void Client::CheckFrame<2>(I3Frame& frame)
 inline void Client::CheckFrame<3>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
+  tut::ensure(DumpStop(frame) == "Physics");
   tut::ensure("event frame has geometry",
 	      I3FrameAccess<I3Geometry>::Exists(frame,"Geometry"));
   tut::ensure("event frame has geometry header",
@@ -126,6 +130,7 @@ inline void Client::CheckFrame<3>(I3Frame& frame)
 inline void Client::CheckFrame<4>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
+  tut::ensure(DumpStop(frame) == "Physics");
   tut::ensure("event frame has geometry",
 	      I3FrameAccess<I3Geometry>::Exists(frame,"Geometry"));
   tut::ensure("event frame has geometry header",

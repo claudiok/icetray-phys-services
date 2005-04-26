@@ -11,12 +11,6 @@ I3CalibrationSource::I3CalibrationSource(I3Context& context) :
 
 void I3CalibrationSource::Physics(I3Frame& frame)
 {
-  log_debug("Entering I3CalibrationSource::Physics");
-  I3Time eventTime = GetEventHeader(frame).GetStartTime();
-  if(!IsCalibrationCurrent(eventTime))
-    {
-      SendCalibration(eventTime);
-    }
   I3FrameAccess<I3Calibration>::Put(frame,
 				    currentCalibration_.calibration,
 				    "Calibration");

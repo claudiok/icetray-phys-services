@@ -11,12 +11,6 @@ I3GeometrySource::I3GeometrySource(I3Context& context) :
 
 void I3GeometrySource::Physics(I3Frame& frame)
 {
-  log_debug("Entering I3GeometrySource::Physics()");
-  I3Time eventTime = GetEventHeader(frame).GetStartTime();
-  if(!IsGeometryCurrent(eventTime))
-    {
-      SendGeometry(eventTime);
-    }
   I3FrameAccess<I3Geometry>::Put(frame,
 				 currentGeometry_.geometry,
 				 "Geometry");
@@ -46,12 +40,6 @@ void I3GeometrySource::Calibration(I3Frame& frame)
 
 void I3GeometrySource::DetectorStatus(I3Frame& frame)
 {
-  log_debug("Entering I3GeometrySource::DetectorStatus()");
-  I3Time statusTime = GetDetectorStatusHeader(frame).GetStartTime();
-  if(!(IsGeometryCurrent(statusTime)))
-    {
-      SendGeometry(statusTime);
-    }
   I3FrameAccess<I3Geometry>::Put(frame,
 				 currentGeometry_.geometry,
 				 "Geometry");
