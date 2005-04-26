@@ -26,6 +26,24 @@ void I3CalibrationSource::Physics(I3Frame& frame)
   PushFrame(frame,"OutBox");
 }
 
+void I3CalibrationSource::DetectorStatus(I3Frame& frame)
+{
+  log_debug("Entering I3CalibrationSource::DetectorStatus");
+  I3Time statusTime = GetDetectorStatusHeader(frame).GetStartTime();
+  if(!IsCalibrationCurrent(statusTime))
+    {
+      SendCalibration(statusTime);
+    }
+  I3FrameAccess<I3Calibration>::Put(frame,
+				    currentCalibration_.calibration,
+				    "Calibration");
+  I3FrameAccess<I3CalibrationHeader>::Put(frame,
+					  currentCalibration_.header,
+					  "CalibrationHeader");
+  PushFrame(frame,"OutBox");
+}
+
+
 void I3CalibrationSource::Calibration(I3Frame& frame)
 {
   log_debug("Entering I3CalibrationSource::Calibration()");

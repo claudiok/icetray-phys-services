@@ -16,6 +16,8 @@ class I3GeometrySource : public I3PhysicsModule
 
   void Calibration(I3Frame& frame);
 
+  void DetectorStatus(I3Frame& frame);
+  
  private:
   void SendGeometry(I3Time time);
   

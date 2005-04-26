@@ -12,6 +12,8 @@ I3PhysicsSource::I3PhysicsSource(I3Context& context) : I3Source(context)
     I3Stream::AddStream("Geometry","Geometry Stream");
   if(!I3Stream::StreamExists("Calibration"))
     I3Stream::AddStream("Calibration","Calibration Stream");
+  if(!I3Stream::StreamExists("DetectorStatus"))
+    I3Stream::AddStream("DetectorStatus","DetectorStatus stream");
 }
 
 void I3PhysicsSource::Process()

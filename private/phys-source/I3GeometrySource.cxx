@@ -44,6 +44,23 @@ void I3GeometrySource::Calibration(I3Frame& frame)
 
 }
 
+void I3GeometrySource::DetectorStatus(I3Frame& frame)
+{
+  log_debug("Entering I3GeometrySource::DetectorStatus()");
+  I3Time statusTime = GetDetectorStatusHeader(frame).GetStartTime();
+  if(!(IsGeometryCurrent(statusTime)))
+    {
+      SendGeometry(statusTime);
+    }
+  I3FrameAccess<I3Geometry>::Put(frame,
+				 currentGeometry_.geometry,
+				 "Geometry");
+  I3FrameAccess<I3GeometryHeader>::Put(frame,
+				       currentGeometry_.header,
+				       "GeometryHeader");
+  PushFrame(frame,"OutBox");
+}
+
 void I3GeometrySource::Geometry(I3Frame& frame)
 {
   log_warn("Somebody upstream of I3GeometrySource is putting "

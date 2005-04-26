@@ -22,5 +22,9 @@
 #pragma link C++ class I3FileGeoOriginFactory;
 #pragma link C++ class I3SPRNGRandomService;
 #pragma link C++ class I3SPRNGRandomServiceFactory;
+#pragma link C++ class I3PhysicsSource;
+#pragma link C++ class I3GeometrySource;
+#pragma link C++ class I3DetectorStatusSource;
+#pragma link C++ class I3CalibrationSource;
 
 #endif

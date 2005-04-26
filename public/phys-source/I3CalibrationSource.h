@@ -14,6 +14,8 @@ class I3CalibrationSource : public I3PhysicsModule
   
   void Calibration(I3Frame& frame);
 
+  void DetectorStatus(I3Frame& frame);
+
  private:
   void SendCalibration(I3Time time);
   
