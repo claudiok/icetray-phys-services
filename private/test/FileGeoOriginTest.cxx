@@ -24,7 +24,7 @@ namespace tut
 
 namespace
 {
-  static tut::factory t("FileGeoOriginTest");
+  static tut::factory fileGeoOrginTestFactory("FileGeoOriginTest");
 }
 
 namespace tut

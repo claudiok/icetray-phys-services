@@ -1,9 +1,8 @@
-#include <icetray/test/serialization-test.h>
-//#include <icetray/test/I3Test.h>
+#include <icetray/test/I3Test.h>
 
-#include "phys-services/I3Calculator.h"
 #include "dataclasses/I3BasicTrack.h"
 #include "dataclasses/I3Position.h"
+#include "phys-services/I3Calculator.h"
 
 using namespace I3Calculator;
 

@@ -33,7 +33,7 @@ namespace tut
 
 namespace
 {
-  static tut::factory t("DummyFactoryTest");
+  static tut::factory dummyFactoryTestFactory("DummyFactoryTest");
 }
 
 namespace tut

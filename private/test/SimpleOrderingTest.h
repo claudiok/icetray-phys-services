@@ -9,6 +9,7 @@ struct DummyFactoryClient
 
 typedef TestClientModule<DummyFactoryClient> Client;
 
+inline
 string DumpStop(I3Frame& frame)
 {
   vector<string> possibleNames;
