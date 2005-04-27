@@ -11,7 +11,6 @@
 
 */
 #include "phys-services/I3Calculator.h"
-#include "dataclasses/I3Constants.h"
 #include "dataclasses/I3Starting.h"
 #include "dataclasses/I3Stopping.h"
 #include "dataclasses/I3Contained.h"
@@ -19,7 +18,6 @@
 #include "dataclasses/I3AMANDAAnalogReadout.h"
 
 using namespace std;
-using namespace I3Constants;
 
 
 //--------------------------------------------------------------
@@ -239,83 +237,4 @@ double I3Calculator::AngleDiff(I3TrackPtr track1, I3TrackPtr track2)
   dir1.RotateY(-dir2.CalcTheta());
   double theta = dir1.CalcTheta();
   return theta;
-}
-
-
-//--------------------------------------------------------------
-double I3Calculator::Ndir(I3TrackPtr track, I3OMResponseMap& ommap, 
-			  I3Geometry& geom, string hitseries,	
-			  double t1, double t2)
-{
-  int ndir = 0;
-  int tot = 0; //####
-  double Ttrack = track->GetT();
-  double Thit, Tarr, Tres;
-  I3OMResponseMap::iterator om;
-  for (om=ommap.begin(); om!=ommap.end(); om++) {
-    I3OMResponsePtr omr_p = om->second;
-    if (omr_p->GetRecoHitSeriesDict().find(hitseries)!=
-	omr_p->GetRecoHitSeriesDict().end()) {
-      I3RecoHitSeriesDict& dict = omr_p->GetRecoHitSeriesDict();
-      I3RecoHitSeriesPtr hits = dict[hitseries];
-//     if (omr_p->GetDataReadoutDict().find(hitseries)!=
-// 	omr_p->GetDataReadoutDict().end()) {
-//       I3DataReadoutDict& dict = omr_p->GetDataReadoutDict();
-//       I3DataReadoutPtr readout_ptr = dict[hitseries];
-//       I3AMANDAAnalogReadoutPtr aarp = 
-// 	roost::dynamic_pointer_cast<I3AMANDAAnalogReadout>(readout_ptr);
-      
-      I3Position ompos = geom.GetInIceGeometry()[om->first]->GetPos();
-      Tarr = CherenkovTime(track, ompos);
-      Thit = hits->GetFirstHitTime();
-      Tres = Thit - Tarr - Ttrack;
-      //cout<<Thit;//###
-      if (Thit>-2000 && Thit<4500) {
-	tot+=1;//###
-	//cout<<"  <-- count in total";//@###
-      }
-      if (Tres>t1 && Tres<t2) {
-	ndir+=1;
-	//cout<<"  <-- direct hit";//###
-      }
-      //cout<<endl;//####
-      
-    }
-  }
-  //cout<<tot<<"  "<<ndir<<"  "<<(double)ndir/(double)tot<<endl;//###
-
-  // 	return ndir;
-  return (double)ndir/(double)tot;
-}
-
-//--------------------------------------------------------------
-double I3Calculator::Ndir(I3TrackPtr track, I3OMResponseMap& ommap, 
-			  I3Geometry& geom, string hitseries, 
-			  NdirWindow window)
-{
-  double t1 = -15*ns;
-  double t2;
-  switch (window) {
-  case A:
-    t2 = 15*ns;
-    break;
-    
-  case B:
-    t2 = 25*ns;
-    break;
-    
-  case C:
-    t2 = 75*ns;
-    break;
-    
-  case D:
-    t2 = 150*ns;
-    break;
-
-  default:
-    t2 = 25*ns; // this is B
-    break;
-  }
-  
-  return Ndir(track, ommap, geom, hitseries, t1, t2);
 }
