@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3DummyDetectorStatusOrigin.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3DUMMYDETECTORSTATUSORIGIN_H
 #define I3DUMMYDETECTORSTATUSORIGIN_H
 

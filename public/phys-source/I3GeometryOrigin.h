@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3GeometryOrigin.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3GEOMETRYORIGIN_H
 #define I3GEOMETRYORIGIN_H
 
@@ -8,10 +19,6 @@
 
 /**
  * @brief dumb struct for holding an I3Geometry and its I3GeometryHeader
- *
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 struct GeometryPair
 {
@@ -27,17 +34,23 @@ struct GeometryPair
 };
 
 /**
- * @brief This class generates I3Geometry objects given a time
- * and then tells the next time the geometry changes.
- *
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
+ * @brief This is an interface to classes which generates I3Geometry and
+ * I3GeometryHeader objects given an I3Time.
+ * This is intended to be an icetray services for getting the geometry
+ * information into the system
  */
 class I3GeometryOrigin
 {
  public:
+  /**
+   * @brief This is the default name of the service in an I3Context
+   */
   static const char* DefaultName() { return "GeometryOrigin";}
+
+  /**
+   * @brief gives the I3Geometry and I3GeometryHeader for the
+   * indicated time.
+   */
   virtual GeometryPair GetGeometry(I3Time time) = 0;
 };
 

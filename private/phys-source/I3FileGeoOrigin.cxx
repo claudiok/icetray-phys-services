@@ -8,7 +8,6 @@
 void I3FileGeoOrigin::Fatal(const string& message)
 {
   log_fatal(message.c_str());
-  throw I3TrayException();
 }
 
 GeometryPair I3FileGeoOrigin::GetGeometry(I3Time time)

@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3DummyEventOrigin.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3DUMMYEVENTORIGIN_H
 #define I3DUMMYEVENTORIGIN_H
 
@@ -6,10 +17,6 @@
 /**
  * @brief a simple implementation of I3EventOrigin which
  * serves up ten (empty) events before quitting.
- *
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 class I3DummyEventOrigin : public I3EventOrigin
 {

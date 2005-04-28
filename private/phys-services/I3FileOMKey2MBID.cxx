@@ -1,5 +1,4 @@
 #include "phys-services/I3FileOMKey2MBID.h"
-#include "icetray/I3TrayException.h"
 #include <fstream>
 #include <string>
 
@@ -113,5 +112,4 @@ OMKey I3FileOMKey2MBID::OMKeyize(const string& key)
 void I3FileOMKey2MBID::Fatal(const string& message) 
 {
   log_fatal(message.c_str());
-  throw I3TrayException();
 }

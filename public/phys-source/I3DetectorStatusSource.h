@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3DetectorStatusSource.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3DETECTORSTATUSSOURCE_H
 #define I3DETECTORSTATUSSOURCE_H
 
@@ -5,6 +16,10 @@
 #include "phys-source/I3DetectorStatusOrigin.h"
 #include "phys-source/I3TimeRange.h"
 
+/**
+ * @brief A module which puts the DetectorStatus into the 
+ * data stream.  Looks at the I3DetectorStatusOrigin to accomplish this.
+ */
 class I3DetectorStatusSource : public I3PhysicsModule
 {
  public:

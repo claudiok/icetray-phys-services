@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3GeometrySource.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3GEOMETRYSOURCE_H
 #define I3GEOMETRYSOURCE_H
 
@@ -5,6 +16,12 @@
 #include "phys-source/I3GeometryOrigin.h"
 #include "phys-source/I3TimeRange.h"
 
+/**
+ * @brief A module which fills the Geometry into the data stream
+ * when it becomes outdated.
+ * Looks at the I3GeometryOrigin service to accomplish this.
+ *
+ */
 class I3GeometrySource : public I3PhysicsModule
 {
  public:

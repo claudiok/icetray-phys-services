@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3EventOrigin.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3EVENTORIGIN_H
 #define I3EVENTORIGIN_H
 
@@ -8,10 +19,6 @@
 
 /**
  * @brief Dumb struct for holding an I3Event and its I3EventHeader
- *
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 struct EventPair
 {
@@ -27,17 +34,22 @@ struct EventPair
 };
 
 /**
- * @brief This class serves up an event and the time of the next 
- * event.
- *
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
+ * @brief This is the interface to classes which  
+ * serve up an event and the time of the next 
+ * event.  This is intended to be an icetray service
  */
 class I3EventOrigin
 {
  public:
+  /**
+   * @brief default name of this service in an icetray I3Context
+   */
   static const char* DefaultName() { return "EventOrigin";}
+
+  /**
+   * @brief indicates whether or not there are more events to find.
+   * 
+   */
   virtual bool MoreEvents() = 0;
   virtual EventPair PopEvent() = 0;
 };

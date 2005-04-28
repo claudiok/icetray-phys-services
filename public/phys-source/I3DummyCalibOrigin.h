@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3DummyCalibOrigin.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3DUMMYCALIBORIGIN_H
 #define I3DUMMYCALIBORIGIN_H
 
@@ -7,10 +18,6 @@
 /**
  * @brief An implementation of the I3CalibrationOrigin which 
  * just serves up one calibration which is empty.
- *
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 class I3DummyCalibOrigin : public I3CalibrationOrigin
 {

@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3CalibrationOrigin.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3CALIBRATIONORIGIN_H
 #define I3CALIBRATIONORIGIN_H
 
@@ -8,10 +19,6 @@
 
 /**
  * @brief Dumb struct for holding an I3Calibration and its I3CalibrationHeader
- *
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 struct CalibrationPair
 {
@@ -29,15 +36,20 @@ struct CalibrationPair
 /**
  * @brief Produces I3Calibration objects given a time.
  * Then it tells the next time the calibration will change.
- * 
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 class I3CalibrationOrigin
 {
  public:
+  /**
+   * @brief default name for the service in the icetray context.
+   */
   static const char* DefaultName() { return "CalibrationOrigin";}
+
+  /**
+   * @brief Gets the calibration and the header associated with the given time
+   * It is expected that the 'start' and 'end' times of the data
+   * header will be appropirately filled.
+   */
   virtual CalibrationPair GetCalibration(I3Time time) = 0;
 };
 
