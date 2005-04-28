@@ -1,5 +1,5 @@
 /**
- @page distribued-rng Using I3SPRNGRandomService in distributed systems
+ @page distributed-rng Using I3SPRNGRandomService in distributed systems
  @author <a href="http://www.icecube.wisc.edu/~juancarlos">Juan Carlos Diaz-Velez</a>
 
 

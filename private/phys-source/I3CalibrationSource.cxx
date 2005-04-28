@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3CalibrationSource.cxx
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #include "phys-source/I3CalibrationSource.h"
 #include "services/I3Execution.h"
 #include "dataclasses/I3Time.h"

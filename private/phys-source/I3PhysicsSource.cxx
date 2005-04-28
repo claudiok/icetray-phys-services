@@ -1,3 +1,15 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file 
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
+
 #include "phys-source/I3PhysicsSource.h"
 #include "icetray/I3Context.h"
 #include "icetray/I3TrayHeaders.h"

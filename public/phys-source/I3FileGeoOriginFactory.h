@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3FileGeoOriginFactory.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3FILEGEOORIGINFACTORY_H
 #define I3FILEGEOORIGINFACTORY_H
 
@@ -9,9 +20,6 @@ using namespace std;
 /**
  * @brief A simple class to install the I3FileGeoOrigin class into the
  * framework
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 class I3FileGeoOriginFactory
 : public I3ServiceFactory

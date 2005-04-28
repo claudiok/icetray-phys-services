@@ -1,3 +1,15 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3DummyDetectorStatusOrigin.cxx
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
+
 #include "phys-source/I3DummyDetectorStatusOrigin.h"
 
 DetectorStatusPair I3DummyDetectorStatusOrigin::GetDetectorStatus(I3Time time)

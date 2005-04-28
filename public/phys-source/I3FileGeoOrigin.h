@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3FileGeoOrigin.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3FILEGEOORIGIN_H
 #define I3FILEGEOORIGIN_H
 
@@ -11,9 +22,6 @@ using namespace std;
 /**
  * @brief A I3GeometryOrigin which reads the geometry from two files,
  * one for icecube and one for inice
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 class I3FileGeoOrigin : public I3GeometryOrigin
 {

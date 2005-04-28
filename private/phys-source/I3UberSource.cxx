@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3UberSource.cxx
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #include "phys-source/I3UberSource.h"
 #include <map>
 #include "icetray/I3TrayHeaders.h"

@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3DummyCalibOrigin.cxx
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #include "phys-source/I3DummyCalibOrigin.h"
 
 CalibrationPair I3DummyCalibOrigin::GetCalibration(I3Time time)

@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3DummyDetectorStatusOriginFactory.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3DUMMYDETECTORSTATUSORIGINFACTORY_H
 #define I3DUMMYDETECTORSTSTUSORIGINFACTORY_H
 
@@ -10,9 +21,6 @@ using namespace std;
  * @brief A simple class to install the I3DummyDetectorStatusOrigin 
  * class into the
  * framework
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 class I3DummyDetectorStatusOriginFactory
 : public I3ServiceFactory

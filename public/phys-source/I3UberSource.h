@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3UberSource.h
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #ifndef I3UBERSOURCE_H
 #define I3UBERSOURCE_H
 
@@ -12,22 +23,27 @@
 #include "I3TimeRange.h"
 
 /**
- * @brief An I3Source which uses abstract factory
- * interfaces to get events, calibration and geometries
+ * @brief An I3Source which uses abstract interfaces
+ * interfaces to get events, calibration and geometries.
  * from.
  *
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
+ * Uses the I3GeometryOrigin, the I3DetectorStatusOrigin, the
+ * I3EventOrigin, and the I3CalibrationOrigin interfaces
+ *
+ * If you don't like the idea of this being one module, you can
+ * use the four modules I3PhysicsSource, I3GeometrySource, 
+ * I3CalibrationSource, and I3DetectorStatusSource together instead.
  */
 class I3UberSource : public I3Source
 {
  public:
   I3UberSource(I3Context& ctx);
 
-  enum Stream {NONE,EVENT,GEOMETRY,CALIBRATION,DETECTORSTATUS};
-  
   void Process();
+
+ private:
+
+  enum Stream {NONE,EVENT,GEOMETRY,CALIBRATION,DETECTORSTATUS};
 
   I3EventOrigin& GetEventOrigin();
 
@@ -37,7 +53,6 @@ class I3UberSource : public I3Source
   
   I3DetectorStatusOrigin& GetDetectorStatusOrigin();
 
- private:
   Stream NextStream();
 
   void SendEvent();

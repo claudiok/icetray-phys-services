@@ -1,3 +1,15 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3DummyGeoOrigin.cxx
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
+
 #include "phys-source/I3DummyGeoOrigin.h"
 
 GeometryPair I3DummyGeoOrigin::GetGeometry(I3Time time)

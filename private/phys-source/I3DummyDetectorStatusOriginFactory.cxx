@@ -1,3 +1,14 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id:$
+ *
+ * @file I3DummyDetectoryStatusOriginFactory.cxx
+ * @version $Revision:$
+ * @date $Date:$
+ * @author pretz
+ */
+
 #include "phys-source/I3DummyDetectorStatusOriginFactory.h"
 
 #include "icetray/I3ServicesAccess.h"

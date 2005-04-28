@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3DummyDetectorStatusOrigin.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -17,10 +17,6 @@
 /**
  * @brief A simple implemetation of the I3DetectorStatusOrigin which serves
  * up one (empty) detector status
- *
- * @note THIS IS AN EXPERIMENTAL CLASS.  DON'T USE IT IF YOU'RE
- * WANTING SOMETHING PERFECTLY STABLE
- * @ingroup experimentalphysservices
  */
 class I3DummyDetectorStatusOrigin : public I3DetectorStatusOrigin
 {

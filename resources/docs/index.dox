@@ -6,4 +6,8 @@ This project contains some basic "service modules".  Here are some docs
 @li @ref phys-services
 
 @li @ref physics-module
+
+@li @ref phys-services-phys-source
+
+@li @ref distributed-rng 
  */
