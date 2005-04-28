@@ -1,7 +1,7 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3RandomService.h,v 1.10 2005/04/12 18:43:58 pretz Exp $
+ * $Id$
  *
  *
  * This class is just the interface.  The names chosen
@@ -9,7 +9,7 @@
  * trivially fill this interface
  *
  * @version $Revision: 1.10 $
- * @date $Date: 2005/04/12 18:43:58 $
+ * @date $Date$
  * @author pretz
  *
  * @todo 
@@ -90,7 +90,7 @@ class I3RandomService {
   /**
    * gives a default name for this service
    */
-  static const char* DefaultName(){return "RandomService";}
+  static const char* DefaultName(){ return "RandomService"; }
 
  private:
   // copy and assignment private
