@@ -10,4 +10,8 @@ This project contains some basic "service modules".  Here are some docs
 @li @ref phys-services-phys-source
 
 @li @ref distributed-rng 
+
+@li @ref I3Calculator -- namespace of functions (tools) to calculate various quantities used in reconstruction
+
+@li @ref I3Cuts -- namespace of functions for calculating parameters on which data reduction cuts will be performed
  */
