@@ -9,8 +9,8 @@
  * @author pretz
  */
 
-#ifndef I3DUMMYEVENTORIGIN_H
-#define I3DUMMYEVENTORIGIN_H
+#ifndef I3DUMMYMONITORINGORIGIN_H
+#define I3DUMMYMONITORINGORIGIN_H
 
 #include "phys-source/I3MonitoringOrigin.h"
 

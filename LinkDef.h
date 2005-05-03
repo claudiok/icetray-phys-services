@@ -16,6 +16,7 @@
 #pragma link C++ class I3FileOMKey2MBIDFactory;
 #pragma link C++ class I3UberSource;
 #pragma link C++ class I3DummyEventOriginFactory;
+#pragma link C++ class I3DummyMonitoringOriginFactory;
 #pragma link C++ class I3DummyGeoOriginFactory;
 #pragma link C++ class I3DummyCalibOriginFactory;
 #pragma link C++ class I3DummyDetectorStatusOriginFactory;

@@ -9,8 +9,8 @@
  * @author pretz
  */
 
-#ifndef I3EVENTORIGIN_H
-#define I3EVENTORIGIN_H
+#ifndef I3MONITORINGORIGIN_H
+#define I3MONITORINGORIGIN_H
 
 #include "dataclasses/I3Monitoring.h"
 #include "dataclasses/I3MonitoringHeader.h"
