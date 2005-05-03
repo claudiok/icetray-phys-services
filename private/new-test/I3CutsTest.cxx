@@ -63,7 +63,7 @@ TEST(FakeTrack)
   ENSURE_DISTANCE(CherenkovTime(track,dd)-3,td,0.0001);
 }
 
-TEST(Ndir)
+TEST(Ndir_DownTrack)
 {
   I3BasicTrackPtr track (new I3BasicTrack);
   track->SetPos(0,0,0);
@@ -87,8 +87,7 @@ TEST(Ndir)
 		+ track->GetT() + off[i]*ns);
     time.push_back(t);
     ENSURE_DISTANCE(CherenkovTime(track,pos[i])+off[i],
-		    time[i]-track->GetT(),
-		    0.0001,
+		    time[i]-track->GetT(), 0.0001,
 		    "The time of this hit was somehow calculated wrong.");
   }
 
@@ -96,27 +95,11 @@ TEST(Ndir)
   I3Geometry geometry = CalcGeom(size,pos);
   I3OMResponseMap ommap = CalcResp(size,time,hitseries);
 
-//   for (int i=0; i<size; i++) {
-//     OMKey om(1,i);
-//     geometry.GetInIceGeometry()[om] = 
-//       I3OMGeoIceCubePtr(new I3OMGeoIceCube);
-//     geometry.GetInIceGeometry()[om]->SetPos(pos[i]);
-
-//     ommap[om] = I3OMResponsePtr(new I3OMResponse);
-//     I3RecoHitSeriesDict& dict = ommap[om]->GetRecoHitSeriesDict();
-//     dict[hitseries] = I3RecoHitSeriesPtr(new I3RecoHitSeries);
-//     I3RecoHitSeriesPtr hits = dict[hitseries];
-//     hits->push_back(I3RecoHitPtr (new I3RecoHit));
-//     I3RecoHitPtr h = hits->back();
-//     h->SetTime(time[i]);
-//   }
-
   double ndir;
   ndir = Ndir(track,geometry,ommap,hitseries,-15.,25.);
   ENSURE_DISTANCE(ndir,3.,0.0001,
 		  "Wrong number of direct hits calculated.");
 
-#if 0
   ndir = Ndir(track,geometry,ommap,hitseries,I3Cuts::A);
   ENSURE_DISTANCE(ndir,2.,0.0001,
 		  "Wrong number of direct hits calculated.");
@@ -128,11 +111,9 @@ TEST(Ndir)
   ndir = Ndir(track,geometry,ommap,hitseries,I3Cuts::D);
   ENSURE_DISTANCE(ndir,5.,0.0001,
 		  "Wrong number of direct hits calculated.");
-#endif
-
 }
 
-TEST(Track45)
+TEST(AllCuts_TiltedTrack)
 {
   double ang = acos(1/1.31); // Cherenkov angle
 
@@ -140,9 +121,6 @@ TEST(Track45)
   track->SetPos(10,10,0);
   track->SetDir(180*deg-ang,90*deg);
   track->SetT(15);
-  track->ToStream(cout);//###
-//   cout<<track->GetDir().CalcTheta()/deg<<" "
-//       <<track->GetDir().CalcPhi()/deg<<endl;//###
 
   double size = 3;
   vector<I3Position> pos;
@@ -161,7 +139,12 @@ TEST(Track45)
   double ndir = Ndir(track,geometry,ommap,hitseries,-15.,25.);
   ENSURE_DISTANCE(ndir,3.,0.0001,
 		  "Wrong number of direct hits calculated.");
+
   double ldir = Ldir(track,geometry,ommap,hitseries,I3Cuts::A);
   ENSURE_DISTANCE(ldir,108.635,0.001,
-		  "Wring Ldir distance calculated.");
+		  "Wrong Ldir distance calculated.");
+
+  double smooth = Smoothness(track,geometry,ommap,hitseries);
+  ENSURE_DISTANCE(smooth,0.121611,0.0001,
+		 "Wrong smoothness calculated.");
 }
