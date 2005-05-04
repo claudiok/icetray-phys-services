@@ -20,6 +20,7 @@ phys-services/I3SPRNGRandomServiceFactory.h \
 phys-services/I3ParticleDataService.h \
 phys-services/I3FileOMKey2MBIDFactory.h \
 phys-source/I3UberSource.h \
+phys-source/I3UberSource_Monitoring.h \
 phys-source/I3DummyEventOriginFactory.h \
 phys-source/I3DummyMonitoringOriginFactory.h \
 phys-source/I3DummyGeoOriginFactory.h \

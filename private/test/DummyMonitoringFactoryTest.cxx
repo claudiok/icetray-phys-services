@@ -7,7 +7,7 @@
 
 #include "root-icetray/RootI3Tray.h"
 
-#include "phys-source/I3UberSource.h"
+#include "phys-source/I3UberSource_Monitoring.h"
 
 #include "phys-source/I3DummyMonitoringOriginFactory.h"
 #include "phys-source/I3DummyGeoOriginFactory.h"
@@ -48,7 +48,7 @@ namespace tut
     tray.AddService<I3DummyGeoOriginFactory>("geo");
     tray.AddService<I3DummyCalibOriginFactory>("calib");
 
-    tray.AddModule<I3UberSource>("source");
+    tray.AddModule<I3UberSource_Monitoring>("source");
     tray.AddModule<Client>("client");
 
     tray.ConnectBoxes("source","OutBox","client");
@@ -57,30 +57,30 @@ namespace tut
     tray.Finish();
   }
 
-  template<> template<>
-  void object::test<2>() 
-  {
-    RootI3Tray tray;
+//   template<> template<>
+//   void object::test<2>() 
+//   {
+//     RootI3Tray tray;
  
-    tray.AddService<I3DummyMonitoringOriginFactory>("events");
-    tray.AddService<I3DummyDetectorStatusOriginFactory>("status");
-    tray.AddService<I3DummyGeoOriginFactory>("geo");
-    tray.AddService<I3DummyCalibOriginFactory>("calib");
+//     tray.AddService<I3DummyMonitoringOriginFactory>("events");
+//     tray.AddService<I3DummyDetectorStatusOriginFactory>("status");
+//     tray.AddService<I3DummyGeoOriginFactory>("geo");
+//     tray.AddService<I3DummyCalibOriginFactory>("calib");
 
-    tray.AddModule<I3PhysicsSource>("eventssource");
-    tray.AddModule<I3DetectorStatusSource>("statussource");
-    tray.AddModule<I3CalibrationSource>("calibsource");
-    tray.AddModule<I3GeometrySource>("geomsource");
-    tray.AddModule<Client>("client");
+//     tray.AddModule<I3PhysicsSource>("eventssource");
+//     tray.AddModule<I3DetectorStatusSource>("statussource");
+//     tray.AddModule<I3CalibrationSource>("calibsource");
+//     tray.AddModule<I3GeometrySource>("geomsource");
+//     tray.AddModule<Client>("client");
 
-    tray.ConnectBoxes("eventssource","OutBox","statussource");
-    tray.ConnectBoxes("statussource","OutBox","calibsource");
-    tray.ConnectBoxes("calibsource","OutBox","geomsource");
-    tray.ConnectBoxes("geomsource","OutBox","client");
+//     tray.ConnectBoxes("eventssource","OutBox","statussource");
+//     tray.ConnectBoxes("statussource","OutBox","calibsource");
+//     tray.ConnectBoxes("calibsource","OutBox","geomsource");
+//     tray.ConnectBoxes("geomsource","OutBox","client");
 
-    tray.Execute();
-    tray.Finish();
-  }
+//     tray.Execute();
+//     tray.Finish();
+//   }
 
 }
 

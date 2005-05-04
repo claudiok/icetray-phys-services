@@ -17,6 +17,7 @@ string DumpStop(I3Frame& frame)
   possibleNames.push_back("DetectorStatus");
   possibleNames.push_back("Calibration");
   possibleNames.push_back("Monitor");
+  possibleNames.push_back("Physics");
   
   for(vector<string>::iterator iter = possibleNames.begin() ; 
       iter != possibleNames.end() ;
