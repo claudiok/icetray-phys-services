@@ -44,7 +44,13 @@ bool
 I3DummyEventOriginFactory::InstallService(I3Services& services)
 {
   if(!eventOrigin_)
-    eventOrigin_ = I3DummyEventOriginPtr(new I3DummyEventOrigin(maxEvents_));
+    {
+      eventOrigin_ = I3DummyEventOriginPtr(new I3DummyEventOrigin(maxEvents_));
+      if(giveMCEvents_)
+	eventOrigin_->GiveMCEvents();
+      else
+	eventOrigin_->GiveNonMCEvents();
+    }
   return I3ServicesAccess<I3EventOrigin>::Put(services,
 						eventOrigin_,
 						I3EventOrigin::DefaultName());
