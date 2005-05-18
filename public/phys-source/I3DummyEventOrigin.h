@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3DummyEventOrigin.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -22,6 +22,7 @@ class I3DummyEventOrigin : public I3EventOrigin
 {
   int maxEvents_;
   int currentEvent_;
+  bool mcEvents_;
 
  public:
   virtual ~I3DummyEventOrigin(){}
@@ -29,6 +30,10 @@ class I3DummyEventOrigin : public I3EventOrigin
   I3DummyEventOrigin(int eventsToReturn);
 
   bool MoreEvents();
+
+  void GiveMCEvents();
+
+  void GiveNonMCEvents();
 
   EventPair PopEvent();
 };
