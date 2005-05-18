@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3DummyEventOriginFactory.cxx
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -18,11 +18,16 @@
 
 I3DummyEventOriginFactory::I3DummyEventOriginFactory(const I3Context& context)
   : I3ServiceFactory(context),
-    maxEvents_(10)
+    maxEvents_(10),
+    giveMCEvents_(false)
 {
   AddParameter("EventsToReturn",
 	       "The maximum number of events to return",
 	       maxEvents_);
+  AddParameter("GiveMCEvents",
+	       "Whether or not to spit out MCEvents",
+	       giveMCEvents_);
+	       
 }
 
 I3DummyEventOriginFactory::~I3DummyEventOriginFactory()
@@ -32,6 +37,7 @@ I3DummyEventOriginFactory::~I3DummyEventOriginFactory()
 void I3DummyEventOriginFactory::Configure()
 {
   GetParameter("EventsToReturn",maxEvents_);
+  GetParameter("GiveMCEvents",giveMCEvents_);
 }
 
 bool

@@ -1,20 +1,33 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3DummyEventOrigin.cxx
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
 #include "phys-source/I3DummyEventOrigin.h"
+#include "dataclasses/I3MCEvent.h"
+#include "dataclasses/I3MCEventHeader.h"
 
 I3DummyEventOrigin::I3DummyEventOrigin(int eventsToReturn)
 {
   maxEvents_ = eventsToReturn;
   currentEvent_ = 0;
+  mcEvents_ = false;
+}
+
+void I3DummyEventOrigin::GiveNonMCEvents()
+{
+  mcEvents_ = false;
+}
+
+void I3DummyEventOrigin::GiveMCEvents()
+{
+  mcEvents_ = true;
 }
 
 bool I3DummyEventOrigin::MoreEvents()
@@ -28,8 +41,16 @@ bool I3DummyEventOrigin::MoreEvents()
 EventPair I3DummyEventOrigin::PopEvent()
 {
   EventPair e;
-  e.event = I3EventPtr(new I3Event());
-  e.header = I3EventHeaderPtr(new I3EventHeader());
+  if(mcEvents_)
+    {
+      e.event = I3EventPtr(new I3MCEvent());
+      e.header = I3EventHeaderPtr(new I3MCEventHeader());
+    }
+  else
+    {
+      e.event = I3EventPtr(new I3Event());
+      e.header = I3EventHeaderPtr(new I3EventHeader());
+    }
 
   I3Time eventTime;
 

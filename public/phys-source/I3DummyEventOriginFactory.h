@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3DummyEventOriginFactory.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -35,6 +35,7 @@ class I3DummyEventOriginFactory
  private:
   int maxEvents_;
   I3DummyEventOriginPtr eventOrigin_;
+  bool giveMCEvents_;
 
   I3DummyEventOriginFactory (const I3DummyEventOriginFactory& rhs); 
   I3DummyEventOriginFactory operator= (const I3DummyEventOriginFactory& rhs); 
