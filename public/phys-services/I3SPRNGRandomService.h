@@ -7,13 +7,10 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_test.h>
 
-// sprng-gsl header must appear after gsl headers
-#include "phys-services/gsl-sprng.h" 
-
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3SPRNGRandomService.h,v 1.2 2005/04/13 18:19:05 pretz Exp $
+ * $Id$
  *
  * @brief SPRNG Implementation of the I3RandomService interface.  
  * This implementation uses a combination of SPRNG and GSL to generate
@@ -24,7 +21,7 @@
  * I3GSLRandomService.
  * 
  * @version $Revision: 1.2 $
- * @date $Date: 2005/04/13 18:19:05 $
+ * @date $Date$
  * @author juancarlos
  *
  * @todo Add ability to save state of rng after run is complete

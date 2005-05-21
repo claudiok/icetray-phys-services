@@ -1,7 +1,7 @@
 /*
  * class: I3SPRNGRandomService
  *
- * Version $Id: I3SPRNGRandomService.cxx,v 1.1 2005/04/13 16:29:34 juancarlos Exp $
+ * Version $Id$
  *
  * Date: 2 Apr 2005
  *
@@ -10,6 +10,7 @@
 
 // Class header files
 #include "phys-services/I3SPRNGRandomService.h"
+#include "phys-services/gsl-sprng.h" 
 
 ClassImp(I3SPRNGRandomService);
 
