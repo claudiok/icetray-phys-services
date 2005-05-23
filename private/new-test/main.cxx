@@ -1,1 +1,1 @@
-#include <icetray/test/main.ixx>
+#include <I3TestMain.ixx>
