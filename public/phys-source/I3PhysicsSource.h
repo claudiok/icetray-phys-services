@@ -17,7 +17,21 @@
 
 #include "icetray/I3Source.h"
 
-#include "I3EventOrigin.h"
+/**
+ * @brief Dumb struct for holding an I3Event and its I3EventHeader
+ */
+struct EventPair
+{
+  I3EventPtr event;
+  I3EventHeaderPtr header;
+
+  operator bool()
+  {
+    if(event && header)
+      return true;
+    return false;
+  }
+};
 
 /**
  * @brief An icetray module which fills the data stream with an event.

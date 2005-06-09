@@ -13,8 +13,24 @@
 #define I3DETECTORSTATUSSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3DetectorStatusOrigin.h"
 #include "phys-source/I3TimeRange.h"
+
+/**
+ * @brief Dumb struct for holding an I3DetectorStatus and its 
+ * I3DetectorStatusHeader
+ */
+struct DetectorStatusPair
+{
+  I3DetectorStatusPtr status;
+  I3DetectorStatusHeaderPtr header;
+
+  operator bool()
+  {
+    if(status && header)
+      return true;
+    return false;
+  }
+};
 
 /**
  * @brief A module which fills the DetectorStatus into the data stream

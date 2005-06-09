@@ -14,14 +14,6 @@
 #pragma link C++ class I3TRandomService;
 #pragma link C++ class I3TRandomServiceFactory;
 #pragma link C++ class I3FileOMKey2MBIDFactory;
-#pragma link C++ class I3UberSource;
-#pragma link C++ class I3UberSource_Monitoring;
-#pragma link C++ class I3DummyEventOriginFactory;
-#pragma link C++ class I3DummyMonitoringOriginFactory;
-#pragma link C++ class I3DummyGeoOriginFactory;
-#pragma link C++ class I3DummyCalibOriginFactory;
-#pragma link C++ class I3DummyDetectorStatusOriginFactory;
-#pragma link C++ class I3FileGeoOriginFactory;
 #pragma link C++ class I3SPRNGRandomService;
 #pragma link C++ class I3SPRNGRandomServiceFactory;
 #pragma link C++ class I3PhysicsSource;

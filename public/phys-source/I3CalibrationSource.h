@@ -13,8 +13,23 @@
 #define I3CALIBRATIONSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3CalibrationOrigin.h"
 #include "phys-source/I3TimeRange.h"
+
+/**
+ * @brief Dumb struct for holding an I3Calibration and its I3CalibrationHeader
+ */
+struct CalibrationPair
+{
+  I3CalibPtr calibration;
+  I3CalibrationHeaderPtr header;
+
+  operator bool()
+  {
+    if(calibration && header)
+      return true;
+    return false;
+  }
+};
 
 /**
  * @brief A module which fills the Calibration into the data stream

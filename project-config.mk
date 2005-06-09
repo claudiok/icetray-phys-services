@@ -19,14 +19,6 @@ phys-services/I3SPRNGRandomService.h \
 phys-services/I3SPRNGRandomServiceFactory.h \
 phys-services/I3ParticleDataService.h \
 phys-services/I3FileOMKey2MBIDFactory.h \
-phys-source/I3UberSource.h \
-phys-source/I3UberSource_Monitoring.h \
-phys-source/I3DummyEventOriginFactory.h \
-phys-source/I3DummyMonitoringOriginFactory.h \
-phys-source/I3DummyGeoOriginFactory.h \
-phys-source/I3DummyDetectorStatusOriginFactory.h \
-phys-source/I3DummyCalibOriginFactory.h \
-phys-source/I3FileGeoOriginFactory.h \
 phys-source/I3PhysicsSource.h \
 phys-source/I3GeometrySource.h \
 phys-source/I3DetectorStatusSource.h \

@@ -1,29 +1,32 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3FileGeoOrigin.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
 #ifndef I3FILEGEOORIGIN_H
 #define I3FILEGEOORIGIN_H
 
-#include "phys-source/I3GeometryOrigin.h"
 #include <string>
 #include <fstream>
 #include <boost/shared_ptr.hpp>
+#include "dataclasses/I3Geometry.h"
+#include "dataclasses/I3GeometryHeader.h"
+#include "phys-source/I3GeometrySource.h"
+#include "dataclasses/I3Time.h"
 
 using namespace std;
 
 /**
- * @brief A I3GeometryOrigin which reads the geometry from two files,
+ * @brief A class which reads the geometry from two files,
  * one for icecube and one for inice
  */
-class I3FileGeoOrigin : public I3GeometryOrigin
+class I3FileGeoOrigin 
 {
   string fAmaGeoInputFile;
   string fI3GeoInputFile;

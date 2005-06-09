@@ -13,8 +13,23 @@
 #define I3GEOMETRYSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3GeometryOrigin.h"
 #include "phys-source/I3TimeRange.h"
+
+/**
+ * @brief dumb struct for holding an I3Geometry and its I3GeometryHeader
+ */
+struct GeometryPair
+{
+  I3GeometryPtr geometry;
+  I3GeometryHeaderPtr header;
+
+  operator bool()
+  {
+    if(geometry && header)
+      return true;
+    return false;
+  }
+};
 
 /**
  * @brief A module which fills the Geometry into the data stream
