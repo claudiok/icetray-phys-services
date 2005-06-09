@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3GeometrySource.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -19,7 +19,6 @@
 /**
  * @brief A module which fills the Geometry into the data stream
  * when it becomes outdated.
- * Looks at the I3GeometryOrigin service to accomplish this.
  *
  */
 class I3GeometrySource : public I3PhysicsModule
@@ -31,19 +30,21 @@ class I3GeometrySource : public I3PhysicsModule
   
   void Geometry(I3Frame& frame);
 
-  void Calibration(I3Frame& frame);
+  /**
+   * virtual, but should only be implemented if you want to change
+   * the logic for when the geometry is updated
+   */
+  virtual bool ShouldUpdateGeometry(I3Frame& frame);
 
-  void DetectorStatus(I3Frame& frame);
-  
+  /**
+   * Give me the geometry that should be in this frame
+   */
+  virtual GeometryPair GetGeometry(I3Frame& frame,I3Time eventTime) = 0;
+
  private:
-  void SendGeometry(I3Time time);
-  
-  bool IsGeometryCurrent(I3Time time);
-  
-  I3GeometryOrigin& GetGeometryFactory();
-  
+  void CurrentGeometryIntoFrame(I3Frame& frame);
+
   GeometryPair currentGeometry_;
-  I3TimeRange currentGeometryRange_;
 
   I3Frame& CreateFrame(const I3Stream& stop);
 };

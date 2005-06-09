@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
- * @file I3CalibrationSource.cxx
+ * @file I3DetectorStatusSource.cxx
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -18,61 +18,35 @@ I3CalibrationSource::I3CalibrationSource(I3Context& context) :
   I3PhysicsModule(context)
 {
   AddOutBox("OutBox");
+
+  if(!I3Stream::StreamExists("Calibration"))
+    I3Stream::AddStream("Calibration","Calibration Stream");
 }
 
 void I3CalibrationSource::Physics(I3Frame& frame)
 {
-  I3FrameAccess<I3Calibration>::Put(frame,
-				    currentCalibration_.calibration,
-				    "Calibration");
-  I3FrameAccess<I3CalibrationHeader>::Put(frame,
-					  currentCalibration_.header,
-					  "CalibrationHeader");
-  PushFrame(frame,"OutBox");
-}
+  I3Time eventTime = GetEventHeader(frame).GetStartTime();
 
-void I3CalibrationSource::DetectorStatus(I3Frame& frame)
-{
-  log_debug("Entering I3CalibrationSource::DetectorStatus");
-  I3Time statusTime = GetDetectorStatusHeader(frame).GetStartTime();
-  if(!IsCalibrationCurrent(statusTime))
+  if(ShouldUpdateCalibration(frame))
     {
-      SendCalibration(statusTime);
+      currentCalibration_ = GetCalibration(frame,eventTime);
+      assert(currentCalibration_);
+
+      I3Frame& geoFrame = CreateFrame(I3Stream::FindStream("Calibration"));
+      CurrentCalibrationIntoFrame(geoFrame);
+
+      PushFrame(geoFrame,"OutBox");
     }
-  I3FrameAccess<I3Calibration>::Put(frame,
-				    currentCalibration_.calibration,
-				    "Calibration");
-  I3FrameAccess<I3CalibrationHeader>::Put(frame,
-					  currentCalibration_.header,
-					  "CalibrationHeader");
+
+  CurrentCalibrationIntoFrame(frame);
+
   PushFrame(frame,"OutBox");
 }
-
 
 void I3CalibrationSource::Calibration(I3Frame& frame)
 {
-  log_debug("Entering I3CalibrationSource::Calibration()");
   log_warn("Somebody upstream of I3CalibrationSource is putting "
 	   "Calibration frames into the system.  What's up with that");
-  PushFrame(frame,"OutBox");
-}
-
-void I3CalibrationSource::SendCalibration(I3Time nextEvent)
-{
-  log_debug("Entering I3CalibrationSource::SendCalibration()");
-  currentCalibration_ = GetCalibrationFactory().GetCalibration(nextEvent);
-  currentCalibrationRange_ 
-    = I3TimeRange(currentCalibration_.header->GetStartTime(),
-		  currentCalibration_.header->GetEndTime()); 
-  assert(currentCalibration_);
-  assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
-  I3Frame& frame = CreateFrame(I3Stream::FindStream("Calibration"));
-  I3FrameAccess<I3Calibration>::Put(frame,
-				    currentCalibration_.calibration,
-				    "Calibration");
-  I3FrameAccess<I3CalibrationHeader>::Put(frame,
-					  currentCalibration_.header,
-					  "CalibrationHeader");
   PushFrame(frame,"OutBox");
 }
 
@@ -85,26 +59,29 @@ I3Frame& I3CalibrationSource::CreateFrame(const I3Stream& stop)
 
 }
 
-bool I3CalibrationSource::IsCalibrationCurrent(I3Time time)
+bool I3CalibrationSource::ShouldUpdateCalibration(I3Frame& frame)
 {
   if(!currentCalibration_)
+    return true;
+
+  I3Time eventTime = GetEventHeader(frame).GetStartTime();
+  
+  if(currentCalibration_.header->GetStartTime() < eventTime  &&
+     currentCalibration_.header->GetEndTime() > eventTime)
     {
-      log_debug("Calibration isn't current 'cause it hasn't been issued yet");
       return false;
     }
-  if(currentCalibrationRange_.lower < time &&
-     time < currentCalibrationRange_.upper)
-    {
-      log_debug("Calibration is current, no worries!");
-      return true;
-    }
-  log_debug("Calibration needs updating");
-  return false;
+
+  return true;
+  
 }
 
-I3CalibrationOrigin& I3CalibrationSource::GetCalibrationFactory()
+void I3CalibrationSource::CurrentCalibrationIntoFrame(I3Frame& frame)
 {
-  return I3ContextAccess<I3CalibrationOrigin>::
-    GetService(GetContext(),
-	       I3CalibrationOrigin::DefaultName());
+  I3FrameAccess<I3Calibration>::Put(frame,
+			      currentCalibration_.calibration,
+			      "Calibration");
+  I3FrameAccess<I3CalibrationHeader>::Put(frame,
+				       currentCalibration_.header,
+				       "CalibrationHeader");
 }

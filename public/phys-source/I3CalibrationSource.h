@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3CalibrationSource.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -17,10 +17,9 @@
 #include "phys-source/I3TimeRange.h"
 
 /**
- * @brief An icetray module which fills the
- * calibration into the data stream when it becomes outdated.
- * Uses the I3CalibrationOrigin service to do this.
- * Also fills the calibration in all faster streams
+ * @brief A module which fills the Calibration into the data stream
+ * when it becomes outdated.
+ *
  */
 class I3CalibrationSource : public I3PhysicsModule
 {
@@ -31,17 +30,21 @@ class I3CalibrationSource : public I3PhysicsModule
   
   void Calibration(I3Frame& frame);
 
-  void DetectorStatus(I3Frame& frame);
+  /**
+   * virtual, but should only be implemented if you want to change
+   * the logic for when the geometry is updated
+   */
+  virtual bool ShouldUpdateCalibration(I3Frame& frame);
+
+  /**
+   * Give me the geometry that should be in this frame
+   */
+  virtual CalibrationPair GetCalibration(I3Frame& frame,I3Time eventTime) = 0;
 
  private:
-  void SendCalibration(I3Time time);
-  
-  bool IsCalibrationCurrent(I3Time time);
-  
-  I3CalibrationOrigin& GetCalibrationFactory();
-  
+  void CurrentCalibrationIntoFrame(I3Frame& frame);
+
   CalibrationPair currentCalibration_;
-  I3TimeRange currentCalibrationRange_;
 
   I3Frame& CreateFrame(const I3Stream& stop);
 };

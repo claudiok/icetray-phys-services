@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id: I3DetectorStatusSource.h 7057 2005-04-28 13:58:02Z pretz $
  *
  * @file I3DetectorStatusSource.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date: 2005-04-28 09:58:02 -0400 (Thu, 28 Apr 2005) $
  * @author pretz
  */
 
@@ -17,8 +17,9 @@
 #include "phys-source/I3TimeRange.h"
 
 /**
- * @brief A module which puts the DetectorStatus into the 
- * data stream.  Looks at the I3DetectorStatusOrigin to accomplish this.
+ * @brief A module which fills the DetectorStatus into the data stream
+ * when it becomes outdated.
+ *
  */
 class I3DetectorStatusSource : public I3PhysicsModule
 {
@@ -29,15 +30,22 @@ class I3DetectorStatusSource : public I3PhysicsModule
   
   void DetectorStatus(I3Frame& frame);
 
+  /**
+   * virtual, but should only be implemented if you want to change
+   * the logic for when the geometry is updated
+   */
+  virtual bool ShouldUpdateDetectorStatus(I3Frame& frame);
+
+  /**
+   * Give me the geometry that should be in this frame
+   */
+  virtual DetectorStatusPair GetDetectorStatus(I3Frame& frame,
+					       I3Time eventTime) = 0;
+
  private:
-  void SendDetectorStatus(I3Time time);
-  
-  bool IsDetectorStatusCurrent(I3Time time);
-  
-  I3DetectorStatusOrigin& GetDetectorStatusFactory();
-  
+  void CurrentDetectorStatusIntoFrame(I3Frame& frame);
+
   DetectorStatusPair currentDetectorStatus_;
-  I3TimeRange currentDetectorStatusRange_;
 
   I3Frame& CreateFrame(const I3Stream& stop);
 };
