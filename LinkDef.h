@@ -21,5 +21,6 @@
 #pragma link C++ class I3DetectorStatusSource;
 #pragma link C++ class I3CalibrationSource;
 #pragma link C++ class I3CalibrateStatusModule;
+#pragma link C++ class I3FileGeometrySource;
 
 #endif

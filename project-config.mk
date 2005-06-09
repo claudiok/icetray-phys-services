@@ -23,6 +23,7 @@ phys-source/I3PhysicsSource.h \
 phys-source/I3GeometrySource.h \
 phys-source/I3DetectorStatusSource.h \
 phys-source/I3CalibrationSource.h \
+phys-source/I3FileGeometrySource.h \
 phys-services/I3SPRNGRandomServiceFactory.h \
 phys-services/I3SPRNGRandomService.h \
 phys-source/I3CalibrateStatusModule.h
