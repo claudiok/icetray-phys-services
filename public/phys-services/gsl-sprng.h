@@ -6,7 +6,7 @@
  * gsl-sprng.h
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: gsl-sprng.h,v 1.1 2005/04/13 16:29:34 juancarlos Exp $
+ * $Id$
  *
  * @brief SPRNG Implementation of the I3RandomService interface.  
  * This implementation uses a combination of SPRNG and GSL to generate
@@ -23,7 +23,7 @@
  * that doesn't make use of streams.
  *
  * @version $Revision: 1.1 $
- * @date $Date: 2005/04/13 16:29:34 $
+ * @date $Date$
  * @author juancarlos
  *
  * @todo 
@@ -64,6 +64,8 @@ static double sprng_get_double(void * vstate)
   return( (double) sprng(stream->streamptr));
 }
 
+// rootcint >4.03 doesn't like this 
+#ifndef __CINT__
 static const gsl_rng_type gsl_rng_sprng20 =
   {"sprng20",        	/* name */
    0x7fffffffUL,     	/* RAND_MAX */
@@ -73,6 +75,7 @@ static const gsl_rng_type gsl_rng_sprng20 =
    &sprng_get,          /* get integer RN */
    &sprng_get_double  	/* get double RN */
 };
+#endif
 
 inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum)
 {
