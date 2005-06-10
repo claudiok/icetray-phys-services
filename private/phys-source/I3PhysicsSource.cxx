@@ -16,6 +16,7 @@
 
 I3PhysicsSource::I3PhysicsSource(I3Context& context) : I3Source(context)
 {
+  log_trace(__PRETTY_FUNCTION__);
   AddOutBox("OutBox");
   NoActiveInBox();
   if(!I3Stream::StreamExists("Physics"))
@@ -24,15 +25,17 @@ I3PhysicsSource::I3PhysicsSource(I3Context& context) : I3Source(context)
 
 void I3PhysicsSource::Process()
 {
-    log_debug("Entering I3PhysicsSource::Process()");
-    if(MoreEvents())
-      SendEvent();
-    else
-      RequestSuspension();
+  log_trace(__PRETTY_FUNCTION__);
+  log_debug("Entering I3PhysicsSource::Process()");
+  if(MoreEvents())
+    SendEvent();
+  else
+    RequestSuspension();
 }
 
 void I3PhysicsSource::SendEvent()
 {
+  log_trace(__PRETTY_FUNCTION__);
   log_debug("Entering I3PhysicsSource::SendEvent()");
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Physics"));
   EventPair nextEvent = NextEvent();

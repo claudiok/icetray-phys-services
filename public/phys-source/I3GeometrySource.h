@@ -13,7 +13,6 @@
 #define I3GEOMETRYSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3TimeRange.h"
 
 /**
  * @brief dumb struct for holding an I3Geometry and its I3GeometryHeader
@@ -44,6 +43,10 @@ class I3GeometrySource : public I3PhysicsModule
   void Physics(I3Frame& frame);
   
   void Geometry(I3Frame& frame);
+
+  void Calibration(I3Frame& frame);
+  
+  void DetectorStatus(I3Frame& frame);
 
   /**
    * virtual, but should only be implemented if you want to change

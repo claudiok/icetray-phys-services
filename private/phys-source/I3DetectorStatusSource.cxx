@@ -16,7 +16,9 @@
 
 I3DetectorStatusSource::I3DetectorStatusSource(I3Context& context) : 
   I3PhysicsModule(context)
-{
+
+{  
+  log_trace(__PRETTY_FUNCTION__);
   AddOutBox("OutBox");
 
   if(!I3Stream::StreamExists("DetectorStatus"))
@@ -25,6 +27,7 @@ I3DetectorStatusSource::I3DetectorStatusSource(I3Context& context) :
 
 void I3DetectorStatusSource::Physics(I3Frame& frame)
 {
+  log_trace(__PRETTY_FUNCTION__);
   I3Time eventTime = GetEventHeader(frame).GetStartTime();
 
   if(ShouldUpdateDetectorStatus(frame))
@@ -45,6 +48,7 @@ void I3DetectorStatusSource::Physics(I3Frame& frame)
 
 void I3DetectorStatusSource::DetectorStatus(I3Frame& frame)
 {
+  log_trace(__PRETTY_FUNCTION__);
   log_warn("Somebody upstream of I3DetectorStatusSource is putting "
 	   "DetectorStatus frames into the system.  What's up with that");
   PushFrame(frame,"OutBox");
@@ -52,6 +56,7 @@ void I3DetectorStatusSource::DetectorStatus(I3Frame& frame)
 
 I3Frame& I3DetectorStatusSource::CreateFrame(const I3Stream& stop)
 {
+  log_trace(__PRETTY_FUNCTION__);
   I3Execution& execution = 
     I3ContextAccess<I3Execution>::GetService(GetContext(),
 					     I3Execution::DefaultName());
@@ -61,6 +66,7 @@ I3Frame& I3DetectorStatusSource::CreateFrame(const I3Stream& stop)
 
 bool I3DetectorStatusSource::ShouldUpdateDetectorStatus(I3Frame& frame)
 {
+  log_trace(__PRETTY_FUNCTION__);
   if(!currentDetectorStatus_)
     return true;
 
@@ -78,6 +84,7 @@ bool I3DetectorStatusSource::ShouldUpdateDetectorStatus(I3Frame& frame)
 
 void I3DetectorStatusSource::CurrentDetectorStatusIntoFrame(I3Frame& frame)
 {
+  log_trace(__PRETTY_FUNCTION__);
   I3FrameAccess<I3DetectorStatus>::Put(frame,
 			      currentDetectorStatus_.status,
 			      "DetectorStatus");

@@ -13,7 +13,6 @@
 #define I3CALIBRATIONSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3TimeRange.h"
 
 /**
  * @brief Dumb struct for holding an I3Calibration and its I3CalibrationHeader
@@ -44,6 +43,8 @@ class I3CalibrationSource : public I3PhysicsModule
   void Physics(I3Frame& frame);
   
   void Calibration(I3Frame& frame);
+
+  void DetectorStatus(I3Frame& frame);
 
   /**
    * virtual, but should only be implemented if you want to change

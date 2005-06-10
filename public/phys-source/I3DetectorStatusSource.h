@@ -13,7 +13,6 @@
 #define I3DETECTORSTATUSSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3TimeRange.h"
 
 /**
  * @brief Dumb struct for holding an I3DetectorStatus and its 
