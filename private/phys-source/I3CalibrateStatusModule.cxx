@@ -112,7 +112,7 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
       double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
 
       rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
-      log_info("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
+      log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
 
       if(chip==0)calibratedstatus->SetSamplingRateA(rateCorrected);
       else if(chip==1)calibratedstatus->SetSamplingRateB(rateCorrected);
