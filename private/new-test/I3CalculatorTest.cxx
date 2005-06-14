@@ -10,7 +10,7 @@
     @todo
 */
 
-#include <icetray/test/I3Test.h>
+#include <I3Test.h>
 
 #include "phys-services/I3Calculator.h"
 #include "dataclasses/I3BasicTrack.h"
