@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3GeometrySource.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -13,8 +13,8 @@
 #define I3GEOMETRYSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3GeometryOrigin.h"
 #include "phys-source/I3TimeRange.h"
+#include "I3GeometryPair.h"
 
 /**
  * @brief A module which fills the Geometry into the data stream
@@ -34,13 +34,13 @@ class I3GeometrySource : public I3PhysicsModule
   void Calibration(I3Frame& frame);
 
   void DetectorStatus(I3Frame& frame);
+
+  virtual GeometryPair GetGeometry(I3Time time)=0;
   
  private:
   void SendGeometry(I3Time time);
   
   bool IsGeometryCurrent(I3Time time);
-  
-  I3GeometryOrigin& GetGeometryFactory();
   
   GeometryPair currentGeometry_;
   I3TimeRange currentGeometryRange_;

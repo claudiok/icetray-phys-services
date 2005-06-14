@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3EventOrigin.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -16,22 +16,7 @@
 #include "dataclasses/I3EventHeader.h"
 #include "dataclasses/StoragePolicy.h"
 #include "dataclasses/I3Time.h"
-
-/**
- * @brief Dumb struct for holding an I3Event and its I3EventHeader
- */
-struct EventPair
-{
-  I3EventPtr event;
-  I3EventHeaderPtr header;
-
-  operator bool()
-  {
-    if(event && header)
-      return true;
-    return false;
-  }
-};
+#include "I3EventPair.h"
 
 /**
  * @brief This is the interface to classes which  

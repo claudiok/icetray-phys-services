@@ -17,6 +17,9 @@
 I3DetectorStatusSource::I3DetectorStatusSource(I3Context& context) : 
   I3PhysicsModule(context)
 {
+  if(!I3Stream::StreamExists("DetectorStatus"))
+    I3Stream::AddStream("DetectorStatus","DetectorStatus stream");
+
   AddOutBox("OutBox");
 }
 
@@ -48,7 +51,7 @@ void I3DetectorStatusSource::DetectorStatus(I3Frame& frame)
 void I3DetectorStatusSource::SendDetectorStatus(I3Time nextEvent)
 {
   log_debug("Entering I3DetectorStatusSource::SendDetectorStatus()");
-  currentDetectorStatus_ = GetDetectorStatusFactory().GetDetectorStatus(nextEvent);
+  currentDetectorStatus_ = GetDetectorStatus(nextEvent);
   currentDetectorStatusRange_ 
     = I3TimeRange(currentDetectorStatus_.header->GetStartTime(),
 		  currentDetectorStatus_.header->GetEndTime()); 
@@ -90,9 +93,4 @@ bool I3DetectorStatusSource::IsDetectorStatusCurrent(I3Time time)
   return false;
 }
 
-I3DetectorStatusOrigin& I3DetectorStatusSource::GetDetectorStatusFactory()
-{
-  return I3ContextAccess<I3DetectorStatusOrigin>::
-    GetService(GetContext(),
-	       I3DetectorStatusOrigin::DefaultName());
-}
+

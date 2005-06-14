@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3CalibrationSource.cxx
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -17,6 +17,9 @@
 I3CalibrationSource::I3CalibrationSource(I3Context& context) : 
   I3PhysicsModule(context)
 {
+  if(!I3Stream::StreamExists("Calibration"))
+    I3Stream::AddStream("Calibration","Calibration Stream");
+
   AddOutBox("OutBox");
 }
 
@@ -60,7 +63,7 @@ void I3CalibrationSource::Calibration(I3Frame& frame)
 void I3CalibrationSource::SendCalibration(I3Time nextEvent)
 {
   log_debug("Entering I3CalibrationSource::SendCalibration()");
-  currentCalibration_ = GetCalibrationFactory().GetCalibration(nextEvent);
+  currentCalibration_ = GetCalibration(nextEvent);
   currentCalibrationRange_ 
     = I3TimeRange(currentCalibration_.header->GetStartTime(),
 		  currentCalibration_.header->GetEndTime()); 
@@ -102,9 +105,4 @@ bool I3CalibrationSource::IsCalibrationCurrent(I3Time time)
   return false;
 }
 
-I3CalibrationOrigin& I3CalibrationSource::GetCalibrationFactory()
-{
-  return I3ContextAccess<I3CalibrationOrigin>::
-    GetService(GetContext(),
-	       I3CalibrationOrigin::DefaultName());
-}
+

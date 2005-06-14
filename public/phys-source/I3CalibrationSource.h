@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3CalibrationSource.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -13,8 +13,8 @@
 #define I3CALIBRATIONSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3CalibrationOrigin.h"
-#include "phys-source/I3TimeRange.h"
+#include "I3TimeRange.h"
+#include "I3CalibrationPair.h"
 
 /**
  * @brief An icetray module which fills the
@@ -33,13 +33,13 @@ class I3CalibrationSource : public I3PhysicsModule
 
   void DetectorStatus(I3Frame& frame);
 
+  virtual CalibrationPair GetCalibration(I3Time time) = 0;
+
  private:
   void SendCalibration(I3Time time);
   
   bool IsCalibrationCurrent(I3Time time);
-  
-  I3CalibrationOrigin& GetCalibrationFactory();
-  
+    
   CalibrationPair currentCalibration_;
   I3TimeRange currentCalibrationRange_;
 

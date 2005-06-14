@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3GeometryOrigin.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -16,22 +16,7 @@
 #include "dataclasses/I3Geometry.h"
 #include "dataclasses/I3GeometryHeader.h"
 #include "dataclasses/StoragePolicy.h"
-
-/**
- * @brief dumb struct for holding an I3Geometry and its I3GeometryHeader
- */
-struct GeometryPair
-{
-  I3GeometryPtr geometry;
-  I3GeometryHeaderPtr header;
-
-  operator bool()
-  {
-    if(geometry && header)
-      return true;
-    return false;
-  }
-};
+#include "I3GeometryPair.h"
 
 /**
  * @brief This is an interface to classes which generates I3Geometry and

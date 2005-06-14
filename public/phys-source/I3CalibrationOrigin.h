@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3CalibrationOrigin.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -16,22 +16,7 @@
 #include "dataclasses/I3Calibration.h"
 #include "dataclasses/I3CalibrationHeader.h"
 #include "dataclasses/StoragePolicy.h"
-
-/**
- * @brief Dumb struct for holding an I3Calibration and its I3CalibrationHeader
- */
-struct CalibrationPair
-{
-  I3CalibPtr calibration;
-  I3CalibrationHeaderPtr header;
-
-  operator bool()
-  {
-    if(calibration && header)
-      return true;
-    return false;
-  }
-};
+#include "I3CalibrationPair.h"
 
 /**
  * @brief Produces I3Calibration objects given a time.

@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file 
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -20,18 +20,15 @@ I3PhysicsSource::I3PhysicsSource(I3Context& context) : I3Source(context)
   NoActiveInBox();
   if(!I3Stream::StreamExists("Physics"))
     I3Stream::AddStream("Physics","Event Stream");
-  if(!I3Stream::StreamExists("Geometry"))
-    I3Stream::AddStream("Geometry","Geometry Stream");
-  if(!I3Stream::StreamExists("Calibration"))
-    I3Stream::AddStream("Calibration","Calibration Stream");
-  if(!I3Stream::StreamExists("DetectorStatus"))
-    I3Stream::AddStream("DetectorStatus","DetectorStatus stream");
+
+
+
 }
 
 void I3PhysicsSource::Process()
 {
     log_debug("Entering I3PhysicsSource::Process()");
-    if(GetEventFactory().MoreEvents())
+    if(MoreEvents())
       SendEvent();
     else
       RequestSuspension();
@@ -40,7 +37,7 @@ void I3PhysicsSource::Process()
 void I3PhysicsSource::SendEvent()
 {
   log_debug("Entering I3PhysicsSource::SendEvent()");
-  currentEvent_ = GetEventFactory().PopEvent();
+  currentEvent_ = NextEvent();
   assert(currentEvent_);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Physics"));
   I3FrameAccess<I3Event>::Put(frame,
@@ -52,9 +49,3 @@ void I3PhysicsSource::SendEvent()
   PushFrame(frame,"OutBox");
 }
 
-I3EventOrigin& I3PhysicsSource::GetEventFactory()
-{
-  return 
-    I3ContextAccess<I3EventOrigin>::GetService(GetContext(),
-					       I3EventOrigin::DefaultName());
-}

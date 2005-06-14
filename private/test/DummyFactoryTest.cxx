@@ -14,10 +14,10 @@
 #include "phys-source/I3DummyCalibOriginFactory.h"
 #include "phys-source/I3DummyDetectorStatusOriginFactory.h"
 
-#include "phys-source/I3PhysicsSource.h"
-#include "phys-source/I3CalibrationSource.h"
-#include "phys-source/I3GeometrySource.h"
-#include "phys-source/I3DetectorStatusSource.h"
+#include "phys-source/I3DummyPhysicsSource.h"
+#include "phys-source/I3DummyCalibrationSource.h"
+#include "phys-source/I3DummyGeometrySource.h"
+#include "phys-source/I3DummyDetectorStatusSource.h"
 
 #include "SimpleOrderingTest.h"
 
@@ -62,15 +62,10 @@ namespace tut
   {
     RootI3Tray tray;
  
-    tray.AddService<I3DummyEventOriginFactory>("events");
-    tray.AddService<I3DummyDetectorStatusOriginFactory>("status");
-    tray.AddService<I3DummyGeoOriginFactory>("geo");
-    tray.AddService<I3DummyCalibOriginFactory>("calib");
-
-    tray.AddModule<I3PhysicsSource>("eventssource");
-    tray.AddModule<I3DetectorStatusSource>("statussource");
-    tray.AddModule<I3CalibrationSource>("calibsource");
-    tray.AddModule<I3GeometrySource>("geomsource");
+    tray.AddModule<I3DummyPhysicsSource>("eventssource");
+    tray.AddModule<I3DummyDetectorStatusSource>("statussource");
+    tray.AddModule<I3DummyCalibrationSource>("calibsource");
+    tray.AddModule<I3DummyGeometrySource>("geomsource");
     tray.AddModule<Client>("client");
 
     tray.ConnectBoxes("eventssource","OutBox","statussource");

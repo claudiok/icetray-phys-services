@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3PhysicsSource.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -16,15 +16,8 @@
 #include "dataclasses/I3EventHeader.h"
 
 #include "icetray/I3Source.h"
+#include "I3EventPair.h"
 
-#include "phys-source/I3EventOrigin.h"
-
-
-/**
- * @brief An icetray module which fills the data stream with an event.
- * Looks at the I3EventOrigin service to accomplish this.
- * This is an I3Source and should be first in the list
- */
 class I3PhysicsSource : public I3Source
 {
  public:
@@ -32,10 +25,12 @@ class I3PhysicsSource : public I3Source
 
   void Process();
 
+  virtual EventPair NextEvent() = 0;
+  
+  virtual bool MoreEvents() = 0;
+
  private:
   void SendEvent();
-
-  I3EventOrigin& GetEventFactory();
 
   EventPair currentEvent_;
   

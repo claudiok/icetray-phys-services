@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3DetectorStatusOrigin.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -16,23 +16,7 @@
 #include "dataclasses/I3DetectorStatus.h"
 #include "dataclasses/I3DetectorStatusHeader.h"
 #include "dataclasses/StoragePolicy.h"
-
-/**
- * @brief Dumb struct for holding an I3DetectorStatus and its 
- * I3DetectorStatusHeader
- */
-struct DetectorStatusPair
-{
-  I3DetectorStatusPtr status;
-  I3DetectorStatusHeaderPtr header;
-
-  operator bool()
-  {
-    if(status && header)
-      return true;
-    return false;
-  }
-};
+#include "I3DetectorStatusPair.h"
 
 /**
  * @brief Produces I3DetectorStatus and I3DetectorStatus Header

@@ -13,8 +13,8 @@
 #define I3DETECTORSTATUSSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3DetectorStatusOrigin.h"
 #include "phys-source/I3TimeRange.h"
+#include "I3DetectorStatusPair.h"
 
 /**
  * @brief A module which puts the DetectorStatus into the 
@@ -29,12 +29,12 @@ class I3DetectorStatusSource : public I3PhysicsModule
   
   void DetectorStatus(I3Frame& frame);
 
+  virtual DetectorStatusPair GetDetectorStatus(I3Time time) = 0;
+
  private:
   void SendDetectorStatus(I3Time time);
   
   bool IsDetectorStatusCurrent(I3Time time);
-  
-  I3DetectorStatusOrigin& GetDetectorStatusFactory();
   
   DetectorStatusPair currentDetectorStatus_;
   I3TimeRange currentDetectorStatusRange_;

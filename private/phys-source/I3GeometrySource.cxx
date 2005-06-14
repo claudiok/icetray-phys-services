@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3DetectorStatusSource.cxx
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -17,6 +17,9 @@
 I3GeometrySource::I3GeometrySource(I3Context& context) : 
   I3PhysicsModule(context)
 {
+  if(!I3Stream::StreamExists("Geometry"))
+    I3Stream::AddStream("Geometry","Geometry Stream");
+
   AddOutBox("OutBox");
 }
 
@@ -70,7 +73,7 @@ void I3GeometrySource::Geometry(I3Frame& frame)
 void I3GeometrySource::SendGeometry(I3Time nextEvent)
 {
   log_debug("Entering IGeometrySource::SendGeometry()");
-  currentGeometry_ = GetGeometryFactory().GetGeometry(nextEvent);
+  currentGeometry_ = GetGeometry(nextEvent);
   currentGeometryRange_ = I3TimeRange(currentGeometry_.header->GetStartTime(),
 				      currentGeometry_.header->GetEndTime());
   assert(currentGeometry_);
@@ -111,9 +114,4 @@ bool I3GeometrySource::IsGeometryCurrent(I3Time time)
   return false;
 }
 
-I3GeometryOrigin& I3GeometrySource::GetGeometryFactory()
-{
-  return I3ContextAccess<I3GeometryOrigin>::
-    GetService(GetContext(),
-	       I3GeometryOrigin::DefaultName());
-}
+
