@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3DetectorStatusSource.cxx 7067 2005-04-28 15:04:38Z pretz $
+ * $Id:$
  *
  * @file I3DetectorStatusSource.cxx
  * @version $Revision:$
- * @date $Date: 2005-04-28 11:04:38 -0400 (Thu, 28 Apr 2005) $
+ * @date $Date:$
  * @author pretz
  */
 
@@ -16,47 +16,59 @@
 
 I3DetectorStatusSource::I3DetectorStatusSource(I3Context& context) : 
   I3PhysicsModule(context)
-
-{  
-  log_trace(__PRETTY_FUNCTION__);
-  AddOutBox("OutBox");
-
+{
   if(!I3Stream::StreamExists("DetectorStatus"))
-    I3Stream::AddStream("DetectorStatus","DetectorStatus Stream");
+    I3Stream::AddStream("DetectorStatus","DetectorStatus stream");
+
+  AddOutBox("OutBox");
 }
 
 void I3DetectorStatusSource::Physics(I3Frame& frame)
 {
-  log_trace(__PRETTY_FUNCTION__);
+  log_debug("Entering I3DetectorStatusSource::Physics");
   I3Time eventTime = GetEventHeader(frame).GetStartTime();
-
-  if(ShouldUpdateDetectorStatus(frame))
+  if(!IsDetectorStatusCurrent(eventTime))
     {
-      currentDetectorStatus_ = GetDetectorStatus(frame,eventTime);
-      assert(currentDetectorStatus_);
-
-      I3Frame& geoFrame = CreateFrame(I3Stream::FindStream("DetectorStatus"));
-      CurrentDetectorStatusIntoFrame(geoFrame);
-
-      PushFrame(geoFrame,"OutBox");
+      SendDetectorStatus(eventTime);
     }
-
-  CurrentDetectorStatusIntoFrame(frame);
-
+  I3FrameAccess<I3DetectorStatus>::Put(frame,
+				    currentDetectorStatus_.status,
+				    "DetectorStatus");
+  I3FrameAccess<I3DetectorStatusHeader>::Put(frame,
+					  currentDetectorStatus_.header,
+					  "DetectorStatusHeader");
   PushFrame(frame,"OutBox");
 }
 
 void I3DetectorStatusSource::DetectorStatus(I3Frame& frame)
 {
-  log_trace(__PRETTY_FUNCTION__);
+  log_debug("Entering I3DetectorStatusSource::DetectorStatus()");
   log_warn("Somebody upstream of I3DetectorStatusSource is putting "
 	   "DetectorStatus frames into the system.  What's up with that");
   PushFrame(frame,"OutBox");
 }
 
+void I3DetectorStatusSource::SendDetectorStatus(I3Time nextEvent)
+{
+  log_debug("Entering I3DetectorStatusSource::SendDetectorStatus()");
+  currentDetectorStatus_ = GetDetectorStatus(nextEvent);
+  currentDetectorStatusRange_ 
+    = I3TimeRange(currentDetectorStatus_.header->GetStartTime(),
+		  currentDetectorStatus_.header->GetEndTime()); 
+  assert(currentDetectorStatus_);
+  assert(currentDetectorStatusRange_.lower < currentDetectorStatusRange_.upper);
+  I3Frame& frame = CreateFrame(I3Stream::FindStream("DetectorStatus"));
+  I3FrameAccess<I3DetectorStatus>::Put(frame,
+				    currentDetectorStatus_.status,
+				    "DetectorStatus");
+  I3FrameAccess<I3DetectorStatusHeader>::Put(frame,
+					  currentDetectorStatus_.header,
+					  "DetectorStatusHeader");
+  PushFrame(frame,"OutBox");
+}
+
 I3Frame& I3DetectorStatusSource::CreateFrame(const I3Stream& stop)
 {
-  log_trace(__PRETTY_FUNCTION__);
   I3Execution& execution = 
     I3ContextAccess<I3Execution>::GetService(GetContext(),
 					     I3Execution::DefaultName());
@@ -64,31 +76,21 @@ I3Frame& I3DetectorStatusSource::CreateFrame(const I3Stream& stop)
 
 }
 
-bool I3DetectorStatusSource::ShouldUpdateDetectorStatus(I3Frame& frame)
+bool I3DetectorStatusSource::IsDetectorStatusCurrent(I3Time time)
 {
-  log_trace(__PRETTY_FUNCTION__);
   if(!currentDetectorStatus_)
-    return true;
-
-  I3Time eventTime = GetEventHeader(frame).GetStartTime();
-  
-  if(currentDetectorStatus_.header->GetStartTime() < eventTime  &&
-     currentDetectorStatus_.header->GetEndTime() > eventTime)
     {
+      log_debug("DetectorStatus isn't current 'cause it hasn't been issued yet");
       return false;
     }
-
-  return true;
-  
+  if(currentDetectorStatusRange_.lower < time &&
+     time < currentDetectorStatusRange_.upper)
+    {
+      log_debug("DetectorStatus is current, no worries!");
+      return true;
+    }
+  log_debug("DetectorStatus needs updating");
+  return false;
 }
 
-void I3DetectorStatusSource::CurrentDetectorStatusIntoFrame(I3Frame& frame)
-{
-  log_trace(__PRETTY_FUNCTION__);
-  I3FrameAccess<I3DetectorStatus>::Put(frame,
-			      currentDetectorStatus_.status,
-			      "DetectorStatus");
-  I3FrameAccess<I3DetectorStatusHeader>::Put(frame,
-				       currentDetectorStatus_.header,
-				       "DetectorStatusHeader");
-}
+

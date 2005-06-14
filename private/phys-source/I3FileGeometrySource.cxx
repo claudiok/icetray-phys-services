@@ -20,8 +20,7 @@ void I3FileGeometrySource::Configure()
 						   icecubeGeoFile_));
 }
 
-GeometryPair I3FileGeometrySource::GetGeometry(I3Frame& frame,
-					       I3Time eventTime)
+GeometryPair I3FileGeometrySource::GetGeometry(I3Time eventTime)
 {
   return origin_->GetGeometry(eventTime);
 }

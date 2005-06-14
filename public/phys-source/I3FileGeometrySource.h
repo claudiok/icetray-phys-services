@@ -11,7 +11,7 @@ class I3FileGeometrySource : public I3GeometrySource
 
   void Configure();
 
-  GeometryPair GetGeometry(I3Frame& frame,I3Time eventTime);
+  GeometryPair GetGeometry(I3Time eventTime);
 
  private:
   I3FileGeoOriginPtr origin_;

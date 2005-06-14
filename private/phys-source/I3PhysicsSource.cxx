@@ -16,32 +16,36 @@
 
 I3PhysicsSource::I3PhysicsSource(I3Context& context) : I3Source(context)
 {
-  log_trace(__PRETTY_FUNCTION__);
   AddOutBox("OutBox");
   NoActiveInBox();
   if(!I3Stream::StreamExists("Physics"))
     I3Stream::AddStream("Physics","Event Stream");
+
+
+
 }
 
 void I3PhysicsSource::Process()
 {
-  log_trace(__PRETTY_FUNCTION__);
-  log_debug("Entering I3PhysicsSource::Process()");
-  if(MoreEvents())
-    SendEvent();
-  else
-    RequestSuspension();
+    log_debug("Entering I3PhysicsSource::Process()");
+    if(MoreEvents())
+      SendEvent();
+    else
+      RequestSuspension();
 }
 
 void I3PhysicsSource::SendEvent()
 {
-  log_trace(__PRETTY_FUNCTION__);
   log_debug("Entering I3PhysicsSource::SendEvent()");
+  currentEvent_ = NextEvent();
+  assert(currentEvent_);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Physics"));
-  EventPair nextEvent = NextEvent();
-  I3FrameAccess<I3Event>::Put(frame,nextEvent.event,"Physics");
-  I3FrameAccess<I3EventHeader>::Put(frame,nextEvent.header,"PhysicsHeader");
-  
+  I3FrameAccess<I3Event>::Put(frame,
+			      currentEvent_.event,
+			      "Physics");
+  I3FrameAccess<I3EventHeader>::Put(frame,
+				    currentEvent_.header,
+				    "PhysicsHeader");
   PushFrame(frame,"OutBox");
 }
 

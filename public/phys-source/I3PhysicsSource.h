@@ -33,10 +33,6 @@ struct EventPair
   }
 };
 
-/**
- * @brief An icetray module which fills the data stream with an event.
- * This is an I3Source and should be first in the list
- */
 class I3PhysicsSource : public I3Source
 {
  public:
@@ -45,11 +41,14 @@ class I3PhysicsSource : public I3Source
   void Process();
 
   virtual EventPair NextEvent() = 0;
-
+  
   virtual bool MoreEvents() = 0;
 
  private:
   void SendEvent();
+
+  EventPair currentEvent_;
+  
 
 };
 

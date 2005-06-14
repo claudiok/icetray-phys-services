@@ -17,61 +17,79 @@
 I3GeometrySource::I3GeometrySource(I3Context& context) : 
   I3PhysicsModule(context)
 {
-  log_trace(__PRETTY_FUNCTION__);
-  AddOutBox("OutBox");
-
   if(!I3Stream::StreamExists("Geometry"))
     I3Stream::AddStream("Geometry","Geometry Stream");
+
+  AddOutBox("OutBox");
 }
 
 void I3GeometrySource::Physics(I3Frame& frame)
 {
-  log_trace(__PRETTY_FUNCTION__);
-  I3Time eventTime = GetEventHeader(frame).GetStartTime();
-
-  if(ShouldUpdateGeometry(frame))
-    {
-      currentGeometry_ = GetGeometry(frame,eventTime);
-      assert(currentGeometry_);
-
-      I3Frame& geoFrame = CreateFrame(I3Stream::FindStream("Geometry"));
-      CurrentGeometryIntoFrame(geoFrame);
-
-      PushFrame(geoFrame,"OutBox");
-    }
-
-  CurrentGeometryIntoFrame(frame);
-
-  PushFrame(frame,"OutBox");
-}
-
-void I3GeometrySource::Geometry(I3Frame& frame)
-{
-  log_trace(__PRETTY_FUNCTION__);
-  log_warn("Somebody upstream of I3GeometrySource is putting "
-	   "Geometry frames into the system.  What's up with that");
+  I3FrameAccess<I3Geometry>::Put(frame,
+				 currentGeometry_.geometry,
+				 "Geometry");
+  I3FrameAccess<I3GeometryHeader>::Put(frame,
+				       currentGeometry_.header,
+				       "GeometryHeader");
   PushFrame(frame,"OutBox");
 }
 
 void I3GeometrySource::Calibration(I3Frame& frame)
 {
-  log_trace(__PRETTY_FUNCTION__);
-  if(currentGeometry_)
-    CurrentGeometryIntoFrame(frame);
+  log_debug("Entering I3GeometrySource::Calibration()");
+  I3Time calibTime = GetCalibrationHeader(frame).GetStartTime();
+  if(!IsGeometryCurrent(calibTime))
+    {
+      SendGeometry(calibTime);
+    }
+  I3FrameAccess<I3Geometry>::Put(frame,
+				 currentGeometry_.geometry,
+				 "Geometry");
+  I3FrameAccess<I3GeometryHeader>::Put(frame,
+				       currentGeometry_.header,
+				       "GeometryHeader");
   PushFrame(frame,"OutBox");
+
 }
 
 void I3GeometrySource::DetectorStatus(I3Frame& frame)
 {
-  log_trace(__PRETTY_FUNCTION__);
-  if(currentGeometry_)
-    CurrentGeometryIntoFrame(frame);
+  I3FrameAccess<I3Geometry>::Put(frame,
+				 currentGeometry_.geometry,
+				 "Geometry");
+  I3FrameAccess<I3GeometryHeader>::Put(frame,
+				       currentGeometry_.header,
+				       "GeometryHeader");
+  PushFrame(frame,"OutBox");
+}
+
+void I3GeometrySource::Geometry(I3Frame& frame)
+{
+  log_warn("Somebody upstream of I3GeometrySource is putting "
+	   "Geometry frames into the system.  What's up with that");
+  PushFrame(frame,"OutBox");
+}
+
+void I3GeometrySource::SendGeometry(I3Time nextEvent)
+{
+  log_debug("Entering IGeometrySource::SendGeometry()");
+  currentGeometry_ = GetGeometry(nextEvent);
+  currentGeometryRange_ = I3TimeRange(currentGeometry_.header->GetStartTime(),
+				      currentGeometry_.header->GetEndTime());
+  assert(currentGeometry_);
+  assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
+  I3Frame& frame = CreateFrame(I3Stream::FindStream("Geometry"));
+  I3FrameAccess<I3Geometry>::Put(frame,
+				 currentGeometry_.geometry,
+				 "Geometry");
+  I3FrameAccess<I3GeometryHeader>::Put(frame,
+				       currentGeometry_.header,
+				       "GeometryHeader");
   PushFrame(frame,"OutBox");
 }
 
 I3Frame& I3GeometrySource::CreateFrame(const I3Stream& stop)
 {
-  log_trace(__PRETTY_FUNCTION__);
   I3Execution& execution = 
     I3ContextAccess<I3Execution>::GetService(GetContext(),
 					     I3Execution::DefaultName());
@@ -79,31 +97,21 @@ I3Frame& I3GeometrySource::CreateFrame(const I3Stream& stop)
 
 }
 
-bool I3GeometrySource::ShouldUpdateGeometry(I3Frame& frame)
+bool I3GeometrySource::IsGeometryCurrent(I3Time time)
 {
-  log_trace(__PRETTY_FUNCTION__);
   if(!currentGeometry_)
-    return true;
-
-  I3Time eventTime = GetEventHeader(frame).GetStartTime();
-  
-  if(currentGeometry_.header->GetStartTime() < eventTime  &&
-     currentGeometry_.header->GetEndTime() > eventTime)
     {
+      log_debug("Geometry isn't current 'cause it hasn't been issued yet");
       return false;
     }
-
-  return true;
-  
+  if(currentGeometryRange_.lower < time &&
+     time < currentGeometryRange_.upper)
+    {
+      log_debug("Geometry is current, no worries!");
+      return true;
+    }
+  log_debug("Geometry needs updating");
+  return false;
 }
 
-void I3GeometrySource::CurrentGeometryIntoFrame(I3Frame& frame)
-{
-  log_trace(__PRETTY_FUNCTION__);
-  I3FrameAccess<I3Geometry>::Put(frame,
-			      currentGeometry_.geometry,
-			      "Geometry");
-  I3FrameAccess<I3GeometryHeader>::Put(frame,
-				       currentGeometry_.header,
-				       "GeometryHeader");
-}
+
