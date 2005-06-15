@@ -36,12 +36,12 @@ class I3GeometrySource : public I3PhysicsModule
   void DetectorStatus(I3Frame& frame);
 
   virtual GeometryPair GetGeometry(I3Time time)=0;
+
+  virtual bool IsGeometryCurrent(I3Time time);
   
  private:
   void SendGeometry(I3Time time);
-  
-  bool IsGeometryCurrent(I3Time time);
-  
+    
   GeometryPair currentGeometry_;
   I3TimeRange currentGeometryRange_;
 

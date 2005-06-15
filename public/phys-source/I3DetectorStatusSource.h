@@ -31,12 +31,13 @@ class I3DetectorStatusSource : public I3PhysicsModule
 
   virtual DetectorStatusPair GetDetectorStatus(I3Time time) = 0;
 
+  virtual bool IsDetectorStatusCurrent(I3Time time);
+
  private:
   void SendDetectorStatus(I3Time time);
-  
-  bool IsDetectorStatusCurrent(I3Time time);
-  
+    
   DetectorStatusPair currentDetectorStatus_;
+
   I3TimeRange currentDetectorStatusRange_;
 
   I3Frame& CreateFrame(const I3Stream& stop);

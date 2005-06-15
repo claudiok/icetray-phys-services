@@ -35,11 +35,11 @@ class I3CalibrationSource : public I3PhysicsModule
 
   virtual CalibrationPair GetCalibration(I3Time time) = 0;
 
+  virtual bool IsCalibrationCurrent(I3Time time);
+
  private:
   void SendCalibration(I3Time time);
   
-  bool IsCalibrationCurrent(I3Time time);
-    
   CalibrationPair currentCalibration_;
   I3TimeRange currentCalibrationRange_;
 
