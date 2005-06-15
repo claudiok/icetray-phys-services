@@ -25,6 +25,7 @@ phys-source/I3DummyEventOriginFactory.h \
 phys-source/I3DummyMonitoringOriginFactory.h \
 phys-source/I3DummyGeoOriginFactory.h \
 phys-source/I3DummyDetectorStatusOriginFactory.h \
+phys-source/I3DummyDetectorStatusSource.h \
 phys-source/I3DummyCalibOriginFactory.h \
 phys-source/I3FileGeoOriginFactory.h \
 phys-source/I3PhysicsSource.h \
