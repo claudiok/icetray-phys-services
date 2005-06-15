@@ -1,4 +1,4 @@
-#include "TUT/tut.h"
+#include <I3Test.h>
 
 #include "module-test/TestClientModule.h"
 
@@ -35,11 +35,11 @@ template<> template<>
 inline void Client::CheckFrame<0>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
-  tut::ensure(DumpStop(frame) == "Geometry");
-  tut::ensure("geometry frame has geometry",
+  ENSURE(DumpStop(frame) == "Geometry");
+  ENSURE("geometry frame has geometry",
 	      I3FrameAccess<I3Geometry>::Exists(frame,
 						"Geometry"));
-  tut::ensure("geometry frame has geometry header",
+  ENSURE("geometry frame has geometry header",
 	      I3FrameAccess<I3GeometryHeader>::Exists(frame,
 						      "GeometryHeader"));
   cout<<I3FrameAccess<I3GeometryHeader>::Get(frame,"GeometryHeader")<<endl;
@@ -49,17 +49,17 @@ inline void Client::CheckFrame<0>(I3Frame& frame)
 inline void Client::CheckFrame<1>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
-  tut::ensure(DumpStop(frame) == "Calibration");
-  tut::ensure("calibration frame has calibration",
+  ENSURE(DumpStop(frame) == "Calibration");
+  ENSURE("calibration frame has calibration",
 	      I3FrameAccess<I3Calibration>::Exists(frame,"Calibration"));
-  tut::ensure("calibration frame has calibration header",
+  ENSURE("calibration frame has calibration header",
 	      I3FrameAccess<I3CalibrationHeader>::
 	      Exists(frame,
 		     "CalibrationHeader"));
-  tut::ensure("calibration frame has geometry",
+  ENSURE("calibration frame has geometry",
 	      I3FrameAccess<I3Geometry>::Exists(frame,
 						"Geometry"));
-  tut::ensure("calibration frame has geometry header",
+  ENSURE("calibration frame has geometry header",
 	      I3FrameAccess<I3GeometryHeader>::Exists(frame,
 						      "GeometryHeader"));
   cout<<I3FrameAccess<I3CalibrationHeader>::Get(frame,
@@ -73,22 +73,22 @@ inline void Client::CheckFrame<1>(I3Frame& frame)
 inline void Client::CheckFrame<2>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
-  tut::ensure(DumpStop(frame) == "DetectorStatus");
-  tut::ensure("detector status frame has geometry",
+  ENSURE(DumpStop(frame) == "DetectorStatus");
+  ENSURE("detector status frame has geometry",
 	      I3FrameAccess<I3Geometry>::Exists(frame,
 						"Geometry"));
-  tut::ensure("detector status frame has geometry header",
+  ENSURE("detector status frame has geometry header",
 	      I3FrameAccess<I3GeometryHeader>::Exists(frame,
 						      "GeometryHeader"));
-  tut::ensure("detector status frame has detector status",
+  ENSURE("detector status frame has detector status",
 	      I3FrameAccess<I3DetectorStatus>::
 	      Exists(frame,"DetectorStatus"));
-  tut::ensure("detector status frame has detector status header",
+  ENSURE("detector status frame has detector status header",
 	      I3FrameAccess<I3DetectorStatusHeader>::
 	      Exists(frame,"DetectorStatus"));
-  tut::ensure("detector status frame has calibration",
+  ENSURE("detector status frame has calibration",
 	      I3FrameAccess<I3Calibration>::Exists(frame,"Calibration"));
-  tut::ensure("detector status frame has calibration header",
+  ENSURE("detector status frame has calibration header",
 	      I3FrameAccess<I3CalibrationHeader>::
 	      Exists(frame,
 		     "CalibrationHeader"));
@@ -107,22 +107,22 @@ inline void Client::CheckFrame<2>(I3Frame& frame)
 inline void Client::CheckFrame<3>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
-  tut::ensure(DumpStop(frame) == "Monitor");
-  tut::ensure("event frame has geometry",
+  ENSURE(DumpStop(frame) == "Monitor");
+  ENSURE("event frame has geometry",
 	      I3FrameAccess<I3Geometry>::Exists(frame,"Geometry"));
-  tut::ensure("event frame has geometry header",
+  ENSURE("event frame has geometry header",
 	      I3FrameAccess<I3GeometryHeader>::
 	      Exists(frame,"GeometryHeader"));
-  tut::ensure("event frame has calibration",
+  ENSURE("event frame has calibration",
 	      I3FrameAccess<I3Calibration>::Exists(frame,
 						   "Calibration"));
-  tut::ensure("event frame has calibration header",
+  ENSURE("event frame has calibration header",
 	      I3FrameAccess<I3CalibrationHeader>
 	      ::Exists(frame,
 		       "CalibrationHeader"));
-  tut::ensure("event frame has event",
+  ENSURE("event frame has event",
 		I3FrameAccess<I3Monitoring>::Exists(frame,"Monitor"));
-  tut::ensure("event frame has event header",
+  ENSURE("event frame has event header",
 	      I3FrameAccess<I3MonitoringHeader>::Exists(frame,"MonitorHeader"));
   cout<<I3FrameAccess<I3MonitoringHeader>::Get(frame,"MonitorHeader")<<endl;
   cout<<I3FrameAccess<I3Monitoring>::Get(frame,"Monitor")<<endl;
@@ -132,27 +132,27 @@ inline void Client::CheckFrame<3>(I3Frame& frame)
 inline void Client::CheckFrame<4>(I3Frame& frame)
 {
   log_debug("FrameStream: %s",DumpStop(frame).c_str());
-  tut::ensure(DumpStop(frame) == "Monitor");
-  tut::ensure("event frame has geometry",
+  ENSURE(DumpStop(frame) == "Monitor");
+  ENSURE("event frame has geometry",
 	      I3FrameAccess<I3Geometry>::Exists(frame,"Geometry"));
-  tut::ensure("event frame has geometry header",
+  ENSURE("event frame has geometry header",
 	      I3FrameAccess<I3GeometryHeader>::
 		Exists(frame,"GeometryHeader"));
-  tut::ensure("event frame has calibration",
+  ENSURE("event frame has calibration",
 	      I3FrameAccess<I3Calibration>::Exists(frame,"Calibration"));
-  tut::ensure("event frame has calibration header",
+  ENSURE("event frame has calibration header",
 	      I3FrameAccess<I3CalibrationHeader>::
 	      Exists(frame,
 		     "CalibrationHeader"));
-  tut::ensure("event frame has detector status",
+  ENSURE("event frame has detector status",
 	      I3FrameAccess<I3DetectorStatus>::
 	      Exists(frame,"DetectorStatus"));
-  tut::ensure("event frame has detector status header",
+  ENSURE("event frame has detector status header",
 	      I3FrameAccess<I3DetectorStatusHeader>::
 	      Exists(frame,"DetectorStatus"));
-  tut::ensure("event frame has event",
+  ENSURE("event frame has event",
 	      I3FrameAccess<I3Monitoring>::Exists(frame,"Monitor"));
-  tut::ensure("event frame has event header",
+  ENSURE("event frame has event header",
 	      I3FrameAccess<I3MonitoringHeader>::Exists(frame,"MonitorHeader"));
   cout<<I3FrameAccess<I3MonitoringHeader>::Get(frame,"MonitorHeader")<<endl;
   cout<<I3FrameAccess<I3Monitoring>::Get(frame,"Monitor")<<endl;

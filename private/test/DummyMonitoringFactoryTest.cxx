@@ -1,4 +1,4 @@
-#include "TUT/tut.h"
+#include <I3Test.h>
 
 #include "phys-source/I3GeometryOrigin.h"
 #include "phys-source/I3MonitoringOrigin.h"
@@ -21,41 +21,25 @@
 
 #include "SimpleOrderingTest-Monitoring.h"
 
-namespace tut
-{
-  struct DummyMonitoringFactoryTest
-  {
-  };
+TEST_GROUP(DummyMonitoringFactoryTest);
 
-  typedef test_group<DummyMonitoringFactoryTest> factory;
-  typedef factory::object object;
+TEST(the_test)
+{
+  RootI3Tray tray;
+  
+  tray.AddService<I3DummyMonitoringOriginFactory>("events");
+  tray.AddService<I3DummyDetectorStatusOriginFactory>("status");
+  tray.AddService<I3DummyGeoOriginFactory>("geo");
+  tray.AddService<I3DummyCalibOriginFactory>("calib");
+  
+  tray.AddModule<I3UberSource_Monitoring>("source");
+  tray.AddModule<Client>("client");
+  
+  tray.ConnectBoxes("source","OutBox","client");
+  
+  tray.Execute();
+  tray.Finish();
 }
-
-namespace
-{
-  static tut::factory dummyFactoryTestFactory("DummyMonitoringFactoryTest");
-}
-
-namespace tut
-{
-  template<> template<>
-  void object::test<1>() 
-  {
-    RootI3Tray tray;
- 
-    tray.AddService<I3DummyMonitoringOriginFactory>("events");
-    tray.AddService<I3DummyDetectorStatusOriginFactory>("status");
-    tray.AddService<I3DummyGeoOriginFactory>("geo");
-    tray.AddService<I3DummyCalibOriginFactory>("calib");
-
-    tray.AddModule<I3UberSource_Monitoring>("source");
-    tray.AddModule<Client>("client");
-
-    tray.ConnectBoxes("source","OutBox","client");
-
-    tray.Execute();
-    tray.Finish();
-  }
 
 //   template<> template<>
 //   void object::test<2>() 
@@ -82,7 +66,7 @@ namespace tut
 //     tray.Finish();
 //   }
 
-}
+
 
 
 

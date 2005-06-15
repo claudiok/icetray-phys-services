@@ -1,4 +1,4 @@
-TEST_SRCDIR_NAMES := test new-test
+TEST_SRCDIR_NAMES := test 
 
 CXX_BIN_SRCDIR_NAMES := 
 
