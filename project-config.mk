@@ -24,6 +24,7 @@ phys-source/I3DummyCalibrationSource.h \
 phys-source/I3DummyMonitoringSource.h \
 phys-source/I3DummyPhysicsSource.h \
 phys-source/I3DummyGeometrySource.h \
+phys-source/I3FileGeometrySource.h \
 phys-source/I3PhysicsSource.h \
 phys-source/I3MonitoringSource.h \
 phys-source/I3GeometrySource.h \
