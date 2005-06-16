@@ -120,3 +120,9 @@ TEST(I3GSLRandomService)
   randomServiceTest::testRandomService<100000,I3GSLRandomService>(random);
 }
 
+TEST(I3SPRNGRandomService)
+{
+  I3GSLRandomService random;
+  randomServiceTest::testRandomService<100000,I3GSLRandomService>(random);
+}
+

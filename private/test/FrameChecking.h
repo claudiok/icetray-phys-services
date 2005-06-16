@@ -16,6 +16,8 @@
 #include "dataclasses/I3DetectorStatus.h"
 #include "dataclasses/I3DetectorStatusHeader.h"
 
+#include "icetray/I3Stream.h"
+
 inline
 string DumpStop(I3Frame& frame)
 {
@@ -30,7 +32,9 @@ string DumpStop(I3Frame& frame)
       iter != possibleNames.end() ;
       iter++)
     {
-      if(frame.GetStop() == I3Stream::FindStream(*iter))
+      if(!I3Stream::StreamExists(*iter))
+	continue;
+      else if(frame.GetStop() == I3Stream::FindStream(*iter))
 	return *iter;
     }
   return "UNKNOWN STREAM";
