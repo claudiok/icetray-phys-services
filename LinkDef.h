@@ -19,6 +19,7 @@
 #pragma link C++ class I3DummyPhysicsSource;
 #pragma link C++ class I3DummyGeometrySource;
 #pragma link C++ class I3DummyMonitoringSource;
+#pragma link C++ class I3FileGeometrySource;
 #pragma link C++ class I3SPRNGRandomService;
 #pragma link C++ class I3SPRNGRandomServiceFactory;
 #pragma link C++ class I3PhysicsSource;
