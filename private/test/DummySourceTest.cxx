@@ -24,7 +24,7 @@
 
 #include "module-test/TestClientModule.h"
 
-TEST_GROUP(DummyFactoryTest);
+TEST_GROUP(DummySourceTest);
 
 struct ev_stat_cal_geo{};
 typedef TestClientModule<ev_stat_cal_geo> EvStatCalGeoClient;
