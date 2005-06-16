@@ -23,41 +23,32 @@ I3CalibrationSource::I3CalibrationSource(I3Context& context) :
   AddOutBox("OutBox");
 }
 
-void I3CalibrationSource::Physics(I3Frame& frame)
+void I3CalibrationSource::Process()
 {
-  I3FrameAccess<I3Calibration>::Put(frame,
-				    currentCalibration_.calibration,
-				    "Calibration");
-  I3FrameAccess<I3CalibrationHeader>::Put(frame,
-					  currentCalibration_.header,
-					  "CalibrationHeader");
-  PushFrame(frame,"OutBox");
-}
+  I3Frame& drivingFrame = GetBoxes().PopFrame();
 
-void I3CalibrationSource::DetectorStatus(I3Frame& frame)
-{
-  log_debug("Entering I3CalibrationSource::DetectorStatus");
-  I3Time statusTime = GetDetectorStatusHeader(frame).GetStartTime();
-  if(!IsCalibrationCurrent(statusTime))
+  I3Time& drivingFrameTime = 
+    I3FrameAccess<I3Time>::Get(drivingFrame,"DrivingTime");
+
+  if(!IsCalibrationCurrent(drivingFrameTime))
     {
-      SendCalibration(statusTime);
+      SendCalibration(drivingFrameTime);
     }
-  I3FrameAccess<I3Calibration>::Put(frame,
+
+  I3FrameAccess<I3Calibration>::Put(drivingFrame,
 				    currentCalibration_.calibration,
 				    "Calibration");
-  I3FrameAccess<I3CalibrationHeader>::Put(frame,
-					  currentCalibration_.header,
-					  "CalibrationHeader");
-  PushFrame(frame,"OutBox");
+  I3FrameAccess<I3CalibrationHeader>::Put(drivingFrame,
+					     currentCalibration_.header,
+					     "CalibrationHeader");
+  PushFrame(drivingFrame,"OutBox");
+
 }
 
-
-void I3CalibrationSource::Calibration(I3Frame& frame)
+I3Boxes& I3CalibrationSource::GetBoxes()
 {
-  log_debug("Entering I3CalibrationSource::Calibration()");
-  log_warn("Somebody upstream of I3CalibrationSource is putting "
-	   "Calibration frames into the system.  What's up with that");
-  PushFrame(frame,"OutBox");
+  return 
+    I3ContextAccess<I3Boxes>::GetService(GetContext(),I3Boxes::DefaultName());
 }
 
 void I3CalibrationSource::SendCalibration(I3Time nextEvent)
@@ -76,6 +67,13 @@ void I3CalibrationSource::SendCalibration(I3Time nextEvent)
   I3FrameAccess<I3CalibrationHeader>::Put(frame,
 					  currentCalibration_.header,
 					  "CalibrationHeader");
+
+  shared_ptr<I3Time> drivingTime(new I3Time(nextEvent));
+  
+  I3FrameAccess<I3Time>::Put(frame,
+			     drivingTime,
+			     "DrivingTime");
+  
   PushFrame(frame,"OutBox");
 }
 

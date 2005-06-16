@@ -23,29 +23,32 @@ I3DetectorStatusSource::I3DetectorStatusSource(I3Context& context) :
   AddOutBox("OutBox");
 }
 
-void I3DetectorStatusSource::Physics(I3Frame& frame)
+void I3DetectorStatusSource::Process()
 {
-  log_debug("Entering I3DetectorStatusSource::Physics");
-  I3Time eventTime = GetEventHeader(frame).GetStartTime();
-  if(!IsDetectorStatusCurrent(eventTime))
+  I3Frame& drivingFrame = GetBoxes().PopFrame();
+
+  I3Time& drivingFrameTime = 
+    I3FrameAccess<I3Time>::Get(drivingFrame,"DrivingTime");
+
+  if(!IsDetectorStatusCurrent(drivingFrameTime))
     {
-      SendDetectorStatus(eventTime);
+      SendDetectorStatus(drivingFrameTime);
     }
-  I3FrameAccess<I3DetectorStatus>::Put(frame,
-				    currentDetectorStatus_.status,
-				    "DetectorStatus");
-  I3FrameAccess<I3DetectorStatusHeader>::Put(frame,
-					  currentDetectorStatus_.header,
-					  "DetectorStatusHeader");
-  PushFrame(frame,"OutBox");
+
+  I3FrameAccess<I3DetectorStatus>::Put(drivingFrame,
+				       currentDetectorStatus_.status,
+				       "DetectorStatus");
+  I3FrameAccess<I3DetectorStatusHeader>::Put(drivingFrame,
+					     currentDetectorStatus_.header,
+					     "DetectorStatusHeader");
+  PushFrame(drivingFrame,"OutBox");
+  
 }
 
-void I3DetectorStatusSource::DetectorStatus(I3Frame& frame)
+I3Boxes& I3DetectorStatusSource::GetBoxes()
 {
-  log_debug("Entering I3DetectorStatusSource::DetectorStatus()");
-  log_warn("Somebody upstream of I3DetectorStatusSource is putting "
-	   "DetectorStatus frames into the system.  What's up with that");
-  PushFrame(frame,"OutBox");
+  return 
+    I3ContextAccess<I3Boxes>::GetService(GetContext(),I3Boxes::DefaultName());
 }
 
 void I3DetectorStatusSource::SendDetectorStatus(I3Time nextEvent)
@@ -64,6 +67,13 @@ void I3DetectorStatusSource::SendDetectorStatus(I3Time nextEvent)
   I3FrameAccess<I3DetectorStatusHeader>::Put(frame,
 					  currentDetectorStatus_.header,
 					  "DetectorStatusHeader");
+  
+  shared_ptr<I3Time> drivingTime(new I3Time(nextEvent));
+
+  I3FrameAccess<I3Time>::Put(frame,
+			     drivingTime,
+			     "DrivingTime");
+  
   PushFrame(frame,"OutBox");
 }
 

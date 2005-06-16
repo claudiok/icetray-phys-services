@@ -14,6 +14,7 @@
 
 #include "phys-services/I3PhysicsModule.h"
 #include "phys-source/I3TimeRange.h"
+#include "services/I3Boxes.h"
 #include "I3DetectorStatusPair.h"
 
 /**
@@ -25,15 +26,16 @@ class I3DetectorStatusSource : public I3PhysicsModule
  public:
   I3DetectorStatusSource(I3Context& context);
 
-  void Physics(I3Frame& frame);
-  
-  void DetectorStatus(I3Frame& frame);
+  void Process();
 
   virtual DetectorStatusPair GetDetectorStatus(I3Time time) = 0;
 
   virtual bool IsDetectorStatusCurrent(I3Time time);
 
  private:
+
+  I3Boxes& GetBoxes();
+
   void SendDetectorStatus(I3Time time);
     
   DetectorStatusPair currentDetectorStatus_;

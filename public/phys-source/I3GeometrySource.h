@@ -15,6 +15,7 @@
 #include "phys-services/I3PhysicsModule.h"
 #include "phys-source/I3TimeRange.h"
 #include "I3GeometryPair.h"
+#include "services/I3Boxes.h"
 
 /**
  * @brief A module which fills the Geometry into the data stream
@@ -27,19 +28,15 @@ class I3GeometrySource : public I3PhysicsModule
  public:
   I3GeometrySource(I3Context& context);
 
-  void Physics(I3Frame& frame);
-  
-  void Geometry(I3Frame& frame);
-
-  void Calibration(I3Frame& frame);
-
-  void DetectorStatus(I3Frame& frame);
+  void Process();
 
   virtual GeometryPair GetGeometry(I3Time time)=0;
 
   virtual bool IsGeometryCurrent(I3Time time);
   
  private:
+  I3Boxes& GetBoxes();
+
   void SendGeometry(I3Time time);
     
   GeometryPair currentGeometry_;

@@ -46,6 +46,12 @@ void I3PhysicsSource::SendEvent()
   I3FrameAccess<I3EventHeader>::Put(frame,
 				    currentEvent_.header,
 				    "PhysicsHeader");
+ 
+  shared_ptr<I3Time> 
+    eventTime(new I3Time(currentEvent_.header->GetStartTime()));;
+
+  I3FrameAccess<I3Time>::Put(frame,eventTime,"DrivingTime");
+
   PushFrame(frame,"OutBox");
 }
 

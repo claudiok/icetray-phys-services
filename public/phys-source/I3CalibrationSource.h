@@ -15,6 +15,7 @@
 #include "phys-services/I3PhysicsModule.h"
 #include "I3TimeRange.h"
 #include "I3CalibrationPair.h"
+#include "services/I3Boxes.h"
 
 /**
  * @brief An icetray module which fills the
@@ -27,17 +28,15 @@ class I3CalibrationSource : public I3PhysicsModule
  public:
   I3CalibrationSource(I3Context& context);
 
-  void Physics(I3Frame& frame);
-  
-  void Calibration(I3Frame& frame);
-
-  void DetectorStatus(I3Frame& frame);
+  void Process();
 
   virtual CalibrationPair GetCalibration(I3Time time) = 0;
 
   virtual bool IsCalibrationCurrent(I3Time time);
 
  private:
+  I3Boxes& GetBoxes();
+
   void SendCalibration(I3Time time);
   
   CalibrationPair currentCalibration_;

@@ -23,52 +23,33 @@ I3GeometrySource::I3GeometrySource(I3Context& context) :
   AddOutBox("OutBox");
 }
 
-void I3GeometrySource::Physics(I3Frame& frame)
+void I3GeometrySource::Process()
 {
-  I3FrameAccess<I3Geometry>::Put(frame,
-				 currentGeometry_.geometry,
-				 "Geometry");
-  I3FrameAccess<I3GeometryHeader>::Put(frame,
-				       currentGeometry_.header,
-				       "GeometryHeader");
-  PushFrame(frame,"OutBox");
-}
+ I3Frame& drivingFrame = GetBoxes().PopFrame();
 
-void I3GeometrySource::Calibration(I3Frame& frame)
-{
-  log_debug("Entering I3GeometrySource::Calibration()");
-  I3Time calibTime = GetCalibrationHeader(frame).GetStartTime();
-  if(!IsGeometryCurrent(calibTime))
+  I3Time& drivingFrameTime = 
+    I3FrameAccess<I3Time>::Get(drivingFrame,"DrivingTime");
+
+  if(!IsGeometryCurrent(drivingFrameTime))
     {
-      SendGeometry(calibTime);
+      SendGeometry(drivingFrameTime);
     }
-  I3FrameAccess<I3Geometry>::Put(frame,
+
+  I3FrameAccess<I3Geometry>::Put(drivingFrame,
 				 currentGeometry_.geometry,
 				 "Geometry");
-  I3FrameAccess<I3GeometryHeader>::Put(frame,
+  I3FrameAccess<I3GeometryHeader>::Put(drivingFrame,
 				       currentGeometry_.header,
 				       "GeometryHeader");
-  PushFrame(frame,"OutBox");
-
+  PushFrame(drivingFrame,"OutBox");
 }
 
-void I3GeometrySource::DetectorStatus(I3Frame& frame)
+I3Boxes& I3GeometrySource::GetBoxes()
 {
-  I3FrameAccess<I3Geometry>::Put(frame,
-				 currentGeometry_.geometry,
-				 "Geometry");
-  I3FrameAccess<I3GeometryHeader>::Put(frame,
-				       currentGeometry_.header,
-				       "GeometryHeader");
-  PushFrame(frame,"OutBox");
+  return 
+    I3ContextAccess<I3Boxes>::GetService(GetContext(),I3Boxes::DefaultName());
 }
 
-void I3GeometrySource::Geometry(I3Frame& frame)
-{
-  log_warn("Somebody upstream of I3GeometrySource is putting "
-	   "Geometry frames into the system.  What's up with that");
-  PushFrame(frame,"OutBox");
-}
 
 void I3GeometrySource::SendGeometry(I3Time nextEvent)
 {
@@ -85,6 +66,13 @@ void I3GeometrySource::SendGeometry(I3Time nextEvent)
   I3FrameAccess<I3GeometryHeader>::Put(frame,
 				       currentGeometry_.header,
 				       "GeometryHeader");
+
+  shared_ptr<I3Time> drivingTime(new I3Time(nextEvent));
+  
+  I3FrameAccess<I3Time>::Put(frame,
+			     drivingTime,
+			     "DrivingTime");
+  
   PushFrame(frame,"OutBox");
 }
 
