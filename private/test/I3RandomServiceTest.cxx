@@ -15,6 +15,7 @@
 #include "phys-services/I3RandomService.h"
 #include "phys-services/I3TRandomService.h"
 #include "phys-services/I3GSLRandomService.h"
+#include "phys-services/I3SPRNGRandomService.h"
 
 #include <string>
 #include <vector>
@@ -122,7 +123,7 @@ TEST(I3GSLRandomService)
 
 TEST(I3SPRNGRandomService)
 {
-  I3GSLRandomService random;
-  randomServiceTest::testRandomService<100000,I3GSLRandomService>(random);
+  I3SPRNGRandomService random;
+  randomServiceTest::testRandomService<100000,I3SPRNGRandomService>(random);
 }
 
