@@ -1,21 +1,21 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3FileGeoOrigin.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
 #ifndef I3FILEGEOORIGIN_H
 #define I3FILEGEOORIGIN_H
 
-#include "phys-source/I3GeometryOrigin.h"
 #include <string>
 #include <fstream>
 #include <boost/shared_ptr.hpp>
+#include "I3GeometryPair.h"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ using namespace std;
  * @brief A I3GeometryOrigin which reads the geometry from two files,
  * one for icecube and one for inice
  */
-class I3FileGeoOrigin : public I3GeometryOrigin
+class I3FileGeoOrigin
 {
   string fAmaGeoInputFile;
   string fI3GeoInputFile;

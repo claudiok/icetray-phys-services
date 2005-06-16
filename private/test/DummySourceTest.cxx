@@ -1,18 +1,6 @@
 #include <I3Test.h>
 
-#include "phys-source/I3GeometryOrigin.h"
-#include "phys-source/I3EventOrigin.h"
-#include "phys-source/I3CalibrationOrigin.h"
-#include "phys-source/I3DetectorStatusOrigin.h"
-
 #include "root-icetray/RootI3Tray.h"
-
-#include "phys-source/I3UberSource.h"
-
-#include "phys-source/I3DummyEventOriginFactory.h"
-#include "phys-source/I3DummyGeoOriginFactory.h"
-#include "phys-source/I3DummyCalibOriginFactory.h"
-#include "phys-source/I3DummyDetectorStatusOriginFactory.h"
 
 #include "phys-source/I3DummyPhysicsSource.h"
 #include "phys-source/I3DummyCalibrationSource.h"

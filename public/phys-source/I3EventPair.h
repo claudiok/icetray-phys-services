@@ -1,6 +1,9 @@
 #ifndef I3EVENTPAIR_H
 #define I3EVENTPAIR_H
 
+#include "dataclasses/I3Event.h"
+#include "dataclasses/I3EventHeader.h"
+
 /**
  * @brief Dumb struct for holding an I3Event and its I3EventHeader
  */
