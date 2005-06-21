@@ -8,6 +8,8 @@ class I3DummyPhysicsSource  : public I3PhysicsSource
  public:
   I3DummyPhysicsSource(I3Context& context);
 
+  void Configure();
+
   EventPair NextEvent();
 
   bool MoreEvents();
@@ -15,6 +17,7 @@ class I3DummyPhysicsSource  : public I3PhysicsSource
  private:
   int eventsReturned_;
   int maxEvents_;
+  bool mcEvents_;
 };
 
 #endif
