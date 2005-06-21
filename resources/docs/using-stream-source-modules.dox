@@ -1,0 +1,41 @@
+/**
+
+@page phys-source-using-stream-source-modules Using Existing Stream Source Modules
+
+@section phys-source-using-stream-source-modules-intro Introduction
+
+To be able to get some data into icetray you need a suite of source modules
+which will fill the streams that following modules will use.  Included in the
+phys-services project are some dummy examples, but most of the functional
+examples are in projects that depend on phys-services.  So this section
+will just contain a short intro into how these things are generally used.  
+You'll have to look elsewhere for docs on specific modules.
+
+To begin with, let's look at one functional example:  If you've built 
+offline-software you can run this example:
+@code
+% python phys-services/resources/scripts/DummySourceExample.py
+@endcode
+
+There's not much output at the default logging level, but if you turn down
+the logging to 'TRACE' you will see that it is doing something.
+
+Here's the text of that example so you can see what's going on:
+@include DummySourceExample.py
+
+The real power of this approach comes because different modules which
+fill the same stream can be swapped to change where the data comes from.  For
+instance the following script is identical to the DummySourceExample.py 
+script except that the DummyGeometrySource has been replaced with a 
+source that reads from a file.  And the script still works.
+
+@code
+% python phys-services/resources/scripts/FileGeometryExample.py
+@endcode
+
+@include FileGeometryExample.py
+
+If you want more information on this system, you might try the docs here:
+@ref phys-source-writing-stream-source-modules
+
+*/
