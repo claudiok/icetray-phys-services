@@ -51,6 +51,18 @@ inline void Client::CheckFrame<3>(I3Frame& frame)
   ENSURE(EventPresent(frame));
 }
 
+struct file_geo_source_print : public I3PhysicsModule
+{
+  file_geo_source_print(I3Context& context) : I3PhysicsModule(context)
+  {
+    AddOutBox("OutBox");
+  }
+  void Physics(I3Frame& frame){cout<<GetEvent(frame)<<endl;}
+  void DetectorStatus(I3Frame& frame){cout<<GetDetectorStatus(frame)<<endl;}
+  void Geometry(I3Frame& frame){cout<<GetGeometry(frame)<<endl;}
+  void Calibration(I3Frame& frame){cout<<GetCalibration(frame)<<endl;}
+
+};
 
 TEST(file_geo_source)
 {
@@ -68,12 +80,14 @@ TEST(file_geo_source)
   tray.AddModule<I3FileGeometrySource>("geomsource");
   tray.SetParameter("geomsource","AmandaGeoFile",amandaFile);
   tray.SetParameter("geomsource","IceCubeGeoFile",icecubeFile);
+  tray.AddModule<file_geo_source_print>("print");
   tray.AddModule<Client>("client");
   
   tray.ConnectBoxes("eventssource","OutBox","statussource");
   tray.ConnectBoxes("statussource","OutBox","calibsource");
   tray.ConnectBoxes("calibsource","OutBox","geomsource");
-  tray.ConnectBoxes("geomsource","OutBox","client");
+  tray.ConnectBoxes("geomsource","OutBox","print");
+  tray.ConnectBoxes("print","OutBox","client");
   
   tray.Execute();
   tray.Finish();
