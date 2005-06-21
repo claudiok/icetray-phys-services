@@ -13,6 +13,10 @@
 
 #include "phys-source/I3CalibrateStatusModule.h"
 
+#include "dataclasses/I3DigitalReadout.h"
+#include "dataclasses/I3DOMLaunch.h"
+#include "dataclasses/I3Event.h"
+
 I3CalibrateStatusModule::I3CalibrateStatusModule(I3Context& context) : 
   I3PhysicsModule(context)
 {
@@ -41,6 +45,56 @@ void I3CalibrateStatusModule::DetectorStatus(I3Frame& frame)
     }
 
   PushFrame(frame,"OutBox");
+}
+
+void I3CalibrateStatusModule::Physics(I3Frame& frame)
+{
+  I3Event& event = GetEvent(frame);
+
+  I3DetectorStatus& status = GetDetectorStatus(frame);
+
+  I3OMResponseMap::iterator iter;
+  I3OMResponseMap& responses = event.GetOMResponseMap();
+  for(iter = responses.begin() ; iter != responses.end() ; iter++)
+    {
+      I3DataReadoutDict& readouts = iter->second->GetDataReadoutDict();
+      for(I3DataReadoutDict::iterator readout = readouts.begin() ; 
+	  readout != readouts.end() ; 
+	  readout++)
+	{
+	  I3DigitalReadoutPtr digital = dynamic_pointer_cast<I3DigitalReadout>(readout->second);
+	  if(digital)
+	    {
+	      for(I3DigitalReadout::iterator launch = digital->begin();
+		  launch != digital->end(); 
+		  launch++)
+		{
+		  I3DOMLaunchPtr thisLaunch = dynamic_pointer_cast<I3DOMLaunch>(*launch);
+		  if(thisLaunch)
+		    {
+		      I3CalibratedDOMStatusPtr calibStatus = status.GetIceCubeStatus()[iter->first].GetCalibratedStatus();
+		      if(!calibStatus)
+			log_warn("Skipping a DOMLaunch that doesn't have a Calibrated readout.  Seems to be an error");
+		      else
+			{
+			  double binsize;
+			  if(thisLaunch->GetWhichATWD() == I3DOMLaunch::ATWDa)
+			    binsize = calibStatus->GetSamplingRateA();
+			  else if(thisLaunch->GetWhichATWD() 
+				  == I3DOMLaunch::ATWDb)
+			    binsize = calibStatus->GetSamplingRateB();
+			  else
+			    log_fatal("unknown atwd");
+			  if(binsize<=0)
+			    log_warn("non-physical sampling rate");
+			  binsize = 1./binsize;
+			  thisLaunch->SetATWDBinSize(binsize);
+			}
+		    }
+		}
+	    }
+	}
+    }
 }
 
 void I3CalibrateStatusModule::
@@ -114,8 +168,8 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
       rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
       log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
 
-      if(chip==0)calibratedstatus->SetSamplingRateA(rateCorrected);
-      else if(chip==1)calibratedstatus->SetSamplingRateB(rateCorrected);
+      if(chip==0)calibratedstatus->SetSamplingRateA(rateCorrected / I3Units::microsecond);
+      else if(chip==1)calibratedstatus->SetSamplingRateB(rateCorrected / I3Units::microsecond);
       else log_error("atwd chip %d not available", chip);
     }
   //a

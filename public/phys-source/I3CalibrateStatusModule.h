@@ -26,6 +26,8 @@ class I3CalibrateStatusModule : public I3PhysicsModule
   I3CalibrateStatusModule(I3Context& context);
 
   void DetectorStatus(I3Frame& frame);
+
+  void Physics(I3Frame& frame);
     
  private:
   void DoTheCalibration(I3RawDOMStatusPtr rawstatus,
