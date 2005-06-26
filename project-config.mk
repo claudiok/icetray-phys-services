@@ -32,4 +32,5 @@ phys-source/I3DetectorStatusSource.h \
 phys-source/I3CalibrationSource.h \
 phys-services/I3SPRNGRandomServiceFactory.h \
 phys-services/I3SPRNGRandomService.h \
-phys-source/I3CalibrateStatusModule.h
+phys-source/I3CalibrateStatusModule.h \
+phys-source/I3TextFileGeometrySource.h

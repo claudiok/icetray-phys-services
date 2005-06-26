@@ -29,4 +29,6 @@
 #pragma link C++ class I3CalibrationSource;
 #pragma link C++ class I3CalibrateStatusModule;
 
+#pragma link C++ class I3TextFileGeometrySource;
+
 #endif
