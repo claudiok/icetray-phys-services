@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3PhysicsModule.h,v 1.15 2005/04/13 14:16:58 dule Exp $
+ * $Id$
  *
  * @file I3PhysicsModule.h
  * @version $Revision: 1.15 $
- * @date $Date: 2005/04/13 14:16:58 $
+ * @date $Date$
  * @author pretz
  */
 
@@ -107,7 +107,11 @@ class I3PhysicsModule : public I3Module
    */
   I3MCEvent& GetMCEvent(I3Frame& frame,const string& name = "Physics")
     {
-      return I3FrameAccess<I3MCEvent>::Get(frame,name);
+      I3EventPtr event = frame.Get<I3EventPtr>(name);
+      I3MCEventPtr mcevent = dynamic_pointer_cast<I3MCEvent>(event);
+      if (mcevent)
+	return *mcevent;
+      log_fatal("attempt to retrieve MCEvent from frame that does not contain one");
     }
 
   /**
@@ -121,7 +125,7 @@ class I3PhysicsModule : public I3Module
   bool PutMCEvent(I3Frame& frame,I3MCEventPtr event,
 		    const string& name="Physics")
     {
-      return I3FrameAccess<I3MCEvent>::Put(frame,event,name);
+      return frame.Put<I3EventPtr>(event,name);
     }
 
    /**
@@ -198,7 +202,7 @@ class I3PhysicsModule : public I3Module
                         I3MCEventHeaderPtr header,
                         const string& name="PhysicsHeader")
     {
-      return I3FrameAccess<I3MCEventHeader>::Put(frame,header,name);
+      return I3FrameAccess<I3EventHeader>::Put(frame,header,name);
     }
 
 
