@@ -31,5 +31,6 @@
 #pragma link C++ class I3TextFileGeometrySource;
 #pragma link C++ class I3MCCalibrationFiller;
 #pragma link C++ class I3MCRawDOMStatusFiller;
+#pragma link C++ class I3TestSources;
 
 #endif

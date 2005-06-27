@@ -34,4 +34,5 @@ phys-services/I3SPRNGRandomService.h \
 phys-source/I3CalibrateStatusModule.h \
 phys-source/I3TextFileGeometrySource.h \
 phys-source/I3MCCalibrationFiller.h \
-phys-source/I3MCRawDOMStatusFiller.h
+phys-source/I3MCRawDOMStatusFiller.h \
+phys-source/I3TestSources.h
