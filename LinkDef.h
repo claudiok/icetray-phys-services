@@ -14,12 +14,11 @@
 #pragma link C++ class I3TRandomService;
 #pragma link C++ class I3TRandomServiceFactory;
 #pragma link C++ class I3FileOMKey2MBIDFactory;
-#pragma link C++ class I3DummyCalibrationSource;
-#pragma link C++ class I3DummyDetectorStatusSource;
-#pragma link C++ class I3DummyPhysicsSource;
-#pragma link C++ class I3DummyGeometrySource;
-#pragma link C++ class I3DummyMonitoringSource;
-#pragma link C++ class I3FileGeometrySource;
+#pragma link C++ class I3DefaultCalibrationSource;
+#pragma link C++ class I3DefaultDetectorStatusSource;
+#pragma link C++ class I3DefaultPhysicsSource;
+#pragma link C++ class I3DefaultGeometrySource;
+#pragma link C++ class I3DefaultMonitoringSource;
 #pragma link C++ class I3SPRNGRandomService;
 #pragma link C++ class I3SPRNGRandomServiceFactory;
 #pragma link C++ class I3PhysicsSource;
@@ -30,5 +29,7 @@
 #pragma link C++ class I3CalibrateStatusModule;
 
 #pragma link C++ class I3TextFileGeometrySource;
+#pragma link C++ class I3MCCalibrationFiller;
+#pragma link C++ class I3MCRawDOMStatusFiller;
 
 #endif

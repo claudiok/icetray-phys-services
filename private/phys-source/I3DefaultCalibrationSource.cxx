@@ -1,0 +1,15 @@
+#include "phys-source/I3DefaultCalibrationSource.h"
+
+
+I3DefaultCalibrationSource::I3DefaultCalibrationSource(I3Context& context) 
+  : I3CalibrationSource(context){}
+
+CalibrationPair I3DefaultCalibrationSource::GetCalibration(I3Time eventTime)
+{
+  CalibrationPair toReturn;
+  toReturn.header = I3CalibrationHeaderPtr(new I3CalibrationHeader());
+  toReturn.header->SetStartTime(I3Time(0,0));
+  toReturn.header->SetEndTime(I3Time(3000,0));
+  toReturn.calibration = I3CalibPtr(new I3Calibration());
+  return toReturn;
+}
