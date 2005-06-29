@@ -7,6 +7,9 @@ load('libdataclasses')
 load('libphys-services')
 load('libamanda-core')
 
+load('libPSInterface')
+load('libhit-constructor')
+
 tray = I3Tray()
 
 F2kCascadeFile = expandvars('$I3_WORK/hit-constructor/resources/gevshower.f2k')
@@ -16,6 +19,8 @@ tray.SetParameter('f2k', 'Infile', F2kCascadeFile)
 
 tray.AddModule('I3F2kEventSource', 'f2kevent')
 tray.SetParameter('f2kevent', 'NumberEvents', 2)
+
+tray.AddService('I3PSI_PhotonicsFactory', 'psi_photonics');
 
 AmandaGeometryFile  = expandvars('$I3_WORK/phys-services/resources/amanda.geo')
 IceCubeGeometryFile = expandvars('$I3_WORK/phys-services/resources/icecube.geo')
@@ -41,6 +46,8 @@ tray.AddModule('I3CalibrateStatusModule', 'calibratestatus')
 
 tray.AddModule('I3TestSources', 'testsources')
 
+tray.AddModule('I3HitConstructor', 'hits')
+
 tray.ConnectBoxes('f2kevent', 'OutBox', 'detectorstatus')
 tray.ConnectBoxes('detectorstatus', 'OutBox', 'calibration')
 tray.ConnectBoxes('calibration', 'OutBox', 'geometry')
@@ -48,6 +55,7 @@ tray.ConnectBoxes('geometry', 'OutBox', 'calibfiller')
 tray.ConnectBoxes('calibfiller', 'OutBox', 'domstatusfiller')
 tray.ConnectBoxes('domstatusfiller', 'OutBox', 'calibratestatus')
 tray.ConnectBoxes('calibratestatus', 'OutBox', 'testsources')
+tray.ConnectBoxes('testsources', 'OutBox', 'hits')
  
 tray.Execute()
 tray.Finish()
