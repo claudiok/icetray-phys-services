@@ -9,6 +9,11 @@ load('libamanda-core')
 
 load('libPSInterface')
 load('libhit-constructor')
+load('libromeo')
+load('libromeo-amanda.so')
+load('libromeo-interface.so')
+load('libDOMsimulator.so')
+load('libDOMcalibrator.so')
 
 tray = I3Tray()
 
@@ -21,9 +26,12 @@ tray.AddModule('I3F2kEventSource', 'f2kevent')
 tray.SetParameter('f2kevent', 'NumberEvents', 2)
 
 tray.AddService('I3PSI_PhotonicsFactory', 'psi_photonics');
+tray.AddService('I3TRandomServiceFactory', 'random')
 
 AmandaGeometryFile  = expandvars('$I3_WORK/phys-services/resources/amanda.geo')
 IceCubeGeometryFile = expandvars('$I3_WORK/phys-services/resources/icecube.geo')
+
+print AmandaGeometryFile
 
 tray.AddModule('I3TextFileGeometrySource', 'geometry')
 tray.SetParameter('geometry', 'AmandaGeoFile', AmandaGeometryFile)
@@ -48,6 +56,25 @@ tray.AddModule('I3TestSources', 'testsources')
 
 tray.AddModule('I3HitConstructor', 'hits')
 
+tray.AddModule('I3RomeoInterfaceModule', 'romeo')
+tray.SetParameter('romeo', 'BinSize',
+                  1.0e-9)
+tray.SetParameter('romeo', 'CEData',
+                  expandvars('$I3_WORK/romeo/resources/scripts/TA0532.table'))
+tray.SetParameter('romeo', 'QEData',
+                  expandvars('$I3_WORK/romeo/resources/scripts/qe_representative.data'))
+tray.SetParameter('romeo', 'GainTable',
+                  expandvars('$I3_WORK/romeo/resources/scripts/TA0451_gain.table'))
+tray.SetParameter('romeo', 'PhotonPropMap_data',
+                  expandvars('$I3_WORK/romeo/resources/scripts/QuickPhotonPropagatorMap.data'))
+tray.SetParameter('romeo', 'WavelengthAcceptance_data',
+                  expandvars('$I3_WORK/romeo/resources/scripts/wavelength_acceptance.data'))
+tray.SetParameter('romeo', 'AngleAcceptance_data',
+                  expandvars('$I3_WORK/romeo/resources/scripts/angle_acceptance.data'))
+
+tray.AddModule('I3DOMsimulator', 'domsimulator')
+tray.AddModule('I3DOMcalibrator', 'domcalibrator')
+
 tray.ConnectBoxes('f2kevent', 'OutBox', 'detectorstatus')
 tray.ConnectBoxes('detectorstatus', 'OutBox', 'calibration')
 tray.ConnectBoxes('calibration', 'OutBox', 'geometry')
@@ -56,6 +83,9 @@ tray.ConnectBoxes('calibfiller', 'OutBox', 'domstatusfiller')
 tray.ConnectBoxes('domstatusfiller', 'OutBox', 'calibratestatus')
 tray.ConnectBoxes('calibratestatus', 'OutBox', 'testsources')
 tray.ConnectBoxes('testsources', 'OutBox', 'hits')
- 
+tray.ConnectBoxes('hits', 'OutBox', 'romeo')
+tray.ConnectBoxes('romeo', 'OutBox', 'domsimulator')
+tray.ConnectBoxes('domsimulator', 'OutBox', 'domcalibrator')
+
 tray.Execute()
 tray.Finish()
