@@ -1,6 +1,8 @@
 #include "phys-source/I3MCRawDOMStatusFiller.h"
 #include "dataclasses/I3RawDOMStatus.h"
 #include "dataclasses/I3MCRawDOMStatus.h"
+#include "dataclasses/I3Geometry.h"
+#include "dataclasses/I3DetectorStatus.h"
 
 I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(I3Context& context) : 
   I3PhysicsModule(context)

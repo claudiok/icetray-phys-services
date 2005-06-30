@@ -1,6 +1,8 @@
 #include "phys-source/I3MCCalibrationFiller.h"
 #include "dataclasses/I3Calibration.h"
 #include "dataclasses/I3DOMCalibration.h"
+#include "dataclasses/I3InIceGeometry.h"
+#include "dataclasses/I3Geometry.h"
 
 I3MCCalibrationFiller::I3MCCalibrationFiller(I3Context& context) 
 : I3PhysicsModule(context)
