@@ -15,15 +15,6 @@
 
 #include "phys-services/I3PhysicsModule.h"
 
-class I3RawDOMStatus;
-class I3CalibratedDOMStatus;
-class I3DOMCalibration;
-
-typedef shared_ptr<I3RawDOMStatus> I3RawDOMStatusPtr;
-typedef shared_ptr<I3CalibratedDOMStatus> I3CalibratedDOMStatusPtr;
-typedef shared_ptr<I3DOMCalibration> I3DOMCalibrationPtr;
-
-
 /**
  * @brief Small icetray module which takes the calibration and the 
  * detector status and assigns some values to the I3CalibratedDOMStatus

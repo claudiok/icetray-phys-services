@@ -19,12 +19,11 @@ phys-services/I3SPRNGRandomService.h \
 phys-services/I3SPRNGRandomServiceFactory.h \
 phys-services/I3ParticleDataService.h \
 phys-services/I3FileOMKey2MBIDFactory.h \
-phys-source/I3DummyDetectorStatusSource.h \
-phys-source/I3DummyCalibrationSource.h \
-phys-source/I3DummyMonitoringSource.h \
-phys-source/I3DummyPhysicsSource.h \
-phys-source/I3DummyGeometrySource.h \
-phys-source/I3FileGeometrySource.h \
+phys-source/I3DefaultDetectorStatusSource.h \
+phys-source/I3DefaultCalibrationSource.h \
+phys-source/I3DefaultMonitoringSource.h \
+phys-source/I3DefaultPhysicsSource.h \
+phys-source/I3DefaultGeometrySource.h \
 phys-source/I3PhysicsSource.h \
 phys-source/I3MonitoringSource.h \
 phys-source/I3GeometrySource.h \
@@ -32,4 +31,12 @@ phys-source/I3DetectorStatusSource.h \
 phys-source/I3CalibrationSource.h \
 phys-services/I3SPRNGRandomServiceFactory.h \
 phys-services/I3SPRNGRandomService.h \
-phys-source/I3CalibrateStatusModule.h
+phys-source/I3CalibrateStatusModule.h \
+phys-source/I3TextFileGeometrySource.h \
+phys-source/I3MCCalibrationFiller.h \
+phys-source/I3MCRawDOMStatusFiller.h \
+phys-source/I3DummyDetectorStatusSource.h \
+phys-source/I3DummyCalibrationSource.h \
+phys-source/I3DummyMonitoringSource.h \
+phys-source/I3DummyPhysicsSource.h \
+phys-source/I3DummyGeometrySource.h 

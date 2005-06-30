@@ -16,12 +16,6 @@
 #include "dataclasses/I3DigitalReadout.h"
 #include "dataclasses/I3DOMLaunch.h"
 #include "dataclasses/I3Event.h"
-#include "dataclasses/I3DetectorStatus.h"
-#include "dataclasses/I3Calibration.h"
-#include "dataclasses/I3InIceCalibration.h"
-#include "dataclasses/I3RawDOMStatus.h"
-#include "dataclasses/I3CalibratedDOMStatus.h"
-#include "dataclasses/I3DOMCalibration.h"
 
 I3CalibrateStatusModule::I3CalibrateStatusModule(I3Context& context) : 
   I3PhysicsModule(context)
