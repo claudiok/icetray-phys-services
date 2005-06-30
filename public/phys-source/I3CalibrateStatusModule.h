@@ -14,6 +14,9 @@
 #define I3CALIBRATESTATUSMODULE_H
 
 #include "phys-services/I3PhysicsModule.h"
+#include "dataclasses/I3RawDOMStatus.h"
+#include "dataclasses/I3CalibratedDOMStatus.h"
+#include "dataclasses/I3DOMCalibration.h"
 
 /**
  * @brief Small icetray module which takes the calibration and the 
