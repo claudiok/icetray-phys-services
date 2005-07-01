@@ -76,7 +76,9 @@ bool I3PhysicsModule::HasMCEvent(I3Frame& frame, const string& name)
  */
 I3MCEvent& I3PhysicsModule::GetMCEvent(I3Frame& frame,const string& name)
 {
-  return I3FrameAccess<I3MCEvent>::Get(frame,name);
+  I3EventPtr eventPtr = frame.Get<I3EventPtr>(name);
+  I3MCEventPtr mcEventPtr = dynamic_pointer_cast<I3MCEvent>(eventPtr);
+  return *mcEventPtr;
 }
 
 /**
