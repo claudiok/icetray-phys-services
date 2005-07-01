@@ -78,6 +78,7 @@ I3MCEvent& I3PhysicsModule::GetMCEvent(I3Frame& frame,const string& name)
 {
   I3EventPtr eventPtr = frame.Get<I3EventPtr>(name);
   I3MCEventPtr mcEventPtr = dynamic_pointer_cast<I3MCEvent>(eventPtr);
+  if(!mcEventPtr) log_fatal("failed to cast I3EventPtr to I3MCEventPtr");
   return *mcEventPtr;
 }
 
