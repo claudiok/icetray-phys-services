@@ -93,7 +93,7 @@ I3MCEvent& I3PhysicsModule::GetMCEvent(I3Frame& frame,const string& name)
 bool I3PhysicsModule::PutMCEvent(I3Frame& frame,I3MCEventPtr event,
 				 const string& name)
 {
-  return I3FrameAccess<I3MCEvent>::Put(frame,event,name);
+  return frame.Put<I3EventPtr>(event, name);
 }
 
 /**
@@ -140,7 +140,12 @@ bool I3PhysicsModule::PutEvent(I3Frame& frame,I3EventPtr event,const string& nam
  */
 bool I3PhysicsModule::HasMCEventHeader(I3Frame& frame,const string& name)
 {
-  return I3FrameAccess<I3MCEventHeader>::Exists(frame,name);
+  if (!frame.Exists(name))
+    return false;
+
+  I3EventHeaderPtr eh = frame.Get<I3EventHeaderPtr>(name);
+  
+  return dynamic_pointer_cast<I3MCEventHeader>(eh);
 }
 
 /**
@@ -154,7 +159,16 @@ bool I3PhysicsModule::HasMCEventHeader(I3Frame& frame,const string& name)
 I3MCEventHeader& I3PhysicsModule::GetMCEventHeader(I3Frame& frame,
 						   const string& name)
 {
-  return I3FrameAccess<I3MCEventHeader>::Get(frame,name);
+  I3EventHeaderPtr eh = frame.Get<I3EventHeaderPtr>(name);
+  if (!eh) 
+    log_fatal("frame contains no I3EventHeaders at all, much less an I3MCEventHeader");
+
+  I3MCEventHeaderPtr mceh = dynamic_pointer_cast<I3MCEventHeader>(eh);
+
+  if (!mceh)
+    log_fatal("frame contains an event header, but not an MC event header");
+
+  return *mceh;
 }
 
 /**
@@ -170,7 +184,9 @@ bool I3PhysicsModule::PutMCEventHeader(I3Frame& frame,
 				       I3MCEventHeaderPtr header,
 				       const string& name)
 {
-  return I3FrameAccess<I3MCEventHeader>::Put(frame,header,name);
+  log_trace(__PRETTY_FUNCTION__);
+  return I3FrameAccess<I3EventHeader>::Put(frame,header,name);
+  //  return frame.Put<I3EventHeaderPtr>(header, name);
 }
 
 

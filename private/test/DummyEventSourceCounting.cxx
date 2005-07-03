@@ -36,7 +36,7 @@ struct count_events : public I3PhysicsModule
 
   void Finish()
   {
-    ENSURE(expectedEvents==physicsCount)  
+    ENSURE(expectedEvents==physicsCount);
   }
 }; 
 
