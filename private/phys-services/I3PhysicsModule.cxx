@@ -83,20 +83,6 @@ I3MCEvent& I3PhysicsModule::GetMCEvent(I3Frame& frame,const string& name)
 }
 
 /**
- * Puts a monte-carlo event in the frame.  
- * Just a helper method to simplify the syntax
- * @param frame the frame to put the event into
- * @param event the event to put into the frame
- * @param name the name of the event in the frame.  Defaults to 'Physics'
- * @return true if it is successful, false if otherwise
- */
-bool I3PhysicsModule::PutMCEvent(I3Frame& frame,I3MCEventPtr event,
-				 const string& name)
-{
-  return frame.Put<I3EventPtr>(event, name);
-}
-
-/**
  * checks to see if the frame has an event in it.
  * @return true if an event is present, false if not
  * @param frame the frame we want to check
@@ -119,17 +105,6 @@ I3Event& I3PhysicsModule::GetEvent(I3Frame& frame,const string& name )
   return I3FrameAccess<I3Event>::Get(frame,name);
 }
 
-/**
- * Puts an event in the frame.  Just a helper method to simplify the syntax
- * @param frame the frame to put the event into
- * @param event the event to put into the frame
- * @param name the name of the event in the frame.  Defaults to 'Physics'
- * @return true if it is successful, false if otherwise
- */
-bool I3PhysicsModule::PutEvent(I3Frame& frame,I3EventPtr event,const string& name)
-{
-  return I3FrameAccess<I3Event>::Put(frame,event,name);
-}
 
 /**
  * checks to see if the frame has a monte-carlo event headerin it.
@@ -172,25 +147,6 @@ I3MCEventHeader& I3PhysicsModule::GetMCEventHeader(I3Frame& frame,
 }
 
 /**
- * Puts an event header in the frame.  Just a helper method to
- * simplify the syntax
- * @param frame the frame to put the event header into
- * @param header the event header to put into the frame
- * @param name the name of the header in the frame.
- * Defaults to 'PhysicsHeader'
- * @return true if it is successful, false if otherwise
- */
-bool I3PhysicsModule::PutMCEventHeader(I3Frame& frame,
-				       I3MCEventHeaderPtr header,
-				       const string& name)
-{
-  log_trace(__PRETTY_FUNCTION__);
-  return I3FrameAccess<I3EventHeader>::Put(frame,header,name);
-  //  return frame.Put<I3EventHeaderPtr>(header, name);
-}
-
-
-/**
  * checks to see if the frame has an event headerin it.
  * @return true if an event headeris present, false if not
  * @param frame the frame we want to check
@@ -217,39 +173,13 @@ I3EventHeader& I3PhysicsModule::GetEventHeader(I3Frame& frame,
 }
 
 /**
- * Puts an event header in the frame.  Just a helper method to 
- * simplify the syntax
- * @param frame the frame to put the event header into
- * @param header the event header to put into the frame
- * @param name the name of the header in the frame.  
- * Defaults to 'PhysicsHeader'
- * @return true if it is successful, false if otherwise
- */
-bool I3PhysicsModule::PutEventHeader(I3Frame& frame,
-				     I3EventHeaderPtr header,
-				     const string& name)
-{
-  return I3FrameAccess<I3EventHeader>::Put(frame,header,name);
-}
-
-/**
  * Method to check for calibration in frame
  */
 bool I3PhysicsModule::HasCalibration(I3Frame& frame, const string& name )
 {
   return I3FrameAccess<I3Calibration>::Exists(frame,name);
 }
-    
-/**
- * Method to put calibration into frame
- */
-bool I3PhysicsModule::PutCalibration(I3Frame& frame,
-				     I3CalibPtr calib,
-				     const string& name )
-{
-  return I3FrameAccess<I3Calibration>::Put(frame,calib,name);
-}
-   
+       
 /**
  * Method to get calibration from frame
  */
@@ -281,20 +211,6 @@ I3Geometry& I3PhysicsModule::GetGeometry(I3Frame& frame,const string& name)
   return I3FrameAccess<I3Geometry>::Get(frame,name);
 }
 
-/**
- * Puts a geometry in the frame.  Just a helper method to simplify the syntax
- * @param frame the frame to put the geometry into
- * @param geometry the geometry to put into the frame
- * @param name the name of the geometry in the frame.  Defaults to 'Geometry'
- * @return true if it is successful, false if otherwise
- */
-bool I3PhysicsModule::PutGeometry(I3Frame& frame,
-				  I3GeometryPtr geometry,
-				  const string& name)
-{
-  return I3FrameAccess<I3Geometry>::Put(frame,geometry,name);
-}
-
 /*
  * Checks to see if a frame has a geometry headerin it
  * @param frame the frame we want to check
@@ -322,23 +238,6 @@ I3GeometryHeader& I3PhysicsModule::GetGeometryHeader(I3Frame& frame,
 }
 
 /**
- * Puts a evemt header in the frame.  Just a helper method to 
- * simplify the syntax
- * @param frame the frame to put the geometry header into
- * @param header the geometry header to put into the frame
- * @param name the name of the header in the frame.  
- * Defaults to 'GeometryHeader'
- * @return true if it is successful, false if otherwise
- */
-bool I3PhysicsModule::PutGeometryHeader(I3Frame& frame,
-					I3GeometryHeaderPtr header,
-					const string& name)
-{
-  return I3FrameAccess<I3GeometryHeader>::Put(frame,header,name);
-}
-
-
-/**
  * Does frame have a calibration header?
  */
 bool I3PhysicsModule::HasCalibrationHeader(I3Frame& frame,const string& name)
@@ -354,16 +253,6 @@ I3CalibrationHeader& I3PhysicsModule::GetCalibrationHeader(I3Frame& frame,
 							   const string& name)
 {
   return I3FrameAccess<I3CalibrationHeader>::Get(frame,name);
-}
-
-/**
- * Put the calibration header into the frame
- */
-bool I3PhysicsModule::PutCalibrationHeader(I3Frame& frame,
-					   I3CalibrationHeaderPtr header,
-					   const string& name)
-{
-  return I3FrameAccess<I3CalibrationHeader>::Put(frame,header,name);
 }
 
 /**
@@ -395,21 +284,6 @@ I3DetectorStatus& I3PhysicsModule::GetDetectorStatus(I3Frame& frame,
 }
 
 /**
- * Puts a  detector status in the frame.  
- * Just a helper method to simplify the syntax
- * @param frame the frame to put the detector status into
- * @param detector status the detector status to put into the frame
- * @param name the name of the detector status in the frame.  
- * Defaults to 'DetectorStatus'
- * @return true if it is successful, false if otherwise
- */
-bool I3PhysicsModule::PutDetectorStatus(I3Frame& frame,I3DetectorStatusPtr status,
-					const string& name)
-{
-  return I3FrameAccess<I3DetectorStatus>::Put(frame,status,name);
-}
-
-/**
  * checks to see if the frame has a  detector status headerin it.
  * @return true if an detector status headeris present, false if not
  * @param frame the frame we want to check
@@ -435,22 +309,5 @@ I3DetectorStatusHeader& I3PhysicsModule::GetDetectorStatusHeader(I3Frame& frame,
 {
   return I3FrameAccess<I3DetectorStatusHeader>::Get(frame,name);
 }
-
-/**
- * Puts an detector status header in the frame.  Just a helper method to
- * simplify the syntax
- * @param frame the frame to put the detector status header into
- * @param header the detector status header to put into the frame
- * @param name the name of the header in the frame.
- * Defaults to 'DetectorStatusHeader'
- * @return true if it is successful, false if otherwise
- */
-bool I3PhysicsModule::PutDetectorStatusHeader(I3Frame& frame,
-					      I3DetectorStatusHeaderPtr header,
-					      const string& name)
-{
-  return I3FrameAccess<I3DetectorStatusHeader>::Put(frame,header,name);
-}
-
 
 ClassImp(I3PhysicsModule);
