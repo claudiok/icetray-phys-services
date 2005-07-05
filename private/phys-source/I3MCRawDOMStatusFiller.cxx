@@ -55,19 +55,27 @@ void I3MCRawDOMStatusFiller::Configure()
 {
     GetParameter("triggerMode", triggerMode_);
  
-    if ( triggerMode_ == 0 || triggerMode_ == 1 )
+    if ( triggerMode_ != 2 )
     {
 	log_warn("Unsupported trigger mode! Setting to 2:SPE");
 	triggerMode_ = 2;
     }
     
     GetParameter("lcMode", lcMode_);
+
+    if ( lcMode_ != 4 )
+    {
+	log_warn("Unsupported LC mode! Setting to 4:UpAndDown");
+	lcMode_ = 4;
+    }
     
+    /*
     if ( lcMode_ < 0 || lcMode_ > 4 )
     {
 	log_fatal("Bad LC mode! Use modes 0:LCOff, 1:UpOrDown, 2:Up, 3:Down, 4:UpAndDown");
     }
-    
+    */
+
     GetParameter("lcWindowUpPre", lcWindowUpPre_);
     GetParameter("lcWindowDownPre", lcWindowDownPre_);
     GetParameter("lcWindowUpPost", lcWindowUpPost_);
