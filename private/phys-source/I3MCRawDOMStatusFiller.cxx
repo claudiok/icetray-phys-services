@@ -7,6 +7,14 @@
 I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(I3Context& context) : 
   I3PhysicsModule(context)
 {
+    triggerMode_ = 2;
+    AddParameter("triggerMode", "trigger mode",
+		 triggerMode_);
+    
+    lcMode_ = 4;
+    AddParameter("lcMode", "local coincidence mode",
+		 lcMode_);
+    
     pmtHV_ = 1200*I3Units::volt;
     AddParameter("pmtHV", "pmt high voltage", 
 		 pmtHV_);
@@ -14,7 +22,7 @@ I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(I3Context& context) :
     speThreshold_ = 4.0*I3Units::mV;
     AddParameter("speThreshold", "discriminator threshold", 
 		 speThreshold_);
-    
+
     lcWindowUpPre_ = -800.0*I3Units::ns;
     AddParameter("lcWindowUpPre", "local coincidence window UpPre", 
 		 lcWindowUpPre_);
@@ -43,6 +51,36 @@ I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(I3Context& context) :
     AddOutBox("OutBox");
 }
 
+void I3MCRawDOMStatusFiller::Configure()
+{
+    GetParameter("triggerMode", triggerMode_);
+ 
+    if ( triggerMode_ == 0 || triggerMode_ == 1 )
+    {
+	log_warn("Unsupported trigger mode! Setting to 2:SPE");
+	triggerMode_ = 2;
+    }
+    
+    GetParameter("lcMode", lcMode_);
+    
+    if ( lcMode_ < 0 || lcMode_ > 4 )
+    {
+	log_fatal("Bad LC mode! Use modes 0:LCOff, 1:UpOrDown, 2:Up, 3:Down, 4:UpAndDown");
+    }
+    
+    GetParameter("lcWindowUpPre", lcWindowUpPre_);
+    GetParameter("lcWindowDownPre", lcWindowDownPre_);
+    GetParameter("lcWindowUpPost", lcWindowUpPost_);
+    GetParameter("lcWindowDownPost", lcWindowDownPost_);
+    
+    GetParameter("pmtHV", pmtHV_);
+    GetParameter("speThreshold", speThreshold_);
+    
+    GetParameter("atwdAOn", atwdAOn_);
+    GetParameter("atwdBOn", atwdBOn_);
+    GetParameter("fadcOn", fadcOn_);
+}
+
 void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 {
     log_debug("I3MCRawDOMStatusFiller::DetectorStatus");
@@ -54,6 +92,76 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 
     I3DetectorStatus& status = GetDetectorStatus(frame);
 
+    // Trigger mode
+    I3RawDOMStatus::TrigMode triggerMode = I3RawDOMStatus::SPE;
+
+    // What's the LC mode?
+    I3RawDOMStatus::LCMode lcMode;
+
+    if ( lcMode_ == 0 )
+    {
+	lcMode = I3RawDOMStatus::LCOff;
+    }
+    
+    else if ( lcMode_ == 1 )
+    {
+	lcMode = I3RawDOMStatus::UpOrDown;
+    }
+    
+    else if ( lcMode_ == 2 )
+    {
+	lcMode = I3RawDOMStatus::Up;
+    }
+    
+    else if ( lcMode_ == 3 )
+    {
+	lcMode = I3RawDOMStatus::Down;
+    }
+    
+    else if ( lcMode_ == 4 )
+    {
+	lcMode = I3RawDOMStatus::UpAndDown;
+    }
+    
+    // Is ATWD A on?
+    I3RawDOMStatus::OnOff atwdAOn;
+
+    if ( atwdAOn_ )
+    {
+	atwdAOn = I3RawDOMStatus::On;
+    }
+    
+    else 
+    {
+	atwdAOn = I3RawDOMStatus::Off;
+    }
+    
+    // Is ATWD B on?
+    I3RawDOMStatus::OnOff atwdBOn;
+
+    if ( atwdBOn_ )
+    {
+	atwdBOn = I3RawDOMStatus::On;
+    }
+    
+    else 
+    {
+	atwdBOn = I3RawDOMStatus::Off;
+    }
+
+    // Is the FADC on?
+    I3RawDOMStatus::OnOff fadcOn;
+
+    if ( fadcOn_ )
+    {
+	fadcOn = I3RawDOMStatus::On;
+    }
+    
+    else 
+    {
+	fadcOn = I3RawDOMStatus::Off;
+    }
+
     for( iter  = inice.begin(); 
 	 iter != inice.end(); 
 	 iter++ )
@@ -62,23 +170,21 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 
 	I3MCRawDOMStatusPtr raw(new I3MCRawDOMStatus());
 
-	//I3RawDOMStatus::TrigMode trigMode = I3RawDOMStatus::SPE;
-
-	raw->SetTrigMode(I3RawDOMStatus::SPE);
-	raw->SetLCMode(I3RawDOMStatus::UpAndDown);
+	raw->SetTrigMode(triggerMode);
+	raw->SetLCMode(lcMode);
 	
 	raw->SetLCWindowUpPre(lcWindowUpPre_);
 	raw->SetLCWindowDownPre(lcWindowDownPre_);
 	raw->SetLCWindowUpPost(lcWindowUpPost_);
 	raw->SetLCWindowDownPost(lcWindowDownPost_);
 
-	raw->SetStatusATWD_A(I3RawDOMStatus::On);
-	raw->SetStatusATWD_B(I3RawDOMStatus::On);
-	raw->SetStatusFADC(I3RawDOMStatus::On);
+	raw->SetStatusATWD_A(atwdAOn);
+	raw->SetStatusATWD_B(atwdBOn);
+	raw->SetStatusFADC(fadcOn);
 	
 	raw->SetPMTHV(pmtHV_);
 	raw->SetSingleSPEThreshold(speThreshold_);
-	raw->SetFEPedestal(0.0*I3Units::mV);
+	raw->SetFEPedestal(0.0*I3Units::volt);
     
 	status.GetIceCubeStatus()[thiskey].SetRawStatus(raw);
     }
