@@ -122,8 +122,6 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
       I3OMResponsePtr omr = om->second;
       I3RecoHitSeriesDict& hitsDict = omr->GetRecoHitSeriesDict();
       I3RecoPulseSeriesDict& pulsesDict = omr->GetRecoPulseSeriesDict();
-      log_debug("\n%s",hitsDict.ToString().c_str());
-      log_debug("\n%s",pulsesDict.ToString().c_str());
 
       // Check that the RecoHits or RecoPulses is present
       if (hitsDict.find(hitsName) != hitsDict.end())
@@ -133,7 +131,7 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
       else 
 	{
 	  log_info("\n   RecoHitSeries or RecoPulseSeries '%s' is not present "
-		   "\n   in the current OM response. ", hitsName.c_str());
+		   "in the current OM response. ", hitsName.c_str());
 	  continue;
 	}
 
