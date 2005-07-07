@@ -106,6 +106,17 @@ class I3PhysicsModule : public I3Module
    */
   I3MCEvent& GetMCEvent(I3Frame& frame,const string& name = "Physics");
 
+  /**
+   * Puts a monte-carlo event in the frame.  
+   * Just a helper method to simplify the syntax
+   * @param frame the frame to put the event into
+   * @param event the event to put into the frame
+   * @param name the name of the event in the frame.  Defaults to 'Physics'
+   * @return true if it is successful, false if otherwise
+   */
+  bool PutMCEvent(I3Frame& frame,I3MCEventPtr event,
+		  const string& name="Physics");
+
    /**
    * checks to see if the frame has an event in it.
    * @return true if an event is present, false if not
@@ -123,6 +134,14 @@ class I3PhysicsModule : public I3Module
    */
   I3Event& GetEvent(I3Frame& frame,const string& name = "Physics");
 
+  /**
+   * Puts an event in the frame.  Just a helper method to simplify the syntax
+   * @param frame the frame to put the event into
+   * @param event the event to put into the frame
+   * @param name the name of the event in the frame.  Defaults to 'Physics'
+   * @return true if it is successful, false if otherwise
+   */
+  bool PutEvent(I3Frame& frame,I3EventPtr event,const string& name="Physics");
 
   /**
    * checks to see if the frame has a monte-carlo event headerin it.
@@ -144,6 +163,18 @@ class I3PhysicsModule : public I3Module
   I3MCEventHeader& GetMCEventHeader(I3Frame& frame,
 				    const string& name="PhysicsHeader");
 
+  /**
+   * Puts an event header in the frame.  Just a helper method to
+   * simplify the syntax
+   * @param frame the frame to put the event header into
+   * @param header the event header to put into the frame
+   * @param name the name of the header in the frame.
+   * Defaults to 'PhysicsHeader'
+   * @return true if it is successful, false if otherwise
+   */
+  bool PutMCEventHeader(I3Frame& frame,
+                        I3MCEventHeaderPtr header,
+                        const string& name="PhysicsHeader");
 
   /**
    * checks to see if the frame has an event headerin it.
@@ -165,12 +196,30 @@ class I3PhysicsModule : public I3Module
   I3EventHeader& GetEventHeader(I3Frame& frame,
 				const string& name="PhysicsHeader");
 
+  /**
+   * Puts an event header in the frame.  Just a helper method to 
+   * simplify the syntax
+   * @param frame the frame to put the event header into
+   * @param header the event header to put into the frame
+   * @param name the name of the header in the frame.  
+   * Defaults to 'PhysicsHeader'
+   * @return true if it is successful, false if otherwise
+   */
+  bool PutEventHeader(I3Frame& frame,
+			I3EventHeaderPtr header,
+		      const string& name="PhysicsHeader");
 
   /**
    * Method to check for calibration in frame
    */
   bool HasCalibration(I3Frame& frame, const string& name = "Calibration");
     
+  /**
+   * Method to put calibration into frame
+   */
+  bool PutCalibration(I3Frame& frame,
+			I3CalibPtr calib,
+		      const string& name = "Calibration");
   /**
    * Method to get calibration from frame
    */
@@ -192,6 +241,16 @@ class I3PhysicsModule : public I3Module
    */
   I3Geometry& GetGeometry(I3Frame& frame,const string& name="Geometry");
 
+  /**
+   * Puts a geometry in the frame.  Just a helper method to simplify the syntax
+   * @param frame the frame to put the geometry into
+   * @param geometry the geometry to put into the frame
+   * @param name the name of the geometry in the frame.  Defaults to 'Geometry'
+   * @return true if it is successful, false if otherwise
+   */
+  bool PutGeometry(I3Frame& frame,
+		     I3GeometryPtr geometry,
+		   const string& name="Geometry");
   /*
    * Checks to see if a frame has a geometry headerin it
    * @param frame the frame we want to check
@@ -211,6 +270,18 @@ class I3PhysicsModule : public I3Module
   I3GeometryHeader& GetGeometryHeader(I3Frame& frame, 
 				      const string& name="GeometryHeader");
 
+  /**
+   * Puts a evemt header in the frame.  Just a helper method to 
+   * simplify the syntax
+   * @param frame the frame to put the geometry header into
+   * @param header the geometry header to put into the frame
+   * @param name the name of the header in the frame.  
+   * Defaults to 'GeometryHeader'
+   * @return true if it is successful, false if otherwise
+   */
+  bool PutGeometryHeader(I3Frame& frame,
+			I3GeometryHeaderPtr header,
+			 const string& name="GeometryHeader");
 
   /**
    * Does frame have a calibration header?
@@ -222,7 +293,12 @@ class I3PhysicsModule : public I3Module
    */
   I3CalibrationHeader& GetCalibrationHeader(I3Frame& frame, 
 					    const string& name="CalibrationHeader");
-
+  /**
+   * Put the calibration header into the frame
+   */
+  bool PutCalibrationHeader(I3Frame& frame,
+			      I3CalibrationHeaderPtr header,
+			    const string& name="CalibrationHeader");
   /**
    * checks to see if the frame has a detector status in it.
    * @return true if an detector status is present, false if not
@@ -245,6 +321,17 @@ class I3PhysicsModule : public I3Module
   I3DetectorStatus& GetDetectorStatus(I3Frame& frame,
 				      const string& name = "DetectorStatus");
 
+  /**
+   * Puts a  detector status in the frame.  
+   * Just a helper method to simplify the syntax
+   * @param frame the frame to put the detector status into
+   * @param detector status the detector status to put into the frame
+   * @param name the name of the detector status in the frame.  
+   * Defaults to 'DetectorStatus'
+   * @return true if it is successful, false if otherwise
+   */
+  bool PutDetectorStatus(I3Frame& frame,I3DetectorStatusPtr status,
+			 const string& name="DetectorStatus");
 
   /**
    * checks to see if the frame has a  detector status headerin it.
@@ -267,6 +354,18 @@ class I3PhysicsModule : public I3Module
   I3DetectorStatusHeader& GetDetectorStatusHeader(I3Frame& frame,
 						  const string& name="DetectorStatusHeader");
 
+  /**
+   * Puts an detector status header in the frame.  Just a helper method to
+   * simplify the syntax
+   * @param frame the frame to put the detector status header into
+   * @param header the detector status header to put into the frame
+   * @param name the name of the header in the frame.
+   * Defaults to 'DetectorStatusHeader'
+   * @return true if it is successful, false if otherwise
+   */
+  bool PutDetectorStatusHeader(I3Frame& frame,
+			  I3DetectorStatusHeaderPtr header,
+			       const string& name="DetectorStatusHeader");
 
   /**
    * Checks to see if a frame has a monitoring in it
