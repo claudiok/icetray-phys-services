@@ -27,7 +27,7 @@ I3PhysicsSource::I3PhysicsSource(I3Context& context) : I3Source(context)
 
 void I3PhysicsSource::Process()
 {
-    log_debug("Entering I3PhysicsSource::Process()");
+    log_trace("Entering I3PhysicsSource::Process()");
     if(MoreEvents())
       SendEvent();
     else
@@ -36,7 +36,7 @@ void I3PhysicsSource::Process()
 
 void I3PhysicsSource::SendEvent()
 {
-  log_debug("Entering I3PhysicsSource::SendEvent()");
+  log_trace("Entering I3PhysicsSource::SendEvent()");
   currentEvent_ = NextEvent();
   assert(currentEvent_);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Physics"));
