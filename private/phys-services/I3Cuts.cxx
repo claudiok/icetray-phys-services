@@ -122,8 +122,8 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
       I3OMResponsePtr omr = om->second;
       I3RecoHitSeriesDict& hitsDict = omr->GetRecoHitSeriesDict();
       I3RecoPulseSeriesDict& pulsesDict = omr->GetRecoPulseSeriesDict();
-      cout<<hitsDict<<endl;//###
-      cout<<pulsesDict<<endl;//###
+      log_debug("\n%s",hitsDict.ToString().c_str());
+      log_debug("\n%s",pulsesDict.ToString().c_str());
 
       // Check that the RecoHits or RecoPulses is present
       if (hitsDict.find(hitsName) != hitsDict.end())
@@ -132,12 +132,9 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
 	Thit = pulsesDict[hitsName]->GetFirstPulseTime();
       else 
 	{
-	  log_error("RecoHitSeries or RecoPulseSeries '%s' is not present!",
-		    hitsName.c_str());
-	  Ndir = 0;
-	  Ldir = NAN;
-	  Smax = NAN;
-	  return;
+	  log_info("\n   RecoHitSeries or RecoPulseSeries '%s' is not present "
+		   "\n   in the current OM response. ", hitsName.c_str());
+	  continue;
 	}
 
       I3Position ompos = geom.GetInIceGeometry()[om->first]->GetPos();
@@ -166,7 +163,7 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
 	  if (dist>max) max = dist;
 	}
 
-    } // for
+    } // end for loop
 
   // calculate Smoothness...
   sort(length.begin(),length.end());
