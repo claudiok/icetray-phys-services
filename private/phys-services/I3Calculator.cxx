@@ -170,6 +170,16 @@ double I3Calculator::ClosestApproachDistance(I3TrackPtr track, I3Position& pos)
 
 
 //--------------------------------------------------------------
+I3Position I3Calculator::ClosestApproachPosition(I3TrackPtr track, I3Position& pos)
+{
+  I3Position appos,chpos;
+  double apdist,chtime,chdist;
+  CherenkovCalc(track,pos,appos,apdist,chpos,chtime,chdist);
+  return appos;
+}
+
+
+//--------------------------------------------------------------
 double I3Calculator::CherenkovDistance(I3TrackPtr track, I3Position& pos)
 {
   I3Position appos,chpos;

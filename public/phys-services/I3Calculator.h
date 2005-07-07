@@ -94,6 +94,13 @@ namespace I3Calculator
    */
   double ClosestApproachDistance(I3TrackPtr track,
 				 I3Position& pos);
+   
+  /**
+   * Output position of closest approach from I3Track to I3Position.
+   * This method simply uses CherenkovCalc for the calculation.
+   */
+  I3Position ClosestApproachPosition(I3TrackPtr track,
+				     I3Position& pos);
 
  /**
    * Output distance from origin of Cherenkov light from I3Track to I3Position.
