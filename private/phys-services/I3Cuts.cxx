@@ -9,20 +9,20 @@ using namespace I3Calculator;
 
 //--------------------------------------------------------------
 int I3Cuts::Ndir(I3TrackPtr track, I3Geometry& geom, 
-		 I3OMResponseMap& ommap, string hitseries,	
+		 I3OMResponseMap& ommap, string hitsName,	
 		 double t1, double t2)
 {
   int Ndir;
   double Ldir;
   double Smax;
-  DirectHits(track, geom, ommap, hitseries, t1, t2, Ndir, Ldir, Smax);
+  DirectHits(track, geom, ommap, hitsName, t1, t2, Ndir, Ldir, Smax);
   return Ndir;
 }
 
 
 //--------------------------------------------------------------
 int I3Cuts::Ndir(I3TrackPtr track, I3Geometry& geom, 
-		 I3OMResponseMap& ommap, string hitseries, 
+		 I3OMResponseMap& ommap, string hitsName, 
 		 NdirWindow window)
 {
   double t1, t2;
@@ -30,27 +30,27 @@ int I3Cuts::Ndir(I3TrackPtr track, I3Geometry& geom,
   int Ndir;
   double Ldir;
   double Smax;
-  DirectHits(track, geom, ommap, hitseries, t1, t2, Ndir, Ldir, Smax);
+  DirectHits(track, geom, ommap, hitsName, t1, t2, Ndir, Ldir, Smax);
   return Ndir;
 }
 
 
 //--------------------------------------------------------------
 double I3Cuts::Ldir(I3TrackPtr track, I3Geometry& geom, 
-		    I3OMResponseMap& ommap, string hitseries,	
+		    I3OMResponseMap& ommap, string hitsName,	
 		    double t1, double t2)
 {
   int Ndir;
   double Ldir;
   double Smax;
-  DirectHits(track, geom, ommap, hitseries, t1, t2, Ndir, Ldir, Smax);
+  DirectHits(track, geom, ommap, hitsName, t1, t2, Ndir, Ldir, Smax);
   return Ldir;
 }
 
 
 //--------------------------------------------------------------
 double I3Cuts::Ldir(I3TrackPtr track, I3Geometry& geom, 
-		    I3OMResponseMap& ommap, string hitseries, 
+		    I3OMResponseMap& ommap, string hitsName, 
 		    NdirWindow window)
 {
   double t1, t2;
@@ -58,19 +58,19 @@ double I3Cuts::Ldir(I3TrackPtr track, I3Geometry& geom,
   int Ndir;
   double Ldir;
   double Smax;
-  DirectHits(track, geom, ommap, hitseries, t1, t2, Ndir, Ldir, Smax);
+  DirectHits(track, geom, ommap, hitsName, t1, t2, Ndir, Ldir, Smax);
   return Ldir;
 }
 
 
 //--------------------------------------------------------------
 double I3Cuts::Smoothness(I3TrackPtr track, I3Geometry& geom, 
-			  I3OMResponseMap& ommap, string hitseries)
+			  I3OMResponseMap& ommap, string hitsName)
 {
   int Ndir;
   double Ldir;
   double Smax;
-  DirectHits(track, geom, ommap, hitseries, -15, 15, Ndir, Ldir, Smax);
+  DirectHits(track, geom, ommap, hitsName, -15, 15, Ndir, Ldir, Smax);
   return Smax;
 }
 
@@ -105,7 +105,7 @@ void I3Cuts::CalcTimeWindow(NdirWindow window, double& t1, double& t2)
 
 //--------------------------------------------------------------
 void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom, 
-			I3OMResponseMap& ommap, string hitseries,
+			I3OMResponseMap& ommap, string hitsName,
 			double t1, double t2, 
 			int& Ndir, double& Ldir, double& Smax)
 {
@@ -117,14 +117,31 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
   double Ttrack = track->GetT();
   double Thit, Tarr, Tres;
   I3OMResponseMap::iterator om;
-  for (om=ommap.begin(); om!=ommap.end(); om++) {
-    I3OMResponsePtr omr = om->second;
-    I3RecoHitSeriesDict& dict = omr->GetRecoHitSeriesDict();
-    if (dict.find(hitseries)!=dict.end()) {
-      I3RecoHitSeriesPtr hits = dict[hitseries];
+  for (om=ommap.begin(); om!=ommap.end(); om++) 
+    {
+      I3OMResponsePtr omr = om->second;
+      I3RecoHitSeriesDict& hitsDict = omr->GetRecoHitSeriesDict();
+      I3RecoPulseSeriesDict& pulsesDict = omr->GetRecoPulseSeriesDict();
+      cout<<hitsDict<<endl;//###
+      cout<<pulsesDict<<endl;//###
+
+      // Check that the RecoHits or RecoPulses is present
+      if (hitsDict.find(hitsName) != hitsDict.end())
+	Thit = hitsDict[hitsName]->GetFirstHitTime();
+      else if (pulsesDict.find(hitsName) != pulsesDict.end())
+	Thit = pulsesDict[hitsName]->GetFirstPulseTime();
+      else 
+	{
+	  log_error("RecoHitSeries or RecoPulseSeries '%s' is not present!",
+		    hitsName.c_str());
+	  Ndir = 0;
+	  Ldir = NAN;
+	  Smax = NAN;
+	  return;
+	}
+
       I3Position ompos = geom.GetInIceGeometry()[om->first]->GetPos();
       Tarr = CherenkovTime(track, ompos);
-      Thit = hits->GetFirstHitTime();
       Tres = Thit - Ttrack - Tarr;
       log_debug("--------------------------");
       log_debug("ompos: %f %f %f",ompos.GetX(),ompos.GetY(),ompos.GetZ());
@@ -142,14 +159,14 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
       length.push_back(dist);
 
       // this is a direct hit...
-      if (Tres>t1 && Tres<t2) {
-	Ndir+=1; // add direct hits
-	if (dist<min) min = dist;
-	if (dist>max) max = dist;
-      }
+      if (Tres>t1 && Tres<t2) 
+	{
+	  Ndir+=1; // add direct hits
+	  if (dist<min) min = dist;
+	  if (dist>max) max = dist;
+	}
 
-    }
-  }
+    } // for
 
   // calculate Smoothness...
   sort(length.begin(),length.end());
@@ -157,16 +174,18 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
     log_debug("length[%i]=%f",i,length[i]);
   int N = length.size()-1;
   Smax = 0;
-  for (unsigned int j=1; j<length.size(); j++) {
-    double lj = length[j]-length[0];
-    double lN = length[N]-length[0];
-    double S = abs((double)j/(double)N - lj/lN);
-    log_debug("j: %i  N: %i  S: %f",j,N,S);
-    if (S>Smax) Smax = S;
-  }
+  for (unsigned int j=1; j<length.size(); j++) 
+    {
+      double lj = length[j]-length[0];
+      double lN = length[N]-length[0];
+      double S = abs((double)j/(double)N - lj/lN);
+      log_debug("j: %i  N: %i  S: %f",j,N,S);
+      if (S>Smax) Smax = S;
+    }
 
   Ldir = max-min; // length of event
   log_debug("-----> Ndir: %i",Ndir);
   log_debug("-----> Ldir: %f",Ldir);
   log_debug("-----> Smax: %f",Smax);
+  return;
 }
