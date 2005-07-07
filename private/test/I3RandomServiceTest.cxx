@@ -111,14 +111,18 @@ void testRandomService(Random& random)
 
 TEST(TRandomServiceTest)
 {
-  I3TRandomService random;
-  randomServiceTest::testRandomService<100000,I3TRandomService>(random);
+  I3TRandomService random1;
+	I3TRandomService random2(666);
+  randomServiceTest::testRandomService<100000,I3TRandomService>(random1);
+  randomServiceTest::testRandomService<100000,I3TRandomService>(random2);
 }
 
 TEST(I3GSLRandomService)
 {
-  I3GSLRandomService random;
-  randomServiceTest::testRandomService<100000,I3GSLRandomService>(random);
+  I3GSLRandomService random1;
+  I3GSLRandomService random2(666);
+  randomServiceTest::testRandomService<100000,I3GSLRandomService>(random1);
+  randomServiceTest::testRandomService<100000,I3GSLRandomService>(random2);
 }
 
 TEST(I3SPRNGRandomService)

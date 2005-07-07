@@ -3,7 +3,7 @@
 /*
  * class: I3TRandomServiceFactory
  *
- * Version $Id: I3TRandomServiceFactory.h,v 1.5 2005/03/16 10:42:53 troy Exp $
+ * Version $Id$
  *
  * Date: 17 Feb 2004
  *
@@ -21,6 +21,7 @@ class I3Services;
 // superclasses
 
 #include "icetray/I3ServiceFactory.h"
+#include "phys-services/I3RandomService.h"
 
 // namespace declarations
 
@@ -29,7 +30,8 @@ using namespace std;
 /**
  * @brief This class installs a I3TRandomService.
  *
- * @version $Id: I3TRandomServiceFactory.h,v 1.5 2005/03/16 10:42:53 troy Exp $
+ * I3TRandomService supports one parameter: <VAR>Seed</VAR>.
+ * @version $Id$
  * @author pretz
  */
 class I3TRandomServiceFactory
@@ -49,12 +51,14 @@ class I3TRandomServiceFactory
    * Installed this objects service into the specified services object.
    *
    * @param services the I3Services into which the service should be installed.
-   * @param context the I3Context in which the service will exist.
-   * @param moduleName the name associated with the module whose service is
-   * being installed.
    * @return true if the services is successfully installed.
    */
   virtual bool InstallService(I3Services& services);
+
+  /**
+   * Configure service prior to installing it. 
+   */
+  virtual void Configure();
 
  private:
 
@@ -66,6 +70,9 @@ class I3TRandomServiceFactory
     (const I3TRandomServiceFactory& rhs); // stop default
 
   // instance member data
+
+	int seed_;
+	I3RandomServicePtr random_;
 
   // ROOT macros
   ClassDef(I3TRandomServiceFactory,0);

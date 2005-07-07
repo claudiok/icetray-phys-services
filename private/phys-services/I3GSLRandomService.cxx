@@ -4,8 +4,13 @@ ClassImp(I3GSLRandomService);
 
 I3GSLRandomService::I3GSLRandomService()
 {
-  gsl_rng_env_setup();
-  r = gsl_rng_alloc(gsl_rng_default);
+  construct();
+}
+
+I3GSLRandomService::I3GSLRandomService(unsigned long int seed)
+{
+  construct();
+  gsl_rng_set(r, seed);
 }
 
 int I3GSLRandomService::Binomial(int ntot, double prob)

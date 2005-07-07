@@ -40,7 +40,10 @@ class I3SPRNGRandomService : public I3RandomService{
    */
   I3SPRNGRandomService();
 
-  I3SPRNGRandomService(Int_t seed, Int_t nstreams, Int_t streamnum);
+  /**
+   * constructor
+   */
+  I3SPRNGRandomService(int seed, int nstreams, int streamnum);
 
   /**
    * destructor
@@ -50,47 +53,51 @@ class I3SPRNGRandomService : public I3RandomService{
   /**
    * Binomial distribution
    */
-  virtual Int_t Binomial(Int_t ntot, Double_t prob);
+  virtual int Binomial(int ntot, double prob);
 
   // As with John Pretz's GSL implementation, I have left this out for now.
-  /* virtual Double_t BreitWigner(Double_t mean = 0, Double_t gamma = 1)=0; */
+  /* virtual double BreitWigner(double mean = 0, double gamma = 1)=0; */
   
   /**
    * Exponential distribution
    */
-  virtual Double_t Exp(Double_t tau);
+  virtual double Exp(double tau);
 
   /**
    * Uniform int distribution with range [0,imax)
    */
-  virtual UInt_t Integer(UInt_t imax);
+  virtual unsigned int Integer(unsigned int imax);
 
   /**
-   * Int_t Poisson distribution
+   * int Poisson distribution
    */
-  virtual Int_t Poisson(Double_t mean);
+  virtual int Poisson(double mean);
 
   /**
-   * Double_t Poisson distribution
+   * double Poisson distribution
    */
-  virtual Double_t PoissonD(Double_t mean);
+  virtual double PoissonD(double mean);
 
   /**
-   * Double_t uniform distribution with range (0,x1)
+   * double uniform distribution with range (0,x1)
    */
-  virtual Double_t Uniform(Double_t x1 = 1);
+  virtual double Uniform(double x1 = 1);
 
   /**
-   * Double_t  uniform distribution with range (x1,x2)
+   * double  uniform distribution with range (x1,x2)
    */
-  virtual Double_t Uniform(Double_t x1, Double_t x2);
+  virtual double Uniform(double x1, double x2);
 
   /**
-   * Double_t Gaussian distribution given mean and StdD
+   * double Gaussian distribution given mean and StdD
    */
-  virtual Double_t Gaus(Double_t mean, Double_t stddev);
+  virtual double Gaus(double mean, double stddev);
 
  private:
+
+  // private copy constructors and assignment
+  I3SPRNGRandomService(const I3SPRNGRandomService& );
+  I3SPRNGRandomService operator=(const I3SPRNGRandomService& );
 
   gsl_rng* r;
 

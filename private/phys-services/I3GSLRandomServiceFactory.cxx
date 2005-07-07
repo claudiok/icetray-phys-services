@@ -1,7 +1,7 @@
 /*
  * class: I3GSLRandomServiceFactory
  *
- * Version $Id: I3GSLRandomServiceFactory.cxx,v 1.5 2005/04/04 18:40:39 pretz Exp $
+ * Version $Id$
  *
  * Date: 17 Feb 2004
  *
@@ -24,8 +24,12 @@ ClassImp(I3GSLRandomServiceFactory);
 
 I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(I3Context& context)
   : I3ServiceFactory(context),
-    random()
+    seed_(-1), random_()
 {
+	// unfortunatelly we can not support a seed of unsigned long int since
+	// AddParameter only supports int
+	AddParameter("Seed","Seed for random number generator", seed_);	
+
 }
 
 // Destructors
@@ -39,9 +43,16 @@ I3GSLRandomServiceFactory::~I3GSLRandomServiceFactory()
 bool
 I3GSLRandomServiceFactory::InstallService(I3Services& services)
 {
-  if(!random)
-    random = I3RandomServicePtr(new I3GSLRandomService());
+  if(!random_)
+		if(seed_ < 0) random_ = I3RandomServicePtr(new I3GSLRandomService());
+		else  random_ = I3RandomServicePtr(new I3GSLRandomService(seed_));
+		
   return I3ServicesAccess<I3RandomService>::Put(services,
-						random,
+						random_,
 						I3RandomService::DefaultName());
+}
+
+void I3GSLRandomServiceFactory::Configure()
+{
+  GetParameter("Seed", seed_);
 }

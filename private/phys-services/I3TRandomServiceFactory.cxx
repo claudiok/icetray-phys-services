@@ -1,7 +1,7 @@
 /*
  * class: I3TRandomServiceFactory
  *
- * Version $Id: I3TRandomServiceFactory.cxx,v 1.9 2005/04/04 18:40:39 pretz Exp $
+ * Version $Id$
  *
  * Date: 17 Feb 2004
  *
@@ -17,14 +17,17 @@ ClassImp(I3TRandomServiceFactory);
 // Other header files
 
 #include "icetray/I3ServicesAccess.h"
-
 #include "phys-services/I3TRandomService.h"
 
 // Constructors
 
 I3TRandomServiceFactory::I3TRandomServiceFactory(const I3Context& context)
-  : I3ServiceFactory(context)
+  : I3ServiceFactory(context),
+  	seed_(-1), random_()
 {
+	// unfortunatelly we can not support a seed of unsigned int since
+	// AddParameter only supports int
+	AddParameter("Seed","Seed for random number generator", seed_);	
 }
 
 // Destructors
@@ -38,8 +41,17 @@ I3TRandomServiceFactory::~I3TRandomServiceFactory()
 bool
 I3TRandomServiceFactory::InstallService(I3Services& services)
 {
-  I3RandomServicePtr random ( new I3TRandomService());
+	if(!random_){
+		if(seed_ < 0) random_ = I3RandomServicePtr(new I3TRandomService());
+		else random_ = I3RandomServicePtr(new I3TRandomService(seed_));
+	}
+	
   return I3ServicesAccess<I3RandomService>::Put(services,
-						random,
+						random_,
 						I3RandomService::DefaultName());
+}
+
+void I3TRandomServiceFactory::Configure()
+{
+  GetParameter("Seed", seed_);
 }

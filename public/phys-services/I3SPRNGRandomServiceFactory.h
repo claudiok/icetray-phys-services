@@ -8,7 +8,7 @@
  * @brief This class installs a I3SPRNGRandomService. 
  * Based on I3GSLRandomService by pretz
  *
- * @version $Id: I3SPRNGRandomServiceFactory.h,v 1.1 2005/04/13 16:29:34 juancarlos Exp $
+ * @version $Id$
  * @author juancarlos
  *
  * (c) IceCube Collaboration
@@ -22,12 +22,18 @@ class I3Services;
 // superclasses
 
 #include "icetray/I3ServiceFactory.h"
-#include "phys-services/I3SPRNGRandomService.h"
+#include "phys-services/I3RandomService.h"
 
 // namespace declarations
 
 using namespace std;
 
+/**
+ * @brief This class installs a I3SPRNGRandomService.
+ *
+ * I3SPRNGRandomService supports three parameter:
+ * <VAR>Seed</VAR>, <VAR>NStreams</VAR>, <VAR>StreamNum</VAR>.
+ */
 class I3SPRNGRandomServiceFactory
 : public I3ServiceFactory
 {
@@ -45,9 +51,6 @@ class I3SPRNGRandomServiceFactory
    * Installed this objects service into the specified services object.
    *
    * @param services the I3Services into which the service should be installed.
-   * @param context the I3Context in which the service will exist.
-   * @param moduleName the name associated with the module whose service is
-   * being installed.
    * @return true if the services is successfully installed.
    */
   virtual bool InstallService(I3Services& services);
@@ -59,8 +62,6 @@ class I3SPRNGRandomServiceFactory
 
  private:
 
-  Int_t seed, nstreams, streamnum;
-
   // private constructors, destructor and assignment
 
   I3SPRNGRandomServiceFactory
@@ -69,7 +70,8 @@ class I3SPRNGRandomServiceFactory
     (const I3SPRNGRandomServiceFactory& rhs); // stop default
 
   // instance member data
-  I3RandomServicePtr random;
+  int seed_, nstreams_, streamnum_;
+  I3RandomServicePtr random_;
   
   // ROOT macros
   ClassDef(I3SPRNGRandomServiceFactory,0);

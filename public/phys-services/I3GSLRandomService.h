@@ -10,14 +10,14 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3GSLRandomService.h,v 1.5 2005/04/12 18:43:58 pretz Exp $
+ * $Id$
  *
  * @brief An implementation of the I3RandomService interface.  
  * 
  * Uses the gsl library for the random numbers
  *
  * @version $Revision: 1.5 $
- * @date $Date: 2005/04/12 18:43:58 $
+ * @date $Date$
  * @author pretz
  *
  * @todo 
@@ -28,6 +28,11 @@ class I3GSLRandomService : public I3RandomService{
    * default constructor
    */
   I3GSLRandomService();
+
+  /**
+   * constructor
+   */
+	I3GSLRandomService(unsigned long int seed);
 
   /**
    * destructor
@@ -80,11 +85,24 @@ class I3GSLRandomService : public I3RandomService{
 
  private:
 
+  // private copy constructors and assignment
+  I3GSLRandomService(const I3GSLRandomService& );
+  I3GSLRandomService operator=(const I3GSLRandomService& );
+
+	void construct();
+
   gsl_rng* r;
 
   ClassDef(I3GSLRandomService,0);
 };
 
 typedef shared_ptr<I3GSLRandomService> I3GSLRandomServicePtr;
+
+
+inline void I3GSLRandomService::construct()
+{
+  gsl_rng_env_setup();
+  r = gsl_rng_alloc(gsl_rng_default);
+}
 
 #endif //I3GSLRANDOMSERVICE_H
