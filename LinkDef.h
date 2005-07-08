@@ -38,4 +38,7 @@
 #pragma link C++ class I3DummyGeometrySource;
 #pragma link C++ class I3DummyMonitoringSource;
 
+#pragma link C++ class I3MediumService;
+#pragma link C++ class I3MediumServiceFactory;
+
 #endif

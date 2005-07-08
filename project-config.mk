@@ -19,6 +19,8 @@ phys-services/I3SPRNGRandomService.h \
 phys-services/I3SPRNGRandomServiceFactory.h \
 phys-services/I3ParticleDataService.h \
 phys-services/I3FileOMKey2MBIDFactory.h \
+phys-services/I3MediumService.h \
+phys-services/I3MediumServiceFactory.h \
 phys-source/I3DefaultDetectorStatusSource.h \
 phys-source/I3DefaultCalibrationSource.h \
 phys-source/I3DefaultMonitoringSource.h \
