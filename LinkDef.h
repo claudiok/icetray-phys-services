@@ -32,6 +32,10 @@
 #pragma link C++ class I3MCCalibrationFiller;
 #pragma link C++ class I3MCRawDOMStatusFiller;
 
+#pragma link C++ class I3XMLFileCalibrationSource;
+#pragma link C++ class I3XMLFileGeometrySource;
+#pragma link C++ class I3XMLFileDetectorStatusSource;
+
 #pragma link C++ class I3DummyCalibrationSource;
 #pragma link C++ class I3DummyDetectorStatusSource;
 #pragma link C++ class I3DummyPhysicsSource;

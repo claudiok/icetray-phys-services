@@ -41,4 +41,7 @@ phys-source/I3DummyDetectorStatusSource.h \
 phys-source/I3DummyCalibrationSource.h \
 phys-source/I3DummyMonitoringSource.h \
 phys-source/I3DummyPhysicsSource.h \
-phys-source/I3DummyGeometrySource.h 
+phys-source/I3DummyGeometrySource.h \
+phys-source/I3XMLFileGeometrySource.h \
+phys-source/I3XMLFileCalibrationSource.h \
+phys-source/I3XMLFileDetectorStatusSource.h
