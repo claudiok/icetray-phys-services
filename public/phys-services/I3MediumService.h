@@ -17,15 +17,14 @@
 
 // forward declarations
 
+class I3MediumProperties;
 
 // header files
 
-#include <fstream>
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include "TH1D.h"
 #include "TH2D.h"
-#include "dataclasses/I3Constants.h"
 #include "services/I3Logging.h"
 
 // definitions
@@ -38,28 +37,36 @@ using namespace std;
 /**
  * @brief This class describes the medium of the Amanda/IceCube detector.
  * 
- * It might be initialized with an ice properties file.
- * It returns default values (bulk ice), which are independent of the
- * wavelength, if it is not initialized.
+ * It might be constructed with specific ice properties.
+ * Some methods return default values (bulkice), which are independent of the
+ * wavelength, if not:
+ * - Absorptivity
+ * - InvEffScattLength
+ * - AbsorptionLength
+ * - EffScattLength
+ * - AveragedAbsorptivity
+ * - AveragedInvEffScattLength
+ * - AveragedAbsorptionLength
+ * - AveragedEffScattLength
+ * - GetAveragedAbsorptionLengthHistogram
+ * - GetAveragedEffScatteringLengthHistogram
+ * - GetAbsorptionLengthHistogram
+ * - GetEffScatteringLengthHistogram
  * 
- * About the ice properties file:
- * - it is important that it starts with NLAYER NWVL LAYER ...
- * - layer depth should be ordered with increasing values, with constant widths
- * - if layer widths are not constant or layer depths are not ordered, 
- *   it will work as well, but integration results will be wrong
- * - if argument of depths or wavelengths are out of bounds
- *   (what is defined in the ice properties file) then the results are only
- *   partially correct (depth and wavelength are set to their limits before
- *   calculation)
+ * 
+ * About the ice properties:
+ * - layers should have constant width
+ * - properties should be given for each layer within the same wavelength
+ * 	 interval with constant binning
+ * - RECO_WAVELENGTH should be within the wavelength interval
  * 
  * Possible improvements (?):
- * - allow for other I3dB input
- * - default hardcoded bulk ice: could depend on wavelength
- * - introduce x-y dependence --> simply add methods replacing z with vectors or the like
+ * - default hardcoded bulk ice could depend on wavelength
+ * - introduce x-y dependence (simply add methods replacing z with vectors or the like)
  * 
  * Measurements of effective scattering and absorption lengths at lambda = 532 nm. Not here ...
- * Here: millenium model Kurt/Buford:
- * - use 380 nm here (in an extended range of depths: measurements at 532 nm
+ * Here: millenium model Woschnagg/Price:
+ * - use 380 nm (in an extended range of depths: measurements at 532 nm
  *   and at different other wavelengths for a more restricted range)
  * - n_group, n, scatt, abs, mean scatt. angle are all functions of frequency.
  */
@@ -78,8 +85,20 @@ public:
 
 	/**
 	 * @brief Default constructor.
+	 * 
+	 * The medium is supposed to be bulkice!
 	 */
 	I3MediumService();
+  
+  /**
+   * @brief Constructor.
+   * 
+   * @param properties Specific ice properties.
+   * @param histoOutFilename Path/name of a ROOT file to dump
+   * lookup tables into (optional).
+   */
+  explicit I3MediumService(const I3MediumProperties& properties,
+  	const string& histoOutFilename = "");
 	
 	/**
 	 * @brief Destructor.
@@ -87,24 +106,11 @@ public:
   virtual ~I3MediumService();
   
   /**
-   * @brief Initialize the medium from an ice properties file.
+   * @brief Returns, if the medium is supposed to be bulkice.
    * 
-   * If the medium is not inititialized, it is supposed to be bulk ice.
-   * 
-   * @param propInFilename Path/name of an ice properties file.
-   * @param histoOutFilename Path/name of a ROOT file to dump
-   * lookup tables into (optional).
-   * @return True, if the medium is initialized.
+   * @return True, if the medium is bulkice.
    */
-  bool Initialize
-  	(const string& propInFilename, const string& histoOutFilename = "");
-  	
-  /**
-   * @brief Returns, if the medium is initialized from an ice properties file.
-   * 
-   * @return True, if the medium is initialized.
-   */
-  bool IsInitialized();
+  bool IsBulkice();
 
 	/**
 	 * @brief Returns NPhase at a given wavelength.
@@ -241,9 +247,9 @@ public:
 	 * @brief Sets the absorptivity.
 	 * 
 	 * Methods for bulk ice (neither depend on wavelength).
-	 * @param absy Absorptivity.
+	 * @param absorptivity Absorptivity.
 	 */
-  void SetBulkIceAbsorptivity(double absy);
+  void SetBulkIceAbsorptivity(double absorptivity);
 
 	/**
 	 * @brief Returns the inverse effective scattering length.
@@ -257,9 +263,9 @@ public:
 	 * @brief Sets the inverse effective scattering length.
 	 * 
 	 * Methods for bulk ice (neither depend on wavelength).
-	 * @param invlen The inverse effective scattering length.
+	 * @param invEffScattLen The inverse effective scattering length.
 	 */
-  void SetBulkiceInvEffScattLength(double invlen);
+  void SetBulkiceInvEffScattLength(double invEffScattLen);
 
 	/**
 	 * @brief Returns the absorption length.
@@ -342,8 +348,8 @@ public:
 	/**
 	 * @brief Returns the averaged absorptivity at a given depth and wavelength.
 	 * 
-	 * @param z1
-	 * @param z2
+	 * @param z1 Lower edge.
+	 * @param z2 Upper edge.
 	 * @param wavelength Wavelength in nm
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Averaged absorptivity.
@@ -354,8 +360,8 @@ public:
 	/**
 	 * @brief Returns the averaged inverse effective scattering length at a given depth and wavelength.
 	 * 
-	 * @param z1
-	 * @param z1
+	 * @param z1 Lower edge.
+	 * @param z2 Upper edge.
 	 * @param wavelength Wavelength in nm
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Averaged inverse effective scattering length.
@@ -366,8 +372,8 @@ public:
 	/**
 	 * @brief Returns the averaged absorption length at a given depth and wavelength.
 	 * 
-	 * @param z1
-	 * @param z2
+	 * @param z1 Lower edge.
+	 * @param z2 Upper edge.
 	 * @param wavelength Wavelength in nm
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Averaged absorption length.
@@ -378,8 +384,8 @@ public:
 	/**
 	 * @brief Returns the averaged effective scattering length at a given depth and wavelength.
 	 * 
-	 * @param z1
-	 * @param z2
+	 * @param z1 Lower edge.
+	 * @param z2 Upper edge.
 	 * @param wavelength Wavelength in nm
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Averaged effective scattering length.
@@ -390,21 +396,12 @@ public:
 private:
 	const static double BULKICE_ABSORPTION_LENGTH;
 	const static double BULKICE_EFF_SCATT_LENGTH;
+	const static double C_VACUUM;
 	const static double EPSILON;
+	const static double INV_C_VACUUM;
 	const static double MAX_WAVELENGTH_PRICE;
 	const static double MEAN_SCATT_COSINE;
 	const static double MIN_WAVELENGTH_PRICE;
-	
-	const static char COMMENT_TOKEN;
-	const static string NLAYER_TOKEN;
-	const static string NWVL_TOKEN;
-	const static string LAYER_TOKEN;
-	const static string ABS_TOKEN;
-	const static string SCAT_TOKEN;
-
-
-	static double C_VACUUM(){ return 2.99792458e-1; }
-	static double InvC_VACUUM(){ return 1.0 / C_VACUUM(); }
 
 
   // private copy constructors and assignment
@@ -412,17 +409,20 @@ private:
   I3MediumService operator=(const I3MediumService& );
 
   void CheckBounds(double& depth, double& wavelength);
+  void CheckProperties(const I3MediumProperties& properties, unsigned int k);
   void CheckWLBounds(double & wavelength); // from Price/Woschnagg analytical formula
+  void Configure(const I3MediumProperties& properties,
+  	const string& histoOutFilename);
 	void DumpLookupTable(const string& histoOutFilename);
   void GetBin
   	(TAxis* axis, double val, int& bin1, int& bin2, double& delta);
-	int GetNextToken(istream& f, string& token);
   void InitLookupTable(); // initialization of the lookup tables
   double Interp2DLin // to interpolate linear
   	(double& depth, double& wavelength, const TH2D* h); // linear interpolation
   double Interp2DIntLin // interp2D_intlin: given hderiv is lin. interp., h (\int h) is interp. quadratically.
 	  (double& depth, double& wavelength, const TH2D* h, const TH2D* hDeriv); // quad. interpolation
-	bool IsInitializedWithWarning();
+	bool IsBulkiceWithWarning();
+	void Release();
 
   // instance member data
   double bulkiceAbsorptivity_;
@@ -431,12 +431,13 @@ private:
   TH2D* hIntEffScattLen_;
   TH2D* hIceLayerAbsorptivity_; // histos of abs./scatt. w.r.t. the depth and wavelength 
   TH2D* hIceLayerInvEffScattLen_;
-  bool isInitialized_;
+  bool isBulkice_;
   double meanScatCosine_;
 
+	unsigned int nlayer_, nwl_;
   double minz_, maxz_, binw_;
-  double wlmin_, wlstep_, minwl_, maxwl_;
-  int nlayer_, nwl_, recobinwl_, nbin_;
+  double minwl_, maxwl_, wlstep_;
+  int recobinwl_;
 
 ////////////////////////////////////////////////////////////////
 // That's Amanda framework stuff
@@ -489,8 +490,6 @@ public:
 	 * @param wavelength Wavelength (optional; default is RECO_WAVELENGTH).
 	 * @return Histogram
 	 * - The caller takes ownership of the histogram!!!
-	 * (Here one should return a smart pointer, but is Amanda software able
-	 * to deal with smart pointers?)
 	 */
   TH1D* GetAveragedAbsorptionLengthHistogram
   	(const string& name="h", int nbin=100, double from=0,
@@ -507,8 +506,6 @@ public:
 	 * @param wavelength Wavelength (optional; default is RECO_WAVELENGTH).
 	 * @return Histogram
 	 * - The caller takes ownership of the histogram!!!
-	 * (Here one should return a smart pointer, but is Amanda software able
-	 * to deal with smart pointers?)
 	 */
   TH1D* GetAveragedEffScatteringLengthHistogram
   	(const string& name="h", int nbin=100, double from=0,
@@ -524,8 +521,6 @@ public:
 	 * @param wavelength Wavelength (optional; default is RECO_WAVELENGTH).
 	 * @return Histogram
 	 * - The caller takes ownership of the histogram!!!
-	 * (Here one should return a smart pointer, but is Amanda software able
-	 * to deal with smart pointers?)
 	 */
   TH1D* GetAbsorptionLengthHistogram
   	(const string& name="h", int nbin=100,
@@ -541,8 +536,6 @@ public:
 	 * @param wavelength Wavelength (optional; default is RECO_WAVELENGTH).
 	 * @return Histogram
 	 * - The caller takes ownership of the histogram!!!
-	 * (Here one should return a smart pointer, but is Amanda software able
-	 * to deal with smart pointers?)
 	 */
   TH1D* GetEffScatteringLengthHistogram
   	(const string& name="h", int nbin=100,
@@ -553,26 +546,26 @@ public:
 	// logging
 	SET_LOGGER("I3MediumService");
 	
-	// ROOT macro
-  ClassDef(I3MediumService,0);
+	// ROOT macro ... we do not need it
+  // ClassDef(I3MediumService,0);
 };
 
 typedef shared_ptr<I3MediumService> I3MediumServicePtr;
 
 // inline methods
 
-inline bool I3MediumService::IsInitialized(){
-	return isInitialized_;
+inline bool I3MediumService::IsBulkice(){
+	return isBulkice_;
 }
 
-inline bool I3MediumService::IsInitializedWithWarning(){
-	if(!IsInitialized()) log_warn("using bulk ice medium");	
+inline bool I3MediumService::IsBulkiceWithWarning(){
+	if(!IsBulkice()) log_warn("using bulk ice medium");	
 	
-	return IsInitialized();
+	return IsBulkice();
 }
 
 inline double I3MediumService::InvC_ICE(double wavelength){
-  return InvC_VACUUM() * NGroup(wavelength);
+  return INV_C_VACUUM * NGroup(wavelength);
 }
 
 inline double I3MediumService::C_ICE(double wavelength){
@@ -611,16 +604,16 @@ inline double I3MediumService::BulkIceAbsorptivity(){
 	return bulkiceAbsorptivity_;
 }
 
-inline void I3MediumService::SetBulkIceAbsorptivity(double absy){
-	bulkiceAbsorptivity_ = absy;
+inline void I3MediumService::SetBulkIceAbsorptivity(double absorptivity){
+	bulkiceAbsorptivity_ = absorptivity;
 }
 
 inline double I3MediumService::BulkIceInvEffScattLength(){
 	return bulkiceInvEffScattLength_;
 }
 
-inline void I3MediumService::SetBulkiceInvEffScattLength(double invlen){
-	bulkiceInvEffScattLength_ = invlen;
+inline void I3MediumService::SetBulkiceInvEffScattLength(double invEffScattLen){
+	bulkiceInvEffScattLength_ = invEffScattLen;
 }
 
 inline double I3MediumService::BulkIceAbsorptionLength(){

@@ -16,31 +16,28 @@
 
 #include "phys-services/I3MediumService.h"
 
-ClassImp(I3MediumService);
+// ClassImp(I3MediumService);
 
 // other header files
 
 #include <algorithm>
 #include <ctype.h>
 #include "TFile.h"
+#include "dataclasses/I3Constants.h"
 #include "dataclasses/I3Units.h"
+#include "phys-services/I3MediumProperties.h"
 
 // implementation
 
 const double I3MediumService::BULKICE_ABSORPTION_LENGTH = 98.0;
 const double I3MediumService::BULKICE_EFF_SCATT_LENGTH = 33.3;
+const double I3MediumService::C_VACUUM = I3Constants::c;
 const double I3MediumService::EPSILON = 1e-7;
+const double I3MediumService::INV_C_VACUUM = 1. / C_VACUUM;
 const double I3MediumService::MAX_WAVELENGTH_PRICE = 600.;
 const double I3MediumService::MEAN_SCATT_COSINE = 0.8;
 const double I3MediumService::MIN_WAVELENGTH_PRICE = 300.;
 const double I3MediumService::RECO_WAVELENGTH = 380.;
-
-const char I3MediumService::COMMENT_TOKEN = '#';
-const string I3MediumService::NLAYER_TOKEN = "NLAYER";
-const string I3MediumService::NWVL_TOKEN = "NWVL";
-const string I3MediumService::LAYER_TOKEN = "LAYER";
-const string I3MediumService::ABS_TOKEN = "ABS";
-const string I3MediumService::SCAT_TOKEN = "SCAT";
 
 
 I3MediumService::I3MediumService()
@@ -48,122 +45,86 @@ I3MediumService::I3MediumService()
 		bulkiceInvEffScattLength_(1. / BULKICE_EFF_SCATT_LENGTH),
 		hIntAbsLen_(0), hIntEffScattLen_(0),
 		hIceLayerAbsorptivity_(0), hIceLayerInvEffScattLen_(0),
-		isInitialized_(false), meanScatCosine_(MEAN_SCATT_COSINE){
+		isBulkice_(false), meanScatCosine_(MEAN_SCATT_COSINE){
 }
 
 
-I3MediumService::~I3MediumService() {
-  delete hIntAbsLen_;
-  delete hIntEffScattLen_;
-  delete hIceLayerAbsorptivity_;
-  delete hIceLayerInvEffScattLen_;
-}
-
-
-int I3MediumService::GetNextToken(istream& f, string& token){
-  token.clear();
-  while(!f.eof()){
-    f >> token;
-    if(!token.empty() && (token[0] == COMMENT_TOKEN)){
-    	getline(f, token);
-    	token.clear();
-    }
-    else break;
-  }
-
-  return token.size();
-}
-
-
-bool I3MediumService::Initialize
-(const string& propInFilename, const string& histoOutFilename){
-  if(isInitialized_) return isInitialized_;
-	else if(propInFilename.empty()){
-		log_warn("using bulk ice medium");
-		return isInitialized_;
+I3MediumService::I3MediumService
+(const I3MediumProperties& properties, const string& histoOutFilename)
+	: bulkiceAbsorptivity_(1. / BULKICE_ABSORPTION_LENGTH),
+		bulkiceInvEffScattLength_(1. / BULKICE_EFF_SCATT_LENGTH),
+		hIntAbsLen_(0), hIntEffScattLen_(0),
+		hIceLayerAbsorptivity_(0), hIceLayerInvEffScattLen_(0),
+		isBulkice_(true), meanScatCosine_(MEAN_SCATT_COSINE){
+			
+	try{
+		Configure(properties, histoOutFilename);
+	}catch(...){
+		Release();
 	}
+}
 
-  log_info("using ice properties file: %s", propInFilename.c_str());
-  ifstream propInFile(propInFilename.c_str());
-  if (propInFile.fail())
-    log_fatal("cannot open file: %s", propInFilename.c_str());
 
-	//////////////////////////////////////////////////////////////
+I3MediumService::~I3MediumService(){
+	Release();
+}
 
-  string token;
-  while(GetNextToken(propInFile, token)){
-    if(token == NLAYER_TOKEN){
-      propInFile >> nlayer_;
-      nbin_ = nlayer_;
-      break;
-    }
-    else log_fatal("problem reading ice properties file, token %s\n",
-    	NLAYER_TOKEN.c_str());
-  }
 
-  while(GetNextToken(propInFile, token)){
-    if(token == NWVL_TOKEN){
-      propInFile >> nwl_ >> wlmin_ >> wlstep_;
-      break;
-    }
-    else log_fatal("problem reading ice properties file, token %s\n",
-    	NWVL_TOKEN.c_str());
-  }
-  minwl_ = wlmin_;
-  maxwl_ = wlmin_ + wlstep_ * nwl_;
+void I3MediumService::CheckProperties
+(const I3MediumProperties& properties, unsigned int k){
+	if((properties.Layers()[k].UpperEdge()
+		- properties.Layers()[k].LowerEdge()) != binw_)
+		log_fatal("non-constant width of layers");
+	if((properties.Layers()[k].AbsorptionCoefficents().Get().size() != nwl_)
+		|| (properties.Layers()[k].ScatteringCoefficents().Get().size()!= nwl_))
+		log_fatal("non-constant wavelength binning");
+	if((properties.Layers()[k].AbsorptionCoefficents().LowestWavelength() != minwl_)
+		|| (properties.Layers()[k].ScatteringCoefficents().LowestWavelength() != minwl_)
+		|| (properties.Layers()[k].AbsorptionCoefficents().HighestWavelength() != maxwl_)
+		|| (properties.Layers()[k].ScatteringCoefficents().HighestWavelength() != maxwl_))
+		log_fatal("non-constant wavelength interval");
+}
 
-  int currentlayer = 0;
-  while(GetNextToken(propInFile, token)){
-    if(token == LAYER_TOKEN){
-      double z1, z2;
-      propInFile >> z1 >> z2;
-	    ++currentlayer;
-      minz_ = z1;
-      binw_ = z2 - z1;
-      maxz_ = minz_ + nlayer_ * binw_;
-      break;
-    }
-    else log_fatal("problem reading ice propertyies file, token %s: %f %f",
-    	LAYER_TOKEN.c_str(), minz_, binw_);
-  }
 
-	//////////////////////////////////////////////////////////////
-
-	delete hIceLayerAbsorptivity_; hIceLayerAbsorptivity_ = 0;
+void I3MediumService::Configure
+(const I3MediumProperties& properties, const string& histoOutFilename){
+	// geometry
+	if(!(nlayer_ = properties.Layers().size())) log_fatal("undefined layers");
+	minz_ = properties.Layers()[0].LowerEdge();
+	binw_ = properties.Layers()[0].UpperEdge() - minz_;
+	maxz_ = nlayer_ * binw_ + minz_;
+	// wavelength
+	if(!(nwl_ = properties.Layers()[0].AbsorptionCoefficents().Get().size()))
+		log_fatal("undefined wavelength binning");
+	minwl_ = properties.Layers()[0].AbsorptionCoefficents().LowestWavelength();
+	maxwl_ = properties.Layers()[0].AbsorptionCoefficents().HighestWavelength();
+	wlstep_ = (maxwl_ - minwl_) / nwl_;
+	if((RECO_WAVELENGTH < minwl_)
+		|| (RECO_WAVELENGTH > maxwl_)
+		|| (minwl_ == maxwl_))
+		log_fatal("wavelength interval to small");
+		
   hIceLayerAbsorptivity_ =
-  	new TH2D("hIceLayerAbsorptivity_", "absorptivity", nbin_, minz_, maxz_,
-  		nwl_, wlmin_, wlmin_ + nwl_ * wlstep_);
-	delete hIceLayerInvEffScattLen_; hIceLayerInvEffScattLen_ = 0;
+  	new TH2D("hIceLayerAbsorptivity_", "absorptivity",
+  		nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
   hIceLayerInvEffScattLen_ =
-  	new TH2D("hIceLayerInvEffScattLen_", "inverse eff. scatt. length", nbin_,
-  		minz_, maxz_, nwl_, wlmin_, wlmin_ + nwl_ * wlstep_);
+  	new TH2D("hIceLayerInvEffScattLen_", "inverse eff. scatt. length",
+  		nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
   recobinwl_ = hIceLayerAbsorptivity_->GetYaxis()->FindBin(RECO_WAVELENGTH);
-
-  // fill the scatt. and abs. histo, including unfl/ovfl bins (copy first/last bin content)
-  while(GetNextToken(propInFile, token)){
-    if(token == LAYER_TOKEN) ++currentlayer;
-    else if(token == ABS_TOKEN){
-      for(int i = 1; i <= nwl_; ++i){
-				double val;
-				propInFile >> val;
-				hIceLayerAbsorptivity_->SetBinContent(currentlayer, i, val);
-				if(currentlayer == 1) hIceLayerAbsorptivity_->SetBinContent(0, i, val);
-				else if(currentlayer == nlayer_)
-					hIceLayerAbsorptivity_->SetBinContent(nlayer_ + 1, i, val);
-      }
-    }
-    else if(token == SCAT_TOKEN){
-      for(int i = 1; i <= nwl_; ++i){
-				double val;
-				propInFile >> val;
-				hIceLayerInvEffScattLen_->SetBinContent(currentlayer, i, val);
-				if(currentlayer == 1) hIceLayerInvEffScattLen_->SetBinContent(0, i, val);
-				else if(currentlayer == nlayer_)
-					hIceLayerInvEffScattLen_->SetBinContent(nlayer_ + 1, i, val);
-      }
-    }
-  }
-  for(int i = 1; i <= nlayer_; ++i){
+	
+	//////////////////////////////////////////////////////////////
+	
+  // fill the scatt. and abs. histo, including unfl/ovfl bins 
+	for(unsigned int i = 1; i <= nlayer_; ++i){
+		CheckProperties(properties, i - 1);			
+		for(unsigned int j = 1; j <= nwl_; ++j){
+			hIceLayerAbsorptivity_->SetBinContent(i, j,
+				properties.Layers()[i - 1].AbsorptionCoefficents().Get()[j - 1]);
+			hIceLayerInvEffScattLen_->SetBinContent(i, j,
+				properties.Layers()[i - 1].ScatteringCoefficents().Get()[j - 1]);
+		}
+	}	
+  for(unsigned int i = 1; i <= nlayer_; ++i){
     hIceLayerInvEffScattLen_->SetBinContent(i, 0,
     	hIceLayerInvEffScattLen_->GetBinContent(i, 1));
     hIceLayerAbsorptivity_->SetBinContent(i, 0,
@@ -173,20 +134,45 @@ bool I3MediumService::Initialize
     hIceLayerAbsorptivity_->SetBinContent(i, nwl_ + 1,
     	hIceLayerAbsorptivity_->GetBinContent(i, nwl_));
   }
+  for(unsigned int j = 1; j <= nwl_; ++j){
+    hIceLayerInvEffScattLen_->SetBinContent(0, j,
+    	hIceLayerInvEffScattLen_->GetBinContent(1, j));
+    hIceLayerAbsorptivity_->SetBinContent(0, j,
+    	hIceLayerAbsorptivity_->GetBinContent(1, j));
+    hIceLayerInvEffScattLen_->SetBinContent(nlayer_ + 1, j,
+    	hIceLayerInvEffScattLen_->GetBinContent(nlayer_, j));
+    hIceLayerAbsorptivity_->SetBinContent(nlayer_ + 1, j,
+    	hIceLayerAbsorptivity_->GetBinContent(nlayer_, j));
+  }
 
 	//////////////////////////////////////////////////////////////
-
-  propInFile.close();
 
   InitLookupTable();
   DumpLookupTable(histoOutFilename);
   // redefine minz and maxz epsilon different, to have no problem with bounds
   minz_ = minz_ + EPSILON;
   maxz_ = maxz_ - EPSILON;
-
-  isInitialized_ = true;
-  return isInitialized_;
 }
+
+
+void I3MediumService::DumpLookupTable(const string& histoOutFilename){
+	if(!histoOutFilename.empty()){
+  	TFile* f = new TFile(histoOutFilename.c_str(), "recreate");
+  	try{
+	    if(!f->IsOpen())
+  	    log_error("cannot open file: %s", histoOutFilename.c_str());
+    	else{
+      	hIceLayerAbsorptivity_->Write();
+	      hIceLayerInvEffScattLen_->Write();
+  	    hIntAbsLen_->Write();
+    	  hIntEffScattLen_->Write();
+      	f->Close();
+	    }
+  	  delete f;
+	  }catch(...){ delete f; }
+	}
+}
+
 
 void I3MediumService::InitLookupTable(){
   // save integrated absorptivity and eff. scatt. length
@@ -194,22 +180,20 @@ void I3MediumService::InitLookupTable(){
   // This is used to introduce ice layering PDF in Amanda/IceCube,
   // with fast computation
 
-	delete hIntAbsLen_; hIntAbsLen_ = 0;
   hIntAbsLen_ =
   	new TH2D("hintabslen","integrated abs. length",
-  		nbin_, minz_, maxz_, nwl_, wlmin_, wlmin_ + nwl_ * wlstep_);
-	delete hIntEffScattLen_; hIntEffScattLen_ = 0;
+  		nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
   hIntEffScattLen_ =
   	new TH2D("hIntEffScattLen_","integrated eff. scatt. length",
-  		nbin_, minz_, maxz_, nwl_, wlmin_, wlmin_ + nwl_ * wlstep_);
+  		nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
 
-  for(int j = 1; j <= nwl_; ++j){ // set to 0 integration the depth unfl bin
+  for(unsigned int j = 1; j <= nwl_; ++j){ // set to 0 integration the depth unfl bin
     hIntAbsLen_->SetBinContent(0, j, 0);
     hIntEffScattLen_->SetBinContent(0, j, 0);
   }
 
-  for(int j = 0;j <= nwl_ + 1; ++j){ // loop over wavelengths
-    for(int i = 1; i <= nbin_ + 1; ++i){ // loop over depths
+  for(unsigned int j = 0; j <= nwl_ + 1; ++j){ // loop over wavelengths
+    for(unsigned int i = 1; i <= nlayer_ + 1; ++i){ // loop over depths
       double cwl = hIntAbsLen_->GetYaxis()->GetBinCenter(j);
       double c = hIntAbsLen_->GetXaxis()->GetBinCenter(i);
 
@@ -249,22 +233,11 @@ void I3MediumService::InitLookupTable(){
 }
 
 
-void I3MediumService::DumpLookupTable(const string& histoOutFilename){
-	if(!histoOutFilename.empty()){
-  	TFile* f = new TFile(histoOutFilename.c_str(), "recreate");
-  	try{
-	    if(!f->IsOpen())
-  	    log_error("cannot open file: %s", histoOutFilename.c_str());
-    	else{
-      	hIceLayerAbsorptivity_->Write();
-	      hIceLayerInvEffScattLen_->Write();
-  	    hIntAbsLen_->Write();
-    	  hIntEffScattLen_->Write();
-      	f->Close();
-	    }
-  	  delete f;
-	  }catch(...){ delete f; }
-	}
+void I3MediumService::Release(){
+	delete hIceLayerInvEffScattLen_;
+	delete hIceLayerAbsorptivity_;
+	delete hIntEffScattLen_;
+	delete hIntAbsLen_;
 }
 
 
@@ -400,14 +373,14 @@ double I3MediumService::Interp2DIntLin
 
 
 double I3MediumService::Absorptivity(double depth, double wavelength){
-  if(!IsInitializedWithWarning()) return BulkIceAbsorptivity();
+  if(!IsBulkiceWithWarning()) return BulkIceAbsorptivity();
   
   return Interp2DLin(depth, wavelength, hIceLayerAbsorptivity_);
 }
 
 
 double I3MediumService::InvEffScattLength(double depth, double wavelength){
-  if(!IsInitializedWithWarning()) return BulkIceInvEffScattLength();
+  if(!IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
   
   return Interp2DLin(depth, wavelength, hIceLayerInvEffScattLen_);
 }
@@ -415,8 +388,9 @@ double I3MediumService::InvEffScattLength(double depth, double wavelength){
 
 double I3MediumService::AveragedAbsorptivity
 (double z1, double z2, double wavelength){
-  if(!IsInitializedWithWarning()) return BulkIceAbsorptivity();
+  if(!IsBulkiceWithWarning()) return BulkIceAbsorptivity();
   
+  if(z2 < z1) swap(z1, z2);
   double valz1 = Interp2DIntLin(z1, wavelength, hIntAbsLen_, hIceLayerAbsorptivity_);
   double valz2 = Interp2DIntLin(z2, wavelength, hIntAbsLen_, hIceLayerAbsorptivity_);
 
@@ -428,8 +402,9 @@ double I3MediumService::AveragedAbsorptivity
 
 double I3MediumService::AveragedInvEffScattLength
 (double z1, double z2, double wavelength){
-  if(!IsInitializedWithWarning()) return BulkIceInvEffScattLength();
+  if(!IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
   
+  if(z2 < z1) swap(z1, z2);
   double valz1 = Interp2DIntLin(z1, wavelength, hIntEffScattLen_, hIceLayerInvEffScattLen_);
   double valz2 = Interp2DIntLin(z2, wavelength, hIntEffScattLen_, hIceLayerInvEffScattLen_);
 

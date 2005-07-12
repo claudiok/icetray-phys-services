@@ -1,0 +1,136 @@
+/**
+ * Definition of I3MediumPropertiesFile class
+ *
+ * (c) 2005
+ * the IceCube Collaboration
+ * $Id:  $
+ *
+ * @file I3MediumPropertiesFile.h
+ * @version $Revision:  $
+ * @date $Date:  $
+ * @author tschmidt
+ */
+
+#ifndef I3_MEDIUM_PROPERTIES_FILE_H_INCLUDED
+#define I3_MEDIUM_PROPERTIES_FILE_H_INCLUDED
+
+// forward declarations
+
+
+// header files
+
+#include <string>
+#include <fstream>
+#include <boost/shared_ptr.hpp>
+#include "phys-services/I3MediumProperties.h"
+#include "services/I3Logging.h"
+
+// definitions
+
+
+// namespace declarations
+
+
+/**
+ * @brief This class holds ice properties. It uses an ice properties file as input.
+ * 
+ * The format of an ice properties file is the following:
+ * - Comment lines must start with #
+ * 
+ * Header consists of:
+ * - NLAYER <VAR>number of layers specified in the file
+ * - NWVL <VAR>wavelength bins</VAR>, <VAR>lowest wavlength</VAR> and <VAR>wavelength step</VAR>
+ * 
+ * After header comes list of layers. Each layer starts with:
+ * - LAYER <VAR>lower edge</VAR> and <VAR>upper edge</VAR> where distances are wrt to some arbitrary origin
+ * 
+ * In layer section accepted commands are:
+ * - ABS <VAR>list of absorption coefficients per wavelength bin</VAR>
+ * - SCAT <VAR>list of effective scattering coefficients per wavelength bin</VAR>
+ * 
+ * Each list has to have correct number of entries.
+ * Layer description is considered complete when new LAYER line is encountered.
+ * Layers don't have to come or be described in any specific order. 
+ */
+class I3MediumPropertiesFile : public I3MediumProperties{
+public:
+	
+  /**
+   * @brief Default constructor.
+   */
+  I3MediumPropertiesFile();
+
+  /**
+   * @brief Constructor.
+   * 
+   * @param propInFilename Path/name of an ice properties file.
+	 */
+  explicit I3MediumPropertiesFile(const string& propInFilename);
+
+  /**
+   * @brief Destructor.
+   */ 
+  virtual ~I3MediumPropertiesFile();
+
+  /**
+   * @brief Clone ice properties.
+   * 
+   * @return A clone of this ice properties.
+   */
+  virtual I3MediumPropertiesPtr Clone() const;
+
+  /**
+   * @brief Configure.
+   * 
+   * @param propInFilename Path/name of an ice properties file.
+   */
+	void Configure(const string& propInFilename);
+	
+	/**
+	 * @brief Returns all ice layers including ice properties.
+	 * 
+	 * @return The collection of all ice layers including ice properties.
+	 * The collection is ordered, e. g. Layers()[0] will hold the lowest layer.
+	 * Layers are guaranteed to be disjoint and contiguous.
+	 * 
+	 * Within each layer: LowerEdge() < UpperEdge is guaranteed.
+	 * For each property: LowestWavelength <= HighestWavelength is guaranteed.
+	 */
+	virtual const STLVectorStoragePolicy<Layer>& Layers() const;
+
+private:
+	const static char COMMENT_TOKEN;
+	const static string NLAYER_TOKEN;
+	const static string NWVL_TOKEN;
+	const static string LAYER_TOKEN;
+	const static string ABS_TOKEN;
+	const static string SCAT_TOKEN;
+
+
+  // private copy constructors and assignment
+  I3MediumPropertiesFile(const I3MediumPropertiesFile&);
+  I3MediumPropertiesFile operator=(const I3MediumPropertiesFile&);
+
+	bool Contiguous(STLVectorStoragePolicy<Layer> layers);
+	unsigned int GetNextToken(istream& f, string& token);
+
+
+	// instance member data
+	STLVectorStoragePolicy<Layer> layers_;
+  	
+	// logging
+	SET_LOGGER("I3MediumPropertiesFile");
+
+	// ROOT macro ... we do not need it
+  // ClassDef(I3MediumPropertiesFile,0);
+};
+
+typedef shared_ptr<I3MediumPropertiesFile> I3MediumPropertiesFilePtr;
+
+
+inline const STLVectorStoragePolicy<I3MediumPropertiesFile::Layer>&
+I3MediumPropertiesFile::Layers() const{
+	return layers_;
+}
+
+#endif // I3_MEDIUM_PROPERTIES_FILE_H_INCLUDED
