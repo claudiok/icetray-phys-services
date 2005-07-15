@@ -252,7 +252,7 @@ private:
 
   // private copy constructors and assignment
   I3MediumProperties(const I3MediumProperties&);
-  I3MediumProperties operator=(const I3MediumProperties&);
+  I3MediumProperties& operator=(const I3MediumProperties&);
 
 	// ROOT macro ... we do not need it
   // ClassDef(I3MediumProperties,0);
