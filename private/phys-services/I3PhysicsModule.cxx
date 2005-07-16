@@ -39,7 +39,7 @@ using namespace std;
 I3ParticleDataService& I3PhysicsModule::GetParticleData(const string& name)
 {
   return I3ContextAccess<I3ParticleDataService>::
-    GetService(GetContext(),name);
+    GetService(GetContext(), name);
 }
 
 /**
@@ -50,41 +50,32 @@ I3ParticleDataService& I3PhysicsModule::GetParticleData(const string& name)
 I3RandomService& I3PhysicsModule::GetRandom(const string& name)
 {
   return I3ContextAccess<I3RandomService>::
-    GetService(GetContext(),name);
+    GetService(GetContext(), name);
 }
 
 
 bool I3PhysicsModule::HasMCEvent(I3Frame& frame, const string& name)
 {
-  if(I3FrameAccess<I3Event>::Exists(frame,name))
-    {
-      I3Event& event = I3FrameAccess<I3Event>::Get(frame,name);
-      I3MCEvent* mcevent = dynamic_cast<I3MCEvent*>(&event);
-      if(mcevent)
-	return true;
-    }
-  return false;
+  return GetMCEvent(frame, name, false);
 }
 
 /**
  * Gets a monte-carlo event out of a frame.  Just a helper method to 
- * simplify the
- * syntax.
+ * simplify the syntax.
  * @return an I3MCEvent that is in the frame
  * @param frame the frame that you want the event out of.
  * @param name the name of the event in the frame, defaults to "Physics"
  */
-I3MCEvent& I3PhysicsModule::GetMCEvent(I3Frame& frame,const string& name)
+I3MCEvent& I3PhysicsModule::GetMCEvent(I3Frame& frame, const string& name)
 {
-  I3EventPtr eventPtr = frame.Get<I3EventPtr>(name);
-  I3MCEventPtr mcEventPtr = dynamic_pointer_cast<I3MCEvent>(eventPtr);
-  if(!mcEventPtr) log_fatal("failed to cast I3EventPtr to I3MCEventPtr");
-  return *mcEventPtr;
+  I3MCEventPtr mcEvent = GetMCEvent(frame, name, true);
+  if(!mcEvent) log_fatal("failed to cast I3EventPtr to I3MCEventPtr");
+  return *mcEvent;
 }
 
 /**
  * Puts a monte-carlo event in the frame.  
- * Just a helper method to simplify the syntax
+ * Just a helper method to simplify the syntax.
  * @param frame the frame to put the event into
  * @param event the event to put into the frame
  * @param name the name of the event in the frame.  Defaults to 'Physics'
@@ -104,7 +95,7 @@ bool I3PhysicsModule::PutMCEvent(I3Frame& frame,I3MCEventPtr event,
  */
 bool I3PhysicsModule::HasEvent(I3Frame& frame, const string& name )
 {
-  return I3FrameAccess<I3Event>::Exists(frame,name);
+  return GetEvent(frame, name, false);
 }
 
 /**
@@ -116,7 +107,9 @@ bool I3PhysicsModule::HasEvent(I3Frame& frame, const string& name )
  */
 I3Event& I3PhysicsModule::GetEvent(I3Frame& frame,const string& name )
 {
-  return I3FrameAccess<I3Event>::Get(frame,name);
+  I3EventPtr event = GetEvent(frame, name, true);
+  if(!event) log_fatal("undefined event");
+  return *event;
 }
 
 /**
@@ -128,24 +121,19 @@ I3Event& I3PhysicsModule::GetEvent(I3Frame& frame,const string& name )
  */
 bool I3PhysicsModule::PutEvent(I3Frame& frame,I3EventPtr event,const string& name)
 {
-  return I3FrameAccess<I3Event>::Put(frame,event,name);
+  return I3FrameAccess<I3Event>::Put(frame,event, name);
 }
 
 /**
- * checks to see if the frame has a monte-carlo event headerin it.
+ * checks to see if the frame has a monte-carlo event header in it.
  * @return true if an event headeris present, false if not
  * @param frame the frame we want to check
  * @param name the name of the event header in the frame.  Defaults to
  * 'PhysicsHeader'
  */
-bool I3PhysicsModule::HasMCEventHeader(I3Frame& frame,const string& name)
+bool I3PhysicsModule::HasMCEventHeader(I3Frame& frame, const string& name)
 {
-  if (!frame.Exists(name))
-    return false;
-
-  I3EventHeaderPtr eh = frame.Get<I3EventHeaderPtr>(name);
-  
-  return dynamic_pointer_cast<I3MCEventHeader>(eh);
+	return GetMCEventHeader(frame, name, false);
 }
 
 /**
@@ -159,16 +147,12 @@ bool I3PhysicsModule::HasMCEventHeader(I3Frame& frame,const string& name)
 I3MCEventHeader& I3PhysicsModule::GetMCEventHeader(I3Frame& frame,
 						   const string& name)
 {
-  I3EventHeaderPtr eh = frame.Get<I3EventHeaderPtr>(name);
-  if (!eh) 
-    log_fatal("frame contains no I3EventHeaders at all, much less an I3MCEventHeader");
+  I3MCEventHeaderPtr mcEventHeader = GetMCEventHeader(frame, name, true);
 
-  I3MCEventHeaderPtr mceh = dynamic_pointer_cast<I3MCEventHeader>(eh);
+  if (!mcEventHeader)
+    log_fatal("failed to cast I3EventHeaderPtr to I3MCEventHeaderPtr");
 
-  if (!mceh)
-    log_fatal("frame contains an event header, but not an MC event header");
-
-  return *mceh;
+  return *mcEventHeader;
 }
 
 /**
@@ -185,13 +169,12 @@ bool I3PhysicsModule::PutMCEventHeader(I3Frame& frame,
 				       const string& name)
 {
   log_trace(__PRETTY_FUNCTION__);
-  return I3FrameAccess<I3EventHeader>::Put(frame,header,name);
-  //  return frame.Put<I3EventHeaderPtr>(header, name);
+  return I3FrameAccess<I3EventHeader>::Put(frame, header, name);
 }
 
 
 /**
- * checks to see if the frame has an event headerin it.
+ * checks to see if the frame has an event header in it.
  * @return true if an event headeris present, false if not
  * @param frame the frame we want to check
  * @param name the name of the event header in the frame.  Defaults to 
@@ -199,7 +182,7 @@ bool I3PhysicsModule::PutMCEventHeader(I3Frame& frame,
  */ 
 bool I3PhysicsModule::HasEventHeader(I3Frame& frame,const string& name)
 {
-  return I3FrameAccess<I3EventHeader>::Exists(frame,name);
+  return GetEventHeader(frame, name, false);
 }
 
 /**
@@ -213,7 +196,9 @@ bool I3PhysicsModule::HasEventHeader(I3Frame& frame,const string& name)
 I3EventHeader& I3PhysicsModule::GetEventHeader(I3Frame& frame,
 					       const string& name)
 {
-  return I3FrameAccess<I3EventHeader>::Get(frame,name);
+  I3EventHeaderPtr eventHeader = GetEventHeader(frame, name, true);
+  if(!eventHeader) log_fatal("undefined event header");
+  return *eventHeader;
 }
 
 /**
@@ -229,7 +214,7 @@ bool I3PhysicsModule::PutEventHeader(I3Frame& frame,
 				     I3EventHeaderPtr header,
 				     const string& name)
 {
-  return I3FrameAccess<I3EventHeader>::Put(frame,header,name);
+  return I3FrameAccess<I3EventHeader>::Put(frame, header, name);
 }
 
 /**
@@ -237,7 +222,7 @@ bool I3PhysicsModule::PutEventHeader(I3Frame& frame,
  */
 bool I3PhysicsModule::HasCalibration(I3Frame& frame, const string& name )
 {
-  return I3FrameAccess<I3Calibration>::Exists(frame,name);
+  return I3FrameAccess<I3Calibration>::Exists(frame, name);
 }
     
 /**
@@ -247,7 +232,7 @@ bool I3PhysicsModule::PutCalibration(I3Frame& frame,
 				     I3CalibPtr calib,
 				     const string& name )
 {
-  return I3FrameAccess<I3Calibration>::Put(frame,calib,name);
+  return I3FrameAccess<I3Calibration>::Put(frame, calib, name);
 }
    
 /**
@@ -255,7 +240,7 @@ bool I3PhysicsModule::PutCalibration(I3Frame& frame,
  */
 I3Calibration& I3PhysicsModule::GetCalibration(I3Frame& frame, const string& name )
 {
-  return I3FrameAccess<I3Calibration>::Get(frame,name);
+  return I3FrameAccess<I3Calibration>::Get(frame, name);
 }
     
 
@@ -267,7 +252,7 @@ I3Calibration& I3PhysicsModule::GetCalibration(I3Frame& frame, const string& nam
  */
 bool I3PhysicsModule::HasGeometry(I3Frame& frame,const string& name)
 {
-  return I3FrameAccess<I3Geometry>::Exists(frame,name);
+  return I3FrameAccess<I3Geometry>::Exists(frame, name);
 }
 
 /**
@@ -278,7 +263,7 @@ bool I3PhysicsModule::HasGeometry(I3Frame& frame,const string& name)
  */
 I3Geometry& I3PhysicsModule::GetGeometry(I3Frame& frame,const string& name)
 {
-  return I3FrameAccess<I3Geometry>::Get(frame,name);
+  return I3FrameAccess<I3Geometry>::Get(frame, name);
 }
 
 /**
@@ -292,18 +277,18 @@ bool I3PhysicsModule::PutGeometry(I3Frame& frame,
 				  I3GeometryPtr geometry,
 				  const string& name)
 {
-  return I3FrameAccess<I3Geometry>::Put(frame,geometry,name);
+  return I3FrameAccess<I3Geometry>::Put(frame, geometry, name);
 }
 
 /*
- * Checks to see if a frame has a geometry headerin it
+ * Checks to see if a frame has a geometry header in it
  * @param frame the frame we want to check
  * @param name the name of the geometry header in the frame
  * @return true if the frame has a geometry header, false if otherwise
  */
 bool I3PhysicsModule::HasGeometryHeader(I3Frame& frame,const string& name)
 {
-  return I3FrameAccess<I3GeometryHeader>::Exists(frame,name);
+  return I3FrameAccess<I3GeometryHeader>::Exists(frame, name);
 }
 
    
@@ -318,7 +303,7 @@ bool I3PhysicsModule::HasGeometryHeader(I3Frame& frame,const string& name)
 I3GeometryHeader& I3PhysicsModule::GetGeometryHeader(I3Frame& frame, 
 						     const string& name)
 {
-  return I3FrameAccess<I3GeometryHeader>::Get(frame,name);
+  return I3FrameAccess<I3GeometryHeader>::Get(frame, name);
 }
 
 /**
@@ -334,7 +319,7 @@ bool I3PhysicsModule::PutGeometryHeader(I3Frame& frame,
 					I3GeometryHeaderPtr header,
 					const string& name)
 {
-  return I3FrameAccess<I3GeometryHeader>::Put(frame,header,name);
+  return I3FrameAccess<I3GeometryHeader>::Put(frame, header, name);
 }
 
 
@@ -343,7 +328,7 @@ bool I3PhysicsModule::PutGeometryHeader(I3Frame& frame,
  */
 bool I3PhysicsModule::HasCalibrationHeader(I3Frame& frame,const string& name)
 {
-  return I3FrameAccess<I3CalibrationHeader>::Exists(frame,name);
+  return I3FrameAccess<I3CalibrationHeader>::Exists(frame, name);
 }
 
       
@@ -353,7 +338,7 @@ bool I3PhysicsModule::HasCalibrationHeader(I3Frame& frame,const string& name)
 I3CalibrationHeader& I3PhysicsModule::GetCalibrationHeader(I3Frame& frame, 
 							   const string& name)
 {
-  return I3FrameAccess<I3CalibrationHeader>::Get(frame,name);
+  return I3FrameAccess<I3CalibrationHeader>::Get(frame, name);
 }
 
 /**
@@ -363,7 +348,7 @@ bool I3PhysicsModule::PutCalibrationHeader(I3Frame& frame,
 					   I3CalibrationHeaderPtr header,
 					   const string& name)
 {
-  return I3FrameAccess<I3CalibrationHeader>::Put(frame,header,name);
+  return I3FrameAccess<I3CalibrationHeader>::Put(frame, header, name);
 }
 
 /**
@@ -376,7 +361,7 @@ bool I3PhysicsModule::PutCalibrationHeader(I3Frame& frame,
 bool I3PhysicsModule::HasDetectorStatus(I3Frame& frame, 
 					const string& name)
 {
-  return I3FrameAccess<I3DetectorStatus>::Exists(frame,name);
+  return I3FrameAccess<I3DetectorStatus>::Exists(frame, name);
 }
 
 /**
@@ -391,7 +376,7 @@ bool I3PhysicsModule::HasDetectorStatus(I3Frame& frame,
 I3DetectorStatus& I3PhysicsModule::GetDetectorStatus(I3Frame& frame,
 						     const string& name )
 {
-  return I3FrameAccess<I3DetectorStatus>::Get(frame,name);
+  return I3FrameAccess<I3DetectorStatus>::Get(frame, name);
 }
 
 /**
@@ -406,11 +391,11 @@ I3DetectorStatus& I3PhysicsModule::GetDetectorStatus(I3Frame& frame,
 bool I3PhysicsModule::PutDetectorStatus(I3Frame& frame,I3DetectorStatusPtr status,
 					const string& name)
 {
-  return I3FrameAccess<I3DetectorStatus>::Put(frame,status,name);
+  return I3FrameAccess<I3DetectorStatus>::Put(frame,status, name);
 }
 
 /**
- * checks to see if the frame has a  detector status headerin it.
+ * checks to see if the frame has a  detector status header in it.
  * @return true if an detector status headeris present, false if not
  * @param frame the frame we want to check
  * @param name the name of the detector status header in the frame.  Defaults to
@@ -419,7 +404,7 @@ bool I3PhysicsModule::PutDetectorStatus(I3Frame& frame,I3DetectorStatusPtr statu
 bool I3PhysicsModule::HasDetectorStatusHeader(I3Frame& frame,
 					      const string& name)
 {
-  return I3FrameAccess<I3DetectorStatusHeader>::Exists(frame,name);
+  return I3FrameAccess<I3DetectorStatusHeader>::Exists(frame, name);
 }
 
 /**
@@ -433,7 +418,7 @@ bool I3PhysicsModule::HasDetectorStatusHeader(I3Frame& frame,
 I3DetectorStatusHeader& I3PhysicsModule::GetDetectorStatusHeader(I3Frame& frame,
 								 const string& name)
 {
-  return I3FrameAccess<I3DetectorStatusHeader>::Get(frame,name);
+  return I3FrameAccess<I3DetectorStatusHeader>::Get(frame, name);
 }
 
 /**
@@ -449,7 +434,101 @@ bool I3PhysicsModule::PutDetectorStatusHeader(I3Frame& frame,
 					      I3DetectorStatusHeaderPtr header,
 					      const string& name)
 {
-  return I3FrameAccess<I3DetectorStatusHeader>::Put(frame,header,name);
+  return I3FrameAccess<I3DetectorStatusHeader>::Put(frame, header, name);
+}
+
+
+I3EventPtr
+I3PhysicsModule::GetEvent(I3Frame& frame, const string& name, bool strict)
+{
+	I3EventPtr event;
+	if(frame.Exists(name))
+	{
+		try{
+			event = frame.Get<I3EventPtr>(name);
+		} // try
+		catch(const std::exception& ex)
+		{
+			log_debug("Exception caught: %s", ex.what());
+			event = frame.Get<I3MCEventPtr>(name);		
+		} // catch(std::exception& ex)
+	} // if(frame.Exists(name))
+	else if(strict)
+		log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
+			name.c_str());
+			
+  return event;
+}
+
+
+I3EventHeaderPtr
+I3PhysicsModule::GetEventHeader(I3Frame& frame, const string& name, bool strict)
+{
+	I3EventHeaderPtr eventHeader;
+	if(frame.Exists(name))
+	{
+		try{
+			eventHeader = frame.Get<I3EventHeaderPtr>(name);
+		} // try
+		catch(const std::exception& ex)
+		{
+			log_debug("Exception caught: %s", ex.what());
+			eventHeader = frame.Get<I3MCEventHeaderPtr>(name);		
+		} // catch(std::exception& ex)
+	} // if(frame.Exists(name))
+	else if(strict)
+		log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
+			name.c_str());
+
+  return eventHeader;
+}
+
+
+I3MCEventPtr
+I3PhysicsModule::GetMCEvent(I3Frame& frame, const string& name, bool strict)
+{
+	I3MCEventPtr mcEvent;
+	if(frame.Exists(name))
+	{
+		try{
+			I3EventPtr event = frame.Get<I3EventPtr>(name);
+			mcEvent = dynamic_pointer_cast<I3MCEvent>(event);
+		} // try
+		catch(const std::exception& ex)
+		{
+			log_debug("Exception caught: %s", ex.what());
+			mcEvent = frame.Get<I3MCEventPtr>(name);		
+		} // catch(std::exception& ex)
+	} // if(frame.Exists(name))
+	else if(strict)
+		log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
+			name.c_str());
+
+  return mcEvent;
+}
+
+
+I3MCEventHeaderPtr
+I3PhysicsModule::GetMCEventHeader(I3Frame& frame, const string& name, bool strict)
+{
+	I3MCEventHeaderPtr mcEventHeader;
+	if(frame.Exists(name))
+	{
+		try{
+			I3EventHeaderPtr eventHeader = frame.Get<I3EventHeaderPtr>(name);
+			mcEventHeader = dynamic_pointer_cast<I3MCEventHeader>(eventHeader);
+		} // try
+		catch(const std::exception& ex)
+		{
+			log_debug("Exception caught: %s", ex.what());
+			mcEventHeader = frame.Get<I3MCEventHeaderPtr>(name);		
+		} // catch(std::exception& ex)
+	} // if(frame.Exists(name))
+	else if(strict)
+		log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
+			name.c_str());
+
+  return mcEventHeader;
 }
 
 

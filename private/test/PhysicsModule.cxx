@@ -57,7 +57,7 @@ namespace PhysicsModuleInterfaceTests
 	TEST_CLASS(DetectorStatusHeader);
       }      
       
-      { 
+      {
 	RootI3Frame frame(stream, execution);
 	ENSURE(!HasMCEvent(frame));
 	ENSURE(!HasEvent(frame));
@@ -70,6 +70,18 @@ namespace PhysicsModuleInterfaceTests
 	I3Event& e = GetMCEvent(frame);
 	ENSURE(&e == mce.get());
       }      
+      
+      {
+	RootI3Frame frame(stream, execution);
+	I3MCEventPtr mce(new I3MCEvent);
+	ENSURE(frame.Put<I3MCEventPtr>(mce, "Physics")); // this, nobody should do, but some do
+	ENSURE(HasMCEvent(frame));
+	ENSURE(HasEvent(frame));
+	ENSURE(&(GetMCEvent(frame)) == mce.get());
+	ENSURE(&(GetEvent(frame)) == mce.get());
+	I3Event& e = GetMCEvent(frame);
+	ENSURE(&e == mce.get());
+      }
 
       { 
 	RootI3Frame frame(stream, execution);
