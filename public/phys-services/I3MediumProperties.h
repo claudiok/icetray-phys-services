@@ -29,10 +29,6 @@ class I3MediumProperties;
 // definitions
 
 
-// namespace declarations
-
-using namespace std;
-
 /**
  * @brief This class provides an interface to the ice properties used by the I3MediumService.
  */
@@ -212,7 +208,7 @@ public:
 	/**
 	 * @brief Functor for sort algorithm.
 	 */
-	struct LayerLower : public binary_function<Layer,Layer,bool>{
+	struct LayerLower : public std::binary_function<Layer,Layer,bool>{
 		bool operator()(const Layer& x, const Layer& y) const{
 			return x.LowerEdge() < y.LowerEdge();
 		}

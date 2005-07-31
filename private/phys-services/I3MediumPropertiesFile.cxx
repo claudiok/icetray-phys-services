@@ -20,6 +20,11 @@
 // other header files
 
 #include <algorithm>
+#include <fstream>
+
+// namespace declarations
+
+using namespace std;
 
 // implementation
 

@@ -30,10 +30,6 @@ class I3MediumProperties;
 // definitions
 
 
-// namespace declarations
-
-using namespace std;
-
 /**
  * @brief This class describes the medium of the Amanda/IceCube detector.
  * 
@@ -98,7 +94,7 @@ public:
    * lookup tables into (optional).
    */
   explicit I3MediumService(const I3MediumProperties& properties,
-  	const string& histoOutFilename = "");
+  	const std::string& histoOutFilename = "");
 	
 	/**
 	 * @brief Destructor.
@@ -412,8 +408,8 @@ private:
   void CheckProperties(const I3MediumProperties& properties, unsigned int k);
   void CheckWLBounds(double & wavelength); // from Price/Woschnagg analytical formula
   void Configure(const I3MediumProperties& properties,
-  	const string& histoOutFilename);
-	void DumpLookupTable(const string& histoOutFilename);
+  	const std::string& histoOutFilename);
+	void DumpLookupTable(const std::string& histoOutFilename);
   void GetBin
   	(TAxis* axis, double val, int& bin1, int& bin2, double& delta);
   void InitLookupTable(); // initialization of the lookup tables
@@ -460,7 +456,7 @@ public:
 	 * or <VAR>all</VAR>)(optional; default is <VAR>all</VAR>).
 	 * @return The number of layers.
 	 */
-  static int GetNumberOfLayer(string ltype="all");
+  static int GetNumberOfLayer(std::string ltype="all");
 
 	/**
 	 * @brief Returns the type a the layer at a given z-coordinate.
@@ -468,7 +464,7 @@ public:
 	 * @param z Z-coordinate.
 	 * @return The type a the layer.
 	 */
-  static string GetLayerType(double z);
+  static std::string GetLayerType(double z);
 
 	/**
 	 * @brief Returns the (ordinal) number of the layer at a given z-coordinate.
@@ -492,7 +488,7 @@ public:
 	 * - The caller takes ownership of the histogram!!!
 	 */
   TH1D* GetAveragedAbsorptionLengthHistogram
-  	(const string& name="h", int nbin=100, double from=0,
+  	(const std::string& name="h", int nbin=100, double from=0,
   	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH);
 
 	/**
@@ -508,7 +504,7 @@ public:
 	 * - The caller takes ownership of the histogram!!!
 	 */
   TH1D* GetAveragedEffScatteringLengthHistogram
-  	(const string& name="h", int nbin=100, double from=0,
+  	(const std::string& name="h", int nbin=100, double from=0,
   	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH);
 
 	/**
@@ -523,7 +519,7 @@ public:
 	 * - The caller takes ownership of the histogram!!!
 	 */
   TH1D* GetAbsorptionLengthHistogram
-  	(const string& name="h", int nbin=100,
+  	(const std::string& name="h", int nbin=100,
   	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH);
 
 	/**
@@ -538,7 +534,7 @@ public:
 	 * - The caller takes ownership of the histogram!!!
 	 */
   TH1D* GetEffScatteringLengthHistogram
-  	(const string& name="h", int nbin=100,
+  	(const std::string& name="h", int nbin=100,
   	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH);
   	
 ////////////////////////////////////////////////////////////////

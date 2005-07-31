@@ -27,6 +27,10 @@
 #include "dataclasses/I3Units.h"
 #include "phys-services/I3MediumProperties.h"
 
+// namespace declarations
+
+using namespace std;
+
 // implementation
 
 const double I3MediumService::BULKICE_ABSORPTION_LENGTH = 98.0;

@@ -29,10 +29,6 @@ class I3Services;
 // definitions
 
 
-// namespace declarations
-
-using namespace std;
-
 /**
  * @brief This class installs an I3MediumService.
  * 
@@ -80,14 +76,14 @@ class I3MediumServiceFactory : public I3ServiceFactory{
 
   // instance member data
 	I3MediumServicePtr medium_;
-	string mediumPropInFilename_;
-	string mediumHistoOutFilename_;
+	std::string mediumPropInFilename_;
+	std::string mediumHistoOutFilename_;
 
 	// logging
 	SET_LOGGER("I3MediumServiceFactory");
 	
   // ROOT macro
-  ClassDef(I3MediumServiceFactory,0);
+  // ClassDef(I3MediumServiceFactory,0);
 };
 
 #endif // I3_MEDIUM_SERVICE_FACTORY_H_INCLUDED

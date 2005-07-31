@@ -20,15 +20,11 @@
 // header files
 
 #include <string>
-#include <fstream>
 #include <boost/shared_ptr.hpp>
 #include "phys-services/I3MediumProperties.h"
 #include "services/I3Logging.h"
 
 // definitions
-
-
-// namespace declarations
 
 
 /**
@@ -65,7 +61,7 @@ public:
    * 
    * @param propInFilename Path/name of an ice properties file.
 	 */
-  explicit I3MediumPropertiesFile(const string& propInFilename);
+  explicit I3MediumPropertiesFile(const std::string& propInFilename);
 
   /**
    * @brief Destructor.
@@ -84,7 +80,7 @@ public:
    * 
    * @param propInFilename Path/name of an ice properties file.
    */
-	void Configure(const string& propInFilename);
+	void Configure(const std::string& propInFilename);
 	
 	/**
 	 * @brief Returns all ice layers including ice properties.
@@ -100,11 +96,11 @@ public:
 
 private:
 	const static char COMMENT_TOKEN;
-	const static string NLAYER_TOKEN;
-	const static string NWVL_TOKEN;
-	const static string LAYER_TOKEN;
-	const static string ABS_TOKEN;
-	const static string SCAT_TOKEN;
+	const static std::string NLAYER_TOKEN;
+	const static std::string NWVL_TOKEN;
+	const static std::string LAYER_TOKEN;
+	const static std::string ABS_TOKEN;
+	const static std::string SCAT_TOKEN;
 
 
   // private copy constructors and assignment
@@ -112,7 +108,7 @@ private:
   I3MediumPropertiesFile operator=(const I3MediumPropertiesFile&);
 
 	bool Contiguous(STLVectorStoragePolicy<Layer> layers);
-	unsigned int GetNextToken(istream& f, string& token);
+	unsigned int GetNextToken(istream& f, std::string& token);
 
 
 	// instance member data
