@@ -48,7 +48,7 @@ class I3MediumServiceFactory : public I3ServiceFactory{
    * 
    * @param context the context in which the service will exist.
    */
-	I3MediumServiceFactory(const I3Context& context);
+	explicit I3MediumServiceFactory(const I3Context& context);
 
   /**
    * @brief Destructor.

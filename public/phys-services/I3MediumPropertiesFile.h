@@ -109,7 +109,11 @@ private:
 
 	bool Contiguous(STLVectorStoragePolicy<Layer> layers);
 	unsigned int GetNextToken(istream& f, std::string& token);
-
+  unsigned int GetNLayer(STLVectorStoragePolicy<Layer>& layers,
+    ifstream& propInFile);
+  void GetNWL(int& nwl, double& minwl, double& maxwl, ifstream& propInFile);
+  unsigned int GetLayers(STLVectorStoragePolicy<Layer>& layers,
+    int nwl, double minwl, double maxwl, ifstream& propInFile);
 
 	// instance member data
 	STLVectorStoragePolicy<Layer> layers_;
