@@ -2,7 +2,7 @@
  @page physics-module The Use of I3PhysicsModule
 
 Also availble:
-<a href="http://glacier.lbl.gov/offline/ICETRAY-APP/newphysmod.html">
+<a href=../ICETRAY-APP/newphysmod.html>
 PhysicsModule - Design and Writing</a> provides detailed instructions
 for writing an I3PhysicsModule.
 
