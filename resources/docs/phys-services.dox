@@ -55,13 +55,6 @@ to insulate users from changes in the lookup mechanics.
 as a service, to insulate users of changes in the coordinate systems used 
 and how the tables are accessed. 
 
-@section download Download
-
-The @c phys-services project is located in the production cvs archive on 
-glacier.lbl.gov.  CVSROOT should point to :ext:glacier.lbl.gov:/home/icecube/cvsroot and the module name is phys-services.
-It is included in the @c DATACLASS-APP metaproject, so there is no need to
-download it separate from the @c DATACLASS-APP metaproject
-
 <!--@section Test-->
 @section use Use
 This collection of services are not really intended to be used stand-alone, so 
