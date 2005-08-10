@@ -90,13 +90,13 @@ for writing an I3PhysicsModule.
  @code
  void Physics(I3Frame& frame){
     I3Event& event = GetEvent(frame);
-    I3EventHeader& event-header = GetEventHeader(frame);
+    I3EventHeader& eventHeader = GetEventHeader(frame);
 
     I3MCEvent& mcevent = GetMCEvent(frame);
-    I3MCEventHeader& mcevent-header = GetMCEventHeader(frame);
+    I3MCEventHeader& mceventHeader = GetMCEventHeader(frame);
  
     I3Geometry& geometry = GetGeometry(frame);
-    I3GeometryHeader& geometry-header = GetGeometryHeader(frame); 
+    I3GeometryHeader& geometryHeader = GetGeometryHeader(frame); 
  }
  @endcode
 
