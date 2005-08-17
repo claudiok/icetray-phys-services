@@ -20,7 +20,7 @@
 // header files
 
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <fstream>
 #include "phys-services/I3MediumProperties.h"
 #include "services/I3Logging.h"
 
@@ -92,7 +92,7 @@ public:
 	 * Within each layer: LowerEdge() < UpperEdge is guaranteed.
 	 * For each property: LowestWavelength <= HighestWavelength is guaranteed.
 	 */
-	virtual const STLVectorStoragePolicy<Layer>& Layers() const;
+	virtual const std::vector<Layer>& Layers() const;
 
 private:
 	const static char COMMENT_TOKEN;
@@ -107,28 +107,24 @@ private:
   I3MediumPropertiesFile(const I3MediumPropertiesFile&);
   I3MediumPropertiesFile operator=(const I3MediumPropertiesFile&);
 
-	bool Contiguous(STLVectorStoragePolicy<Layer> layers);
-	unsigned int GetNextToken(istream& f, std::string& token);
-  unsigned int GetNLayer(STLVectorStoragePolicy<Layer>& layers,
-    ifstream& propInFile);
-  void GetNWL(int& nwl, double& minwl, double& maxwl, ifstream& propInFile);
-  unsigned int GetLayers(STLVectorStoragePolicy<Layer>& layers,
-    int nwl, double minwl, double maxwl, ifstream& propInFile);
+	bool Contiguous(const std::vector<Layer>& layers);
+	unsigned int GetNextToken(std::istream& f, std::string& token);
+  unsigned int GetNLayer(std::vector<Layer>& layers, std::ifstream& propInFile);
+  void GetNWL(int& nwl, double& minwl, double& maxwl, std::ifstream& propInFile);
+  unsigned int GetLayers(std::vector<Layer>& layers,
+    int nwl, double minwl, double maxwl, std::ifstream& propInFile);
 
 	// instance member data
-	STLVectorStoragePolicy<Layer> layers_;
+	std::vector<Layer> layers_;
   	
 	// logging
 	SET_LOGGER("I3MediumPropertiesFile");
-
-	// ROOT macro ... we do not need it
-  // ClassDef(I3MediumPropertiesFile,0);
 };
 
 typedef shared_ptr<I3MediumPropertiesFile> I3MediumPropertiesFilePtr;
 
 
-inline const STLVectorStoragePolicy<I3MediumPropertiesFile::Layer>&
+inline const std::vector<I3MediumPropertiesFile::Layer>&
 I3MediumPropertiesFile::Layers() const{
 	return layers_;
 }

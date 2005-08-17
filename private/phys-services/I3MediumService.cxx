@@ -80,7 +80,7 @@ void I3MediumService::CheckProperties
 		- properties.Layers()[k].LowerEdge()) != binw_)
 		log_fatal("non-constant width of layers");
 	if((properties.Layers()[k].AbsorptionCoefficents().Get().size() != nwl_)
-		|| (properties.Layers()[k].ScatteringCoefficents().Get().size()!= nwl_))
+		|| (properties.Layers()[k].ScatteringCoefficents().Get().size() != nwl_))
 		log_fatal("non-constant wavelength binning");
 	if((properties.Layers()[k].AbsorptionCoefficents().LowestWavelength() != minwl_)
 		|| (properties.Layers()[k].ScatteringCoefficents().LowestWavelength() != minwl_)

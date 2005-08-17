@@ -22,7 +22,6 @@ class I3MediumProperties;
 // header files
 
 #include <string>
-#include <boost/shared_ptr.hpp>
 #include "TH1D.h"
 #include "TH2D.h"
 #include "services/I3Logging.h"
@@ -154,28 +153,6 @@ public:
   double C_ICE(double wavelength=RECO_WAVELENGTH);
 
 	/**
-	 * @brief Returns the inverse CosThetaC at a given relativistic beta and wavelength.
-	 * 
-	 * @param beta Relativistic beta
-	 * (optoinal; default <VAR>1</VAR>).
-	 * @param wavelength Wavelength in nm
-	 * (optional; default is RECO_WAVELENGTH).
-	 * @return Inverse CosThetaC.
-	 */
-  double InvCosThetaC(double beta=1, double wavelength=RECO_WAVELENGTH);
-
-	/**
-	 * @brief Returns CosThetaC at a given relativistic beta and wavelength.
-	 * 
-	 * @param beta Relativistic beta
-	 * (optoinal; default <VAR>1</VAR>).
-	 * @param wavelength Wavelength in nm
-	 * (optional; default is RECO_WAVELENGTH).
-	 * @return CosThetaC.
-	 */
-  double CosThetaC(double beta=1, double wavelength=RECO_WAVELENGTH);
-
-	/**
 	 * @brief Returns ThetaC at a given relativistic beta and wavelength.
 	 * 
 	 * @param beta Relativistic beta
@@ -187,51 +164,6 @@ public:
   double ThetaC(double beta=1, double wavelength=RECO_WAVELENGTH);
 
 	/**
-	 * @brief Returns SinThetaC at a given relativistic beta and wavelength.
-	 * 
-	 * @param beta Relativistic beta
-	 * (optoinal; default <VAR>1</VAR>).
-	 * @param wavelength Wavelength in nm
-	 * (optional; default is RECO_WAVELENGTH).
-	 * @return SinThetaC.
-	 */
-  double SinThetaC(double beta=1, double wavelength=RECO_WAVELENGTH);
-
-	/**
-	 * @brief Returns the inverse SinThetaC at a given relativistic beta and wavelength.
-	 * 
-	 * @param beta Relativistic beta
-	 * (optoinal; default <VAR>1</VAR>).
-	 * @param wavelength Wavelength in nm
-	 * (optional; default is RECO_WAVELENGTH).
-	 * @return Inverse SinThetaC.
-	 */
-  double InvSinThetaC(double beta=1, double wavelength=RECO_WAVELENGTH);
-
-	/**
-	 * @brief Returns TgThetaC at a given relativistic beta and wavelength.
-	 * 
-	 * @param beta Relativistic beta
-	 * (optoinal; default <VAR>1</VAR>).
-	 * @param wavelength Wavelength in nm
-	 * (optional; default is RECO_WAVELENGTH).
-	 * @return TgThetaC.
-	 */
-  double TgThetaC(double beta=1, double wavelength=RECO_WAVELENGTH);
-
-	/**
-	 * @brief Returns CtgThetaC at a given relativistic beta and wavelength.
-	 * 
-	 * @param beta Relativistic beta
-	 * (optoinal; default <VAR>1</VAR>).
-	 * @param wavelength Wavelength in nm
-	 * (optional; default is RECO_WAVELENGTH).
-	 * @return CtgThetaC.
-	 */
-  double CtgThetaC(double beta=1, double wavelength=RECO_WAVELENGTH);
-
-
-	/**
 	 * @brief Returns the absorptivity.
 	 * 
 	 * Methods for bulk ice (neither depend on wavelength).
@@ -240,28 +172,12 @@ public:
 	double BulkIceAbsorptivity();
 
 	/**
-	 * @brief Sets the absorptivity.
-	 * 
-	 * Methods for bulk ice (neither depend on wavelength).
-	 * @param absorptivity Absorptivity.
-	 */
-  void SetBulkIceAbsorptivity(double absorptivity);
-
-	/**
 	 * @brief Returns the inverse effective scattering length.
 	 * 
 	 * Methods for bulk ice (neither depend on wavelength).
 	 * @return The inverse effective scattering length.
 	 */
   double BulkIceInvEffScattLength();
-
-	/**
-	 * @brief Sets the inverse effective scattering length.
-	 * 
-	 * Methods for bulk ice (neither depend on wavelength).
-	 * @param invEffScattLen The inverse effective scattering length.
-	 */
-  void SetBulkiceInvEffScattLength(double invEffScattLen);
 
 	/**
 	 * @brief Returns the absorption length.
@@ -285,13 +201,6 @@ public:
 	 * @return The mean scattering cosine.
 	 */
   double MeanScatteringCosine();
-
-	/**
-	 * @brief Sets the mean scattering cosine.
-	 * 
-	 * @param cosine The mean scattering cosine.
-	 */
-  void SetMeanScatteringCosine(double cosine);
 
 	/**
 	 * @brief Returns the absorptivity at a given depth and wavelength.
@@ -541,9 +450,6 @@ public:
   	
 	// logging
 	SET_LOGGER("I3MediumService");
-	
-	// ROOT macro ... we do not need it
-  // ClassDef(I3MediumService,0);
 };
 
 typedef shared_ptr<I3MediumService> I3MediumServicePtr;
@@ -568,48 +474,16 @@ inline double I3MediumService::C_ICE(double wavelength){
   return 1.0 / InvC_ICE(wavelength);
 }
 
-inline double I3MediumService::InvCosThetaC(double beta, double wavelength){
-  return NPhase(wavelength) * beta;
-}
-
-inline double I3MediumService::CosThetaC(double beta, double wavelength){
-  return 1.0 / InvCosThetaC(beta, wavelength);
-}
-
 inline double I3MediumService::ThetaC(double beta, double wavelength){
-  return acos(CosThetaC(beta, wavelength));
-}
-
-inline double I3MediumService::SinThetaC(double beta, double wavelength){
-  return sin(ThetaC(beta, wavelength));
-}
-
-inline double I3MediumService::InvSinThetaC(double beta, double wavelength){
-  return 1. / sin(ThetaC(beta, wavelength));
-}
-
-inline double I3MediumService::TgThetaC(double beta, double wavelength){
-  return SinThetaC(beta, wavelength) / CosThetaC(beta, wavelength);
-}
-
-inline double I3MediumService::CtgThetaC(double beta, double wavelength){
-  return CosThetaC(beta, wavelength) / SinThetaC(beta, wavelength);
+  return acos(1.0 / (NPhase(wavelength) * beta));
 }
 
 inline double I3MediumService::BulkIceAbsorptivity(){
 	return bulkiceAbsorptivity_;
 }
 
-inline void I3MediumService::SetBulkIceAbsorptivity(double absorptivity){
-	bulkiceAbsorptivity_ = absorptivity;
-}
-
 inline double I3MediumService::BulkIceInvEffScattLength(){
 	return bulkiceInvEffScattLength_;
-}
-
-inline void I3MediumService::SetBulkiceInvEffScattLength(double invEffScattLen){
-	bulkiceInvEffScattLength_ = invEffScattLen;
 }
 
 inline double I3MediumService::BulkIceAbsorptionLength(){
@@ -622,10 +496,6 @@ inline double I3MediumService::BulkIceEffScattLength(){
 
 inline double I3MediumService::MeanScatteringCosine(){
 	return meanScatCosine_;
-}
-
-inline void I3MediumService::SetMeanScatteringCosine(double cosine){
-  	meanScatCosine_ = cosine;
 }
 
 inline double I3MediumService::AbsorptionLength

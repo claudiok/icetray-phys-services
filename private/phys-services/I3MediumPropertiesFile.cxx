@@ -71,7 +71,7 @@ I3MediumPropertiesFile::Configure(const string& propInFilename){
 
 	//////////////////////////////////////////////////////////////
 
-  STLVectorStoragePolicy<Layer> layers;
+  std::vector<Layer> layers;
   double minwl, maxwl;
   int nwl;
   
@@ -96,7 +96,7 @@ I3MediumPropertiesFile::Configure(const string& propInFilename){
 
 
 bool
-I3MediumPropertiesFile::Contiguous(STLVectorStoragePolicy<Layer> layers){
+I3MediumPropertiesFile::Contiguous(const std::vector<Layer>& layers){
 	for(unsigned int i = 1; i < layers.size(); ++i)
 		if(layers[i - 1].UpperEdge() != layers[i].LowerEdge()) return false;
 	return true;
@@ -119,7 +119,7 @@ I3MediumPropertiesFile::GetNextToken(istream& f, string& token){
 
 
 unsigned int
-I3MediumPropertiesFile::GetNLayer(STLVectorStoragePolicy<Layer>& layers,
+I3MediumPropertiesFile::GetNLayer(std::vector<Layer>& layers,
 ifstream& propInFile){
   int n;
   string token;
@@ -155,7 +155,7 @@ ifstream& propInFile){
 }
 
 unsigned int
-I3MediumPropertiesFile::GetLayers(STLVectorStoragePolicy<Layer>& layers,
+I3MediumPropertiesFile::GetLayers(std::vector<Layer>& layers,
 int nwl, double minwl, double maxwl, ifstream& propInFile){
   unsigned int currentLayer = 0;
   string token;

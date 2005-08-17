@@ -22,9 +22,7 @@ class I3MediumProperties;
 // header files
 
 #include <functional>
-#include <boost/shared_ptr.hpp>
-#include "dataclasses/StoragePolicy.h"
-#include "dataclasses/STLVectorStoragePolicy.h"
+#include <vector>
 
 // definitions
 
@@ -42,89 +40,74 @@ public:
 	 */
 	class Layer{
 		public:
-		
+    		
 			/**
 	 		 * @brief This class describes an ice property of an ice layer.
 			 */
 			class Property{
-				public:
-				/**
-				 * @brief Default constructor.
-				 */
-				Property() : lowestWavelength_(0), highestWavelength_(0){
-					properties_.clear();
-				}
-				
-				/**
-				 * @brief Returns the lowest wavelength, for which the property is known.
-				 * 
-				 * @return The lowest wavelength.
-				 */
-				double LowestWavelength() const { return lowestWavelength_; }
-				
-				/**
-				 * @brief Sets the lowest wavelength, for which the property is known.
-				 * 
-				 * @param The lowest wavelength.
-				 */
-				void SetLowestWavelength(double lowestWavelength){
-					lowestWavelength_ = lowestWavelength;
-				}
-
-				/**
-				 * @brief Returns the highest wavelength, for which the property is known.
-				 * 
-				 * @return The highest wavelength.
-				 */
-				double HighestWavelength() const { return highestWavelength_; }
-				
-				/**
-				 * @brief Sets the highest wavelength, for which the property is known.
-				 * 
-				 * @param The highest wavelength.
-				 */
-				void SetHighestWavelength(double highestWavelength){
-					highestWavelength_ = highestWavelength;
-				}
-
-				/**
-				 * @brief Returns the property.
-				 * 
-				 * @return Returns the property per wavelength bin.
-				 */
-				const STLVectorStoragePolicy<double>& Get() const{
-					return properties_;
-				}
-
-				/**
-				 * @brief Returns the property.
-				 * 
-				 * @return Returns the property per wavelength bin.
-				 */
-				STLVectorStoragePolicy<double>& Get(){ return properties_; }				
-
-				private:
-
-				  friend class boost::serialization::access;
-
-  				template <class Archive>
-  				void serialize(Archive& ar, unsigned version){
-		    		ar & make_nvp("LowestWavelength", lowestWavelength_);
-		    		ar & make_nvp("HighestWavelength", highestWavelength_);
-    				ar & make_nvp("Properties", properties_);
-				  }
-		
-		
-					double lowestWavelength_;
-					double highestWavelength_;
-					STLVectorStoragePolicy<double> properties_;
+        private:
+          double lowestWavelength_;
+          double highestWavelength_;
+          std::vector<double> properties_;
+        
+				public:				
+  				/**
+  				 * @brief Returns the lowest wavelength, for which the property is known.
+  				 * 
+  				 * @return The lowest wavelength.
+  				 */
+  				double LowestWavelength() const { return lowestWavelength_; }
+  				
+  				/**
+  				 * @brief Sets the lowest wavelength, for which the property is known.
+  				 * 
+  				 * @param The lowest wavelength.
+  				 */
+  				void SetLowestWavelength(double lowestWavelength){
+  					lowestWavelength_ = lowestWavelength;
+  				}
+  
+  				/**
+  				 * @brief Returns the highest wavelength, for which the property is known.
+  				 * 
+  				 * @return The highest wavelength.
+  				 */
+  				double HighestWavelength() const { return highestWavelength_; }
+  				
+  				/**
+  				 * @brief Sets the highest wavelength, for which the property is known.
+  				 * 
+  				 * @param The highest wavelength.
+  				 */
+  				void SetHighestWavelength(double highestWavelength){
+  					highestWavelength_ = highestWavelength;
+  				}
+  
+  				/**
+  				 * @brief Returns the property.
+  				 * 
+  				 * @return Returns the property per wavelength bin.
+  				 */
+  				const std::vector<double>& Get() const{
+  					return properties_;
+  				}
+  
+  				/**
+  				 * @brief Returns the property.
+  				 * 
+  				 * @return Returns the property per wavelength bin.
+  				 */
+  				std::vector<double>& Get(){ return properties_; }				
 			};
 			
-			/**
-			 * @brief Default constructor
-			 */
-			Layer() : lowerEdge_(0), upperEdge_(0){}
+      
+    private:    
+      double lowerEdge_;
+      double upperEdge_;
+      Property abs_;
+      Property scat_;
 
+    public:
 			/**
 			 * @brief Returns the lower edge of the layer.
 			 * 
@@ -184,24 +167,6 @@ public:
 	 		 * @return The scattering coefficents per wavelength bin.
 	 		 */
 			Property& ScatteringCoefficents(){ return scat_; }
-
-		private:
-		  
-		  friend class boost::serialization::access;
-
-  		template <class Archive>
-  		void serialize(Archive& ar, unsigned version){
-		    ar & make_nvp("LowerEdge", lowerEdge_);
-    		ar & make_nvp("UpperEdge", upperEdge_);
-    		ar & make_nvp("AbsorptionCoefficents", abs_);
-    		ar & make_nvp("ScatteringCoefficents", scat_);
-		  }
-
-		
-			double lowerEdge_;
-			double upperEdge_;
-			Property abs_;
-			Property scat_;
 	};
 	
 	
@@ -242,16 +207,13 @@ public:
 	 * Within each layer: LowerEdge() < UpperEdge is guaranteed.
 	 * For each property: LowestWavelength <= HighestWavelength is guaranteed.
 	 */
-	virtual const STLVectorStoragePolicy<Layer>& Layers() const = 0;
+	virtual const std::vector<Layer>& Layers() const = 0;
 
 private:
 
   // private copy constructors and assignment
   I3MediumProperties(const I3MediumProperties&);
   I3MediumProperties& operator=(const I3MediumProperties&);
-
-	// ROOT macro ... we do not need it
-  // ClassDef(I3MediumProperties,0);
 };
 
 #endif // I3_MEDIUM_PROPERTIES_H_INCLUDED
