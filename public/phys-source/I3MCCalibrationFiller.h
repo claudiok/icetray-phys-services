@@ -20,7 +20,7 @@
  * @brief This module fills the 
  * I3Calibration for each 
  * DOM that it finds in the in ice geometry.
- * This is meant to be a short-term fix.
+ * THIS IS MEANT TO BE A SHORT-TERM FIX.
  */
 class I3MCCalibrationFiller : public I3PhysicsModule
 {
@@ -38,6 +38,15 @@ private:
     double atwd2gain_;
 
     double fadcGain_;
+
+    /**
+     * This is the conversion factor from count to mV
+     * It is normally around 2 mV/count. In the real
+     * calibration this number is different for each bin
+     * in the ATWD. Here we use it for every bin.
+     */
+    static double CONVERSION_FACTOR;
+
 };
 
 #endif

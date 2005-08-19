@@ -4,6 +4,8 @@
 #include "dataclasses/I3InIceGeometry.h"
 #include "dataclasses/I3Geometry.h"
 
+double I3MCCalibrationFiller::CONVERSION_FACTOR = -0.0021;
+
 I3MCCalibrationFiller::I3MCCalibrationFiller(I3Context& context) 
 : I3PhysicsModule(context)
 {
@@ -64,12 +66,10 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 	    {
 		for( int bin = 0; bin < 128; ++bin )
 		{
-		    double slope = -0.0021;
-		    double intercept = 2.8;	
-		    double regress_coeff = 1.0;
+		    double slope = CONVERSION_FACTOR;
 	   
 		    domCalib->SetATWDParameters(id,channel,bin,
-						slope,intercept,regress_coeff);
+						slope,0.0,0.0);
 		}
 	    }
 	}
