@@ -62,7 +62,7 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
        
 	for( int channel = 0; channel < 3; ++channel )
 	{
-	    for( int id = 0; id < 1; ++id )
+	    for( int id = 0; id <= 1; ++id )
 	    {
 		for( int bin = 0; bin < 128; ++bin )
 		{
