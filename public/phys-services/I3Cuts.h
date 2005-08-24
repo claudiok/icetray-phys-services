@@ -8,80 +8,70 @@
 
 using namespace I3Units;
 
+
+/**
+ * @brief The I3Cuts namespace is a collection of functions that calculate 
+ * various cut parameters for reconstruction.  These include things like 
+ * Ndir, Ldir, and Smoothness.
+ * 
+ * @todo So far we have Ndir, Ldir, and Smoothness, but other cut parameters
+ * will and should be added as we have move more into an analysis phase of the 
+ * experiment.
+ */
 namespace I3Cuts
 {
-  enum NdirWindow { A, B, C, D };
 
   /**
-   * Calculate the number of direct hits from a given track.
-   * The moethod counts the hits with small time residuals (between t1, t2)
-   *  - t1~=-15ns, t2~=15ns..150ns
+   * The default value for the lower edge of the residual time window for
+   * direct hits.
    */
-  int Ndir(I3TrackPtr track, 
-	   I3Geometry& geom, 
-	   I3OMResponseMap& ommap, 
-	   string hitseries,
-	   double t1 = -15*ns, 
-	   double t2 = +25*ns);
+  static const double minusTWindow = -15*ns;
 
   /**
-   * Calculate the number of direct hits from a given track.
-   * The moethod counts the hits with small time residuals (between t1, t2)
-   *  - t1 is preset to the default, which is -15ns
-   *  - t2 can be set as: A, B, C, or D  (A=15ns, B=25ns, C=75ns, D=150ns)
+   * The default value for the upper edge of the residual time window for
+   * direct hits.
    */
-  int Ndir(I3TrackPtr track, 
-	   I3Geometry& geom, 
-	   I3OMResponseMap& ommap, 
-	   string hitseries,
-	   NdirWindow window);
+  static const double plusTWindow  = +25*ns;
 
   /**
-   * Calculate the "direct" length of event.  This is the length between 
-   * the two most extreme projections of the direct hits onto the track.  
-   * Direct hits are the hits with small time residuals (between t1, t2)
-   *  - t1~=-15ns, t2~=15ns..150ns
-   */
-  double Ldir(I3TrackPtr track, 
-	      I3Geometry& geom, 
-	      I3OMResponseMap& ommap, 
-	      string hitseries,
-	      double t1 = -15*ns, 
-	      double t2 = +25*ns);
-
-  /**
-   * Calculate the "direct" length of event.  This is the length between 
-   * the two most extreme projections of the direct hits onto the track.  
-   * Direct hits are the hits with small time residuals (between t1, t2)
-   *  - t1 is preset to the default, which is -15ns
-   *  - t2 can be set as: A, B, C, or D  (A=15ns, B=25ns, C=75ns, D=150ns)
-   */
-  double Ldir(I3TrackPtr track, 
-	      I3Geometry& geom, 
-	      I3OMResponseMap& ommap, 
-	      string hitseries,
-	      NdirWindow window);
-
-  /**
-   * Calculate the "smoothness" of event.  This is a measure of how 
-   * spread out the hits are along the track.
-   * Smoothness is calculated for all hits.
-   */
-  double Smoothness(I3TrackPtr track, 
-		    I3Geometry& geom, 
-		    I3OMResponseMap& ommap, 
-		    string hitseries);
-
-  /**
-   * Calculate the t1 and t2 of the time window for calculating direct hits
-   */
-  void CalcTimeWindow(NdirWindow window,
-		      double& t1,
-		      double& t2);
-
-  /**
-   * The method underneath Ndir and Ldir that actually calculates the 
-   * direct hits
+   * Main function that does the actual calculation of Ndir, Ldir, and 
+   * Smoothness, based on direct hits.  First, it loops over all hits 
+   * (or pulses), makes "projections" of the hits onto the input track, and 
+   * calculates the time residual for each hit (difference between the 
+   * expected and actual time of arrival of the Cherenkov photon from the 
+   * given track and the OM).  If the time residual is within some set time 
+   * window, then the hit is tagged as "direct hit".  Then, based on the 
+   * times and distances of the direct (or all) hits, it calculates the 3 
+   * quantities, according to their individual algorithms.
+   * 
+   * 
+   * INPUT:
+   * @param track -- Smart pointer to the track object.
+   * @param geom -- The geometry object from the event.
+   * @param ommap -- The OMResponseMap object from which to extract the 
+   *                 OMResponse.
+   * @param hitseries -- Name of the RecoHitSeries or RecoPulseSeries which 
+   *                     contains the desired hit information.
+   * @param t1 -- Lower edge of the time residual window for direct hits.
+   *              Generally, this value is -15ns.
+   * @param t2 -- Upper edge of the time residual window for direct hits.
+   *              Generally, this value is 15ns..150ns.
+   * 
+   * 
+   * OUTPUT:
+   * @param Ndir -- The Ndir cut parameter: number of direct hits.
+   * @param Ldir -- The Ldir cut parameter (based on direct hits): "length" 
+   *                of the event.  This is the length between the two most 
+   *                extreme projections of the direct hits onto the track.  
+   * @param Sall -- The Smoothness parameter (based on all hits): how 
+   *                uniformly are the hit projections onto the track 
+   *                distributed along that track.
+   * @param Sdir -- The Smoothness parameter (based on direct hits): how 
+   *                uniformly are the hit projections onto the track 
+   *                distributed along that track.
+   * 
+   * 
+   * @todo Think about making the code more efficient...
    */
   void DirectHits(I3TrackPtr track, 
 		  I3Geometry& geom, 
@@ -91,7 +81,60 @@ namespace I3Cuts
 		  double t2, 
 		  int& Ndir, 
 		  double& Ldir,
-		  double& Smax);
+		  double& Sall,
+		  double& Sdir);
+
+  /**
+   * A convenience function that calls DirectHits() and returns the number 
+   * of direct hits from a given track.  If you are interested in more than 
+   * one quantity from DirectHits(), use the DirectHits() function directly,
+   * in order to save multiple calls to the function.
+   */
+  int Ndir(I3TrackPtr track, 
+	   I3Geometry& geom, 
+	   I3OMResponseMap& ommap, 
+	   string hitseries,
+	   double t1 = minusTWindow, 
+	   double t2 = plusTWindow);
+
+  /**
+   * A convenience function that calls DirectHits() and returns the 
+   * "direct-hits length" of the event.  If you are interested in more than  
+   * one quantity from DirectHits(), use the DirectHits() function directly, 
+   * in order to save multiple calls to the function.
+   */
+  double Ldir(I3TrackPtr track, 
+	      I3Geometry& geom, 
+	      I3OMResponseMap& ommap, 
+	      string hitseries,
+	      double t1 = minusTWindow, 
+	      double t2 = plusTWindow);
+
+  /**
+   * A convenience function that calls DirectHits() and returns the 
+   * "all-hits smoothness" of the event.  If you are interested in more than  
+   * one quantity from DirectHits(), use the DirectHits() function directly, 
+   * in order to save multiple calls to the function.
+   */
+  double SmoothnessAll(I3TrackPtr track, 
+		       I3Geometry& geom, 
+		       I3OMResponseMap& ommap, 
+		       string hitseries,
+		       double t1 = minusTWindow, 
+		       double t2 = plusTWindow);
+
+  /**
+   * A convenience function that calls DirectHits() and returns the 
+   * "direct-hits smoothness" of the event.  If you are interested in more   
+   * than one quantity from DirectHits(), use the DirectHits() function, 
+   * directly in order to save multiple calls to the function.
+   */
+  double SmoothnessDir(I3TrackPtr track, 
+		       I3Geometry& geom, 
+		       I3OMResponseMap& ommap, 
+		       string hitseries,
+		       double t1 = minusTWindow, 
+		       double t2 = plusTWindow);
 
 }
 
