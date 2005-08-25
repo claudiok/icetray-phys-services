@@ -193,21 +193,21 @@ namespace I3Calculator
 			I3Position& position,
 			I3OMGeo::EOrientation orient=I3OMGeo::Down);
 
-  /**
-   * A convenience function that calls I3Position::CalcDistance() to calculate
-   * the distance between an input cascade and an OM position.   
-   */
-  double CascadeDistance(I3CascadePtr cascade, 
-			   I3Position& position);
-
  /**
    * A convenience function that calls I3Position::CalcDistance() to calculate
    * the time it takes Cherenkov light to travel between an input cascade and
    * an OM position.  The index of refraction can be set by the user.
    */
-  double CascadeTime(I3CascadePtr cascade,
+  double CherenkovTimeC(I3CascadePtr cascade,
 		       I3Position& position,
 		       double IndexRef=I3Constants::n_ice);
+
+  /**
+   * A convenience function that calls I3Position::CalcDistance() to calculate
+   * the distance between an input cascade and an OM position.   
+   */
+  double CherenkovDistanceC(I3CascadePtr cascade, 
+			   I3Position& position);
 
   /**
    * Returns the spatial angle between two input tracks.

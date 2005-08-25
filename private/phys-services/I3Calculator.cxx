@@ -237,17 +237,17 @@ double I3Calculator::CherenkovAngle(I3TrackPtr track, I3Position& position, I3OM
 
 
 //--------------------------------------------------------------
-double I3Calculator::CascadeDistance(I3CascadePtr cascade, I3Position& position)
+double I3Calculator::CherenkovTimeC(I3CascadePtr cascade, I3Position& position, double IndexRef)
 {
-  return position.CalcDistance(cascade->GetPos());
+  double speed = c/IndexRef;
+  return position.CalcDistance(cascade->GetPos()) / speed;
 }
 
 
 //--------------------------------------------------------------
-double I3Calculator::CascadeTime(I3CascadePtr cascade, I3Position& position, double IndexRef)
+double I3Calculator::CherenkovDistanceC(I3CascadePtr cascade, I3Position& position)
 {
-  double speed = c/IndexRef;
-  return position.CalcDistance(cascade->GetPos()) / speed;
+  return position.CalcDistance(cascade->GetPos());
 }
 
 
@@ -277,6 +277,7 @@ I3Position I3Calculator::InTrackSystem(const I3Direction& direction, const I3Pos
   pos.RotateZ(-direction.CalcPhi());
   pos.RotateY(-direction.CalcTheta());
   pos.RotateZ(direction.CalcPhi()); //get x-y orientation right
+  //pos.RotateZ(pi/2.); //###
   return pos;
 }
 
@@ -285,7 +286,8 @@ I3Position I3Calculator::InTrackSystem(const I3Direction& direction, const I3Pos
 I3Position I3Calculator::InNominalSystem(const I3Direction& direction, const I3Position& position)
 {
   I3Position pos(position);
-  pos.RotateZ(-direction.CalcPhi());
+  pos.RotateZ(-direction.CalcPhi()); //get x-y orientation right
+  //pos.RotateZ(-pi/2.); //###
   pos.RotateY(direction.CalcTheta());
   pos.RotateZ(direction.CalcPhi());
   return pos;

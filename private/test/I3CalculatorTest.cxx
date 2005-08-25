@@ -58,6 +58,20 @@ static I3StartingTrackPtr starttrack()
   return starttrack;
 }
 
+static I3BasicCascadePtr casc1()
+{
+  I3BasicCascadePtr casc1 (new I3BasicCascade);
+  casc1->SetPos(2,2,2);
+  return casc1;
+}
+
+static I3BasicCascadePtr casc2()
+{
+  I3BasicCascadePtr casc2 (new I3BasicCascade);
+  casc2->SetPos(2,2,7);
+  return casc2;
+}
+
 static I3Position p(1,1,1);
 static I3Position q(2,2,2);
 static I3Position r(0,0,0);
@@ -89,7 +103,6 @@ TEST(IsOnTrack)
 
   on.SetPosition(1,1,1.1);
   ENSURE(!IsOnTrack(starttrack(),on,0.1*m));
-
 }
 
 TEST(ClosestApproachDistance)
@@ -156,32 +169,27 @@ TEST(CherenkovAngle)
 
 TEST(CascadeDistance)
 { 
-  I3BasicCascadePtr casc (new I3BasicCascade);
-  casc->SetPos(2,2,2);
-  I3BasicCascadePtr casc2 (new I3BasicCascade);
-  casc2->SetPos(2,2,7);
-
-  ENSURE_DISTANCE(CascadeDistance(casc,r),3.46410,0.0001);
-
-  ENSURE_DISTANCE(CascadeDistance(casc,casc2),5.0,0.0001);
+  ENSURE_DISTANCE(CherenkovDistanceC(casc1(),r),3.46410,0.0001);
 }
 
 TEST(CascadeTime)
 {
-  I3BasicCascadePtr casc (new I3BasicCascade);
-  casc->SetPos(2,2,2);
-
-  ENSURE_DISTANCE(CascadeTime(casc,r)/ns,15.137,0.001);
+  ENSURE_DISTANCE(CherenkovTimeC(casc1(),r)/ns,15.137,0.001);
 }
 
-TEST(AngleDiff)
+TEST(Angle)
 {
-  ENSURE_DISTANCE(AngleDiff(inftrack(),muon())/deg,90.,0.001);
+  ENSURE_DISTANCE(Angle(inftrack(),muon())/deg,90.,0.001);
     
   I3BasicTrackPtr track1 (new I3BasicTrack);
   track1->SetDir(0,1,-1);
   I3BasicTrackPtr track2 (new I3BasicTrack);
   track2->SetDir(1,0,-1);
 
-  ENSURE_DISTANCE(AngleDiff(track1,track2)/deg,60.,0.001);
+  ENSURE_DISTANCE(Angle(track1,track2)/deg,60.,0.001);
+}
+
+TEST(Distance)
+{ 
+  ENSURE_DISTANCE(Distance(casc1(),casc2()),5.0,0.0001);
 }

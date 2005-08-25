@@ -100,15 +100,15 @@ TEST(Ndir_DownTrack)
   ENSURE_DISTANCE(ndir,3.,0.0001,
 		  "Wrong number of direct hits calculated.");
 
-  ndir = Ndir(track,geometry,ommap,hitseries,I3Cuts::A);
+  ndir = Ndir(track,geometry,ommap,hitseries,-15.,15.);
   ENSURE_DISTANCE(ndir,2.,0.0001,
 		  "Wrong number of direct hits calculated.");
 
-  ndir = Ndir(track,geometry,ommap,hitseries,I3Cuts::C);
+  ndir = Ndir(track,geometry,ommap,hitseries,-15.,75.);
   ENSURE_DISTANCE(ndir,4.,0.0001,
 		  "Wrong number of direct hits calculated.");
 
-  ndir = Ndir(track,geometry,ommap,hitseries,I3Cuts::D);
+  ndir = Ndir(track,geometry,ommap,hitseries,-15.,150.);
   ENSURE_DISTANCE(ndir,5.,0.0001,
 		  "Wrong number of direct hits calculated.");
 }
@@ -140,11 +140,11 @@ TEST(AllCuts_TiltedTrack)
   ENSURE_DISTANCE(ndir,3.,0.0001,
 		  "Wrong number of direct hits calculated.");
 
-  double ldir = Ldir(track,geometry,ommap,hitseries,I3Cuts::A);
+  double ldir = Ldir(track,geometry,ommap,hitseries,-15.,15.);
   ENSURE_DISTANCE(ldir,108.635,0.001,
 		  "Wrong Ldir distance calculated.");
 
-  double smooth = Smoothness(track,geometry,ommap,hitseries);
+  double smooth = SmoothnessAll(track,geometry,ommap,hitseries);
   ENSURE_DISTANCE(smooth,0.121611,0.0001,
 		 "Wrong smoothness calculated.");
 }
