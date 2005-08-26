@@ -45,16 +45,16 @@ namespace AmbiguityTests
   {
     shared_ptr<I3BasicTrack> btp (new I3BasicTrack);
 
-    // doesn't compile.  Looks like it should.
-    // ENSURE(TimeFromSharedPtr(btp) == TRACK);
+    // this really needs the explicit cast
+    ENSURE(TimeFromSharedPtr(dynamic_pointer_cast<I3Track>(btp)) == TRACK);
 
     // do this instead, it's faster and makes your Time() function signatures clearer.
     ENSURE(Time(*btp) == TRACK);
 
     shared_ptr<I3CompleteCascade> ccp(new I3CompleteCascade);
 
-    // ditto.  Bad:
-    // ENSURE(TimeFromSharedPtr(ccp) == CASCADE);
+    // ditto. Bad:
+    ENSURE(TimeFromSharedPtr(dynamic_pointer_cast<I3Cascade>(ccp)) == CASCADE);
 
     // good:
     ENSURE(Time(*ccp) == CASCADE);
