@@ -2,32 +2,63 @@
 
 #include "phys-services/I3Calculator.h"
 #include "dataclasses/I3BasicTrack.h"
+#include "dataclasses/I3CompleteCascade.h"
 #include "dataclasses/I3Position.h"
 
 using namespace I3Calculator;
 
-double Time(I3TrackPtr) { return 1; }
-double Time(I3CascadePtr) { return 2; }
-I3BasicTrackPtr track (new I3BasicTrack);
+const double TRACK = 1;
+const double CASCADE = 2;
 
-TEST_GROUP(Ambiguity)
+TEST_GROUP(Ambiguity);
 
-TEST(One)
+namespace AmbiguityTests 
 {
-  double t = Time(dynamic_pointer_cast<I3Track>(track));
-  cout<<"t="<<t<<endl;
-}
 
-TEST(Two)
-{
-  double t = Time(dynamic_pointer_cast<I3Cascade>(track));
-  cout<<"t="<<t<<endl;
-}
+  double Time(const I3Track& t) { return TRACK; }
+  double Time(const I3Cascade& c) { return CASCADE; }
 
-/*
-TEST(Three)
-{
-  double t = Time(track);
-  cout<<"t="<<t<<endl;
+  double TimeFromSharedPtr(I3TrackPtr spt) { return TRACK; }
+  double TimeFromSharedPtr(I3CascadePtr spc) { return CASCADE; }
+
+  double TimeFromDumbPtr(I3Track* dpt) { return TRACK; }
+  double TimeFromDumbPtr(I3Cascade* dpc) { return CASCADE; }
+
+
+  TEST(ByReferenceFromAnObject)
+  {
+    I3BasicTrack bt;
+    ENSURE(Time(bt) == TRACK);
+    I3CompleteCascade cc;
+    ENSURE(Time(cc) == CASCADE);
+  }
+
+  TEST(ByDumbPtr)
+  {
+    I3BasicTrack* btp;
+    ENSURE(TimeFromDumbPtr(btp) == TRACK);
+    I3CompleteCascade* ccp;
+    ENSURE(TimeFromDumbPtr(ccp) == CASCADE);
+  }
+
+  TEST(BySharedPtr)
+  {
+    shared_ptr<I3BasicTrack> btp (new I3BasicTrack);
+
+    // doesn't compile.  Looks like it should.
+    // ENSURE(TimeFromSharedPtr(btp) == TRACK);
+
+    // do this instead, it's faster and makes your Time() function signatures clearer.
+    ENSURE(Time(*btp) == TRACK);
+
+    shared_ptr<I3CompleteCascade> ccp(new I3CompleteCascade);
+
+    // ditto.  Bad:
+    // ENSURE(TimeFromSharedPtr(ccp) == CASCADE);
+
+    // good:
+    ENSURE(Time(*ccp) == CASCADE);
+
+  }
+
 }
-*/
