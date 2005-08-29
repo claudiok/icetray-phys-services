@@ -73,10 +73,10 @@ namespace I3Cuts
    * 
    * @todo Think about making the code more efficient...
    */
-  void DirectHits(I3TrackPtr track, 
+  void DirectHits(const I3Track& track, 
 		  I3Geometry& geom, 
 		  I3OMResponseMap& ommap, 
-		  string hitseries,
+		  const string hitseries,
 		  double t1, 
 		  double t2, 
 		  int& Ndir, 
@@ -90,10 +90,10 @@ namespace I3Cuts
    * one quantity from DirectHits(), use the DirectHits() function directly,
    * in order to save multiple calls to the function.
    */
-  int Ndir(I3TrackPtr track, 
+  int Ndir(const I3Track& track, 
 	   I3Geometry& geom, 
 	   I3OMResponseMap& ommap, 
-	   string hitseries,
+	   const string hitseries,
 	   double t1 = minusTWindow, 
 	   double t2 = plusTWindow);
 
@@ -103,10 +103,10 @@ namespace I3Cuts
    * one quantity from DirectHits(), use the DirectHits() function directly, 
    * in order to save multiple calls to the function.
    */
-  double Ldir(I3TrackPtr track, 
+  double Ldir(const I3Track& track, 
 	      I3Geometry& geom, 
 	      I3OMResponseMap& ommap, 
-	      string hitseries,
+	      const string hitseries,
 	      double t1 = minusTWindow, 
 	      double t2 = plusTWindow);
 
@@ -116,10 +116,10 @@ namespace I3Cuts
    * one quantity from DirectHits(), use the DirectHits() function directly, 
    * in order to save multiple calls to the function.
    */
-  double SmoothnessAll(I3TrackPtr track, 
+  double SmoothnessAll(const I3Track& track, 
 		       I3Geometry& geom, 
 		       I3OMResponseMap& ommap, 
-		       string hitseries,
+		       const string hitseries,
 		       double t1 = minusTWindow, 
 		       double t2 = plusTWindow);
 
@@ -129,10 +129,10 @@ namespace I3Cuts
    * than one quantity from DirectHits(), use the DirectHits() function, 
    * directly in order to save multiple calls to the function.
    */
-  double SmoothnessDir(I3TrackPtr track, 
+  double SmoothnessDir(const I3Track& track, 
 		       I3Geometry& geom, 
 		       I3OMResponseMap& ommap, 
-		       string hitseries,
+		       const string hitseries,
 		       double t1 = minusTWindow, 
 		       double t2 = plusTWindow);
 

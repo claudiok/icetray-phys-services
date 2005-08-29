@@ -34,41 +34,41 @@ typedef shared_ptr<I3StartingTrack> I3StartingTrackPtr;
 
 using namespace I3Calculator;
 
-static I3BasicTrackPtr inftrack()
+static I3BasicTrack inftrack()
 {
-  I3BasicTrackPtr inftrack (new I3BasicTrack);
-  inftrack->SetPos(0,0,0);
-  inftrack->SetDir(0,1,1);
+  I3BasicTrack inftrack;
+  inftrack.SetPos(0,0,0);
+  inftrack.SetDir(0,1,1);
   return inftrack;
 }
 
-static I3BasicTrackPtr muon()
+static I3BasicTrack muon()
 {
-  I3BasicTrackPtr muon (new I3BasicTrack);
-  muon->SetPos(10,0,0);
-  muon->SetDir(90*deg,0); // muon moving toward -x axis
+  I3BasicTrack muon;
+  muon.SetPos(10,0,0);
+  muon.SetDir(90*deg,0); // muon moving toward -x axis
   return muon;
 }
 
-static I3StartingTrackPtr starttrack()
+static I3StartingTrack starttrack()
 {
-  I3StartingTrackPtr starttrack (new I3StartingTrack);
-  starttrack->SetStartPos(1,1,1);
-  starttrack->SetDir(0,0);
+  I3StartingTrack starttrack;
+  starttrack.SetStartPos(1,1,1);
+  starttrack.SetDir(0,0);
   return starttrack;
 }
 
-static I3BasicCascadePtr casc1()
+static I3BasicCascade casc1()
 {
-  I3BasicCascadePtr casc1 (new I3BasicCascade);
-  casc1->SetPos(2,2,2);
+  I3BasicCascade casc1;
+  casc1.SetPos(2,2,2);
   return casc1;
 }
 
-static I3BasicCascadePtr casc2()
+static I3BasicCascade casc2()
 {
-  I3BasicCascadePtr casc2 (new I3BasicCascade);
-  casc2->SetPos(2,2,7);
+  I3BasicCascade casc2;
+  casc2.SetPos(2,2,7);
   return casc2;
 }
 
@@ -159,32 +159,32 @@ TEST(CherenkovTime)
 TEST(CherenkovAngle)
 { 
   a1.SetPosition(0,1,0);
-  ENSURE_DISTANCE(CherenkovAngle(muon(),a1)/deg,90.0,0.0001);
+  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/deg,90.0,0.0001);
 
   a1.SetPosition(0,0,1);
-  ENSURE_DISTANCE(CherenkovAngle(muon(),a1)/deg,49.7612,0.0001);
+  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/deg,49.7612,0.0001);
 
-  ENSURE_DISTANCE(CherenkovAngle(muon(),p,I3OMGeo::Up)/deg,117.179,0.0001);
+  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),p,I3OMGeo::Up)/deg,117.179,0.0001);
 }
 
 TEST(CascadeDistance)
 { 
-  ENSURE_DISTANCE(CherenkovDistanceC(casc1(),r),3.46410,0.0001);
+  ENSURE_DISTANCE(CherenkovDistance(casc1(),r),3.46410,0.0001);
 }
 
 TEST(CascadeTime)
 {
-  ENSURE_DISTANCE(CherenkovTimeC(casc1(),r)/ns,15.137,0.001);
+  ENSURE_DISTANCE(CherenkovTime(casc1(),r)/ns,15.137,0.001);
 }
 
 TEST(Angle)
 {
   ENSURE_DISTANCE(Angle(inftrack(),muon())/deg,90.,0.001);
     
-  I3BasicTrackPtr track1 (new I3BasicTrack);
-  track1->SetDir(0,1,-1);
-  I3BasicTrackPtr track2 (new I3BasicTrack);
-  track2->SetDir(1,0,-1);
+  I3BasicTrack track1;
+  track1.SetDir(0,1,-1);
+  I3BasicTrack track2;
+  track2.SetDir(1,0,-1);
 
   ENSURE_DISTANCE(Angle(track1,track2)/deg,60.,0.001);
 }

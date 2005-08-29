@@ -8,8 +8,8 @@ using namespace I3Calculator;
 
 
 //--------------------------------------------------------------
-void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom, 
-			I3OMResponseMap& ommap, string hitsName,
+void I3Cuts::DirectHits(const I3Track& track, I3Geometry& geom, 
+			I3OMResponseMap& ommap, const string hitsName,
 			double t1, double t2, 
 			int& Ndir, double& Ldir, double& Sall, double& Sdir)
 {
@@ -19,7 +19,7 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
   vector<double> lengthDir;
   double min = 999999;
   double max = -999999;
-  double Ttrack = track->GetT();
+  double Ttrack = track.GetT();
   double Thit, Tarr, Tres;
   I3OMResponseMap::iterator om;
   for (om=ommap.begin(); om!=ommap.end(); om++) 
@@ -50,9 +50,9 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
       // calculate projections of hits onto track...
       ntot++;
       I3Position pos(ompos);
-      pos.ShiftCoordSystem(track->GetPos());
-      pos.RotateZ(-track->GetDir().CalcPhi());
-      pos.RotateY(-track->GetDir().CalcTheta());
+      pos.ShiftCoordSystem(track.GetPos());
+      pos.RotateZ(-track.GetDir().CalcPhi());
+      pos.RotateY(-track.GetDir().CalcTheta());
       double dist = pos.GetZ();
       log_debug("dist: %f",dist);
       lengthAll.push_back(dist);        // set up for SmoothnessAll calculation
@@ -109,8 +109,8 @@ void I3Cuts::DirectHits(I3TrackPtr track, I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-int I3Cuts::Ndir(I3TrackPtr track, I3Geometry& geom, 
-		 I3OMResponseMap& ommap, string hitsName,	
+int I3Cuts::Ndir(const I3Track& track, I3Geometry& geom, 
+		 I3OMResponseMap& ommap, const string hitsName,	
 		 double t1, double t2)
 {
   int Ndir;
@@ -121,8 +121,8 @@ int I3Cuts::Ndir(I3TrackPtr track, I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-double I3Cuts::Ldir(I3TrackPtr track, I3Geometry& geom, 
-		    I3OMResponseMap& ommap, string hitsName,	
+double I3Cuts::Ldir(const I3Track& track, I3Geometry& geom, 
+		    I3OMResponseMap& ommap, const string hitsName,
 		    double t1, double t2)
 {
   int Ndir;
@@ -133,9 +133,9 @@ double I3Cuts::Ldir(I3TrackPtr track, I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-double I3Cuts::SmoothnessAll(I3TrackPtr track, I3Geometry& geom, 
-			     I3OMResponseMap& ommap, string hitsName,
-			     double t1, double t2)
+double I3Cuts::SmoothnessAll(const I3Track& track, I3Geometry& geom, 
+			     I3OMResponseMap& ommap, 
+			     const string hitsName, double t1, double t2)
 {
   int Ndir;
   double Ldir, Sall, Sdir;
@@ -145,9 +145,9 @@ double I3Cuts::SmoothnessAll(I3TrackPtr track, I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-double I3Cuts::SmoothnessDir(I3TrackPtr track, I3Geometry& geom, 
-			     I3OMResponseMap& ommap, string hitsName,
-			     double t1, double t2)
+double I3Cuts::SmoothnessDir(const I3Track& track, I3Geometry& geom, 
+			     I3OMResponseMap& ommap, 
+			     const string hitsName, double t1, double t2)
 {
   int Ndir;
   double Ldir, Sall, Sdir;

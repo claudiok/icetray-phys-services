@@ -44,9 +44,9 @@ TEST_GROUP(I3Cuts)
 
 TEST(FakeTrack)
 {
-  I3BasicTrackPtr track (new I3BasicTrack);
-  track->SetPos(0,0,0);
-  track->SetDir(0,0);
+  I3BasicTrack track;
+  track.SetPos(0,0,0);
+  track.SetDir(0,0);
   double ang = 180*deg-acos(1/1.31);
   I3Position aa(10,ang,45*deg,I3Position::sph);
   I3Position bb(5,ang,-30*deg,I3Position::sph);
@@ -65,10 +65,10 @@ TEST(FakeTrack)
 
 TEST(Ndir_DownTrack)
 {
-  I3BasicTrackPtr track (new I3BasicTrack);
-  track->SetPos(0,0,0);
-  track->SetDir(0,0);
-  track->SetT(103.5);
+  I3BasicTrack track;
+  track.SetPos(0,0,0);
+  track.SetDir(0,0);
+  track.SetT(103.5);
 
   int size = 6;
   double r[] =   {10,   5, 20,   7,   10,  15};
@@ -84,10 +84,10 @@ TEST(Ndir_DownTrack)
     I3Position p(r[i],ang,phi[i]*deg,I3Position::sph); p.SetZ(p.GetZ()-z[i]);
     pos.push_back(p);
     double t = (z[i]/c + sqrt(pow(pos[i].GetX(),2)+pow(pos[i].GetY(),2))*A
-		+ track->GetT() + off[i]*ns);
+		+ track.GetT() + off[i]*ns);
     time.push_back(t);
     ENSURE_DISTANCE(CherenkovTime(track,pos[i])+off[i],
-		    time[i]-track->GetT(), 0.0001,
+		    time[i]-track.GetT(), 0.0001,
 		    "The time of this hit was somehow calculated wrong.");
   }
 
@@ -117,10 +117,10 @@ TEST(AllCuts_TiltedTrack)
 {
   double ang = acos(1/1.31); // Cherenkov angle
 
-  I3BasicTrackPtr track (new I3BasicTrack);
-  track->SetPos(10,10,0);
-  track->SetDir(180*deg-ang,90*deg);
-  track->SetT(15);
+  I3BasicTrack track;
+  track.SetPos(10,10,0);
+  track.SetDir(180*deg-ang,90*deg);
+  track.SetT(15);
 
   double size = 3;
   vector<I3Position> pos;
