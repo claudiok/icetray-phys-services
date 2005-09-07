@@ -269,63 +269,77 @@ double I3Calculator::Distance(const I3Cascade& casc1, const I3Cascade& casc2)
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::InTrackSystem(const I3Direction& direction, const I3Position& position)
+I3Position I3Calculator::InTrackSystem(const I3Direction& direction, const I3Position& pos)
 {
-  I3Position pos(position);
-  pos.RotateZ(-direction.CalcPhi());
-  pos.RotateY(-direction.CalcTheta());
-  //pos.RotateZ(direction.CalcPhi()); //get x-y orientation right
-  pos.RotateZ(pi/2.); //###
-  return pos;
+  I3Position p(pos);
+  p.RotateZ(-direction.CalcPhi());
+  p.RotateY(-direction.CalcTheta());
+  //p.RotateZ(direction.CalcPhi()); //get x-y orientation right
+  p.RotateZ(pi/2.); //###
+  return p;
 }
 
 
 //--------------------------------------------------------------
-I3Direction I3Calculator::InTrackSystem(const I3Direction& direction, const I3Direction& direction2)
+I3Direction I3Calculator::InTrackSystem(const I3Direction& direction, const I3Direction& dir)
 {
-  I3Direction dir(direction2);
-  dir.RotateZ(-direction.CalcPhi());
-  dir.RotateY(-direction.CalcTheta());
-  //dir.RotateZ(direction.CalcPhi()); //get x-y orientation right
-  dir.RotateZ(pi/2.); //###
-  return dir;
+  I3Direction d(dir);
+  d.RotateZ(-direction.CalcPhi());
+  d.RotateY(-direction.CalcTheta());
+  //d.RotateZ(direction.CalcPhi()); //get x-y orientation right
+  d.RotateZ(pi/2.); //###
+  return d;
 }
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::InTrackSystem(const I3Track& track, const I3Position& position)
+I3Position I3Calculator::InTrackSystem(const I3Track& track, const I3Position& pos)
 {
-  return InTrackSystem(track.GetDir(), position);
+  return InTrackSystem(track.GetDir(), pos);
 }
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::InNominalSystem(const I3Direction& direction, const I3Position& position)
+I3Direction I3Calculator::InTrackSystem(const I3Track& track, const I3Direction& dir)
 {
-  I3Position pos(position);
-  //pos.RotateZ(-direction.CalcPhi()); //get x-y orientation right
-  pos.RotateZ(-pi/2.); //###
-  pos.RotateY(direction.CalcTheta());
-  pos.RotateZ(direction.CalcPhi());
-  return pos;
+  return InTrackSystem(track.GetDir(), dir);
 }
 
 
 //--------------------------------------------------------------
-I3Direction I3Calculator::InNominalSystem(const I3Direction& direction, const I3Direction& direction2)
+I3Position I3Calculator::InNominalSystem(const I3Direction& direction, const I3Position& pos)
 {
-  I3Direction dir(direction2);
-  //dir.RotateZ(-direction.CalcPhi()); //get x-y orientation right
-  dir.RotateZ(-pi/2.); //###
-  dir.RotateY(direction.CalcTheta());
-  dir.RotateZ(direction.CalcPhi());
-  return dir;
+  I3Position p(pos);
+  //p.RotateZ(-direction.CalcPhi()); //get x-y orientation right
+  p.RotateZ(-pi/2.); //###
+  p.RotateY(direction.CalcTheta());
+  p.RotateZ(direction.CalcPhi());
+  return p;
 }
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::InNominalSystem(const I3Track& track, const I3Position& position)
+I3Direction I3Calculator::InNominalSystem(const I3Direction& direction, const I3Direction& dir)
 {
-  return InNominalSystem(track.GetDir(), position);
+  I3Direction d(dir);
+  //d.RotateZ(-direction.CalcPhi()); //get x-y orientation right
+  d.RotateZ(-pi/2.); //###
+  d.RotateY(direction.CalcTheta());
+  d.RotateZ(direction.CalcPhi());
+  return d;
+}
+
+
+//--------------------------------------------------------------
+I3Position I3Calculator::InNominalSystem(const I3Track& track, const I3Position& pos)
+{
+  return InNominalSystem(track.GetDir(), pos);
+}
+
+
+//--------------------------------------------------------------
+I3Direction I3Calculator::InNominalSystem(const I3Track& track, const I3Direction& dir)
+{
+  return InNominalSystem(track.GetDir(), dir);
 }
 

@@ -226,42 +226,56 @@ namespace I3Calculator
    * track.  Effectively, the track is now in the z-dir.
    */
   I3Position InTrackSystem(const I3Direction& direction, 
-			   const I3Position& position);
+			   const I3Position& pos);
 
   /**
    * Transform the input position into the coordinate system of the input 
    * track.  Effectively, the track is now in the z-dir.
    */
   I3Direction InTrackSystem(const I3Direction& direction, 
-			    const I3Direction& direction2);
+			    const I3Direction& dir);
 
   /**
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InTrackSystem().
    */
   I3Position InTrackSystem(const I3Track& track, 
-			   const I3Position& position);
+			   const I3Position& pos);
+
+  /**
+   * Convenience function overload that extracts the direction out of a track
+   * and then calls the regular InTrackSystem().
+   */
+  I3Direction InTrackSystem(const I3Track& track, 
+			    const I3Direction& dir);
 
   /**
    * Transform the input position out of the coordinate system of the input 
    * track.  Effectively, the track is now in its original direction.
    */
   I3Position InNominalSystem(const I3Direction& direction, 
-			     const I3Position& position);
+			     const I3Position& pos);
 
   /**
    * Transform the input position out of the coordinate system of the input 
    * track.  Effectively, the track is now in its original direction.
    */
   I3Direction InNominalSystem(const I3Direction& direction, 
-			      const I3Direction& direction2);
+			      const I3Direction& dir);
 
   /**
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InNominalSystem().
    */
   I3Position InNominalSystem(const I3Track& track, 
-			     const I3Position& position);
+			     const I3Position& pos);
+
+  /**
+   * Convenience function overload that extracts the direction out of a track
+   * and then calls the regular InNominalSystem().
+   */
+  I3Direction InNominalSystem(const I3Track& track, 
+			      const I3Direction& dir);
 
 };
 
