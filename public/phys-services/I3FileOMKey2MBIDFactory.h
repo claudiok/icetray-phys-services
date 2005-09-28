@@ -32,7 +32,6 @@ class I3FileOMKey2MBIDFactory
   I3FileOMKey2MBIDFactory operator=
     (const I3FileOMKey2MBIDFactory& rhs); 
 
-  ClassDef(I3FileOMKey2MBIDFactory,0);
 };
 
 #endif 

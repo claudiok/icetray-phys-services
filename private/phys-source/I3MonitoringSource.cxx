@@ -14,7 +14,9 @@
 #include "icetray/I3Context.h"
 #include "icetray/I3TrayHeaders.h"
 
-I3MonitoringSource::I3MonitoringSource(I3Context& context) : I3Source(context)
+//I3_MODULE(I3MonitoringSource);
+
+I3MonitoringSource::I3MonitoringSource(const I3Context& context) : I3Source(context)
 {
   AddOutBox("OutBox");
   NoActiveInBox();

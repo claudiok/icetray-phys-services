@@ -6,7 +6,7 @@
 class I3DefaultGeometrySource : public I3GeometrySource
 {
  public:
-  I3DefaultGeometrySource(I3Context& context);
+  I3DefaultGeometrySource(const I3Context& context);
 
   GeometryPair GetGeometry(I3Time eventTime);
 

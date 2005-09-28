@@ -11,7 +11,6 @@
 #ifndef I3CALCULATOR_H
 #define I3CALCULATOR_H
 
-#include <TObject.h>
 #include <cmath>
 #include "dataclasses/I3Track.h"
 #include "dataclasses/I3Cascade.h"

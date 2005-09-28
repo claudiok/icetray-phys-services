@@ -21,7 +21,7 @@
 class I3PhysicsSource : public I3Source
 {
  public:
-  I3PhysicsSource(I3Context& context);
+  I3PhysicsSource(const I3Context& context);
 
   void Process();
 

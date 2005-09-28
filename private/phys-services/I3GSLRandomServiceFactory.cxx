@@ -12,7 +12,7 @@
 
 #include "phys-services/I3GSLRandomServiceFactory.h"
 
-ClassImp(I3GSLRandomServiceFactory);
+I3_SERVICE_FACTORY(I3GSLRandomServiceFactory);
 
 // Other header files
 
@@ -22,7 +22,7 @@ ClassImp(I3GSLRandomServiceFactory);
 
 // Constructors
 
-I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(I3Context& context)
+I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(const I3Context& context)
   : I3ServiceFactory(context),
     seed_(-1), random_()
 {

@@ -12,9 +12,6 @@
 
 #include "phys-services/I3SPRNGRandomServiceFactory.h"
 
-ClassImp(I3SPRNGRandomServiceFactory);
-
-// Other header files
 
 #include "icetray/I3ServicesAccess.h"
 

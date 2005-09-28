@@ -6,7 +6,7 @@
 class I3DefaultDetectorStatusSource : public I3DetectorStatusSource
 {
  public:
-  I3DefaultDetectorStatusSource(I3Context& context);
+  I3DefaultDetectorStatusSource(const I3Context& context);
 
   DetectorStatusPair GetDetectorStatus(I3Time eventTime);
 

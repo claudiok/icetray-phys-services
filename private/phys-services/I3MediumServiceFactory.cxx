@@ -15,10 +15,6 @@
 
 #include "phys-services/I3MediumServiceFactory.h"
 
-// ClassImp(I3MediumServiceFactory);
-
-// other header files
-
 #include "icetray/I3ServicesAccess.h"
 #include "phys-services/I3MediumPropertiesFile.h"
 

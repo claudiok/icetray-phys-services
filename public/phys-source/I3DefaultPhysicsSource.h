@@ -6,7 +6,7 @@
 class I3DefaultPhysicsSource  : public I3PhysicsSource
 {
  public:
-  I3DefaultPhysicsSource(I3Context& context);
+  I3DefaultPhysicsSource(const I3Context& context);
 
   void Configure();
 

@@ -8,7 +8,9 @@
 
 #include <fstream>
 
-I3TextFileGeometrySource::I3TextFileGeometrySource(I3Context& context) :
+I3_MODULE(I3TextFileGeometrySource);
+
+I3TextFileGeometrySource::I3TextFileGeometrySource(const I3Context& context) :
   I3GeometrySource(context)
 {
     AddParameter("AmandaGeoFile",

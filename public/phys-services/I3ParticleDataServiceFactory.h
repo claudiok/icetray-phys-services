@@ -3,7 +3,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.h,v 1.5 2005/03/16 10:42:53 troy Exp $
+ * Version $Id$
  *
  * Date: 17 Feb 2004
  *
@@ -29,7 +29,7 @@ using namespace std;
 /**
  * @brief Installs a I3ParticleDataService.
  *
- * @version $Id: I3ParticleDataServiceFactory.h,v 1.5 2005/03/16 10:42:53 troy Exp $
+ * @version $Id$
  * @author pretz
  */
 class I3ParticleDataServiceFactory
@@ -67,8 +67,6 @@ class I3ParticleDataServiceFactory
 
   // instance member data
 
-  // ROOT macros
-  ClassDef(I3ParticleDataServiceFactory,0);
 };
 
 #endif // ROOTI3BOXESFACTORY_H

@@ -21,7 +21,7 @@
 class I3MonitoringSource : public I3Source
 {
  public:
-  I3MonitoringSource(I3Context& context);
+  I3MonitoringSource(const I3Context& context);
 
   void Process();
 

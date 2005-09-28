@@ -2,7 +2,9 @@
 #include "dataclasses/I3MCEvent.h"
 #include "dataclasses/I3MCEventHeader.h"
 
-I3DummyPhysicsSource::I3DummyPhysicsSource(I3Context& context) : 
+I3_MODULE(I3DummyPhysicsSource);
+
+I3DummyPhysicsSource::I3DummyPhysicsSource(const I3Context& context) : 
   I3PhysicsSource(context)
 {
   eventsReturned_ = 0;

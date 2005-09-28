@@ -1,6 +1,8 @@
 #include "phys-source/I3DummyMonitoringSource.h"
 
-I3DummyMonitoringSource::I3DummyMonitoringSource(I3Context& context) : 
+I3_MODULE(I3DummyMonitoringSource);
+
+I3DummyMonitoringSource::I3DummyMonitoringSource(const I3Context& context) : 
   I3MonitoringSource(context)
 {
   monitoringsReturned_ = 0;

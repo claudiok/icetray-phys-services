@@ -12,8 +12,6 @@
 #include "phys-services/I3SPRNGRandomService.h"
 #include "phys-services/gsl-sprng.h" 
 
-ClassImp(I3SPRNGRandomService);
-
 I3SPRNGRandomService::I3SPRNGRandomService()
 {
   gsl_rng_env_setup();

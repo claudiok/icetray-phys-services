@@ -1,6 +1,8 @@
 #include "phys-source/I3FileGeometrySource.h"
 
-I3FileGeometrySource::I3FileGeometrySource(I3Context& context) :
+I3_MODULE(I3FileGeometrySource);
+
+I3FileGeometrySource::I3FileGeometrySource(const I3Context& context) :
   I3GeometrySource(context)
 {
   AddParameter("AmandaGeoFile",

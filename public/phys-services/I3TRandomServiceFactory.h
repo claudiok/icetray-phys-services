@@ -74,8 +74,6 @@ class I3TRandomServiceFactory
 	int seed_;
 	I3RandomServicePtr random_;
 
-  // ROOT macros
-  ClassDef(I3TRandomServiceFactory,0);
 };
 
 #endif // ROOTI3BOXESFACTORY_H

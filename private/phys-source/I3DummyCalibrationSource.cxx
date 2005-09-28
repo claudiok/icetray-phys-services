@@ -1,7 +1,9 @@
 #include "phys-source/I3DummyCalibrationSource.h"
 
 
-I3DummyCalibrationSource::I3DummyCalibrationSource(I3Context& context) 
+I3_MODULE(I3DummyCalibrationSource);
+
+I3DummyCalibrationSource::I3DummyCalibrationSource(const I3Context& context) 
   : I3CalibrationSource(context){}
 
 CalibrationPair I3DummyCalibrationSource::GetCalibration(I3Time eventTime)

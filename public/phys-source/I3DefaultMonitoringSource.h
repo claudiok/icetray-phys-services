@@ -6,7 +6,7 @@
 class I3DefaultMonitoringSource  : public I3MonitoringSource
 {
  public:
-  I3DefaultMonitoringSource(I3Context& context);
+  I3DefaultMonitoringSource(const I3Context& context);
 
   MonitoringPair NextMonitoring();
 

@@ -532,4 +532,3 @@ I3PhysicsModule::GetMCEventHeader(I3Frame& frame, const string& name, bool stric
 }
 
 
-ClassImp(I3PhysicsModule);

@@ -2,7 +2,9 @@
 #include "dataclasses/I3MCEvent.h"
 #include "dataclasses/I3MCEventHeader.h"
 
-I3DefaultPhysicsSource::I3DefaultPhysicsSource(I3Context& context) : 
+I3_MODULE(I3DefaultPhysicsSource);
+
+I3DefaultPhysicsSource::I3DefaultPhysicsSource(const I3Context& context) : 
   I3PhysicsSource(context)
 {
   eventsReturned_ = 0;

@@ -1,7 +1,9 @@
 #include "phys-source/I3DefaultDetectorStatusSource.h"
 
 
-I3DefaultDetectorStatusSource::I3DefaultDetectorStatusSource(I3Context& context) 
+I3_MODULE(I3DefaultDetectorStatusSource);
+
+I3DefaultDetectorStatusSource::I3DefaultDetectorStatusSource(const I3Context& context) 
   : I3DetectorStatusSource(context){}
 
 DetectorStatusPair 

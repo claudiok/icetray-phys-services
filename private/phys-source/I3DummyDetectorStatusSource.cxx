@@ -1,7 +1,9 @@
 #include "phys-source/I3DummyDetectorStatusSource.h"
 
 
-I3DummyDetectorStatusSource::I3DummyDetectorStatusSource(I3Context& context) 
+I3_MODULE(I3DummyDetectorStatusSource);
+
+I3DummyDetectorStatusSource::I3DummyDetectorStatusSource(const I3Context& context) 
   : I3DetectorStatusSource(context){}
 
 DetectorStatusPair 

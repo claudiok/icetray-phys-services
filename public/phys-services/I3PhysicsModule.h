@@ -67,7 +67,7 @@ class I3PhysicsModule : public I3Module
    * This is the only constructor that should be used for this module
    * @param ctx the context that this module is built with
    */
-  I3PhysicsModule(I3Context& ctx) : I3Module(ctx){}
+  I3PhysicsModule(const I3Context& ctx) : I3Module(ctx){}
 
   /**
    * destructor
@@ -512,9 +512,6 @@ class I3PhysicsModule : public I3Module
 	I3MCEventHeaderPtr
 		GetMCEventHeader(I3Frame& frame, const string& name, bool strict);
 	
-
-  // ROOT macro
-  ClassDef(I3PhysicsModule,0);
 };
 
 #endif

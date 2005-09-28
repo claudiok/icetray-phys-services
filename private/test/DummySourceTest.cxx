@@ -17,6 +17,8 @@ TEST_GROUP(DummySourceTest);
 struct ev_stat_cal_geo{};
 typedef TestClientModule<ev_stat_cal_geo> EvStatCalGeoClient;
 
+I3_MODULE(EvStatCalGeoClient);
+
 template<> template <>
 inline void EvStatCalGeoClient::CheckFrame<0>(I3Frame& frame)
 {
@@ -56,11 +58,11 @@ TEST(ev_stat_cal_geo)
 {
   RootI3Tray tray;
   
-  tray.AddModule<I3DummyPhysicsSource>("eventssource");
-  tray.AddModule<I3DummyDetectorStatusSource>("statussource");
-  tray.AddModule<I3DummyCalibrationSource>("calibsource");
-  tray.AddModule<I3DummyGeometrySource>("geomsource");
-  tray.AddModule<EvStatCalGeoClient>("client");
+  tray.AddModule("I3DummyPhysicsSource","eventssource");
+  tray.AddModule("I3DummyDetectorStatusSource","statussource");
+  tray.AddModule("I3DummyCalibrationSource","calibsource");
+  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("EvStatCalGeoClient","client");
   
   tray.ConnectBoxes("eventssource","OutBox","statussource");
   tray.ConnectBoxes("statussource","OutBox","calibsource");
@@ -73,6 +75,8 @@ TEST(ev_stat_cal_geo)
 
 struct ev_cal_geo{};
 typedef TestClientModule<ev_cal_geo> EvCalGeoClient;
+
+I3_MODULE(EvCalGeoClient);
 
 template<> template <>
 inline void EvCalGeoClient::CheckFrame<0>(I3Frame& frame)
@@ -102,10 +106,10 @@ TEST(ev_cal_geo)
 {
   RootI3Tray tray;
   
-  tray.AddModule<I3DummyPhysicsSource>("eventssource");
-  tray.AddModule<I3DummyCalibrationSource>("calibsource");
-  tray.AddModule<I3DummyGeometrySource>("geomsource");
-  tray.AddModule<EvCalGeoClient>("client");
+  tray.AddModule("I3DummyPhysicsSource","eventssource");
+  tray.AddModule("I3DummyCalibrationSource","calibsource");
+  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("EvCalGeoClient","client");
   
   tray.ConnectBoxes("eventssource","OutBox","calibsource");
   tray.ConnectBoxes("calibsource","OutBox","geomsource");
@@ -117,6 +121,7 @@ TEST(ev_cal_geo)
 
 struct mon_stat_cal_geo{};
 typedef TestClientModule<mon_stat_cal_geo> MonStatCalGeoClient;
+I3_MODULE(MonStatCalGeoClient);
 
 template<> template <>
 inline void MonStatCalGeoClient::CheckFrame<0>(I3Frame& frame)
@@ -157,11 +162,11 @@ TEST(mon_stat_cal_geo)
 {
   RootI3Tray tray;
   
-  tray.AddModule<I3DummyMonitoringSource>("eventssource");
-  tray.AddModule<I3DummyDetectorStatusSource>("statussource");
-  tray.AddModule<I3DummyCalibrationSource>("calibsource");
-  tray.AddModule<I3DummyGeometrySource>("geomsource");
-  tray.AddModule<MonStatCalGeoClient>("client");
+  tray.AddModule("I3DummyMonitoringSource","eventssource");
+  tray.AddModule("I3DummyDetectorStatusSource","statussource");
+  tray.AddModule("I3DummyCalibrationSource","calibsource");
+  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("MonStatCalGeoClient","client");
   
   tray.ConnectBoxes("eventssource","OutBox","statussource");
   tray.ConnectBoxes("statussource","OutBox","calibsource");
@@ -174,6 +179,8 @@ TEST(mon_stat_cal_geo)
 
 struct mon_cal_geo{};
 typedef TestClientModule<mon_cal_geo> MonCalGeoClient;
+
+I3_MODULE(MonCalGeoClient);
 
 template<> template <>
 inline void MonCalGeoClient::CheckFrame<0>(I3Frame& frame)
@@ -203,10 +210,10 @@ TEST(mon_cal_geo)
 {
   RootI3Tray tray;
   
-  tray.AddModule<I3DummyMonitoringSource>("eventssource");
-  tray.AddModule<I3DummyCalibrationSource>("calibsource");
-  tray.AddModule<I3DummyGeometrySource>("geomsource");
-  tray.AddModule<MonCalGeoClient>("client");
+  tray.AddModule("I3DummyMonitoringSource","eventssource");
+  tray.AddModule("I3DummyCalibrationSource","calibsource");
+  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("MonCalGeoClient","client");
   
   tray.ConnectBoxes("eventssource","OutBox","calibsource");
   tray.ConnectBoxes("calibsource","OutBox","geomsource");

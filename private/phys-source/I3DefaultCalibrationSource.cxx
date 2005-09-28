@@ -1,7 +1,9 @@
 #include "phys-source/I3DefaultCalibrationSource.h"
 
 
-I3DefaultCalibrationSource::I3DefaultCalibrationSource(I3Context& context) 
+I3_MODULE(I3DefaultCalibrationSource);
+
+I3DefaultCalibrationSource::I3DefaultCalibrationSource(const I3Context& context) 
   : I3CalibrationSource(context){}
 
 CalibrationPair I3DefaultCalibrationSource::GetCalibration(I3Time eventTime)

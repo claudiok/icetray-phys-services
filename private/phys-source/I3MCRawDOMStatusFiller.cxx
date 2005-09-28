@@ -4,7 +4,9 @@
 #include "dataclasses/I3Geometry.h"
 #include "dataclasses/I3DetectorStatus.h"
 
-I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(I3Context& context) : 
+I3_MODULE(I3MCRawDOMStatusFiller);
+
+I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(const I3Context& context) : 
   I3PhysicsModule(context)
 {
     triggerMode_ = 2;

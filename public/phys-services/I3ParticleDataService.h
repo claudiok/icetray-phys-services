@@ -7,7 +7,7 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3ParticleDataService.h,v 1.11 2005/04/12 18:43:58 pretz Exp $
+ * $Id$
  *
  * @brief This class provides frequently needed operations on the Particle 
  * types.
@@ -18,7 +18,7 @@
  * Lifetime(I3Track::MuMinus)/I3Units::ns
  *
  * @version $Revision: 1.11 $
- * @date $Date: 2005/04/12 18:43:58 $
+ * @date $Date$
  * @author pretz
  *
  * @todo implment the TranslateFromPDG and TranslateFromCorsika methods
@@ -118,9 +118,6 @@ class I3ParticleDataService {
   // copy and assignment are private
   I3ParticleDataService(const I3ParticleDataService&);
   const I3ParticleDataService& operator=(const I3ParticleDataService&);
-
-  //ROOT macro
-  ClassDef(I3ParticleDataService,0);
 
 };
 

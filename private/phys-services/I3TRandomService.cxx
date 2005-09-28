@@ -1,7 +1,5 @@
 #include "phys-services/I3TRandomService.h"
 
-ClassImp(I3TRandomService);
-
 int I3TRandomService::Binomial(int ntot, double prob)
 {
   return fRand.Binomial(ntot,prob);

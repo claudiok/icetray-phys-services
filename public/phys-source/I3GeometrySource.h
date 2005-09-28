@@ -26,7 +26,7 @@
 class I3GeometrySource : public I3PhysicsModule
 {
  public:
-  I3GeometrySource(I3Context& context);
+  I3GeometrySource(const I3Context& context);
 
   void Process();
 

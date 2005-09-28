@@ -73,8 +73,6 @@ class I3SPRNGRandomServiceFactory
   int seed_, nstreams_, streamnum_;
   I3RandomServicePtr random_;
   
-  // ROOT macros
-  ClassDef(I3SPRNGRandomServiceFactory,0);
 };
 
 #endif

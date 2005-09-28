@@ -14,7 +14,9 @@
 #include "dataclasses/I3Time.h"
 #include "icetray/I3TrayHeaders.h"
 
-I3DetectorStatusSource::I3DetectorStatusSource(I3Context& context) : 
+//I3_MODULE(I3DetectorStatusSource);
+
+I3DetectorStatusSource::I3DetectorStatusSource(const I3Context& context) : 
   I3PhysicsModule(context)
 {
   if(!I3Stream::StreamExists("DetectorStatus"))

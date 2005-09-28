@@ -1,7 +1,9 @@
 #include "phys-source/I3DummyGeometrySource.h"
 
 
-I3DummyGeometrySource::I3DummyGeometrySource(I3Context& context) 
+I3_MODULE(I3DummyGeometrySource);
+
+I3DummyGeometrySource::I3DummyGeometrySource(const I3Context& context) 
   : I3GeometrySource(context){}
 
 GeometryPair I3DummyGeometrySource::GetGeometry(I3Time eventTime)

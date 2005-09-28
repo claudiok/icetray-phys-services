@@ -6,7 +6,7 @@
 class I3DummyPhysicsSource  : public I3PhysicsSource
 {
  public:
-  I3DummyPhysicsSource(I3Context& context);
+  I3DummyPhysicsSource(const I3Context& context);
 
   void Configure();
 

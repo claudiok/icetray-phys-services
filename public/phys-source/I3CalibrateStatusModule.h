@@ -26,7 +26,7 @@
 class I3CalibrateStatusModule : public I3PhysicsModule
 {
  public:
-  I3CalibrateStatusModule(I3Context& context);
+  I3CalibrateStatusModule(const I3Context& context);
 
   void DetectorStatus(I3Frame& frame);
 

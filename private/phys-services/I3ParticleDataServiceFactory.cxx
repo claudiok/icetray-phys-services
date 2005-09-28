@@ -1,7 +1,7 @@
 /*
  * class: I3ParticleDataServiceFactory
  *
- * Version $Id: I3ParticleDataServiceFactory.cxx,v 1.8 2005/04/04 18:40:39 pretz Exp $
+ * Version $Id$
  *
  * Date: 17 Feb 2004
  *
@@ -11,10 +11,6 @@
 // Class header files
 
 #include "phys-services/I3ParticleDataServiceFactory.h"
-
-ClassImp(I3ParticleDataServiceFactory);
-
-// Other header files
 
 #include "icetray/I3ServicesAccess.h"
 

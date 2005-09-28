@@ -14,7 +14,7 @@
 #include "dataclasses/I3Time.h"
 #include "icetray/I3TrayHeaders.h"
 
-I3CalibrationSource::I3CalibrationSource(I3Context& context) : 
+I3CalibrationSource::I3CalibrationSource(const I3Context& context) : 
   I3PhysicsModule(context)
 {
   if(!I3Stream::StreamExists("Calibration"))

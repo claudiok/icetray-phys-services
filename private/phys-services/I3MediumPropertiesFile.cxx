@@ -15,8 +15,6 @@
 
 #include "phys-services/I3MediumPropertiesFile.h"
 
-// ClassImp(I3MediumPropertiesFile);
-
 // other header files
 
 #include <algorithm>

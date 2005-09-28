@@ -26,7 +26,7 @@
 class I3CalibrationSource : public I3PhysicsModule
 {
  public:
-  I3CalibrationSource(I3Context& context);
+  I3CalibrationSource(const I3Context& context);
 
   void Process();
 

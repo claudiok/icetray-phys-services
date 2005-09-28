@@ -24,7 +24,7 @@
 class I3DetectorStatusSource : public I3PhysicsModule
 {
  public:
-  I3DetectorStatusSource(I3Context& context);
+  I3DetectorStatusSource(const I3Context& context);
 
   void Process();
 

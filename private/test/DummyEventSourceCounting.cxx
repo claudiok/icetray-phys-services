@@ -16,7 +16,7 @@ struct count_events : public I3PhysicsModule
 {
   int physicsCount;
   int expectedEvents;
-  count_events(I3Context& context) : I3PhysicsModule(context)
+  count_events(const I3Context& context) : I3PhysicsModule(context)
   {
     physicsCount = 0;
     expectedEvents = -1;
@@ -40,17 +40,19 @@ struct count_events : public I3PhysicsModule
   }
 }; 
 
+I3_MODULE(count_events);
+
 
 inline void runTheCountingTest(int input,int output)
 {
   RootI3Tray tray;
   
-  tray.AddModule<I3DummyPhysicsSource>("eventssource");
+  tray.AddModule("I3DummyPhysicsSource","eventssource");
   tray.SetParameter("eventssource","EventsToReturn",input);
-  tray.AddModule<I3DummyDetectorStatusSource>("statussource");
-  tray.AddModule<I3DummyCalibrationSource>("calibsource");
-  tray.AddModule<I3DummyGeometrySource>("geomsource");
-  tray.AddModule<count_events>("count");
+  tray.AddModule("I3DummyDetectorStatusSource","statussource");
+  tray.AddModule("I3DummyCalibrationSource","calibsource");
+  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("count_events","count");
   tray.SetParameter("count","expectedNumEvents",output);
   
   tray.ConnectBoxes("eventssource","OutBox","statussource");

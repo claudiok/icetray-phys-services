@@ -14,7 +14,9 @@
 #include "icetray/I3Context.h"
 #include "icetray/I3TrayHeaders.h"
 
-I3PhysicsSource::I3PhysicsSource(I3Context& context) : I3Source(context)
+//I3_MODULE(I3PhysicsSource);
+
+I3PhysicsSource::I3PhysicsSource(const I3Context& context) : I3Source(context)
 {
   AddOutBox("OutBox");
   NoActiveInBox();

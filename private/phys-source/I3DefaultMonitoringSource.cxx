@@ -1,6 +1,8 @@
 #include "phys-source/I3DefaultMonitoringSource.h"
 
-I3DefaultMonitoringSource::I3DefaultMonitoringSource(I3Context& context) : 
+I3_MODULE(I3DefaultMonitoringSource);
+
+I3DefaultMonitoringSource::I3DefaultMonitoringSource(const I3Context& context) : 
   I3MonitoringSource(context)
 {
   monitoringsReturned_ = 0;

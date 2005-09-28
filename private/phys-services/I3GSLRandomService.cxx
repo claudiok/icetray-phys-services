@@ -1,7 +1,5 @@
 #include "phys-services/I3GSLRandomService.h"
 
-ClassImp(I3GSLRandomService);
-
 I3GSLRandomService::I3GSLRandomService()
 {
   construct();

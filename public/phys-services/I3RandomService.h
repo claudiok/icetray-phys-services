@@ -97,8 +97,6 @@ class I3RandomService {
   I3RandomService(const I3RandomService&);
   const I3RandomService& operator=(const I3RandomService&);
 
-  //ROOT macro
-  ClassDef(I3RandomService,0);
 };
 
 typedef shared_ptr<I3RandomService> I3RandomServicePtr;

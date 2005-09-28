@@ -25,7 +25,7 @@
 class I3MCCalibrationFiller : public I3PhysicsModule
 {
 public:
-    I3MCCalibrationFiller(I3Context&);
+    I3MCCalibrationFiller(const I3Context&);
 
     void Configure();
     void Calibration(I3Frame& frame);

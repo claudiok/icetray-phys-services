@@ -28,7 +28,7 @@
 class I3MCRawDOMStatusFiller : public I3PhysicsModule
 {
 public:
-    I3MCRawDOMStatusFiller(I3Context&);
+    I3MCRawDOMStatusFiller(const I3Context&);
 
     void Configure();
     void DetectorStatus(I3Frame& frame);

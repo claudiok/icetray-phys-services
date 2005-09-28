@@ -6,7 +6,9 @@
 
 double I3MCCalibrationFiller::CONVERSION_FACTOR = -0.0021;
 
-I3MCCalibrationFiller::I3MCCalibrationFiller(I3Context& context) 
+I3_MODULE(I3MCCalibrationFiller);
+
+I3MCCalibrationFiller::I3MCCalibrationFiller(const I3Context& context) 
 : I3PhysicsModule(context)
 {
     atwd0gain_ = -16.0;

@@ -1,7 +1,9 @@
 #include "phys-source/I3DefaultGeometrySource.h"
 
 
-I3DefaultGeometrySource::I3DefaultGeometrySource(I3Context& context) 
+I3_MODULE(I3DefaultGeometrySource);
+
+I3DefaultGeometrySource::I3DefaultGeometrySource(const I3Context& context) 
   : I3GeometrySource(context){}
 
 GeometryPair I3DefaultGeometrySource::GetGeometry(I3Time eventTime)

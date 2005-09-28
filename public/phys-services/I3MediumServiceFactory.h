@@ -82,8 +82,6 @@ class I3MediumServiceFactory : public I3ServiceFactory{
 	// logging
 	SET_LOGGER("I3MediumServiceFactory");
 	
-  // ROOT macro
-  // ClassDef(I3MediumServiceFactory,0);
 };
 
 #endif // I3_MEDIUM_SERVICE_FACTORY_H_INCLUDED

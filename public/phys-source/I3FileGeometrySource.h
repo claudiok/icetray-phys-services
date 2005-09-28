@@ -7,7 +7,7 @@
 class I3FileGeometrySource : public I3GeometrySource
 {
  public:
-  I3FileGeometrySource(I3Context& context);
+  I3FileGeometrySource(const I3Context& context);
 
   void Configure();
 

@@ -20,7 +20,9 @@
 #include "dataclasses/I3Calibration.h"
 #include "dataclasses/I3DetectorStatus.h"
 
-I3CalibrateStatusModule::I3CalibrateStatusModule(I3Context& context) : 
+I3_MODULE(I3CalibrateStatusModule);
+
+I3CalibrateStatusModule::I3CalibrateStatusModule(const I3Context& context) : 
   I3PhysicsModule(context)
 {
   AddOutBox("OutBox");

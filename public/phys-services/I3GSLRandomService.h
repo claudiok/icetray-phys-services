@@ -93,7 +93,6 @@ class I3GSLRandomService : public I3RandomService{
 
   gsl_rng* r;
 
-  ClassDef(I3GSLRandomService,0);
 };
 
 typedef shared_ptr<I3GSLRandomService> I3GSLRandomServicePtr;

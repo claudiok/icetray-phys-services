@@ -16,10 +16,6 @@
 
 #include "phys-services/I3MediumService.h"
 
-// ClassImp(I3MediumService);
-
-// other header files
-
 #include <algorithm>
 #include <ctype.h>
 #include "TFile.h"

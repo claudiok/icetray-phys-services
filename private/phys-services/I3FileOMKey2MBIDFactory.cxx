@@ -1,11 +1,11 @@
 #include "phys-services/I3FileOMKey2MBIDFactory.h"
 #include "phys-services/I3FileOMKey2MBID.h"
 
-ClassImp(I3FileOMKey2MBIDFactory);
-
 #include "icetray/I3ServicesAccess.h"
 
 #include "phys-services/I3TRandomService.h"
+
+I3_SERVICE_FACTORY(I3FileOMKey2MBIDFactory);
 
 I3FileOMKey2MBIDFactory::I3FileOMKey2MBIDFactory(const I3Context& context)
   : I3ServiceFactory(context)

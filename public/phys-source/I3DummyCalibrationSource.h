@@ -6,7 +6,7 @@
 class I3DummyCalibrationSource : public I3CalibrationSource
 {
  public:
-  I3DummyCalibrationSource(I3Context& context);
+  I3DummyCalibrationSource(const I3Context& context);
 
   CalibrationPair GetCalibration(I3Time eventTime);
 

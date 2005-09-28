@@ -6,7 +6,7 @@
 class I3DummyGeometrySource : public I3GeometrySource
 {
  public:
-  I3DummyGeometrySource(I3Context& context);
+  I3DummyGeometrySource(const I3Context& context);
 
   GeometryPair GetGeometry(I3Time eventTime);
 

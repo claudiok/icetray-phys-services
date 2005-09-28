@@ -41,7 +41,7 @@ class I3GSLRandomServiceFactory
 
   // Constructors and destructor
 
-  I3GSLRandomServiceFactory(I3Context& context);
+  I3GSLRandomServiceFactory(const I3Context& context);
 
   virtual ~I3GSLRandomServiceFactory();
 
@@ -73,8 +73,6 @@ class I3GSLRandomServiceFactory
   int seed_;
   I3RandomServicePtr random_;
   
-  // ROOT macros
-  ClassDef(I3GSLRandomServiceFactory,0);
 };
 
 #endif
