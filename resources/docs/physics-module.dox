@@ -10,12 +10,25 @@ for writing an I3PhysicsModule.
 
  @section description-of-physics-module Description
 
- IceTray modules must inherit from the I3Module class of the @c icetray project.
- In some places the syntax  to be able to access data
- or services is cumbersome and not intuitive.  I3PhysicsModule inherits from
- I3Module and defines a number of helper methods to simplify the syntax.  
- Modules may inherit from I3PhysicsModule instead of I3Module directly to
- gain access to these helper methods.
+ IceTray modules must inherit from the I3Module class of the @c
+ icetray project.  In some places the syntax to be able to access
+ data or services is cumbersome and not intuitive.  I3PhysicsModule
+ inherits from I3Module and defines a number of helper methods to
+ simplify the syntax.  Modules may inherit from I3PhysicsModule
+ instead of I3Module directly to gain access to these helper methods.
+
+ @section registration Registering modules with the framework
+
+ Modules (descendants of I3Module) and service factories
+ (descendants of I3ServiceFactory) need to be registered with the
+ framework for creation to work, so that the framework can create
+ modules when configuring the icetray.
+
+ This is done with @c I3_MODULE(MyModuleName) or
+ @c I3_SERVICE_FACTORY(MyServiceFactoryName), in the modules
+ implementation file (a .cxx file).
+
+ See any provided module or service factory for an example.
 
  @section accessing-services-physics-module Accessing Standard Services with I3PhysicsModule
  
