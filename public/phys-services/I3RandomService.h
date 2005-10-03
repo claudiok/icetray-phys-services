@@ -48,9 +48,6 @@ class I3RandomService {
    */
   virtual int Binomial(int ntot, double prob)=0;
 
-  // Apparently, my version of ROOT doesn't have this, so I left it out.
-  /* virtual double BreitWigner(double mean = 0, double gamma = 1)=0; */
-  
   /**
    * A number from an Exponential distribution
    */
@@ -96,6 +93,8 @@ class I3RandomService {
   // copy and assignment private
   I3RandomService(const I3RandomService&);
   const I3RandomService& operator=(const I3RandomService&);
+
+  SET_LOGGER("I3RandomService");
 
 };
 

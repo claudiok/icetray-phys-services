@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3OMKey2MBID.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -42,6 +42,8 @@ class I3OMKey2MBID
    * @brief Gets the default name of this service in the context.
    */
   static const char* DefaultName() { return "OMKey2MBID";}
+
+   SET_LOGGER("I3OMKey2MBID");
 };
 
 typedef boost::shared_ptr<I3OMKey2MBID> I3OMKey2MBIDPtr;

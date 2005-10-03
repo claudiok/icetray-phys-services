@@ -1,3 +1,11 @@
+/*
+ * class:  I3FileOMKey2MBID
+ *
+ * Version: $Id:$
+ *
+ * (c) IceCube Collaboration
+ */
+
 #include "phys-services/I3FileOMKey2MBID.h"
 #include <fstream>
 #include <string>

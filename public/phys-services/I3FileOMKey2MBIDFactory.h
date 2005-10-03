@@ -32,6 +32,8 @@ class I3FileOMKey2MBIDFactory
   I3FileOMKey2MBIDFactory operator=
     (const I3FileOMKey2MBIDFactory& rhs); 
 
+ SET_LOGGER("I3FileOMKey2MBIDFactory");
+
 };
 
 #endif 

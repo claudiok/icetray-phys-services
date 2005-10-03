@@ -17,8 +17,6 @@
  * @version $Revision: 1.6 $
  * @date $Date$
  * @author pretz
- *
- * @todo 
  */
 class I3TRandomService : public I3RandomService{
  public:
@@ -33,7 +31,7 @@ class I3TRandomService : public I3RandomService{
    * Builds the private TRandom with the indicated seed
    * @param seed the seed value you want for the TRandom
    */
-  I3TRandomService(unsigned int seed) : fRand(seed){}
+  I3TRandomService(unsigned int seed) : rand_(seed){}
 
   /**
    * destructor
@@ -45,9 +43,6 @@ class I3TRandomService : public I3RandomService{
    */
   virtual int Binomial(int ntot, double prob);
 
-  // Apparently, my version of ROOT doesn't have this, so I left it out.
-  /* virtual double BreitWigner(double mean = 0, double gamma = 1)=0; */
-  
   /**
    * A number from an Exponential distribution
    */
@@ -84,7 +79,9 @@ class I3TRandomService : public I3RandomService{
    */
   virtual double Gaus(double mean, double stddev);
  private:
-  TRandom fRand;
+  TRandom rand_;
+
+  SET_LOGGER("I3TRandomService");
 
 
 };

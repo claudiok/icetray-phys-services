@@ -72,6 +72,8 @@ class I3SPRNGRandomServiceFactory
   // instance member data
   int seed_, nstreams_, streamnum_;
   I3RandomServicePtr random_;
+
+  SET_LOGGER("I3SPRNGRandomServiceFactory");
   
 };
 

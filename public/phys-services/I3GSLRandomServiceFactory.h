@@ -73,6 +73,8 @@ class I3GSLRandomServiceFactory
   int seed_;
   I3RandomServicePtr random_;
   
+
+  SET_LOGGER("I3GSLRandomServiceFactory");
 };
 
 #endif

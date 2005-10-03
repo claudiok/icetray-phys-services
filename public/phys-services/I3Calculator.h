@@ -34,7 +34,6 @@ using namespace I3Units;
  */
 namespace I3Calculator
 {
-
   /**
    * Returns a position on the input track ('track'), which is a distance 
    * 'dist' away from the track's nominal position.  If 'dist' is positive, 

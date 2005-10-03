@@ -20,7 +20,6 @@ using namespace I3Units;
  */
 namespace I3Cuts
 {
-
   /**
    * The default value for the lower edge of the residual time window for
    * direct hits.

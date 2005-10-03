@@ -74,6 +74,7 @@ class I3TRandomServiceFactory
 	int seed_;
 	I3RandomServicePtr random_;
 
+   SET_LOGGER("I3TRandomServiceFactory");
 };
 
-#endif // ROOTI3BOXESFACTORY_H
+#endif 

@@ -1,7 +1,5 @@
 #include "phys-services/I3PhysicsModule.h"
 
-//#include "icetray/I3Module.h"
-//#include "icetray/I3ContextAccess.h"
 #include "dataclasses/I3MCEvent.h"
 #include "dataclasses/I3MCEventHeader.h"
 #include "dataclasses/I3Geometry.h"
@@ -10,11 +8,6 @@
 #include "dataclasses/I3GeometryHeader.h"
 #include "dataclasses/I3DetectorStatus.h"
 #include "dataclasses/I3DetectorStatusHeader.h"
-//#include "dataclasses/I3Monitoring.h"
-//#include "dataclasses/I3MonitoringHeader.h"
-//#include "icetray/I3FrameAccess.h"
-//#include "I3ParticleDataService.h"
-//#include "I3RandomService.h"
 
 using namespace std;
 
@@ -35,12 +28,6 @@ using namespace std;
  * @param frame the frame we want to check
  * @param name the name of the event in the frame.  Defaults to 'Physics'
  */
-
-I3ParticleDataService& I3PhysicsModule::GetParticleData(const string& name)
-{
-  return I3ContextAccess<I3ParticleDataService>::
-    GetService(GetContext(), name);
-}
 
 /**
  * returns a reference to the random number service

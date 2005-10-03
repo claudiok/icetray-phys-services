@@ -19,6 +19,7 @@
 #include "dataclasses/I3InIceCalibration.h"
 #include "dataclasses/I3Calibration.h"
 #include "dataclasses/I3DetectorStatus.h"
+#include "dataclasses/I3Units.h"
 
 I3_MODULE(I3CalibrateStatusModule);
 

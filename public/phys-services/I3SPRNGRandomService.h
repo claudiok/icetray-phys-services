@@ -101,6 +101,8 @@ class I3SPRNGRandomService : public I3RandomService{
 
   gsl_rng* r;
 
+  SET_LOGGER("I3SPRNGRandomService");
+
 };
 
 typedef shared_ptr<I3SPRNGRandomService> I3SPRNGRandomServicePtr;

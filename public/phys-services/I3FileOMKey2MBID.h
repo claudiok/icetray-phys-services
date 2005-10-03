@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id:$
+ * $Id$
  *
  * @file I3FileOMKey2MBID.h
  * @version $Revision:$
- * @date $Date:$
+ * @date $Date$
  * @author pretz
  */
 
@@ -36,6 +36,8 @@ class I3FileOMKey2MBID : public I3OMKey2MBID
   OMKey OMKeyize(const string& key);
 
   void Fatal(const string& message);
+
+  SET_LOGGER("I3FileOMKey2MBID");
 };
 
 #endif

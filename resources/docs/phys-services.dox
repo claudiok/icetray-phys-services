@@ -13,24 +13,13 @@ provided:
 I3RandomService is an abstract interface, which can be serviced by any of
 several implementations.  Currently there are three implementations of this
 interface.  I3TRandomService uses a private instance of a TRandom to create
-the random numbers.  I3GSLRandomServices uses the gnu scientific library
+the random numbers.  I3GSLRandomService uses the gnu scientific library
 to generate random numbers. I3SPRNGRandomService uses the SPRNG library to
 produce independent streams of pseudo-random numbers for distributed
 computation (see distributed-rng doxygen document).
 The advantage of having an I3RandomService interface between us and the 
 random number generator.  We can dynamically switch between any
 implementations of I3RandomSerivce.
-
-
-@li <b>I3ParticleDataService</b> is a service dealing with the 
-IceCube particle types.  The I3ParticleDataService provides physical constants 
-such as mass, charge, and lifetime for any I3Particle::ParticleType that is 
-given it.  
-There are also facilites for converting between RDMC particle ids, Geant 
-particle ids, and PDG particle ids, and a facility to convert an 
-I3Particle::ParticleType into a std::string.  The conversion of Geant and PDG 
-particle types has yet to be implemented.  There are probably several important
-features that should be in this class that are not yet implemented.
 
 @li <b> I3Calculator </b> is a service which handles standard calculations.
 Right now these are mostly routines for calcuating geometrical quantities of

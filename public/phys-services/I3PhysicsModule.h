@@ -16,7 +16,6 @@
 #include "icetray/I3ContextAccess.h"
 #include "icetray/I3FrameAccess.h"
 #include "icetray/I3Frame.h"
-#include "I3ParticleDataService.h"
 #include "I3RandomService.h"
 
 class I3MCEvent;
@@ -74,14 +73,6 @@ class I3PhysicsModule : public I3Module
    */
   virtual ~I3PhysicsModule(){}
 
-  /**
-   * returns a reference to the particle data service
-   * @return a reference to the particle data serve that a module is
-   * using 
-   * @param name the name of the instance of the service requested.
-   */
-  I3ParticleDataService& GetParticleData(const string& name=
-					 I3ParticleDataService::DefaultName());
   /**
    * returns a reference to the random number service
    * @return a reference to the random number service
@@ -411,87 +402,7 @@ class I3PhysicsModule : public I3Module
 			  I3DetectorStatusHeaderPtr header,
 			       const string& name="DetectorStatusHeader");
 
-  /**
-   * Checks to see if a frame has a monitoring in it
-   * @param frame the frame we want to check
-   * @param name the name of the monitoring in the frame
-   * @return true if the frame has a monitoring, false if otherwise
-   */
-/*   bool HasMonitoring(I3Frame& frame,const string& name="Monitoring") */
-/*     { */
-/*       return I3FrameAccess<I3Monitoring>::Exists(frame,name); */
-/*     } */
-  
-  /**
-   * Gets the monitoring out of the frame.  Just a helper method to 
-   * simplify the
-   * syntax
-   * @return an I3Monitoring that is in the frame
-   * @param frame the frame that you want the monitoring out of
-   */
-/*   I3Monitoring& GetMonitoring(I3Frame& frame,const string& name="Monitoring") */
-/*     { */
-/*       return I3FrameAccess<I3Monitoring>::Get(frame,name); */
-/*     } */
-  
-  /**
-   * Puts a monitoring in the frame.  Just a helper method to simplify 
-   * the syntax
-   * @param frame the frame to put the monitoring into
-   * @param monitoring the monitoring to put into the frame
-   * @param name the name of the monitoring in the frame.  Defaults to 
-   * 'Monitoring'
-   * @return true if it is successful, false if otherwise
-   */
-/*   bool PutMonitoring(I3Frame& frame, */
-/* 		       I3MonitoringPtr monitoring, */
-/* 		       const string& name="Monitoring") */
-/*     { */
-/*       return I3FrameAccess<I3Monitoring>::Put(frame,monitoring,name); */
-/*     } */
-  
-  /*
-   * Checks to see if a frame has a monitoring header in it
-   * @param frame the frame we want to check
-   * @param name the name of the monitoring header in the frame
-   * @return true if the frame has a monitoring header, false if otherwise
-   */
-/*   bool HasMonitoringHeader(I3Frame& frame, */
-/* 			     const string& name="MonitoringHeader") */
-/*     { */
-/*       return I3FrameAccess<I3MonitoringHeader>::Exists(frame,name); */
-/*     } */
-  
-  /**
-   * Gets the monitoring header out of the frame.  Just a helper method to 
-   * simplify the syntax.  
-   * @return an I3MonitoringHeader that is in the frame
-   * @param frame the frame that you want the monitoring header out of.
-   * @param name the name of the monitoring header in the frame.  Defaults
-   * to 'MonitoringHeader'
-   */
-/*   I3MonitoringHeader& GetMonitoringHeader(I3Frame& frame,  */
-/* 					  const string& name= */
-/* 					  "MonitoringHeader") */
-/*     { */
-/*       return I3FrameAccess<I3MonitoringHeader>::Get(frame,name); */
-/*     } */
-  
-  /**
-   * Puts a evemt header in the frame.  Just a helper method to 
-   * simplify the syntax
-   * @param frame the frame to put the monitoring header into
-   * @param header the monitoring header to put into the frame
-   * @param name the name of the header in the frame.  
-   * Defaults to 'MonitoringHeader'
-   * @return true if it is successful, false if otherwise
-   */
-/*   bool PutMonitoringHeader(I3Frame& frame, */
-/* 			     I3MonitoringHeaderPtr header, */
-/* 			     const string& name="MonitoringHeader") */
-/*     { */
-/*       return I3FrameAccess<I3MonitoringHeader>::Put(frame,header,name); */
-/*     } */
+  SET_LOGGER("I3PhysicsModule");
   
  private:
   
@@ -512,6 +423,7 @@ class I3PhysicsModule : public I3Module
 	I3MCEventHeaderPtr
 		GetMCEventHeader(I3Frame& frame, const string& name, bool strict);
 	
+
 };
 
 #endif
