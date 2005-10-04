@@ -1,17 +1,42 @@
 /**
 @mainpage The 'phys-services' Project
 
-This project contains some basic "service modules".  Here are some docs
+The phys-services project is a collection of IceTray services and other
+utilities common to all or most of icetray-based software.  The project
+has come to contain some things are not strictly speaking 'icetray services'
+but are still pieces of code that are useful in a wide range of projects.
 
-@li @ref phys-services
+For a reference on what an icetray service is, please see the icetray docs
+on the subject @ref addingservices
+<hr>
+These are docs on the specific icetray service interfaces 
+and implementations offered by the phys-services project
+@li @ref random-service
 
-@li @ref physics-module
+@li @ref omkey2mbid
 
-@li @ref phys-services-phys-source
+@li @ref i3medium
 
-@li @ref distributed-rng 
+<hr>
 
+These docs are about two namespaces full of useful functions.  They are not
+really icetray 'services' per se, but they can still be used by other code.
 @li @ref I3Calculator -- namespace of functions (tools) to calculate various quantities used in reconstruction
 
 @li @ref I3Cuts -- namespace of functions for calculating parameters on which data reduction cuts will be performed
- */
+
+<hr>
+
+Following are docs about the I3PhysicsModule class which is included in 
+phys-services.  It contains several 'helper' and 'convenience' functions
+that the base I3Module class does not.
+@li @ref physics-module
+
+<hr>
+
+These are docs related to a set of base module classes for starting off an
+icetray session.  The so-called 'Source Modules' inherit from these classes so
+that common functionality is all in one place.
+@li @ref phys-services-phys-source
+
+*/
