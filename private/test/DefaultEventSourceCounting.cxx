@@ -2,17 +2,17 @@
 
 #include "root-icetray/RootI3Tray.h"
 
-#include "phys-source/I3DummyPhysicsSource.h"
-#include "phys-source/I3DummyCalibrationSource.h"
-#include "phys-source/I3DummyGeometrySource.h"
-#include "phys-source/I3DummyDetectorStatusSource.h"
-#include "phys-source/I3DummyMonitoringSource.h"
+#include "phys-source/I3DefaultPhysicsSource.h"
+#include "phys-source/I3DefaultCalibrationSource.h"
+#include "phys-source/I3DefaultGeometrySource.h"
+#include "phys-source/I3DefaultDetectorStatusSource.h"
+#include "phys-source/I3DefaultMonitoringSource.h"
 
 #include "FrameChecking.h"
 
 // testing that if we ask the source for n events that
 // we actually get n out of the other end
-TEST_GROUP(DummyEventSourceCounting);
+TEST_GROUP(DefaultEventSourceCounting);
 
 struct count_events : public I3PhysicsModule
 {
@@ -49,11 +49,11 @@ inline void runTheCountingTest(int input,int output)
 {
   RootI3Tray tray;
   
-  tray.AddModule("I3DummyPhysicsSource","eventssource");
+  tray.AddModule("I3DefaultPhysicsSource","eventssource");
   tray.SetParameter("eventssource","EventsToReturn",input);
-  tray.AddModule("I3DummyDetectorStatusSource","statussource");
-  tray.AddModule("I3DummyCalibrationSource","calibsource");
-  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("I3DefaultDetectorStatusSource","statussource");
+  tray.AddModule("I3DefaultCalibrationSource","calibsource");
+  tray.AddModule("I3DefaultGeometrySource","geomsource");
   tray.AddModule("count_events","count");
   tray.SetParameter("count","expectedNumEvents",output);
   

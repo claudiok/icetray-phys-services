@@ -2,11 +2,11 @@
 
 #include "root-icetray/RootI3Tray.h"
 
-#include "phys-source/I3DummyPhysicsSource.h"
-#include "phys-source/I3DummyCalibrationSource.h"
-#include "phys-source/I3DummyGeometrySource.h"
-#include "phys-source/I3DummyDetectorStatusSource.h"
-#include "phys-source/I3DummyMonitoringSource.h"
+#include "phys-source/I3DefaultPhysicsSource.h"
+#include "phys-source/I3DefaultCalibrationSource.h"
+#include "phys-source/I3DefaultGeometrySource.h"
+#include "phys-source/I3DefaultDetectorStatusSource.h"
+#include "phys-source/I3DefaultMonitoringSource.h"
 
 #include "FrameChecking.h"
 
@@ -15,7 +15,7 @@
 // This is a test that checks that each of the frames that comes
 // through is a.) created on the right stream and b.) has the 
 // right classes in it.
-TEST_GROUP(DummySourceTest);
+TEST_GROUP(DefaultSourceTest);
 
 struct ev_stat_cal_geo{};
 typedef TestClientModule<ev_stat_cal_geo> EvStatCalGeoClient;
@@ -61,10 +61,10 @@ TEST(ev_stat_cal_geo)
 {
   RootI3Tray tray;
   
-  tray.AddModule("I3DummyPhysicsSource","eventssource");
-  tray.AddModule("I3DummyDetectorStatusSource","statussource");
-  tray.AddModule("I3DummyCalibrationSource","calibsource");
-  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("I3DefaultPhysicsSource","eventssource");
+  tray.AddModule("I3DefaultDetectorStatusSource","statussource");
+  tray.AddModule("I3DefaultCalibrationSource","calibsource");
+  tray.AddModule("I3DefaultGeometrySource","geomsource");
   tray.AddModule("EvStatCalGeoClient","client");
   
   tray.ConnectBoxes("eventssource","OutBox","statussource");
@@ -109,9 +109,9 @@ TEST(ev_cal_geo)
 {
   RootI3Tray tray;
   
-  tray.AddModule("I3DummyPhysicsSource","eventssource");
-  tray.AddModule("I3DummyCalibrationSource","calibsource");
-  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("I3DefaultPhysicsSource","eventssource");
+  tray.AddModule("I3DefaultCalibrationSource","calibsource");
+  tray.AddModule("I3DefaultGeometrySource","geomsource");
   tray.AddModule("EvCalGeoClient","client");
   
   tray.ConnectBoxes("eventssource","OutBox","calibsource");
@@ -165,10 +165,10 @@ TEST(mon_stat_cal_geo)
 {
   RootI3Tray tray;
   
-  tray.AddModule("I3DummyMonitoringSource","eventssource");
-  tray.AddModule("I3DummyDetectorStatusSource","statussource");
-  tray.AddModule("I3DummyCalibrationSource","calibsource");
-  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("I3DefaultMonitoringSource","eventssource");
+  tray.AddModule("I3DefaultDetectorStatusSource","statussource");
+  tray.AddModule("I3DefaultCalibrationSource","calibsource");
+  tray.AddModule("I3DefaultGeometrySource","geomsource");
   tray.AddModule("MonStatCalGeoClient","client");
   
   tray.ConnectBoxes("eventssource","OutBox","statussource");
@@ -213,9 +213,9 @@ TEST(mon_cal_geo)
 {
   RootI3Tray tray;
   
-  tray.AddModule("I3DummyMonitoringSource","eventssource");
-  tray.AddModule("I3DummyCalibrationSource","calibsource");
-  tray.AddModule("I3DummyGeometrySource","geomsource");
+  tray.AddModule("I3DefaultMonitoringSource","eventssource");
+  tray.AddModule("I3DefaultCalibrationSource","calibsource");
+  tray.AddModule("I3DefaultGeometrySource","geomsource");
   tray.AddModule("MonCalGeoClient","client");
   
   tray.ConnectBoxes("eventssource","OutBox","calibsource");

@@ -53,6 +53,7 @@ class I3DetectorStatusSource : public I3PhysicsModule
    */
   virtual bool IsDetectorStatusCurrent(I3Time time);
 
+  SET_LOGGER("I3DetectorStatusSource");
  private:
 
   I3Boxes& GetBoxes();

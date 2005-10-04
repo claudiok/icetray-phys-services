@@ -49,6 +49,8 @@ class I3MonitoringSource : public I3Source
    * until this method returns false
    */
   virtual bool MoreMonitorings() = 0;
+ 
+  SET_LOGGER("I3MonitoringSource");
 
  private:
   void SendMonitoring();

@@ -47,6 +47,8 @@ class I3PhysicsSource : public I3Source
    */
   virtual bool MoreEvents() = 0;
 
+  SET_LOGGER("I3PhysicsSource");
+
  private:
   void SendEvent();
 

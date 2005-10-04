@@ -9,11 +9,11 @@ load("libphys-services")
 
 tray = I3Tray()
 
-tray.AddModule("I3DummyPhysicsSource","events")
+tray.AddModule("I3DefaultPhysicsSource","events")
 
-tray.AddModule("I3DummyDetectorStatusSource","status")
+tray.AddModule("I3DefaultDetectorStatusSource","status")
 
-tray.AddModule("I3DummyCalibrationSource","calib")
+tray.AddModule("I3DefaultCalibrationSource","calib")
 
 tray.AddModule("I3FileGeometrySource","geometry")
 amageofile = expandvars("$I3_WORK/phys-services/resources/amanda.geo")
