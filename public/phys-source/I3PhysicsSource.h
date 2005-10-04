@@ -18,6 +18,12 @@
 #include "icetray/I3Source.h"
 #include "I3EventPair.h"
 
+/**
+ * @brief The base class for source modules which sends out an I3Event 
+ *
+ * Two virtual methods must be implemented by deriving classes to customize
+ * the behavior.
+ */
 class I3PhysicsSource : public I3Source
 {
  public:
@@ -25,8 +31,20 @@ class I3PhysicsSource : public I3Source
 
   void Process();
 
+  /**
+   * @brief This method should only be called when
+   * I3PhysicsSource::MoreEvents() is returning true.  The returned
+   * EventPair.header should have a valid start time. 
+   *
+   * This method should allocate a new I3Event and a new I3EventHeader and
+   * return it filled as the module would like
+   */
   virtual EventPair NextEvent() = 0;
   
+  /**
+   * @brief IceTray will continue to run and call I3PhysicsSource::NextEvent()
+   * until this method returns false
+   */
   virtual bool MoreEvents() = 0;
 
  private:

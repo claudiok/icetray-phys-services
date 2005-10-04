@@ -2,11 +2,13 @@
 
 I3GSLRandomService::I3GSLRandomService()
 {
+  // needed call to gsl
   construct();
 }
 
 I3GSLRandomService::I3GSLRandomService(unsigned long int seed)
 {
+  // needed call to gsl.  Then set the seed.
   construct();
   gsl_rng_set(r, seed);
 }

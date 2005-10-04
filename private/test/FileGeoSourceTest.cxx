@@ -12,6 +12,7 @@
 
 #include "module-test/TestClientModule.h"
 
+// just testing that the FileGeometrySource works as expected.
 TEST_GROUP(FileGeometrySourceTest);
 
 struct file_geo_source{};

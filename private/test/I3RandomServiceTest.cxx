@@ -24,6 +24,10 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+// tests a random number service that it has the expected mean 
+// and std dev.  Theoretically it is possible for a random number
+// to fail this test and still be working, so I put healthy tolerances
+// on it.
 TEST_GROUP(I3RandomServiceTest);
 
 namespace randomServiceTest{

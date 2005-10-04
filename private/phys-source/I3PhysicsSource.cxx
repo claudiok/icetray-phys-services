@@ -22,9 +22,6 @@ I3PhysicsSource::I3PhysicsSource(const I3Context& context) : I3Source(context)
   NoActiveInBox();
   if(!I3Stream::StreamExists("Physics"))
     I3Stream::AddStream("Physics","Event Stream");
-
-
-
 }
 
 void I3PhysicsSource::Process()

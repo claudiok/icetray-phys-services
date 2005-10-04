@@ -7,6 +7,8 @@
 
 using namespace std;
 
+// These tests look for a few specific mbids and OMKeys that
+// are in the test file.  Checks that the mapping works correctly
 TEST_GROUP(OMKey2MBIDTest);
 
 TEST(0df7b060acad)

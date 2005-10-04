@@ -20,8 +20,16 @@
 /**
  * @brief A module which fills the Geometry into the data stream
  * when it becomes outdated.
- * Looks at the I3GeometryOrigin service to accomplish this.
  *
+ * Users are expected to override the 
+ * I3GeometrySource::GetGeometry(I3Time time) to get their
+ * Geometry data into icetray.
+ * 
+ * Optionally people writing subclasses of I3GeometrySource can 
+ * override the I3GeometrySource::IsGeometryCurrent(I3Time time)
+ * method and change the logic that is used when deciding when to 
+ * send out a new Geometry.  The default behavior is to use
+ * the StartTime and EndTime of the last Geometry sent
  */
 class I3GeometrySource : public I3PhysicsModule
 {
@@ -30,8 +38,19 @@ class I3GeometrySource : public I3PhysicsModule
 
   void Process();
 
+  /**
+   * This method should be written to return a newly allocated
+   * I3Geometry and I3GeometryHeader for the given
+   * time.  The start time and end time of the header should be
+   * valid.
+   */
   virtual GeometryPair GetGeometry(I3Time time)=0;
 
+  /**
+   * Called internally to check whether the last Geometry sent out
+   * is current or not by looking at the StartTime and end time on the
+   * last Geometry.  Can be overridden to change this behavior
+   */
   virtual bool IsGeometryCurrent(I3Time time);
   
  private:

@@ -10,6 +10,8 @@
 
 #include "FrameChecking.h"
 
+// testing that if we ask the source for n events that
+// we actually get n out of the other end
 TEST_GROUP(DummyEventSourceCounting);
 
 struct count_events : public I3PhysicsModule

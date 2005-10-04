@@ -18,15 +18,36 @@
 #include "icetray/I3Source.h"
 #include "I3MonitoringPair.h"
 
+/**
+ * @brief The base class for source modules which sends out an I3Monitoring 
+ *
+ * Two virtual methods must be implemented by deriving classes to customize
+ * the behavior.
+ */
 class I3MonitoringSource : public I3Source
 {
  public:
+
   I3MonitoringSource(const I3Context& context);
 
   void Process();
 
+  /**
+   * @brief This method should only be called when
+   * I3PhysicsSource::MoreMonitorings() is returning true.  The returned
+   * MonitoringPair.header should have a valid start time. 
+   *
+   * This method should allocate a new I3Monitoring and a new 
+   * I3MonitoringHeader and
+   * return it filled as the module would like
+   */
   virtual MonitoringPair NextMonitoring() = 0;
   
+  /**
+   * @brief IceTray will continue to run and call 
+   * I3MonitoringSource::NextMonitoring()
+   * until this method returns false
+   */
   virtual bool MoreMonitorings() = 0;
 
  private:

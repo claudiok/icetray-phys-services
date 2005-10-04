@@ -12,6 +12,9 @@
 
 #include "module-test/TestClientModule.h"
 
+// This is a test that checks that each of the frames that comes
+// through is a.) created on the right stream and b.) has the 
+// right classes in it.
 TEST_GROUP(DummySourceTest);
 
 struct ev_stat_cal_geo{};

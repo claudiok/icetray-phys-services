@@ -48,10 +48,10 @@
 
  Service parameters can be configured using
  @code 
- Bool_t I3Tray::SetParameter(const char* module, const char* parameter, <int> value)
+ bool I3Tray::SetParameter(const char* module, const char* parameter, <int> value)
  @endcode
 
- For reproducibility SPRNG requires that for each generator to be given the in
+ For reproducibility SPRNG requires that for each generator to be given in
  addition to the <b>seed</b> two other parameters which are used for
  determining the stream of random numbers and their state. The following are
  the parameters used to configure I3SPRNGRandomService:

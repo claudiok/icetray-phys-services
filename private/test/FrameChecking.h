@@ -18,6 +18,8 @@
 
 #include "icetray/I3Stream.h"
 
+// icetray doesn't normally allow you to get the string for the 
+// stream that your frame is on.  Had to hack in a way to do it.
 inline
 string DumpStop(I3Frame& frame)
 {

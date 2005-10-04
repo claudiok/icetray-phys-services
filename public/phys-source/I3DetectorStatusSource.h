@@ -19,7 +19,17 @@
 
 /**
  * @brief A module which puts the DetectorStatus into the 
- * data stream.  Looks at the I3DetectorStatusOrigin to accomplish this.
+ * data stream. 
+ *
+ * Users are expected to override the 
+ * I3DetectorStatusSource::GetDetectorStatus(I3Time time) to get their
+ * DetectorStatus data into icetray.
+ * 
+ * Optionally people writing subclasses of I3DetectorStatusSource can 
+ * override the I3DetectorStatusSource::IsDetectorStatusCurrent(I3Time time)
+ * method and change the logic that is used when deciding when to 
+ * send out a new DetectorStatus.  The default behavior is to use
+ * the StartTime and EndTime of the last DetectorStatus sent
  */
 class I3DetectorStatusSource : public I3PhysicsModule
 {
@@ -28,8 +38,19 @@ class I3DetectorStatusSource : public I3PhysicsModule
 
   void Process();
 
+  /**
+   * This method should be written to return a newly allocated
+   * I3DetectorStatus and I3DetectorStatusHeader for the given
+   * time.  The start time and end time of the header should be
+   * valid.
+   */
   virtual DetectorStatusPair GetDetectorStatus(I3Time time) = 0;
 
+  /**
+   * Called internally to check whether the last DetectorStatus sent out
+   * is current or not by looking at the StartTime and end time on the
+   * last DetectorStatus.  Can be overridden to change this behavior
+   */
   virtual bool IsDetectorStatusCurrent(I3Time time);
 
  private:
