@@ -38,4 +38,7 @@ source that reads from a file.  And the script still works.
 If you want more information on this system, you might try the docs here:
 @ref phys-source-writing-stream-source-modules
 
+@todo Need to find a way to throw an error if the stream source modules
+are in a bad order.
+
 */
