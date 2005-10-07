@@ -120,11 +120,6 @@ void I3TextFileGeometrySource::FillGeometry(I3Geometry& Geometry,
     AmaGeoInFile.close();
     I3GeoInFile.close();
   
-    log_warn("FillFileGeometry: ATTENTION: No date set in header or date set to 0.");
-  
-    I3Time time;
-    time.SetModJulianTime(0,0,0.0);
-    GeometryHeader.SetStartTime(time);
     GeometryHeader.SetArrayName("FullIceCube+Amanda");
 }
 
