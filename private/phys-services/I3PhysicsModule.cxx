@@ -428,21 +428,21 @@ bool I3PhysicsModule::PutDetectorStatusHeader(I3Frame& frame,
 I3EventPtr
 I3PhysicsModule::GetEvent(I3Frame& frame, const string& name, bool strict)
 {
-	I3EventPtr event;
-	if(frame.Exists(name))
+  I3EventPtr event;
+  if(frame.Exists(name))
+    {
+      try{
+	event = frame.Get<I3EventPtr>(name);
+      } // try
+      catch(const std::exception& ex)
 	{
-		try{
-			event = frame.Get<I3EventPtr>(name);
-		} // try
-		catch(const std::exception& ex)
-		{
-			log_debug("Exception caught: %s", ex.what());
-			event = frame.Get<I3MCEventPtr>(name);		
-		} // catch(std::exception& ex)
-	} // if(frame.Exists(name))
-	else if(strict)
-		log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
-			name.c_str());
+	  log_debug("Exception caught: %s", ex.what());
+	  event = frame.Get<I3MCEventPtr>(name);		
+	} // catch(std::exception& ex)
+    } // if(frame.Exists(name))
+  else if(strict)
+    log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
+	      name.c_str());
 			
   return event;
 }
@@ -451,21 +451,21 @@ I3PhysicsModule::GetEvent(I3Frame& frame, const string& name, bool strict)
 I3EventHeaderPtr
 I3PhysicsModule::GetEventHeader(I3Frame& frame, const string& name, bool strict)
 {
-	I3EventHeaderPtr eventHeader;
-	if(frame.Exists(name))
+  I3EventHeaderPtr eventHeader;
+  if(frame.Exists(name))
+    {
+      try{
+	eventHeader = frame.Get<I3EventHeaderPtr>(name);
+      } // try
+      catch(const std::exception& ex)
 	{
-		try{
-			eventHeader = frame.Get<I3EventHeaderPtr>(name);
-		} // try
-		catch(const std::exception& ex)
-		{
-			log_debug("Exception caught: %s", ex.what());
-			eventHeader = frame.Get<I3MCEventHeaderPtr>(name);		
-		} // catch(std::exception& ex)
-	} // if(frame.Exists(name))
-	else if(strict)
-		log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
-			name.c_str());
+	  log_debug("Exception caught: %s", ex.what());
+	  eventHeader = frame.Get<I3MCEventHeaderPtr>(name);		
+	} // catch(std::exception& ex)
+    } // if(frame.Exists(name))
+  else if(strict)
+    log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
+	      name.c_str());
 
   return eventHeader;
 }
@@ -474,22 +474,22 @@ I3PhysicsModule::GetEventHeader(I3Frame& frame, const string& name, bool strict)
 I3MCEventPtr
 I3PhysicsModule::GetMCEvent(I3Frame& frame, const string& name, bool strict)
 {
-	I3MCEventPtr mcEvent;
-	if(frame.Exists(name))
+  I3MCEventPtr mcEvent;
+  if(frame.Exists(name))
+    {
+      try{
+	I3EventPtr event = frame.Get<I3EventPtr>(name);
+	mcEvent = dynamic_pointer_cast<I3MCEvent>(event);
+      } // try
+      catch(const std::exception& ex)
 	{
-		try{
-			I3EventPtr event = frame.Get<I3EventPtr>(name);
-			mcEvent = dynamic_pointer_cast<I3MCEvent>(event);
-		} // try
-		catch(const std::exception& ex)
-		{
-			log_debug("Exception caught: %s", ex.what());
-			mcEvent = frame.Get<I3MCEventPtr>(name);		
-		} // catch(std::exception& ex)
-	} // if(frame.Exists(name))
-	else if(strict)
-		log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
-			name.c_str());
+	  log_debug("Exception caught: %s", ex.what());
+	  mcEvent = frame.Get<I3MCEventPtr>(name);		
+	} // catch(std::exception& ex)
+    } // if(frame.Exists(name))
+  else if(strict)
+    log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
+	      name.c_str());
 
   return mcEvent;
 }
@@ -498,22 +498,22 @@ I3PhysicsModule::GetMCEvent(I3Frame& frame, const string& name, bool strict)
 I3MCEventHeaderPtr
 I3PhysicsModule::GetMCEventHeader(I3Frame& frame, const string& name, bool strict)
 {
-	I3MCEventHeaderPtr mcEventHeader;
-	if(frame.Exists(name))
+  I3MCEventHeaderPtr mcEventHeader;
+  if(frame.Exists(name))
+    {
+      try{
+	I3EventHeaderPtr eventHeader = frame.Get<I3EventHeaderPtr>(name);
+	mcEventHeader = dynamic_pointer_cast<I3MCEventHeader>(eventHeader);
+      } // try
+      catch(const std::exception& ex)
 	{
-		try{
-			I3EventHeaderPtr eventHeader = frame.Get<I3EventHeaderPtr>(name);
-			mcEventHeader = dynamic_pointer_cast<I3MCEventHeader>(eventHeader);
-		} // try
-		catch(const std::exception& ex)
-		{
-			log_debug("Exception caught: %s", ex.what());
-			mcEventHeader = frame.Get<I3MCEventHeaderPtr>(name);		
-		} // catch(std::exception& ex)
-	} // if(frame.Exists(name))
-	else if(strict)
-		log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
-			name.c_str());
+	  log_debug("Exception caught: %s", ex.what());
+	  mcEventHeader = frame.Get<I3MCEventHeaderPtr>(name);		
+	} // catch(std::exception& ex)
+    } // if(frame.Exists(name))
+  else if(strict)
+    log_fatal("attempt to retrieve element name=\"%s\", which does not exist.",
+	      name.c_str());
 
   return mcEventHeader;
 }
