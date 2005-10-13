@@ -208,6 +208,28 @@ namespace I3Calculator
 			   const I3Position& position);
 
   /**
+   * A convenience function that calls CherenkovTime() and calculates the time
+   * residual between a hit and a track.
+   * A time residual is defined as the difference between the measured hit time
+   * and the expected time of arrival of a photon from the track.
+   */
+  double TimeResidual(const I3Track& track,
+                      const I3Position& hitpos,
+                      const double hittime,
+                      const double IndexRef=I3Constants::n_ice);
+
+  /**
+   * A convenience function that calls CherenkovTime() and calculates the time
+   * residual between a hit and a cascade.
+   * A time residual is defined as the difference between the measured hit time
+   * and the expected time of arrival of a photon from the cascade.
+   */
+  double TimeResidual(const I3Cascade& cascade,
+                      const I3Position& hitpos,
+                      const double hittime,
+                      const double IndexRef=I3Constants::n_ice);
+
+  /**
    * Returns the spatial angle between two input tracks.
    */
   double Angle(const I3Track& track1,

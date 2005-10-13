@@ -248,6 +248,23 @@ double I3Calculator::CherenkovDistance(const I3Cascade& cascade, const I3Positio
   return position.CalcDistance(cascade.GetPos());
 }
 
+//--------------------------------------------------------------
+
+double I3Calculator::TimeResidual(const I3Track& track, const I3Position& hitpos, double hittime, const double IndexRef)
+{
+  double T_exp = CherenkovTime(track, hitpos, IndexRef);
+  double T_meas = hittime - track.GetT();
+  return T_meas - T_exp;
+}
+
+
+//--------------------------------------------------------------
+double I3Calculator::TimeResidual(const I3Cascade& cascade, const I3Position& hitpos, double hittime, const double IndexRef)
+{
+  double T_exp = CherenkovTime(cascade, hitpos, IndexRef);
+  double T_meas = hittime - cascade.GetT();
+  return T_meas - T_exp;
+}
 
 //--------------------------------------------------------------
 double I3Calculator::Angle(const I3Track& track1, const I3Track& track2)

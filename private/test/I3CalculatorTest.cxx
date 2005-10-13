@@ -55,6 +55,7 @@ static I3StartingTrack starttrack()
   I3StartingTrack starttrack;
   starttrack.SetStartPos(1,1,1);
   starttrack.SetDir(0,0);
+  starttrack.SetStartT(100);
   return starttrack;
 }
 
@@ -62,6 +63,7 @@ static I3BasicCascade casc1()
 {
   I3BasicCascade casc1;
   casc1.SetPos(2,2,2);
+  casc1.SetT(100);
   return casc1;
 }
 
@@ -124,21 +126,15 @@ TEST(ClosestApproachDistance)
   ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),a1),sqrt(2.0),0.0001);
 }
 
-TEST(CherenkovDistance)
+TEST(CherenkovPosition)
 {
-  a1.SetPosition(1,0,0);
-  ENSURE(isnan(CherenkovDistance(starttrack(),a1)));
-
   a1.SetPosition(1,0,-1);
-  ENSURE_DISTANCE(CherenkovDistance(starttrack(),a1),1.54805,0.0001);
-
-  a1.SetPosition(1,0,-11);
-  ENSURE_DISTANCE(CherenkovDistance(starttrack(),a1),1.54805,0.0001);
+  I3Position pos = CherenkovPosition(starttrack(),a1);
+  ENSURE_DISTANCE(pos.GetZ(),0.181716,0.0001);
 
   a1.SetPosition(-2,1,0);
-  ENSURE_DISTANCE(CherenkovDistance(muon(),a1),1.54805,0.0001);
-
-  ENSURE_DISTANCE(CherenkovDistance(muon(),q),4.37854,0.0001);
+  pos = CherenkovPosition(muon(),a1);
+  ENSURE_DISTANCE(pos.GetX(),-0.818284,0.0001);
 }
 
 TEST(CherenkovTime)
@@ -169,12 +165,23 @@ TEST(CherenkovAngle)
 
 TEST(CascadeDistance)
 { 
-  ENSURE_DISTANCE(CherenkovDistance(casc1(),r),3.46410,0.0001);
+  ENSURE_DISTANCE(CherenkovDistance(casc1(),r), 3.46410, 0.0001);
 }
 
 TEST(CascadeTime)
 {
-  ENSURE_DISTANCE(CherenkovTime(casc1(),r)/ns,15.137,0.001);
+  ENSURE_DISTANCE(CherenkovTime(casc1(),r)/ns, 15.137, 0.001);
+}
+
+TEST(TimeResidual_track)
+{
+  a1.SetPosition(0,0,-3.66712);
+  ENSURE_DISTANCE(TimeResidual(starttrack(),a1,120), 0.44025, 0.0001);
+}
+
+TEST(TimeResidual_cascade)
+{
+  ENSURE_DISTANCE(TimeResidual(casc1(),r,120), 4.86295, 0.0001);
 }
 
 TEST(Angle)
