@@ -70,8 +70,8 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 		{
 		    double slope = CONVERSION_FACTOR;
 	   
-		    domCalib->SetATWDParameters(id,channel,bin,
-						slope,0.0,0.0);
+		    domCalib->SetATWDBinParameters(id,channel,bin,
+						   slope, 2.88, 1.0);
 		}
 	    }
 	}

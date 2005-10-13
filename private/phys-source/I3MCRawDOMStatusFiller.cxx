@@ -194,7 +194,7 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 	
 	raw->SetPMTHV(pmtHV_);
 	raw->SetSingleSPEThreshold(speThreshold_);
-	raw->SetFEPedestal(0.0*I3Units::volt);
+	raw->SetFEPedestal(2.6*I3Units::volt);
     
 	status.GetIceCubeStatus()[thiskey].SetRawStatus(raw);
     }
