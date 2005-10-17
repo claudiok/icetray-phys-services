@@ -105,7 +105,7 @@ public:
    * 
    * @return True, if the medium is bulkice.
    */
-  bool IsBulkice();
+  bool IsBulkice() const;
 
 	/**
 	 * @brief Returns NPhase at a given wavelength.
@@ -169,7 +169,7 @@ public:
 	 * Methods for bulk ice (neither depend on wavelength).
 	 * @return Absorptivity.
 	 */
-	double BulkIceAbsorptivity();
+	double BulkIceAbsorptivity() const;
 
 	/**
 	 * @brief Returns the inverse effective scattering length.
@@ -177,7 +177,7 @@ public:
 	 * Methods for bulk ice (neither depend on wavelength).
 	 * @return The inverse effective scattering length.
 	 */
-  double BulkIceInvEffScattLength();
+  double BulkIceInvEffScattLength() const;
 
 	/**
 	 * @brief Returns the absorption length.
@@ -212,7 +212,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Absorptivity.
 	 */
-  double Absorptivity(double depth=0, double wavelength=RECO_WAVELENGTH);
+  double Absorptivity(double depth=0, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns the inverse effective scattering length at a given depth and wavelength.
@@ -224,7 +224,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Inverse effective scattering length.
 	 */
-  double InvEffScattLength(double depth=0, double wavelength=RECO_WAVELENGTH);
+  double InvEffScattLength(double depth=0, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns the absorption length at a given depth and wavelength.
@@ -313,20 +313,20 @@ private:
   I3MediumService(const I3MediumService& );
   I3MediumService operator=(const I3MediumService& );
 
-  void CheckBounds(double& depth, double& wavelength);
+  void CheckBounds(double& depth, double& wavelength) const;
   void CheckProperties(const I3MediumProperties& properties, unsigned int k);
   void CheckWLBounds(double & wavelength); // from Price/Woschnagg analytical formula
   void Configure(const I3MediumProperties& properties,
   	const std::string& histoOutFilename);
 	void DumpLookupTable(const std::string& histoOutFilename);
   void GetBin
-  	(TAxis* axis, double val, int& bin1, int& bin2, double& delta);
+  	(TAxis* axis, double val, int& bin1, int& bin2, double& delta) const;
   void InitLookupTable(); // initialization of the lookup tables
   double Interp2DLin // to interpolate linear
-  	(double& depth, double& wavelength, const TH2D* h); // linear interpolation
+  	(double& depth, double& wavelength, const TH2D* h) const; // linear interpolation
   double Interp2DIntLin // interp2D_intlin: given hderiv is lin. interp., h (\int h) is interp. quadratically.
 	  (double& depth, double& wavelength, const TH2D* h, const TH2D* hDeriv); // quad. interpolation
-	bool IsBulkiceWithWarning();
+	bool IsBulkiceWithWarning() const;
 	void Release();
 
   // instance member data
@@ -456,11 +456,11 @@ typedef shared_ptr<I3MediumService> I3MediumServicePtr;
 
 // inline methods
 
-inline bool I3MediumService::IsBulkice(){
+inline bool I3MediumService::IsBulkice() const{
 	return isBulkice_;
 }
 
-inline bool I3MediumService::IsBulkiceWithWarning(){
+inline bool I3MediumService::IsBulkiceWithWarning() const{
 	if(!IsBulkice()) log_warn("using bulk ice medium");	
 	
 	return IsBulkice();
@@ -478,11 +478,11 @@ inline double I3MediumService::ThetaC(double beta, double wavelength){
   return acos(1.0 / (NPhase(wavelength) * beta));
 }
 
-inline double I3MediumService::BulkIceAbsorptivity(){
+inline double I3MediumService::BulkIceAbsorptivity() const{
 	return bulkiceAbsorptivity_;
 }
 
-inline double I3MediumService::BulkIceInvEffScattLength(){
+inline double I3MediumService::BulkIceInvEffScattLength() const{
 	return bulkiceInvEffScattLength_;
 }
 

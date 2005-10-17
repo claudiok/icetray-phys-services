@@ -282,7 +282,7 @@ double I3MediumService::NGroup(double wavelength){
 }
 
 
-void I3MediumService::CheckBounds(double& depth, double& wavelength){
+void I3MediumService::CheckBounds(double& depth, double& wavelength) const {
   if(depth < minz_) depth = minz_;
   else if(depth > maxz_) depth = maxz_;
   if(wavelength < minwl_) wavelength = minwl_;
@@ -291,7 +291,7 @@ void I3MediumService::CheckBounds(double& depth, double& wavelength){
 
 
 void I3MediumService::GetBin
-(TAxis* axis, double val, int& bin1, int& bin2, double& delta){
+(TAxis* axis, double val, int& bin1, int& bin2, double& delta) const{
   int bin = axis->FindBin(val);
   delta = val - axis->GetBinCenter(bin);
 
@@ -308,7 +308,7 @@ void I3MediumService::GetBin
 
 
 double I3MediumService::Interp2DLin
-(double& depth, double& wavelength, const TH2D* h){
+(double& depth, double& wavelength, const TH2D* h) const {
   int depth1, depth2, wl1, wl2;
   double deltaDepth, deltaWl;
   
@@ -372,14 +372,14 @@ double I3MediumService::Interp2DIntLin
 }
 
 
-double I3MediumService::Absorptivity(double depth, double wavelength){
+double I3MediumService::Absorptivity(double depth, double wavelength) const {
   if(!IsBulkiceWithWarning()) return BulkIceAbsorptivity();
   
   return Interp2DLin(depth, wavelength, hIceLayerAbsorptivity_);
 }
 
 
-double I3MediumService::InvEffScattLength(double depth, double wavelength){
+double I3MediumService::InvEffScattLength(double depth, double wavelength) const {
   if(!IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
   
   return Interp2DLin(depth, wavelength, hIceLayerInvEffScattLen_);
