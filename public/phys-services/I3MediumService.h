@@ -114,7 +114,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return NPhase.
 	 */
-  double NPhase(double wavelength=RECO_WAVELENGTH);
+  double NPhase(double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns DNPhaseDLambda at a given wavelength.
@@ -123,7 +123,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return DNPhaseDLambda.
 	 */
-  double DNPhaseDLambda(double wavelength=RECO_WAVELENGTH);
+  double DNPhaseDLambda(double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns NGroup at a given wavelength.
@@ -132,7 +132,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return NGroup.
 	 */
-  double NGroup(double wavelength=RECO_WAVELENGTH);
+  double NGroup(double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns the inverse speed of light in ice at a given wavelength.
@@ -141,7 +141,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Inverse speed of light in ice.
 	 */
-  double InvC_ICE(double wavelength=RECO_WAVELENGTH);
+  double InvC_ICE(double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns the speed of light in ice at a given wavelength.
@@ -150,7 +150,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Speed of light in ice.
 	 */
-  double C_ICE(double wavelength=RECO_WAVELENGTH);
+  double C_ICE(double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns ThetaC at a given relativistic beta and wavelength.
@@ -161,7 +161,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return ThetaC.
 	 */
-  double ThetaC(double beta=1, double wavelength=RECO_WAVELENGTH);
+  double ThetaC(double beta=1, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns the absorptivity.
@@ -185,7 +185,7 @@ public:
 	 * Methods for bulk ice (neither depend on wavelength).
 	 * @return The absorption length.
 	 */
-  double BulkIceAbsorptionLength();
+  double BulkIceAbsorptionLength() const;
 
 	/**
 	 * @brief Returns the effective scattering length.
@@ -193,14 +193,14 @@ public:
 	 * Methods for bulk ice (neither depend on wavelength).
 	 * @return The effective scattering length.
 	 */
-  double BulkIceEffScattLength();
+  double BulkIceEffScattLength() const;
 
  	/**
 	 * @brief Returns the mean scattering cosine.
 	 * 
 	 * @return The mean scattering cosine.
 	 */
-  double MeanScatteringCosine();
+  double MeanScatteringCosine() const;
 
 	/**
 	 * @brief Returns the absorptivity at a given depth and wavelength.
@@ -236,7 +236,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Absorption length.
 	 */
-  double AbsorptionLength(double depth=0, double wavelength=RECO_WAVELENGTH);
+  double AbsorptionLength(double depth=0, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns the effective scattering length at a given depth and wavelength.
@@ -248,7 +248,7 @@ public:
 	 * (optional; default is RECO_WAVELENGTH).
 	 * @return Effective scattering length.
 	 */
-  double EffScattLength(double depth=0, double wavelength=RECO_WAVELENGTH);
+  double EffScattLength(double depth=0, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns the averaged absorptivity at a given depth and wavelength.
@@ -260,7 +260,7 @@ public:
 	 * @return Averaged absorptivity.
 	 */
   double AveragedAbsorptivity
-  	(double z1, double z2, double wavelength=RECO_WAVELENGTH);
+  	(double z1, double z2, double wavelength=RECO_WAVELENGTH) const;
   	
 	/**
 	 * @brief Returns the averaged inverse effective scattering length at a given depth and wavelength.
@@ -272,7 +272,7 @@ public:
 	 * @return Averaged inverse effective scattering length.
 	 */
   double AveragedInvEffScattLength
-  	(double z1, double z2, double wavelength=RECO_WAVELENGTH);
+  	(double z1, double z2, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns the averaged absorption length at a given depth and wavelength.
@@ -284,7 +284,7 @@ public:
 	 * @return Averaged absorption length.
 	 */
   double AveragedAbsorptionLength
-  	(double z1, double z2, double wavelength=RECO_WAVELENGTH);
+  	(double z1, double z2, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns the averaged effective scattering length at a given depth and wavelength.
@@ -296,7 +296,7 @@ public:
 	 * @return Averaged effective scattering length.
 	 */
   double AveragedEffScattLength
-  	(double z1, double z2, double wavelength=RECO_WAVELENGTH);
+  	(double z1, double z2, double wavelength=RECO_WAVELENGTH) const;
   
 private:
 	const static double BULKICE_ABSORPTION_LENGTH;
@@ -314,18 +314,18 @@ private:
   I3MediumService operator=(const I3MediumService& );
 
   void CheckBounds(double& depth, double& wavelength) const;
-  void CheckProperties(const I3MediumProperties& properties, unsigned int k);
-  void CheckWLBounds(double & wavelength); // from Price/Woschnagg analytical formula
+  void CheckProperties(const I3MediumProperties& properties, unsigned int k) const;
+  void CheckWLBounds(double & wavelength) const; // from Price/Woschnagg analytical formula
   void Configure(const I3MediumProperties& properties,
   	const std::string& histoOutFilename);
-	void DumpLookupTable(const std::string& histoOutFilename);
+	void DumpLookupTable(const std::string& histoOutFilename) const;
   void GetBin
   	(TAxis* axis, double val, int& bin1, int& bin2, double& delta) const;
   void InitLookupTable(); // initialization of the lookup tables
   double Interp2DLin // to interpolate linear
   	(double& depth, double& wavelength, const TH2D* h) const; // linear interpolation
   double Interp2DIntLin // interp2D_intlin: given hderiv is lin. interp., h (\int h) is interp. quadratically.
-	  (double& depth, double& wavelength, const TH2D* h, const TH2D* hDeriv); // quad. interpolation
+	  (double& depth, double& wavelength, const TH2D* h, const TH2D* hDeriv) const; // quad. interpolation
 	bool IsBulkiceWithWarning() const;
 	void Release();
 
@@ -398,7 +398,7 @@ public:
 	 */
   TH1D* GetAveragedAbsorptionLengthHistogram
   	(const std::string& name="h", int nbin=100, double from=0,
-  	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH);
+  	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns a histogram of the averaged effective scattering length.
@@ -414,7 +414,7 @@ public:
 	 */
   TH1D* GetAveragedEffScatteringLengthHistogram
   	(const std::string& name="h", int nbin=100, double from=0,
-  	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH);
+  	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns a histogram of the absorption length.
@@ -429,7 +429,7 @@ public:
 	 */
   TH1D* GetAbsorptionLengthHistogram
   	(const std::string& name="h", int nbin=100,
-  	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH);
+  	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH) const;
 
 	/**
 	 * @brief Returns a histogram of the effective scattering length.
@@ -444,7 +444,7 @@ public:
 	 */
   TH1D* GetEffScatteringLengthHistogram
   	(const std::string& name="h", int nbin=100,
-  	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH);
+  	double min=-600, double max=630, double wavelength=RECO_WAVELENGTH) const;
   	
 ////////////////////////////////////////////////////////////////
   	
@@ -452,7 +452,7 @@ public:
 	SET_LOGGER("I3MediumService");
 };
 
-typedef shared_ptr<I3MediumService> I3MediumServicePtr;
+typedef boost::shared_ptr<I3MediumService> I3MediumServicePtr;
 
 // inline methods
 
@@ -466,15 +466,15 @@ inline bool I3MediumService::IsBulkiceWithWarning() const{
 	return IsBulkice();
 }
 
-inline double I3MediumService::InvC_ICE(double wavelength){
+inline double I3MediumService::InvC_ICE(double wavelength) const{
   return INV_C_VACUUM * NGroup(wavelength);
 }
 
-inline double I3MediumService::C_ICE(double wavelength){
+inline double I3MediumService::C_ICE(double wavelength) const{
   return 1.0 / InvC_ICE(wavelength);
 }
 
-inline double I3MediumService::ThetaC(double beta, double wavelength){
+inline double I3MediumService::ThetaC(double beta, double wavelength) const{
   return acos(1.0 / (NPhase(wavelength) * beta));
 }
 
@@ -486,35 +486,35 @@ inline double I3MediumService::BulkIceInvEffScattLength() const{
 	return bulkiceInvEffScattLength_;
 }
 
-inline double I3MediumService::BulkIceAbsorptionLength(){
+inline double I3MediumService::BulkIceAbsorptionLength() const{
 	return 1. / bulkiceAbsorptivity_;
 }
 
-inline double I3MediumService::BulkIceEffScattLength(){
+inline double I3MediumService::BulkIceEffScattLength() const{
 	return 1. / bulkiceInvEffScattLength_;
 }
 
-inline double I3MediumService::MeanScatteringCosine(){
+inline double I3MediumService::MeanScatteringCosine() const{
 	return meanScatCosine_;
 }
 
 inline double I3MediumService::AbsorptionLength
-(double depth, double wavelength){
+(double depth, double wavelength) const{
   return  1. / Absorptivity(depth, wavelength);
 }
 
 inline double I3MediumService::EffScattLength
-(double depth, double wavelength){
+(double depth, double wavelength) const{
   return 1. / InvEffScattLength(depth, wavelength);
 }
 
 inline double I3MediumService::AveragedAbsorptionLength
-(double z1, double z2, double wavelength) {
+(double z1, double z2, double wavelength) const{
   return 1. / AveragedAbsorptivity(z1, z2, wavelength);
 }
 
 inline double I3MediumService::AveragedEffScattLength
-(double z1, double z2, double wavelength){
+(double z1, double z2, double wavelength) const{
   return 1. / AveragedInvEffScattLength(z1, z2, wavelength);
 }
 

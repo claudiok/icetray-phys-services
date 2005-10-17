@@ -71,7 +71,7 @@ I3MediumService::~I3MediumService(){
 
 
 void I3MediumService::CheckProperties
-(const I3MediumProperties& properties, unsigned int k){
+(const I3MediumProperties& properties, unsigned int k) const{
 	if((properties.Layers()[k].UpperEdge()
 		- properties.Layers()[k].LowerEdge()) != binw_)
 		log_fatal("non-constant width of layers");
@@ -155,7 +155,7 @@ void I3MediumService::Configure
 }
 
 
-void I3MediumService::DumpLookupTable(const string& histoOutFilename){
+void I3MediumService::DumpLookupTable(const string& histoOutFilename) const{
 	if(!histoOutFilename.empty()){
   	TFile* f = new TFile(histoOutFilename.c_str(), "recreate");
   	try{
@@ -177,8 +177,8 @@ void I3MediumService::DumpLookupTable(const string& histoOutFilename){
 void I3MediumService::InitLookupTable(){
   // save integrated absorptivity and eff. scatt. length
   // (from center of detector) and z in 1D-histo.
-  // This is used to introduce ice layering PDF in Amanda/IceCube,
-  // with fast computation
+  // this is used to introduce ice layering PDF in Amanda/IceCube,
+  // with fast computation.
 
   hIntAbsLen_ =
   	new TH2D("hintabslen","integrated abs. length",
@@ -241,13 +241,13 @@ void I3MediumService::Release(){
 }
 
 
-void I3MediumService::CheckWLBounds(double & wavelength){
+void I3MediumService::CheckWLBounds(double& wavelength) const{
   if(wavelength < MIN_WAVELENGTH_PRICE) wavelength = MIN_WAVELENGTH_PRICE;
   else if(wavelength > MAX_WAVELENGTH_PRICE) wavelength = MAX_WAVELENGTH_PRICE;
 }
 
 
-double I3MediumService::NPhase(double wavelength){
+double I3MediumService::NPhase(double wavelength) const{
   CheckWLBounds(wavelength);
 
 	// here, according to kurt/price article, 300nm<wavelength<600nm  
@@ -258,7 +258,7 @@ double I3MediumService::NPhase(double wavelength){
 }
 
 
-double I3MediumService::DNPhaseDLambda(double wavelength){
+double I3MediumService::DNPhaseDLambda(double wavelength) const{
   CheckWLBounds(wavelength);
   
 	// here, according to kurt/price article, 300nm<wavelength<600nm  
@@ -269,7 +269,7 @@ double I3MediumService::DNPhaseDLambda(double wavelength){
 }
 
 
-double I3MediumService::NGroup(double wavelength){
+double I3MediumService::NGroup(double wavelength) const{
   CheckWLBounds(wavelength);
   
 	// here, according to kurt/price article, 300nm<wavelength<600nm  
@@ -282,7 +282,7 @@ double I3MediumService::NGroup(double wavelength){
 }
 
 
-void I3MediumService::CheckBounds(double& depth, double& wavelength) const {
+void I3MediumService::CheckBounds(double& depth, double& wavelength) const{
   if(depth < minz_) depth = minz_;
   else if(depth > maxz_) depth = maxz_;
   if(wavelength < minwl_) wavelength = minwl_;
@@ -308,7 +308,8 @@ void I3MediumService::GetBin
 
 
 double I3MediumService::Interp2DLin
-(double& depth, double& wavelength, const TH2D* h) const {
+
+(double& depth, double& wavelength, const TH2D* h) const{
   int depth1, depth2, wl1, wl2;
   double deltaDepth, deltaWl;
   
@@ -338,7 +339,7 @@ double I3MediumService::Interp2DLin
 
 
 double I3MediumService::Interp2DIntLin
-(double& depth, double& wavelength, const TH2D* h, const TH2D* hDeriv){
+(double& depth, double& wavelength, const TH2D* h, const TH2D* hDeriv) const{
   int depth1, depth2, wl1, wl2;
   double deltaDepth, deltaWl;
 
@@ -372,14 +373,14 @@ double I3MediumService::Interp2DIntLin
 }
 
 
-double I3MediumService::Absorptivity(double depth, double wavelength) const {
+double I3MediumService::Absorptivity(double depth, double wavelength) const{
   if(!IsBulkiceWithWarning()) return BulkIceAbsorptivity();
   
   return Interp2DLin(depth, wavelength, hIceLayerAbsorptivity_);
 }
 
 
-double I3MediumService::InvEffScattLength(double depth, double wavelength) const {
+double I3MediumService::InvEffScattLength(double depth, double wavelength) const{
   if(!IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
   
   return Interp2DLin(depth, wavelength, hIceLayerInvEffScattLen_);
@@ -387,7 +388,7 @@ double I3MediumService::InvEffScattLength(double depth, double wavelength) const
 
 
 double I3MediumService::AveragedAbsorptivity
-(double z1, double z2, double wavelength){
+(double z1, double z2, double wavelength) const{
   if(!IsBulkiceWithWarning()) return BulkIceAbsorptivity();
   
   if(z2 < z1) swap(z1, z2);
@@ -401,7 +402,7 @@ double I3MediumService::AveragedAbsorptivity
 
 
 double I3MediumService::AveragedInvEffScattLength
-(double z1, double z2, double wavelength){
+(double z1, double z2, double wavelength) const{
   if(!IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
   
   if(z2 < z1) swap(z1, z2);
@@ -475,7 +476,7 @@ int I3MediumService::GetLayerNumber(double z){
 
 TH1D* I3MediumService::GetAveragedAbsorptionLengthHistogram
 (const string& name, int nbin, double from,
-double min, double max, double wavelength){
+double min, double max, double wavelength) const{
   TH1D* h = new TH1D(name.c_str(), "\\int 1/#lambda_{abs}", nbin, min, max);
   for(int i = 1; i <= nbin; ++i){
     double c = h->GetBinCenter(i);
@@ -488,7 +489,7 @@ double min, double max, double wavelength){
 
 TH1D* I3MediumService::GetAveragedEffScatteringLengthHistogram
 (const string& name, int nbin, double from,
-double min, double max, double wavelength){
+double min, double max, double wavelength) const{
   TH1D* h = new TH1D(name.c_str(), "\\int 1/#lambda_{es}", nbin, min, max);
   for(int i = 1; i <= nbin; ++i){
     double c = h->GetBinCenter(i);
@@ -500,7 +501,7 @@ double min, double max, double wavelength){
 
 
 TH1D* I3MediumService::GetAbsorptionLengthHistogram
-(const string& name, int nbin, double min, double max, double wavelength){
+(const string& name, int nbin, double min, double max, double wavelength) const{
   TH1D* h = new TH1D(name.c_str(), "#lambda_{abs}", nbin, min, max);
   for(int i = 1; i <= nbin; ++i){
     double c = h->GetBinCenter(i);
@@ -512,7 +513,7 @@ TH1D* I3MediumService::GetAbsorptionLengthHistogram
 
 
 TH1D* I3MediumService::GetEffScatteringLengthHistogram
-(const string& name, int nbin, double min, double max, double wavelength){
+(const string& name, int nbin, double min, double max, double wavelength) const{
   TH1D* h = new TH1D(name.c_str(), "#lambda_{es}", nbin, min, max);
   for(int i = 1; i <= nbin; ++i){
     double c = h->GetBinCenter(i);
