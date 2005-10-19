@@ -60,38 +60,6 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 	{
 	    for( unsigned int id = 0; id <= 1; ++id )
 	    {
-		domCalib->SetATWDBaselineParameters(id, channel, 
-						       1200*I3Units::V, 
-						       0.0021*I3Units::V);
-
-		domCalib->SetATWDBaselineParameters(id, channel, 
-						       1300*I3Units::V, 
-						       0.0022*I3Units::V);
-
-		domCalib->SetATWDBaselineParameters(id, channel, 
-						       1400*I3Units::V, 
-						       0.0024*I3Units::V);
-
-		domCalib->SetATWDBaselineParameters(id, channel, 
-						       1500*I3Units::V, 
-						       0.0026*I3Units::V);
-
-		domCalib->SetATWDBaselineParameters(id, channel, 
-						       1600*I3Units::V, 
-						       0.0028*I3Units::V);
-
-		domCalib->SetATWDBaselineParameters(id, channel, 
-						       1700*I3Units::V, 
-						       0.0029*I3Units::V);
-		
-		domCalib->SetATWDBaselineParameters(id, channel, 
-						       1800*I3Units::V, 
-						       0.0030*I3Units::V);
-
-		domCalib->SetATWDBaselineParameters(id, channel, 
-						       1900*I3Units::V, 
-						       0.0033*I3Units::V);
-		
 		for( unsigned int bin = 0; bin < 128; ++bin )
 		{
 		    double slope = -0.002*I3Units::V;
