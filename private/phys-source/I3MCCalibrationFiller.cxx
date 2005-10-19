@@ -4,8 +4,6 @@
 #include "dataclasses/I3InIceGeometry.h"
 #include "dataclasses/I3Geometry.h"
 
-double I3MCCalibrationFiller::CONVERSION_FACTOR = -0.0021;
-
 I3_MODULE(I3MCCalibrationFiller);
 
 I3MCCalibrationFiller::I3MCCalibrationFiller(const I3Context& context) 
@@ -58,20 +56,49 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 	domCalib->SetATWDGain(1, atwd1gain_, 0.0);
 	domCalib->SetATWDGain(2, atwd2gain_, 0.0);
 
-	double pedestal = 0.0;
-	double gain = fadcGain_;
-	domCalib->SetFADCParameters(pedestal, gain);
-       
-	for( int channel = 0; channel < 3; ++channel )
+	for( unsigned int channel = 0; channel < 3; ++channel )
 	{
-	    for( int id = 0; id <= 1; ++id )
+	    for( unsigned int id = 0; id <= 1; ++id )
 	    {
-		for( int bin = 0; bin < 128; ++bin )
+		domCalib->SetATWDBaselineParameters(id, channel, 
+						       1200*I3Units::V, 
+						       0.0021*I3Units::V);
+
+		domCalib->SetATWDBaselineParameters(id, channel, 
+						       1300*I3Units::V, 
+						       0.0022*I3Units::V);
+
+		domCalib->SetATWDBaselineParameters(id, channel, 
+						       1400*I3Units::V, 
+						       0.0024*I3Units::V);
+
+		domCalib->SetATWDBaselineParameters(id, channel, 
+						       1500*I3Units::V, 
+						       0.0026*I3Units::V);
+
+		domCalib->SetATWDBaselineParameters(id, channel, 
+						       1600*I3Units::V, 
+						       0.0028*I3Units::V);
+
+		domCalib->SetATWDBaselineParameters(id, channel, 
+						       1700*I3Units::V, 
+						       0.0029*I3Units::V);
+		
+		domCalib->SetATWDBaselineParameters(id, channel, 
+						       1800*I3Units::V, 
+						       0.0030*I3Units::V);
+
+		domCalib->SetATWDBaselineParameters(id, channel, 
+						       1900*I3Units::V, 
+						       0.0033*I3Units::V);
+		
+		for( unsigned int bin = 0; bin < 128; ++bin )
 		{
-		    double slope = CONVERSION_FACTOR;
+		    double slope = -0.002*I3Units::V;
+		    double intercept = 2.9*I3Units::V;
 	   
 		    domCalib->SetATWDBinParameters(id,channel,bin,
-						   slope, 2.88, 1.0);
+						   slope, intercept, 0.0);
 		}
 	    }
 	}

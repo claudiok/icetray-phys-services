@@ -8,7 +8,7 @@
  * @file I3MCCalibrationFiller.h
  * @version $Revision: 1.14 $
  * @date $Date: 2005-04-25 22:56:37 -0400 (Mon, 25 Apr 2005) $
- * @author tmccauley
+ * @author T. McCauley <tpmccauley@lbl.gov>
  */
 
 #ifndef I3MCCALIBRATIONFILLER_H
@@ -38,15 +38,6 @@ private:
     double atwd2gain_;
 
     double fadcGain_;
-
-    /**
-     * This is the conversion factor from count to mV
-     * It is normally around 2 mV/count. In the real
-     * calibration this number is different for each bin
-     * in the ATWD. Here we use it for every bin.
-     */
-    static double CONVERSION_FACTOR;
-
 };
 
 #endif

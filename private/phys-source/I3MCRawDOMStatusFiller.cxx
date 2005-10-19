@@ -17,7 +17,7 @@ I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(const I3Context& context) :
     AddParameter("lcMode", "local coincidence mode",
 		 lcMode_);
     
-    pmtHV_ = 1200*I3Units::volt;
+    pmtHV_ = 1350*I3Units::volt;
     AddParameter("pmtHV", "pmt high voltage", 
 		 pmtHV_);
     
