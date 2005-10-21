@@ -30,6 +30,13 @@ void I3CalibrationSource::Process()
   I3Time& drivingFrameTime = 
     I3FrameAccess<I3Time>::Get(drivingFrame,"DrivingTime");
 
+  if(drivingFrame.Exists("Geometry") || 
+     drivingFrame.Exists("GeometryHeader") )
+    {
+      log_fatal("Somebody put these modules in the wrong order.  The "
+		"Calibration Source needs to go before the Geometry Source ");
+    }
+
   if(!IsCalibrationCurrent(drivingFrameTime))
     {
       SendCalibration(drivingFrameTime);

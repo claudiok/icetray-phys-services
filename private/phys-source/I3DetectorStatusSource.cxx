@@ -32,6 +32,16 @@ void I3DetectorStatusSource::Process()
   I3Time& drivingFrameTime = 
     I3FrameAccess<I3Time>::Get(drivingFrame,"DrivingTime");
 
+  if(drivingFrame.Exists("Geometry") || 
+     drivingFrame.Exists("GeometryHeader") ||
+     drivingFrame.Exists("Calibration") ||
+     drivingFrame.Exists("CalibrationHeader") )
+    {
+      log_fatal("Somebody put these modules in the wrong order.  The "
+		"DetectorStatus Source needs to go before the Geometry and "
+		"Calibration Sources.");
+    }
+
   if(!IsDetectorStatusCurrent(drivingFrameTime))
     {
       SendDetectorStatus(drivingFrameTime);
