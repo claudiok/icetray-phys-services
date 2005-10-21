@@ -50,6 +50,31 @@ I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(const I3Context& context) :
     fadcOn_ = true;
     AddParameter("fadcOn", "Is FADC on?", fadcOn_);
 
+    atwd0Nbins_ = 128;
+    AddParameter("atwd0Nbins", 
+		 "number of samples in ATWD channel 0",
+		 atwd0Nbins_);
+    
+    atwd1Nbins_ = 128;
+    AddParameter("atwd1Nbins", 
+		 "number of samples in ATWD channel 1",
+		 atwd1Nbins_);
+
+    atwd2Nbins_ = 128;
+    AddParameter("atwd2Nbins", 
+		 "number of samples in ATWD channel 2",
+		 atwd2Nbins_);
+
+    atwd3Nbins_ = 128;
+    AddParameter("atwd3Nbins", 
+		 "number of samples in ATWD channel 3",
+		 atwd3Nbins_);
+
+    fadcNbins_ = 256;
+    AddParameter("fadcNbins", 
+		 "number of samples in FADC",
+		 fadcNbins_);
+
     AddOutBox("OutBox");
 }
 
@@ -89,7 +114,15 @@ void I3MCRawDOMStatusFiller::Configure()
     GetParameter("atwdAOn", atwdAOn_);
     GetParameter("atwdBOn", atwdBOn_);
     GetParameter("fadcOn", fadcOn_);
+
+    GetParameter("atwd0Nbins", atwd0Nbins_);
+    GetParameter("atwd1Nbins", atwd1Nbins_);
+    GetParameter("atwd2Nbins", atwd2Nbins_);
+    GetParameter("atwd3Nbins", atwd3Nbins_);
+
+    GetParameter("fadcNbins", fadcNbins_);
 }
+
 
 void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 {
@@ -196,6 +229,12 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 	raw->SetSingleSPEThreshold(speThreshold_);
 	raw->SetFEPedestal(2.6*I3Units::volt);
     
+	raw->SetNBinsATWD(0, atwd0Nbins_);
+	raw->SetNBinsATWD(1, atwd1Nbins_);
+	raw->SetNBinsATWD(2, atwd2Nbins_);
+
+	raw->SetNBinsFADC(fadcNbins_);
+
 	status.GetIceCubeStatus()[thiskey].SetRawStatus(raw);
     }
     

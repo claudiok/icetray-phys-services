@@ -52,6 +52,13 @@ private:
     bool atwdBOn_;
     
     bool fadcOn_;
+
+    int atwd0Nbins_;
+    int atwd1Nbins_;
+    int atwd2Nbins_;
+    int atwd3Nbins_;
+
+    int fadcNbins_;
 };
 
 #endif
