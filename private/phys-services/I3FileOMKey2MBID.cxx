@@ -1,7 +1,7 @@
 /*
  * class:  I3FileOMKey2MBID
  *
- * Version: $Id:$
+ * Version: $Id$
  *
  * (c) IceCube Collaboration
  */

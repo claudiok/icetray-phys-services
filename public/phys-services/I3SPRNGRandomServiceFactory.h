@@ -41,7 +41,7 @@ class I3SPRNGRandomServiceFactory
 
   // Constructors and destructor
 
-  I3SPRNGRandomServiceFactory(I3Context& context);
+  I3SPRNGRandomServiceFactory(const I3Context& context);
 
   virtual ~I3SPRNGRandomServiceFactory();
 
@@ -71,6 +71,7 @@ class I3SPRNGRandomServiceFactory
 
   // instance member data
   int seed_, nstreams_, streamnum_;
+  string instatefile_,outstatefile_;
   I3RandomServicePtr random_;
 
   SET_LOGGER("I3SPRNGRandomServiceFactory");

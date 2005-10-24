@@ -77,7 +77,7 @@ static const gsl_rng_type gsl_rng_sprng20 =
 };
 #endif
 
-inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum)
+inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum, char *state=NULL)
 {
    gsl_sprng_stream* s = 
    	  (gsl_sprng_stream*)  malloc( sizeof( gsl_sprng_stream ) );
@@ -94,13 +94,17 @@ inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum)
    s->nstreams 	= nstreams;
 
    /*Initialize stream*/
-   s->streamptr = 
-   		init_sprng(
-			DEFAULT_RNG_TYPE, 
-			streamnum, 
-			nstreams, 
-			seed, 
-			SPRNG_DEFAULT);
+   if (state) {
+   		s->streamptr = unpack_sprng(state);
+   } else {
+   		s->streamptr = 
+   			init_sprng(
+				DEFAULT_RNG_TYPE, 
+				streamnum, 
+				nstreams, 
+				seed, 
+				SPRNG_DEFAULT);
+   }
 
    /*Allocate memory for rng parameters*/
    gsl_rng *r 	= (gsl_rng *) malloc (sizeof (gsl_rng));
@@ -117,6 +121,22 @@ inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum)
    return r;
 }
 
+/**
+ * save the current state of the RNG to an array of characters
+ * @param rng gsl_rng struct
+ * @param state array to store state in
+ * @return size of state array
+ */
+inline int gsl_sprng_pack(gsl_rng* rng, char **state)
+{
+   gsl_sprng_stream* s = (gsl_sprng_stream*) rng->state;
+   return pack_sprng(s->streamptr, state);
+}
+
+/**
+ * Free memory for RNG
+ * @param rng gsl_rng struct
+ */
 inline void gsl_sprng_free (gsl_rng * r)
 {
   free (r->state);

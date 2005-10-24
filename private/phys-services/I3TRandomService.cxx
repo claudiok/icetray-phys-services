@@ -1,9 +1,9 @@
 /*
  * class: I3TRandomService
  *
- * Version: $Id:$
+ * Version: $Id$
  *
- * Date: $Date:$
+ * Date: $Date$
  *
  * (c) IceCube Collaboration
  */

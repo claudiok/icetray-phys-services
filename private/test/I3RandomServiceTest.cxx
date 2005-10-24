@@ -131,7 +131,12 @@ TEST(I3GSLRandomService)
 
 TEST(I3SPRNGRandomService)
 {
-  I3SPRNGRandomService random;
+  int nstreams = 2;
+  int streamnum = 1;
+  string instate = "saved" ;
+  string outstate = "saved";
+
+  I3SPRNGRandomService random(666,nstreams,streamnum,instate,outstate);
   randomServiceTest::testRandomService<100000,I3SPRNGRandomService>(random);
 }
 

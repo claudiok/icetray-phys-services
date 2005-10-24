@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.2 2004/10/15 18:45:42 troy Exp $
+# $Id$
 #
 # This is a generic makefile, and should most probably not be changed.  
 #

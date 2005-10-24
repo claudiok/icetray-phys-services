@@ -41,9 +41,12 @@ class I3SPRNGRandomService : public I3RandomService{
   I3SPRNGRandomService();
 
   /**
-   * constructor
+   * constructors
    */
   I3SPRNGRandomService(int seed, int nstreams, int streamnum);
+
+  I3SPRNGRandomService(int seed, int nstreams, int streamnum, 
+				  string instatefile, string outstatefile);
 
   /**
    * destructor
@@ -99,7 +102,9 @@ class I3SPRNGRandomService : public I3RandomService{
   I3SPRNGRandomService(const I3SPRNGRandomService& );
   I3SPRNGRandomService operator=(const I3SPRNGRandomService& );
 
-  gsl_rng* r;
+  gsl_rng* rng_;
+  string instatefile_;
+  string outstatefile_;
 
   SET_LOGGER("I3SPRNGRandomService");
 

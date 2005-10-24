@@ -11,6 +11,7 @@
 // Class header files
 
 #include "phys-services/I3SPRNGRandomServiceFactory.h"
+I3_SERVICE_FACTORY(I3SPRNGRandomServiceFactory);
 
 
 #include "icetray/I3ServicesAccess.h"
@@ -19,13 +20,19 @@
 
 // Constructors
 
-I3SPRNGRandomServiceFactory::I3SPRNGRandomServiceFactory(I3Context& context)
-  : I3ServiceFactory(context)
+I3SPRNGRandomServiceFactory::I3SPRNGRandomServiceFactory(const I3Context& context)
+  : I3ServiceFactory(context),
+  seed_(0),
+  nstreams_(1),
+  streamnum_(0),
+  instatefile_(),
+  outstatefile_()
 {
-  random_ = NULL;
   AddParameter("Seed","Seed for random number generator",seed_);
   AddParameter("NStreams","Number of streams used in cluster",nstreams_);
   AddParameter("StreamNum","Thread number for this generator",streamnum_);
+  AddParameter("inStateFile","If set, load saved state from file",instatefile_);
+  AddParameter("outStateFile","If set, save state to file",outstatefile_);
 }
 
 // Destructors
@@ -40,11 +47,9 @@ bool
 I3SPRNGRandomServiceFactory::InstallService(I3Services& services)
 {
   if (!random_)  {
-     if(!nstreams_) {
-		random_ = I3RandomServicePtr(new I3SPRNGRandomService());
-	} else
-		random_ = I3RandomServicePtr(
-				new I3SPRNGRandomService(seed_,nstreams_,streamnum_));
+	random_ = I3RandomServicePtr(
+				new I3SPRNGRandomService(seed_, nstreams_,
+						streamnum_, instatefile_, outstatefile_));
   }
 
   return I3ServicesAccess<I3RandomService>::Put(services,
@@ -57,5 +62,7 @@ void I3SPRNGRandomServiceFactory::Configure()
   GetParameter("Seed",seed_);
   GetParameter("NStreams",nstreams_);
   GetParameter("StreamNum",streamnum_);
+  GetParameter("inStateFile",instatefile_);
+  GetParameter("outStateFile",outstatefile_);
 }
 /* eof */

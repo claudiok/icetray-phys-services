@@ -22,9 +22,10 @@ I3_SERVICE_FACTORY(I3GSLRandomServiceFactory);
 
 // Constructors
 
-I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(const I3Context& context)
+I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(const I3Context& context) 
   : I3ServiceFactory(context),
-    seed_(-1), random_()
+  seed_(-1), 
+  random_()
 {
 	// unfortunatelly we can not support a seed of unsigned long int since
 	// AddParameter only supports int
