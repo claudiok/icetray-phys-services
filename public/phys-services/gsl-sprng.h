@@ -36,6 +36,7 @@ typedef struct
    int streamnum;
    int nstreams;
    int *streamptr;
+   char *savedstate; // saved rng state (from previous run).
 } gsl_sprng_stream;
 
 
@@ -43,13 +44,17 @@ static void sprng_set(void * vstate,unsigned long int s)
 {
   gsl_sprng_stream *stream = (gsl_sprng_stream*) vstate;
 
-  stream->seed = s;
-  stream->streamptr = init_sprng(
+  if (stream->savedstate) {
+   		stream->streamptr = unpack_sprng(stream->savedstate);
+  } else {
+  	stream->seed = s;
+  	stream->streamptr = init_sprng(
 		DEFAULT_RNG_TYPE, 
   		stream->streamnum, 
 		stream->nstreams, 
 		stream->seed,
 		SPRNG_DEFAULT);
+  } 
 }
 
 static unsigned long sprng_get(void * vstate)
@@ -92,6 +97,7 @@ inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum, char *stat
    s->seed		= seed;
    s->streamnum = streamnum;
    s->nstreams 	= nstreams;
+   s->savedstate = state;
 
    /*Initialize stream*/
    if (state) {

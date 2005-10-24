@@ -34,6 +34,8 @@ I3SPRNGRandomService::I3SPRNGRandomService(
   char buffer[MAX_PACKED_LENGTH];
   int size;
 
+  assert(streamnum<nstreams);
+  assert(streamnum>=0);
   gsl_rng_env_setup();
 
   if (instatefile_.length() > 0) {

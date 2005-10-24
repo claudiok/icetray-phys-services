@@ -111,6 +111,25 @@ void testRandomService(Random& random)
   testGaussian<samples,Random>(random);
 }
 
+
+template <int samples,class Random>
+void testIndependence(Random& r1, Random& r2)
+{
+  double mean1=0.5;
+  double mean2=0.5;
+  double covariance=0;
+  double sigma1=0;
+  double sigma2=0;
+  double correlation;
+
+  for(int i = 0 ; i< samples ; i++) {
+    covariance += (r1.Uniform()-mean1)*(r2.Uniform()-mean2);
+    sigma1 += pow(r1.Uniform()-mean1,2);
+    sigma2 += pow(r2.Uniform()-mean2,2);
+  }
+  correlation = covariance/sqrt(sigma1*sigma2);
+  ENSURE_DISTANCE(correlation, 0.0, 0.01, "testing correlation");
+}
 }
 
 TEST(TRandomServiceTest)
@@ -132,11 +151,17 @@ TEST(I3GSLRandomService)
 TEST(I3SPRNGRandomService)
 {
   int nstreams = 2;
-  int streamnum = 1;
-  string instate = "saved" ;
-  string outstate = "saved";
+  int streamnum = 0;
 
-  I3SPRNGRandomService random(666,nstreams,streamnum,instate,outstate);
-  randomServiceTest::testRandomService<100000,I3SPRNGRandomService>(random);
+  I3SPRNGRandomService random1(666,nstreams,streamnum,string(),"saved");
+  randomServiceTest::testRandomService<100000,I3SPRNGRandomService>(random1);
+
+  I3SPRNGRandomService random2(666,nstreams,streamnum,"saved",string());
+  randomServiceTest::testRandomService<100000,I3SPRNGRandomService>(random2);
+
+  I3SPRNGRandomService random3(666,nstreams,1,string(),string());
+
+  randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random2);
+  randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random3);
 }
 
