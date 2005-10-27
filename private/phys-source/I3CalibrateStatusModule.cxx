@@ -66,7 +66,7 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
   // sometimes extrapolating.
 
   int closestVoltage = 0;
-  int currentVoltage=(unsigned int)rawstatus->GetPMTHV();
+  int currentVoltage=(unsigned int)(rawstatus->GetPMTHV()/I3Units::volt);
   map<unsigned int,ChargeHistogram>::iterator iter;
   for(iter = calib->GetChargeHistograms().begin() ; 
       iter!= calib->GetChargeHistograms().end() ; 
@@ -104,14 +104,19 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
   double m = (y1 - y2) / (x1 - x2);
   double b = y1 - m * x1;
   
-  double predictedSpeMean = m * rawstatus->GetPMTHV() + b;
+  double predictedSpeMean = m * (rawstatus->GetPMTHV()/I3Units::volt) + b;
   
   log_trace("LOOK: predictedSPEMean %f",predictedSpeMean);
 //   cout<<"LOOK: found closest: "<<closestVoltage<<endl;
 //   cout<<"LOOK: found next-closest: "<<nextClosestVoltage<<endl;
 //   cout<<"LOOK: real: "<<rawstatus->GetPMTHV()<<endl;
 
-  calibratedstatus->SetSPEMean(predictedSpeMean);
+  //Michelangelo's hack for MC data that doesn't have the charge histograms
+  if(x1==0&&x2==0&&y1==0&&y2==0){
+    predictedSpeMean=1.6; //this is just some average, reasonable value
+  }
+  
+  calibratedstatus->SetSPEMean(predictedSpeMean*I3Units::pC);
  //a
   double rateCorrected=0; //sampling rate in MHz
 
