@@ -311,7 +311,7 @@ private:
 
   // private copy constructors and assignment
   I3MediumService(const I3MediumService& );
-  I3MediumService operator=(const I3MediumService& );
+  I3MediumService& operator=(const I3MediumService& );
 
   void CheckBounds(double& depth, double& wavelength) const;
   void CheckProperties(const I3MediumProperties& properties, unsigned int k) const;

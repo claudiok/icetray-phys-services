@@ -10,7 +10,7 @@
  * @date $Date:  $
  * @author tschmidt
  */
- 
+
 #ifndef I3_MEDIUM_SERVICE_FACTORY_H_INCLUDED
 #define I3_MEDIUM_SERVICE_FACTORY_H_INCLUDED
 
@@ -39,16 +39,16 @@ class I3Services;
  * might be dumped. <VAR>Histograms</VAR> makes an impact, only if
  * <VAR>Properties</VAR> is set and not empty.
  */
-class I3MediumServiceFactory : public I3ServiceFactory{
- 	
-	public:
+class I3MediumServiceFactory : public I3ServiceFactory
+{
+public:
 
-	/**
-	 * @brief Constructor.
+  /**
+   * @brief Constructor.
    * 
    * @param context the context in which the service will exist.
    */
-	explicit I3MediumServiceFactory(const I3Context& context);
+  explicit I3MediumServiceFactory(const I3Context& context);
 
   /**
    * @brief Destructor.
@@ -68,20 +68,19 @@ class I3MediumServiceFactory : public I3ServiceFactory{
    */
   virtual void Configure();
 
- private:
+private:
 
   // private copy constructors and assignment
-  I3MediumServiceFactory(const I3MediumServiceFactory& );
-  I3MediumServiceFactory operator=(const I3MediumServiceFactory& );
+  I3MediumServiceFactory(const I3MediumServiceFactory &);
+  I3MediumServiceFactory& operator=(const I3MediumServiceFactory &);
 
   // instance member data
-	I3MediumServicePtr medium_;
-	std::string mediumPropInFilename_;
-	std::string mediumHistoOutFilename_;
+  I3MediumServicePtr medium_;
+  std::string mediumPropInFilename_;
+  std::string mediumHistoOutFilename_;
 
-	// logging
-	SET_LOGGER("I3MediumServiceFactory");
-	
+  // logging
+  SET_LOGGER ("I3MediumServiceFactory");
 };
 
 #endif // I3_MEDIUM_SERVICE_FACTORY_H_INCLUDED
