@@ -122,8 +122,8 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 
   for (int chip=0; chip<2; chip++)
     {
-      double slope = calib->GetATWDFreqSlope(chip);
-      double intercept = calib->GetATWDFreqIntercept(chip);
+      double slope = calib->GetATWDfreqSlope(chip);
+      double intercept = calib->GetATWDfreqIntercept(chip);
       double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
 
       rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
