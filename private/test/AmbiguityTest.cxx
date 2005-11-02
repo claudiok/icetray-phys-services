@@ -2,7 +2,7 @@
 
 #include "phys-services/I3Calculator.h"
 #include "dataclasses/I3BasicTrack.h"
-#include "dataclasses/I3CompleteCascade.h"
+#include "dataclasses/I3BasicCascade.h"
 #include "dataclasses/I3Position.h"
 
 using namespace I3Calculator;
@@ -29,7 +29,7 @@ namespace AmbiguityTests
   {
     I3BasicTrack bt;
     ENSURE(Time(bt) == TRACK);
-    I3CompleteCascade cc;
+    I3BasicCascade cc;
     ENSURE(Time(cc) == CASCADE);
   }
 
@@ -37,7 +37,7 @@ namespace AmbiguityTests
   {
     I3BasicTrack* btp;
     ENSURE(TimeFromDumbPtr(btp) == TRACK);
-    I3CompleteCascade* ccp;
+    I3BasicCascade* ccp;
     ENSURE(TimeFromDumbPtr(ccp) == CASCADE);
   }
 
@@ -51,7 +51,7 @@ namespace AmbiguityTests
     // do this instead, it's faster and makes your Time() function signatures clearer.
     ENSURE(Time(*btp) == TRACK);
 
-    shared_ptr<I3CompleteCascade> ccp(new I3CompleteCascade);
+    shared_ptr<I3BasicCascade> ccp(new I3BasicCascade);
 
     // ditto. Bad:
     ENSURE(TimeFromSharedPtr(dynamic_pointer_cast<I3Cascade>(ccp)) == CASCADE);
