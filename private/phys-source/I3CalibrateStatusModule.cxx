@@ -60,59 +60,30 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 {
   //currently this method just calibrates the position of the SPE peak
 
-  // the proceedure here is to find first the charge histogram 
-  // that is closest to our hv, then the one that is next closest.
-  // Do it this way 'cause sometimes we're interpolating and 
-  // sometimes extrapolating.
+  //Now using the supplied HVGain relation: 
+  //  recall relation: log(10)Gain = slope*log(10)V + intercept
 
-  int closestVoltage = 0;
+  double predictedSpeMean;
+  double log_gain = 0.0;
   int currentVoltage=(unsigned int)(rawstatus->GetPMTHV()/I3Units::volt);
-  map<unsigned int,ChargeHistogram>::iterator iter;
-  for(iter = calib->GetChargeHistograms().begin() ; 
-      iter!= calib->GetChargeHistograms().end() ; 
-      iter++)
-    {
-      if(iter->second.convergent)
-	{
-	  unsigned int currentDist = abs(closestVoltage - currentVoltage);
-	  unsigned int thisDist = abs(((int)iter->first) - currentVoltage);
-	  if(thisDist < currentDist)
-	    closestVoltage = iter->first;
-	}
-    }
+  const LinearFit hvgain = calib->GetHVGainFit();
   
-  int nextClosestVoltage = 0;
-  for(iter = calib->GetChargeHistograms().begin() ; 
-      iter!= calib->GetChargeHistograms().end() ; 
-      iter++)
+  if(currentVoltage >0.0)
     {
-      if(iter->second.convergent)
-	{
-	  unsigned int currentDist = abs(nextClosestVoltage - currentVoltage);
-	  unsigned int thisDist = abs(((int)iter->first) - currentVoltage);
-	  if(thisDist < currentDist && closestVoltage != (int)iter->first)
-	    nextClosestVoltage = iter->first;
-	}
+      log_gain = hvgain.slope*log10(currentVoltage) + hvgain.intercept;
+      predictedSpeMean = pow(10.0,log_gain);
+      
+      log_trace("LOOK: predictedSPEMean %f",predictedSpeMean);
+    }
+  else
+    {
+      log_warn("DOM voltage is zero.  No SPEMean possible");
+      predictedSpeMean = 0.0;
     }
 
-  // just use a linear extrapolation of form y = m * x + b
-  // Fancier later if we want
-  double y1 = calib->GetChargeHistograms()[closestVoltage].gaussianMean;
-  double y2 = calib->GetChargeHistograms()[nextClosestVoltage].gaussianMean;
-  double x1 = closestVoltage;
-  double x2 = nextClosestVoltage;
-  double m = (y1 - y2) / (x1 - x2);
-  double b = y1 - m * x1;
-  
-  double predictedSpeMean = m * (rawstatus->GetPMTHV()/I3Units::volt) + b;
-  
-  log_trace("LOOK: predictedSPEMean %f",predictedSpeMean);
-//   cout<<"LOOK: found closest: "<<closestVoltage<<endl;
-//   cout<<"LOOK: found next-closest: "<<nextClosestVoltage<<endl;
-//   cout<<"LOOK: real: "<<rawstatus->GetPMTHV()<<endl;
 
   //Michelangelo's hack for MC data that doesn't have the charge histograms
-  if(x1==0&&x2==0&&y1==0&&y2==0){
+  if(hvgain.intercept==0.0&&hvgain.slope==0.0){
     predictedSpeMean=1.6; //this is just some average, reasonable value
   }
   
@@ -122,16 +93,27 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 
   for (int chip=0; chip<2; chip++)
     {
-      double slope = calib->GetATWDFreqSlope(chip);
-      double intercept = calib->GetATWDFreqIntercept(chip);
-      double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
-
-      rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
-      log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
-
-      if(chip==0)calibratedstatus->SetSamplingRateA(rateCorrected / I3Units::microsecond);
-      else if(chip==1)calibratedstatus->SetSamplingRateB(rateCorrected / I3Units::microsecond);
-      else log_error("atwd chip %d not available", chip);
+      QuadraticFit atwdQFit  = calib->GetATWDFreqFit(chip);
+     
+      if(atwdQFit.quadFitC==NULL) // Old style linear fit
+	{
+	  double slope = atwdQFit.quadFitB;
+	  double intercept = atwdQFit.quadFitA;
+	  double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
+	  
+	  rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
+	  log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
+	  
+	  if(chip==0)calibratedstatus->SetSamplingRateA(rateCorrected / I3Units::microsecond);
+	  else if(chip==1)calibratedstatus->SetSamplingRateB(rateCorrected / I3Units::microsecond);
+	  else log_error("atwd chip %d not available", chip);
+	}
+      else
+	{
+	  log_warn("Quadratic fit found.  I need to be implemented!!");
+	  // @todo implement this
+	}
     }
+  
   //a
 }

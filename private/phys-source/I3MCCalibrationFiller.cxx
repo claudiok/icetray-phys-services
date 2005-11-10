@@ -52,9 +52,9 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 
 	I3DOMCalibrationPtr domCalib(new I3DOMCalibration());
 	
-	domCalib->SetATWDGain(0, atwd0gain_, 0.0);
-	domCalib->SetATWDGain(1, atwd1gain_, 0.0);
-	domCalib->SetATWDGain(2, atwd2gain_, 0.0);
+	domCalib->SetATWDGain(0, atwd0gain_);
+	domCalib->SetATWDGain(1, atwd1gain_);
+	domCalib->SetATWDGain(2, atwd2gain_);
 
 	for( unsigned int channel = 0; channel < 3; ++channel )
 	{
@@ -62,11 +62,12 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 	    {
 		for( unsigned int bin = 0; bin < 128; ++bin )
 		{
-		    double slope = -0.002*I3Units::V;
-		    double intercept = 2.9*I3Units::V;
+		    LinearFit binfit;
+		    binfit.slope = -0.002*I3Units::V;
+		    binfit.intercept = 2.9*I3Units::V;
 	   
-		    domCalib->SetATWDBinParameters(id,channel,bin,
-						   slope, intercept, 0.0);
+		    domCalib->SetATWDBinCalibFit(id,channel,bin,
+						   binfit);
 		}
 	    }
 	}
