@@ -95,7 +95,7 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
     {
       QuadraticFit atwdQFit  = calib->GetATWDFreqFit(chip);
      
-      if(atwdQFit.quadFitC==NULL) // Old style linear fit
+      if(atwdQFit.quadFitC==NAN) // Old style linear fit
 	{
 	  double slope = atwdQFit.quadFitB;
 	  double intercept = atwdQFit.quadFitA;
