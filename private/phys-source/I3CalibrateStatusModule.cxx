@@ -65,7 +65,7 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 
   double predictedSpeMean;
   double log_gain = 0.0;
-  int currentVoltage=(unsigned int)(rawstatus->GetPMTHV()/I3Units::volt);
+  double currentVoltage=(rawstatus->GetPMTHV()/I3Units::volt);
   const LinearFit hvgain = calib->GetHVGainFit();
   
   if(currentVoltage >0.0)
