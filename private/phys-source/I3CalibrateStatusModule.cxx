@@ -71,7 +71,7 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
   if(currentVoltage >0.0)
     {
       log_gain = hvgain.slope*log10(currentVoltage) + hvgain.intercept;
-      predictedSpeMean = pow(10.0,log_gain);
+      predictedSpeMean = pow(10.0,log_gain)*I3Units::eSI;
       
       log_trace("LOOK: predictedSPEMean %f",predictedSpeMean);
     }
@@ -94,8 +94,8 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
   for (int chip=0; chip<2; chip++)
     {
       QuadraticFit atwdQFit  = calib->GetATWDFreqFit(chip);
-     
-      if(atwdQFit.quadFitC==NAN) // Old style linear fit
+
+      if(isnan(atwdQFit.quadFitC)) // Old style linear fit
 	{
 	  double slope = atwdQFit.quadFitB;
 	  double intercept = atwdQFit.quadFitA;
@@ -110,7 +110,7 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 	}
       else
 	{
-	  log_warn("Quadratic fit found.  I need to be implemented!!");
+	  log_error("Quadratic fit found.  I need to be implemented!!");
 	  // @todo implement this
 	}
     }
