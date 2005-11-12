@@ -35,9 +35,9 @@ void I3CalibrateStatusModule::DetectorStatus(I3Frame& frame)
   I3Calibration& calibration = GetCalibration(frame);
   I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
 
-  I3IceCubeStatus& icecubestatus = status.GetIceCubeStatus();
+  I3IceCubeDOMStatusDict& icecubestatus = status.GetIceCubeDOMStatus();
   
-  I3IceCubeStatus::iterator iter;
+  I3IceCubeDOMStatusDict::iterator iter;
   for(iter = icecubestatus.begin() ; iter != icecubestatus.end() ; iter++)
     {
       OMKey thekey = iter->first;
