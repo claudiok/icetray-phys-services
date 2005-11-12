@@ -9,7 +9,7 @@
  */
 struct CalibrationPair
 {
-  I3CalibPtr calibration;
+  I3CalibrationPtr calibration;
   I3CalibrationHeaderPtr header;
 
   operator bool()
