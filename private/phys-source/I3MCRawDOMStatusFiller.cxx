@@ -13,7 +13,7 @@ I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(const I3Context& context) :
     AddParameter("triggerMode", "trigger mode",
 		 triggerMode_);
     
-    lcMode_ = 4;
+    lcMode_ = 1;
     AddParameter("lcMode", "local coincidence mode",
 		 lcMode_);
     
@@ -25,21 +25,14 @@ I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(const I3Context& context) :
     AddParameter("speThreshold", "discriminator threshold", 
 		 speThreshold_);
 
-    lcWindowUpPre_ = -800.0*I3Units::ns;
-    AddParameter("lcWindowUpPre", "local coincidence window UpPre", 
-		 lcWindowUpPre_);
-    
-    lcWindowDownPre_ = -800.0*I3Units::ns;
-    AddParameter("lcWindowDownPre", "local coincidence window DownPre", 
-		 lcWindowDownPre_);
+    lcWindowPre_ = -800.0*I3Units::ns;
+    AddParameter("lcWindowPre", "local coincidence window Pre", 
+		 lcWindowPre_);
 
-    lcWindowUpPost_ = 800.0*I3Units::ns;
-    AddParameter("lcWindowUpPost", "local coincidence window UpPost", 
-		 lcWindowUpPost_);
+    lcWindowPost_ = 800.0*I3Units::ns;
+    AddParameter("lcWindowPost", "local coincidence window Post", 
+		 lcWindowPost_);
 
-    lcWindowDownPost_ = 800.0*I3Units::ns;
-    AddParameter("lcWindowDownPost", "local coincidence window DownPost", 
-		 lcWindowDownPost_);
 
     atwdAOn_ = true;
     AddParameter("atwdAOn", "Is ATWD A on?", atwdAOn_);
@@ -90,10 +83,10 @@ void I3MCRawDOMStatusFiller::Configure()
     
     GetParameter("lcMode", lcMode_);
 
-    if ( lcMode_ != 4 )
+    if ( lcMode_ != 1 )
     {
-	log_warn("Unsupported LC mode! Setting to 4:UpAndDown");
-	lcMode_ = 4;
+	log_warn("Unsupported LC mode! Setting to 1:UpOrDown");
+	lcMode_ = 1;
     }
     
     /*
@@ -103,10 +96,8 @@ void I3MCRawDOMStatusFiller::Configure()
     }
     */
 
-    GetParameter("lcWindowUpPre", lcWindowUpPre_);
-    GetParameter("lcWindowDownPre", lcWindowDownPre_);
-    GetParameter("lcWindowUpPost", lcWindowUpPost_);
-    GetParameter("lcWindowDownPost", lcWindowDownPost_);
+    GetParameter("lcWindowPre", lcWindowPre_);
+    GetParameter("lcWindowPost", lcWindowPost_);
     
     GetParameter("pmtHV", pmtHV_);
     GetParameter("speThreshold", speThreshold_);
@@ -161,10 +152,6 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 	lcMode = I3RawDOMStatus::Down;
     }
     
-    else if ( lcMode_ == 4 )
-    {
-	lcMode = I3RawDOMStatus::UpAndDown;
-    }
     
     // Is ATWD A on?
     I3RawDOMStatus::OnOff atwdAOn;
@@ -216,10 +203,8 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 	raw->SetTrigMode(triggerMode);
 	raw->SetLCMode(lcMode);
 	
-	raw->SetLCWindowUpPre(lcWindowUpPre_);
-	raw->SetLCWindowDownPre(lcWindowDownPre_);
-	raw->SetLCWindowUpPost(lcWindowUpPost_);
-	raw->SetLCWindowDownPost(lcWindowDownPost_);
+	raw->SetLCWindowPre(lcWindowPre_);
+	raw->SetLCWindowPost(lcWindowPost_);
 
 	raw->SetStatusATWD_A(atwdAOn);
 	raw->SetStatusATWD_B(atwdBOn);

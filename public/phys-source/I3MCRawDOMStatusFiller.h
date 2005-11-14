@@ -39,11 +39,9 @@ private:
     int triggerMode_;
     int lcMode_;
     
-    double lcWindowUpPre_;
-    double lcWindowDownPre_;
+    double lcWindowPre_;
     
-    double lcWindowUpPost_;
-    double lcWindowDownPost_;
+    double lcWindowPost_;
     
     double pmtHV_;
     double speThreshold_;
