@@ -4,7 +4,7 @@
 #include "dataclasses/I3InIceGeometry.h"
 #include "dataclasses/I3Geometry.h"
 
-double I3MCCalibrationFiller::CONVERSION_FACTOR = -0.0021;
+double I3MCCalibrationFiller::CONVERSION_FACTOR = -0.0021*I3Units::V;
 
 I3_MODULE(I3MCCalibrationFiller);
 
