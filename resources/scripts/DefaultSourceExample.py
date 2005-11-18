@@ -1,5 +1,5 @@
 # This is a python script.  
-from libithon import *
+from I3Tray import *
 
 # required libraries
 load("libicetray")

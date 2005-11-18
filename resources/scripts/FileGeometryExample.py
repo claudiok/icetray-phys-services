@@ -1,4 +1,4 @@
-from libithon import *
+from I3Tray import *
 
 from os.path import expandvars
 
