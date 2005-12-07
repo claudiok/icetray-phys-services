@@ -41,10 +41,11 @@ void I3CalibrateStatusModule::DetectorStatus(I3Frame& frame)
   for(iter = icecubestatus.begin() ; iter != icecubestatus.end() ; iter++)
     {
       OMKey thekey = iter->first;
-      I3RawDOMStatusPtr rawstatus = iter->second.GetRawStatus();
+      I3DOMStatusPtr dstatptr = iter->second;
+      I3RawDOMStatusPtr rawstatus = dstatptr->GetRawStatus(); 
       I3CalibratedDOMStatusPtr 
 	calibratedstatus(new I3CalibratedDOMStatus());      
-      iter->second.SetCalibratedStatus(calibratedstatus);
+      dstatptr->SetCalibratedStatus(calibratedstatus);
       assert(inicecalib.count(thekey)>0);
       I3DOMCalibrationPtr domcalib = inicecalib[thekey];
       DoTheCalibration(rawstatus,calibratedstatus,domcalib);

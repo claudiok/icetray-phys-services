@@ -220,7 +220,7 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 
 	raw->SetNBinsFADC(fadcNbins_);
 
-	status.GetIceCubeDOMStatus()[thiskey].SetRawStatus(raw);
+	status.GetIceCubeDOMStatus()[thiskey]->SetRawStatus(raw);
     }
     
     PushFrame(frame,"OutBox");
