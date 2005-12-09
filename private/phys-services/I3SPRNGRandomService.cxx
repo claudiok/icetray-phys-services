@@ -38,7 +38,8 @@ I3SPRNGRandomService::I3SPRNGRandomService(
   assert(streamnum>=0);
   gsl_rng_env_setup();
 
-  if (instatefile_.length() > 0) {
+  /*if (instatefile_.length() > 0) {*/
+  if (!instatefile_.empty()) {
   	ifstream in(instatefile_.c_str()); 
   	in.read((char*) &size,sizeof(int));  // read size of array
   	in.read(buffer,size);		// read array
@@ -52,7 +53,8 @@ I3SPRNGRandomService::I3SPRNGRandomService(
 
 I3SPRNGRandomService::~I3SPRNGRandomService()
 {
-   if (outstatefile_.length() != 0) { //save rng state to file
+   /*if (outstatefile_.length() > 0) { //save rng state to file*/
+   if ( !outstatefile_.empty() ) { //save rng state to file
 	   int size;
 	   char *bytes;
 

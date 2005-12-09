@@ -153,15 +153,15 @@ TEST(I3SPRNGRandomService)
   int nstreams = 2;
   int streamnum = 0;
 
-  I3SPRNGRandomService random1(666,nstreams,streamnum,string(),"saved");
+  I3SPRNGRandomService random1(666,nstreams,streamnum,"","sprngsaved");
   randomServiceTest::testRandomService<100000,I3SPRNGRandomService>(random1);
 
-  I3SPRNGRandomService random2(666,nstreams,streamnum,"saved",string());
-  randomServiceTest::testRandomService<100000,I3SPRNGRandomService>(random2);
+  /*I3SPRNGRandomService random2(666,nstreams,streamnum,"sprngsaved","");*/
+  /*randomServiceTest::testRandomService<100000,I3SPRNGRandomService>(random2);*/
 
   I3SPRNGRandomService random3(666,nstreams,1,string(),string());
 
-  randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random2);
   randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random3);
+  /*randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random2);*/
 }
 
