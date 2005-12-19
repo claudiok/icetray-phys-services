@@ -85,6 +85,12 @@ void I3Calculator::CherenkovCalc(const I3Track& track,        // input
     if (orient==I3OMGeo::Up) { angle = pi-angle; } // in case OM points UP
     chapangle = angle;
 
+    // The effective distance (d_eff) due to scattering in the ice.
+    // We don't really expect direct hits ever.
+    // Maybe we should use this d_eff instead of d (CP) in calculating 
+    // expected time of arrival of photons.
+    //double d_eff=3.1-3.9*cos_eta+4.6*cos_eta*cos_eta+0.84 * sin(changle)*CP;
+
     //--Is point of closest approach (A) on track?
     //--Is Cherenkov origin point (C) on track?
     if (track.IsStarting()) 
