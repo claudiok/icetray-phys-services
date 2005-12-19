@@ -9,6 +9,7 @@ I3DefaultPhysicsSource::I3DefaultPhysicsSource(const I3Context& context) :
 {
   eventsReturned_ = 0;
   maxEvents_ = 10;
+  mcEvents_ = false;
 
   AddParameter("GiveMCEvents","Whether or not to return MC events",mcEvents_);
   AddParameter("EventsToReturn","The numbers of events to return",maxEvents_);
