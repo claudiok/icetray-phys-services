@@ -24,7 +24,7 @@ class I3Services;
 #include <string>
 #include "icetray/I3ServiceFactory.h"
 #include "phys-services/I3MediumService.h"
-#include "services/I3Logging.h"
+#include "icetray/services/I3Logging.h"
 
 // definitions
 

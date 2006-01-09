@@ -15,7 +15,7 @@
 #include "phys-services/I3PhysicsModule.h"
 #include "I3TimeRange.h"
 #include "I3CalibrationPair.h"
-#include "services/I3Boxes.h"
+#include "icetray/services/I3Boxes.h"
 
 /**
  * @brief An icetray module which fills the

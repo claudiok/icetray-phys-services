@@ -10,7 +10,7 @@
  */
 
 #include "phys-source/I3GeometrySource.h"
-#include "services/I3Execution.h"
+#include "icetray/services/I3Execution.h"
 #include "dataclasses/I3Time.h"
 #include "icetray/I3TrayHeaders.h"
 

@@ -10,7 +10,7 @@
 
 #include "FrameChecking.h"
 
-#include "module-test/TestClientModule.h"
+#include "icetray/module-test/TestClientModule.h"
 
 // just testing that the FileGeometrySource works as expected.
 TEST_GROUP(FileGeometrySourceTest);

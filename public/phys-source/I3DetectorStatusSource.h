@@ -14,7 +14,7 @@
 
 #include "phys-services/I3PhysicsModule.h"
 #include "phys-source/I3TimeRange.h"
-#include "services/I3Boxes.h"
+#include "icetray/services/I3Boxes.h"
 #include "I3DetectorStatusPair.h"
 
 /**

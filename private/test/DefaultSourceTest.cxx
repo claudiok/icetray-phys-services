@@ -10,7 +10,7 @@
 
 #include "FrameChecking.h"
 
-#include "module-test/TestClientModule.h"
+#include "icetray/module-test/TestClientModule.h"
 
 // This is a test that checks that each of the frames that comes
 // through is a.) created on the right stream and b.) has the 

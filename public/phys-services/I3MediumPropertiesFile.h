@@ -22,7 +22,7 @@
 #include <string>
 #include <fstream>
 #include "phys-services/I3MediumProperties.h"
-#include "services/I3Logging.h"
+#include "icetray/services/I3Logging.h"
 
 // definitions
 

@@ -15,7 +15,7 @@
 #include "phys-services/I3PhysicsModule.h"
 #include "phys-source/I3TimeRange.h"
 #include "I3GeometryPair.h"
-#include "services/I3Boxes.h"
+#include "icetray/services/I3Boxes.h"
 
 /**
  * @brief A module which fills the Geometry into the data stream
