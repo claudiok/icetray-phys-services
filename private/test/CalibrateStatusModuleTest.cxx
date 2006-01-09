@@ -1,6 +1,6 @@
 #include <I3Test.h>
 
-#include "phys-source/I3CalibrateStatusModule.h"
+#include "phys-services/source/I3CalibrateStatusModule.h"
 #include "dataclasses/I3MCRawDOMStatus.h"
 #include "dataclasses/I3Units.h"
 

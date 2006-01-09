@@ -11,7 +11,7 @@
  */
 
 
-#include "phys-source/I3CalibrateStatusModule.h"
+#include "phys-services/source/I3CalibrateStatusModule.h"
 
 #include "dataclasses/I3DigitalReadout.h"
 #include "dataclasses/I3DOMLaunch.h"

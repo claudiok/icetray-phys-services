@@ -1,4 +1,4 @@
-#include "phys-source/I3DefaultPhysicsSource.h"
+#include "phys-services/source/I3DefaultPhysicsSource.h"
 #include "dataclasses/I3MCEvent.h"
 #include "dataclasses/I3MCEventHeader.h"
 

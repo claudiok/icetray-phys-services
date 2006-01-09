@@ -1,7 +1,7 @@
 #ifndef I3TEXTFILEGEOMETRYSOURCE_H
 #define I3TEXTFILEGEOMETRYSOURCE_H
 
-#include "phys-source/I3GeometrySource.h"
+#include "phys-services/source/I3GeometrySource.h"
 
 class I3TextFileGeometrySource : public I3GeometrySource
 {

@@ -1,8 +1,8 @@
 #ifndef I3FILEGEOMETRYSOURCE_H
 #define I3FILEGEOMETRYSOURCE_H
 
-#include "phys-source/I3GeometrySource.h"
-#include "phys-source/I3FileGeoOrigin.h"
+#include "phys-services/source/I3GeometrySource.h"
+#include "phys-services/source/I3FileGeoOrigin.h"
 
 class I3FileGeometrySource : public I3GeometrySource
 {

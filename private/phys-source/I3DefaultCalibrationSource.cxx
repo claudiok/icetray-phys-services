@@ -1,4 +1,4 @@
-#include "phys-source/I3DefaultCalibrationSource.h"
+#include "phys-services/source/I3DefaultCalibrationSource.h"
 
 
 I3_MODULE(I3DefaultCalibrationSource);

@@ -13,7 +13,7 @@
 #define I3GEOMETRYSOURCE_H
 
 #include "phys-services/I3PhysicsModule.h"
-#include "phys-source/I3TimeRange.h"
+#include "phys-services/source/I3TimeRange.h"
 #include "I3GeometryPair.h"
 #include "icetray/services/I3Boxes.h"
 

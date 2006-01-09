@@ -1,4 +1,4 @@
-#include "phys-source/I3DefaultGeometrySource.h"
+#include "phys-services/source/I3DefaultGeometrySource.h"
 
 
 I3_MODULE(I3DefaultGeometrySource);

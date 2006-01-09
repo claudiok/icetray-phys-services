@@ -1,4 +1,4 @@
-#include "phys-source/I3FileGeoOrigin.h"
+#include "phys-services/source/I3FileGeoOrigin.h"
 #include "dataclasses/I3OMGeoAMANDA.h"
 #include "dataclasses/I3OMGeoIceCube.h"
 #include "dataclasses/I3StationMap.h"

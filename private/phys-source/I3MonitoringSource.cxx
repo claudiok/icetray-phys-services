@@ -10,7 +10,7 @@
  */
 
 
-#include "phys-source/I3MonitoringSource.h"
+#include "phys-services/source/I3MonitoringSource.h"
 #include "icetray/I3Context.h"
 #include "icetray/I3TrayHeaders.h"
 

@@ -9,7 +9,7 @@
  * @author pretz
  */
 
-#include "phys-source/I3CalibrationSource.h"
+#include "phys-services/source/I3CalibrationSource.h"
 #include "icetray/services/I3Execution.h"
 #include "dataclasses/I3Time.h"
 #include "icetray/I3TrayHeaders.h"

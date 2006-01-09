@@ -1,4 +1,4 @@
-#include "phys-source/I3DefaultMonitoringSource.h"
+#include "phys-services/source/I3DefaultMonitoringSource.h"
 
 I3_MODULE(I3DefaultMonitoringSource);
 

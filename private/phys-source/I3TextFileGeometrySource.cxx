@@ -1,4 +1,4 @@
-#include "phys-source/I3TextFileGeometrySource.h"
+#include "phys-services/source/I3TextFileGeometrySource.h"
 
 #include "dataclasses/I3OMGeoAMANDA.h"
 #include "dataclasses/I3OMGeoIceCube.h"

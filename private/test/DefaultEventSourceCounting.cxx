@@ -2,11 +2,11 @@
 
 #include "root-icetray/RootI3Tray.h"
 
-#include "phys-source/I3DefaultPhysicsSource.h"
-#include "phys-source/I3DefaultCalibrationSource.h"
-#include "phys-source/I3DefaultGeometrySource.h"
-#include "phys-source/I3DefaultDetectorStatusSource.h"
-#include "phys-source/I3DefaultMonitoringSource.h"
+#include "phys-services/source/I3DefaultPhysicsSource.h"
+#include "phys-services/source/I3DefaultCalibrationSource.h"
+#include "phys-services/source/I3DefaultGeometrySource.h"
+#include "phys-services/source/I3DefaultDetectorStatusSource.h"
+#include "phys-services/source/I3DefaultMonitoringSource.h"
 
 #include "FrameChecking.h"
 

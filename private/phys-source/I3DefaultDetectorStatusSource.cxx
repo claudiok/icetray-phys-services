@@ -1,4 +1,4 @@
-#include "phys-source/I3DefaultDetectorStatusSource.h"
+#include "phys-services/source/I3DefaultDetectorStatusSource.h"
 
 
 I3_MODULE(I3DefaultDetectorStatusSource);
