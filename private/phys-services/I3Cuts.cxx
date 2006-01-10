@@ -77,10 +77,13 @@ void I3Cuts::DirectHits(const I3Track& track, I3Geometry& geom,
     for (unsigned int j=1; j<lengthAll.size(); j++) {
       double lj = lengthAll[j]-lengthAll[0];
       double lN = lengthAll[N]-lengthAll[0];
-      double S = abs((double)j/(double)N - lj/lN);
+      double S = (double)j/(double)N - lj/lN;
       log_debug("j: %i  N: %i  S: %f",j,N,S);
-      if (S>Sall) Sall = S;
+      if (fabs(S)>fabs(Sall)) Sall = S;
     }
+    // calculation is meaningless for less than 3 hits
+    if(lengthAll.size() <= 2)
+      Sall = NAN;
   }
 
   // calculate SmoothnessDir...
@@ -93,10 +96,13 @@ void I3Cuts::DirectHits(const I3Track& track, I3Geometry& geom,
     for (unsigned int j=1; j<lengthDir.size(); j++) {
       double lj = lengthDir[j]-lengthDir[0];
       double lN = lengthDir[N]-lengthDir[0];
-      double S = abs((double)j/(double)N - lj/lN);
+      double S = (double)j/(double)N - lj/lN;
       log_debug("j: %i  N: %i  S: %f",j,N,S);
-      if (S>Sdir) Sdir = S;
+      if (fabs(S)>fabs(Sdir)) Sdir = S;
     }
+    // calculation is meaningless for less than 3 direct hits
+    if(lengthDir.size() <= 2)
+      Sdir = NAN;
   }
 
   Ldir = max-min; // length of event
