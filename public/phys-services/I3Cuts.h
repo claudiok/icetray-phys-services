@@ -135,6 +135,28 @@ namespace I3Cuts
 		       double t1 = minusTWindow, 
 		       double t2 = plusTWindow);
 
+
+
+  // Computes the size of the "cylinder of closest approach", 
+  // which is the amount by which one must expand a "reference cylinder"
+  // (such as the volume of the in-ice detector) in order to just barely
+  // contain the track.
+  // For grusome defail, see Kath's thesis appendix A.
+  //
+  // "H0" = height of reference cylinder
+  // "R0" = radius of reference cylinder
+  // "center" = z-coordinate of center of reference cylinder
+  //           (the x- and y-coordinates are assumed to be at zero)
+  //
+  // This is useful, for instance, for making cuts on whether a track goes
+  // through the physical volume of the in-ice detector, close to the center,
+  // or outside of it.
+  double CylinderSize(const I3Track& track, 
+		      double H0, 
+		      double R0, 
+		      double center);
+
+
 }
 
 #endif
