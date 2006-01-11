@@ -161,3 +161,107 @@ double I3Cuts::SmoothnessDir(const I3Track& track, I3Geometry& geom,
   return Sdir;
 }
 
+
+//--------------------------------------------------------------
+// Computes the size of the "cylinder of closest approach", as defined
+// in Kath's thesis appendix A
+double I3Cuts::CylinderSize(const I3Track& track, 
+			    //I3Geometry& geom, 
+			    //I3OMResponseMap& ommap, 
+			    double H0, double R0, double center) {
+
+  I3Direction v = track.GetDir();
+  I3Position p = track.GetPos();
+
+  // X, Y, and Z
+  double xx = p.GetX();
+  double yy = p.GetY();
+  double zz = p.GetZ();
+
+  // Theta and Phi must be in RADIANS
+  //double px = -cos(phi)*sin(theta);
+  //double py = -sin(phi)*sin(theta);
+  //double pz = -cos(theta);
+  double px = v.GetX();
+  double py = v.GetY();
+  double pz = v.GetZ();
+
+  double k, r;
+  double aa, bb, cc, underroot, root1, root2, z1, z2;
+  double bestcorner, bestcyl, zcyl, zprime;
+
+  // Typical values for AMANDA-B10:
+  // H0 = 175,
+  // R0 = 100,
+  // center = 45
+
+  k = R0/H0;
+
+  //###########################################
+  // smallest cylindrical volume of radius r and total height h around 
+  // (0,0,center), which is proportional to R0, H0 and contains the track 
+
+  // 1) Solve for top/bottom clippers
+
+  zprime = zz - center;
+
+  aa = px*px+py*py-k*k*pz*pz;
+  bb = 2*(xx*px + yy*py -k*k*zprime*pz);
+  cc = xx*xx + yy*yy-k*k*zprime*zprime;
+  underroot = bb*bb - 4*aa*cc;
+
+  if (underroot >= 0.) {
+    root1 = 0.5*(-bb + sqrt(underroot))/aa;
+    root2 = 0.5*(-bb - sqrt(underroot))/aa;
+    z1 = fabs(zprime + root1*pz);
+    z2 = fabs(zprime + root2*pz);
+
+    if (z2<z1) {
+      bestcorner = z2/H0;
+    } else {
+      bestcorner = z1/H0;
+    }
+
+  } else {
+    bestcorner = 1.E9;
+  }
+
+  // 2) Solve for cylinder-clipper
+  if ((px==0) && (py==0)) {
+    //  it's straight vertical
+    r = xx*xx + yy*yy;
+    if (r > 0) {
+      r = sqrt(r);
+    } else {
+      r = 0.;
+    }
+    bestcyl = r/R0;
+  } else {
+    // not straight vertical
+    r = (xx*xx + yy*yy -
+         ((px*xx + py*yy)*(px*xx + py*yy))/(px*px + py*py));
+    if (r > 0) {
+      r = sqrt(r);
+    } else {
+      r = 0.;
+    }
+
+    // But wait!  It must have at least the proper r/h ratio
+    zcyl = fabs(zprime + (-(px*xx+py*yy)/(px*px+py*py))*pz);
+    if (r/zcyl >= k) {
+      bestcyl = r/R0;
+    } else {
+      bestcyl = 1.E9;
+    }
+  }
+
+  // Which is smaller?
+  if (bestcorner<bestcyl) {
+    return bestcorner;
+  } else {
+    return bestcyl;
+  }
+
+}
+
+
