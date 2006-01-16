@@ -11,11 +11,10 @@
 
 */
 #include "phys-services/I3Calculator.h"
-#include "dataclasses/I3Starting.h"
-#include "dataclasses/I3Stopping.h"
-#include "dataclasses/I3Contained.h"
-#include "dataclasses/I3OMResponse.h"
-#include "dataclasses/I3AMANDAAnalogReadout.h"
+#include "dataclasses/physics/I3Starting.h"
+#include "dataclasses/physics/I3Stopping.h"
+#include "dataclasses/physics/I3Contained.h"
+#include "dataclasses/physics/I3AMANDAAnalogReadout.h"
 
 using namespace std;
 

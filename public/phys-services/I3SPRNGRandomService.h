@@ -7,6 +7,10 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_test.h>
 
+#include <string>
+
+using namespace std;
+
 /**
  * copyright  (C) 2004
  * the icecube collaboration
@@ -44,7 +48,7 @@ class I3SPRNGRandomService : public I3RandomService{
    * constructors
    */
   I3SPRNGRandomService(int seed, int nstreams, int streamnum, 
-				  string instatefile=string(), string outstatefile=string());
+		       string instatefile=string(), string outstatefile=string());
 
   /**
    * destructor

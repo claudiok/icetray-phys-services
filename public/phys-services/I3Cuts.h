@@ -2,9 +2,12 @@
 #define I3CUTS_H
 
 #include "dataclasses/I3Units.h"
-#include "dataclasses/I3Track.h"
-#include "dataclasses/I3OMResponseMap.h"
-#include "dataclasses/I3Geometry.h"
+#include "dataclasses/physics/I3Track.h"
+//#include "dataclasses/I3OMResponseMap.h"
+#include "dataclasses/geometry/I3Geometry.h"
+
+class I3OMResponse;
+class I3OMResponseMap;
 
 using namespace I3Units;
 

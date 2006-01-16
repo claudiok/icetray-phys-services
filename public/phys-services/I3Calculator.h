@@ -12,11 +12,11 @@
 #define I3CALCULATOR_H
 
 #include <cmath>
-#include "dataclasses/I3Track.h"
-#include "dataclasses/I3Cascade.h"
+#include "dataclasses/physics/I3Track.h"
+#include "dataclasses/physics/I3Cascade.h"
 #include "dataclasses/I3Units.h"
 #include "dataclasses/I3Constants.h"
-#include "dataclasses/I3OMGeo.h"
+#include "dataclasses/geometry/I3OMGeo.h"
 
 using namespace I3Units;
 

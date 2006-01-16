@@ -13,6 +13,8 @@ void I3Cuts::DirectHits(const I3Track& track, I3Geometry& geom,
 			double t1, double t2, 
 			int& Ndir, double& Ldir, double& Sall, double& Sdir)
 {
+#warning Commented out for dc retool
+#if 0
   Ndir = 0;
   int ntot = 0;
   vector<double> lengthAll;
@@ -111,6 +113,7 @@ void I3Cuts::DirectHits(const I3Track& track, I3Geometry& geom,
   log_debug("-----> Sall: %f",Sall);
   log_debug("-----> Sdir: %f",Sdir);
   return;
+#endif
 }
 
 
