@@ -1,8 +1,8 @@
 #ifndef I3DETECTORSTATUSPAIR_H
 #define I3DETECTORSTATUSPAIR_H
 
-#include "dataclasses/I3DetectorStatus.h"
-#include "dataclasses/I3DetectorStatusHeader.h"
+#include "dataclasses/status/I3DetectorStatus.h"
+#include "dataclasses/status/I3DetectorStatusHeader.h"
 
 /**
  * @brief Dumb struct for holding an I3DetectorStatus and its 

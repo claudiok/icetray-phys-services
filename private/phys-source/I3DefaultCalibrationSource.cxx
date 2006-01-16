@@ -12,6 +12,6 @@ CalibrationPair I3DefaultCalibrationSource::GetCalibration(I3Time eventTime)
   toReturn.header = I3CalibrationHeaderPtr(new I3CalibrationHeader());
   toReturn.header->SetStartTime(I3Time(0,0));
   toReturn.header->SetEndTime(I3Time(3000,0));
-  toReturn.calibration = I3CalibPtr(new I3Calibration());
+  toReturn.calibration = I3CalibrationPtr(new I3Calibration());
   return toReturn;
 }

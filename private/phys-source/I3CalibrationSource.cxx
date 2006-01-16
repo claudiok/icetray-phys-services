@@ -13,9 +13,12 @@
 #include "icetray/services/I3Execution.h"
 #include "dataclasses/I3Time.h"
 #include "icetray/I3TrayHeaders.h"
+#include "icetray/services/I3Boxes.h"
+#include "icetray/I3Stream.h"
+
 
 I3CalibrationSource::I3CalibrationSource(const I3Context& context) : 
-  I3PhysicsModule(context)
+  I3Module(context)
 {
   if(!I3Stream::StreamExists("Calibration"))
     I3Stream::AddStream("Calibration","Calibration Stream");

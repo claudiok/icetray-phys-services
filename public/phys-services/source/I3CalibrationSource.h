@@ -12,10 +12,12 @@
 #ifndef I3CALIBRATIONSOURCE_H
 #define I3CALIBRATIONSOURCE_H
 
-#include "phys-services/I3PhysicsModule.h"
+#include "icetray/I3Module.h"
 #include "I3TimeRange.h"
 #include "I3CalibrationPair.h"
-#include "icetray/services/I3Boxes.h"
+
+class I3Boxes;
+class I3Stream;
 
 /**
  * @brief An icetray module which fills the
@@ -31,7 +33,7 @@
  * send out a new Calibration.  The default behavior is to use
  * the StartTime and EndTime of the last Calibration sent
  */
-class I3CalibrationSource : public I3PhysicsModule
+class I3CalibrationSource : public I3Module
 {
  public:
   I3CalibrationSource(const I3Context& context);

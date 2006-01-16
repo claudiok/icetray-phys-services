@@ -12,10 +12,12 @@
 #ifndef I3DETECTORSTATUSSOURCE_H
 #define I3DETECTORSTATUSSOURCE_H
 
-#include "phys-services/I3PhysicsModule.h"
+#include "icetray/I3Module.h"
 #include "phys-services/source/I3TimeRange.h"
-#include "icetray/services/I3Boxes.h"
 #include "I3DetectorStatusPair.h"
+
+class I3Boxes;
+class I3Stream;
 
 /**
  * @brief A module which puts the DetectorStatus into the 
@@ -31,7 +33,7 @@
  * send out a new DetectorStatus.  The default behavior is to use
  * the StartTime and EndTime of the last DetectorStatus sent
  */
-class I3DetectorStatusSource : public I3PhysicsModule
+class I3DetectorStatusSource : public I3Module
 {
  public:
   I3DetectorStatusSource(const I3Context& context);

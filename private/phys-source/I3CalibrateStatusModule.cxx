@@ -18,6 +18,8 @@
 #include "dataclasses/status/I3DetectorStatus.h"
 #include "dataclasses/I3Units.h"
 #include "icetray/I3Frame.h"
+#include "icetray/services/I3Boxes.h"
+#include "icetray/I3Stream.h"
 
 I3_MODULE(I3CalibrateStatusModule);
 
