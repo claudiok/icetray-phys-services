@@ -13,26 +13,25 @@
 
 #include "phys-services/source/I3CalibrateStatusModule.h"
 
-#include "dataclasses/I3DigitalReadout.h"
-#include "dataclasses/I3DOMLaunch.h"
-#include "dataclasses/I3Event.h"
-#include "dataclasses/I3InIceCalibration.h"
-#include "dataclasses/I3Calibration.h"
-#include "dataclasses/I3DetectorStatus.h"
+#include "dataclasses/calibration/I3InIceCalibration.h"
+#include "dataclasses/calibration/I3Calibration.h"
+#include "dataclasses/status/I3DetectorStatus.h"
 #include "dataclasses/I3Units.h"
+#include "icetray/I3Frame.h"
 
 I3_MODULE(I3CalibrateStatusModule);
 
 I3CalibrateStatusModule::I3CalibrateStatusModule(const I3Context& context) : 
-  I3PhysicsModule(context)
+  I3Module(context)
 {
   AddOutBox("OutBox");
 }
 
 void I3CalibrateStatusModule::DetectorStatus(I3Frame& frame)
 {
-  I3DetectorStatus& status = GetDetectorStatus(frame);
-  I3Calibration& calibration = GetCalibration(frame);
+  I3DetectorStatus& status = 
+    *frame.Get<I3DetectorStatusPtr>("DetectorStatus");
+  I3Calibration& calibration = *frame.Get<I3CalibrationPtr>("Calibration");
   I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
 
   I3IceCubeDOMStatusDict& icecubestatus = status.GetIceCubeDOMStatus();
