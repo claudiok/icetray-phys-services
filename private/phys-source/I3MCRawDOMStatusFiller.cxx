@@ -1,13 +1,15 @@
 #include "phys-services/source/I3MCRawDOMStatusFiller.h"
-#include "dataclasses/I3RawDOMStatus.h"
-#include "dataclasses/I3MCRawDOMStatus.h"
-#include "dataclasses/I3Geometry.h"
-#include "dataclasses/I3DetectorStatus.h"
+#include "dataclasses/status/I3RawDOMStatus.h"
+#include "dataclasses/status/I3MCRawDOMStatus.h"
+#include "dataclasses/geometry/I3Geometry.h"
+#include "dataclasses/status/I3DetectorStatus.h"
+#include "dataclasses/I3Units.h"
+#include "icetray/I3Frame.h"
 
 I3_MODULE(I3MCRawDOMStatusFiller);
 
 I3MCRawDOMStatusFiller::I3MCRawDOMStatusFiller(const I3Context& context) : 
-  I3PhysicsModule(context)
+  I3Module(context)
 {
     triggerMode_ = 2;
     AddParameter("triggerMode", "trigger mode",
@@ -119,12 +121,13 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
 {
     log_debug("I3MCRawDOMStatusFiller::DetectorStatus");
 
-    I3Geometry& geo = GetGeometry(frame);
+    I3Geometry& geo = *frame.Get<I3GeometryPtr>("Geometry");
     I3InIceGeometry& inice = geo.GetInIceGeometry();
 
     I3InIceGeometry::iterator iter;
 
-    I3DetectorStatus& status = GetDetectorStatus(frame);
+    I3DetectorStatus& status = 
+      *frame.Get<I3DetectorStatusPtr>("DetectorStatus");
 
     // Trigger mode
     I3RawDOMStatus::TrigMode triggerMode = I3RawDOMStatus::SPE;

@@ -13,11 +13,13 @@
 #include "icetray/services/I3Execution.h"
 #include "dataclasses/I3Time.h"
 #include "icetray/I3TrayHeaders.h"
+#include "icetray/I3Stream.h"
+#include "icetray/services/I3Boxes.h"
 
 //I3_MODULE(I3GeometrySource);
 
 I3GeometrySource::I3GeometrySource(const I3Context& context) : 
-  I3PhysicsModule(context)
+  I3Module(context)
 {
   if(!I3Stream::StreamExists("Geometry"))
     I3Stream::AddStream("Geometry","Geometry Stream");

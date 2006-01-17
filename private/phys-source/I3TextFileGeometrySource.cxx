@@ -1,9 +1,8 @@
 #include "phys-services/source/I3TextFileGeometrySource.h"
 
-#include "dataclasses/I3OMGeoAMANDA.h"
-#include "dataclasses/I3OMGeoIceCube.h"
-#include "dataclasses/I3StationMap.h"
-#include "dataclasses/I3SurfModuleGeo.h"
+#include "dataclasses/geometry/I3OMGeo.h"
+#include "dataclasses/geometry/I3StationMap.h"
+#include "dataclasses/geometry/I3SurfModuleGeo.h"
 #include "icetray/I3TrayHeaders.h"
 
 #include <fstream>
@@ -56,7 +55,7 @@ void I3TextFileGeometrySource::FillGeometry(I3Geometry& Geometry,
   
     while(AmaGeoInFile>>string_F>>tube_F>>x_F>>y_F>>z_F>>orientation_F)
     {    
-	I3OMGeoAMANDAPtr amanda = I3OMGeoAMANDAPtr(new I3OMGeoAMANDA());
+	I3OMGeoPtr amanda = I3OMGeoPtr(new I3OMGeo());
 	Geometry.GetInIceGeometry()[OMKey(string_F,tube_F)] = amanda;
       
 	amanda->SetPos(x_F * I3Units::m,
@@ -76,7 +75,7 @@ void I3TextFileGeometrySource::FillGeometry(I3Geometry& Geometry,
     {
 	if(tube_F<61)
 	{
-	    I3OMGeoIceCubePtr icecube = I3OMGeoIceCubePtr(new I3OMGeoIceCube());
+	    I3OMGeoPtr icecube = I3OMGeoPtr(new I3OMGeo());
 	    Geometry.GetInIceGeometry()[OMKey(string_F,tube_F)] = icecube;
       
 	    icecube->SetPos(x_F * I3Units::m,
@@ -98,7 +97,7 @@ void I3TextFileGeometrySource::FillGeometry(I3Geometry& Geometry,
 		station_map[string_F]->push_back(I3SurfModuleGeoPtr(new I3SurfModuleGeo()));
 	    }
 
-	    I3OMGeoIceCubePtr icecube = I3OMGeoIceCubePtr(new I3OMGeoIceCube());
+	    I3OMGeoPtr icecube = I3OMGeoPtr(new I3OMGeo());
 	    switch(tube_F)
 	    {
 	    case 61:

@@ -12,9 +12,6 @@
 #ifndef I3MONITORINGSOURCE_H
 #define I3MONITORINGSOURCE_H
 
-#include "dataclasses/I3Event.h"
-#include "dataclasses/I3EventHeader.h"
-
 #include "icetray/I3Source.h"
 #include "I3MonitoringPair.h"
 

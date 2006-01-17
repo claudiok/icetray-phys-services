@@ -1,13 +1,15 @@
 #include "phys-services/source/I3MCCalibrationFiller.h"
-#include "dataclasses/I3Calibration.h"
-#include "dataclasses/I3DOMCalibration.h"
-#include "dataclasses/I3InIceGeometry.h"
-#include "dataclasses/I3Geometry.h"
+#include "dataclasses/calibration/I3Calibration.h"
+#include "dataclasses/calibration/I3DOMCalibration.h"
+#include "dataclasses/geometry/I3InIceGeometry.h"
+#include "dataclasses/geometry/I3Geometry.h"
+#include "icetray/I3Frame.h"
+#include "dataclasses/I3Units.h"
 
 I3_MODULE(I3MCCalibrationFiller);
 
 I3MCCalibrationFiller::I3MCCalibrationFiller(const I3Context& context) 
-: I3PhysicsModule(context)
+: I3Module(context)
 {
     atwd0gain_ = -16.0;
     AddParameter("ATWD0gain", "ATWD0 gain", atwd0gain_);
@@ -37,12 +39,12 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 {
     log_debug("I3MCCalibrationFiller::Calibration");
 
-    I3Geometry& geo = GetGeometry(frame);
+    I3Geometry& geo = *frame.Get<I3GeometryPtr>("Geometry");
     I3InIceGeometry& inice = geo.GetInIceGeometry();
 
     I3InIceGeometry::iterator iter;
 
-    I3Calibration& calib = GetCalibration(frame);
+    I3Calibration& calib = *frame.Get<I3CalibrationPtr>("Calibration");
 
     for( iter  = inice.begin(); 
 	 iter != inice.end(); 

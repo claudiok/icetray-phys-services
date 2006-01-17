@@ -12,10 +12,12 @@
 #ifndef I3GEOMETRYSOURCE_H
 #define I3GEOMETRYSOURCE_H
 
-#include "phys-services/I3PhysicsModule.h"
+#include "icetray/I3Module.h"
 #include "phys-services/source/I3TimeRange.h"
 #include "I3GeometryPair.h"
-#include "icetray/services/I3Boxes.h"
+
+class I3Boxes;
+class I3Stream;
 
 /**
  * @brief A module which fills the Geometry into the data stream
@@ -31,7 +33,7 @@
  * send out a new Geometry.  The default behavior is to use
  * the StartTime and EndTime of the last Geometry sent
  */
-class I3GeometrySource : public I3PhysicsModule
+class I3GeometrySource : public I3Module
 {
  public:
   I3GeometrySource(const I3Context& context);
