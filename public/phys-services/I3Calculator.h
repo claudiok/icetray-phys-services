@@ -109,7 +109,7 @@ namespace I3Calculator
 		     double& chdist,
 		     double& changle,
 		     const double IndexRef=I3Constants::n_ice,
-		     const I3OMGeo::EOrientation orient=I3OMGeo::Down);
+		     const I3OMGeo::Orientation orient=I3OMGeo::Down);
 
   /**
    * Check if the input position ('position') lies on the input track 
@@ -189,7 +189,7 @@ namespace I3Calculator
    */
   double CherenkovApproachAngle(const I3Track& track,
 			    const I3Position& position,
-			    const I3OMGeo::EOrientation orient=I3OMGeo::Down);
+			    const I3OMGeo::Orientation orient=I3OMGeo::Down);
 
  /**
    * A convenience function that calls I3Position::CalcDistance() to calculate

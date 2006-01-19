@@ -45,7 +45,7 @@ void I3Calculator::CherenkovCalc(const I3Track& track,        // input
 				 double& chdist,        // output
 				 double& chapangle,       // output
 				 const double IndexRef,       // input
-				 const I3OMGeo::EOrientation orient) // input
+				 const I3OMGeo::Orientation orient) // input
 {
   //--Only calculate if track has direction
   if (track.HasDirection()) {
@@ -229,7 +229,7 @@ double I3Calculator::CherenkovDistance(const I3Track& track, const I3Position& p
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovApproachAngle(const I3Track& track, const I3Position& position, const I3OMGeo::EOrientation orient)
+double I3Calculator::CherenkovApproachAngle(const I3Track& track, const I3Position& position, const I3OMGeo::Orientation orient)
 {
   I3Position appos,chpos;
   double apdist,chtime,chdist,chapangle;
