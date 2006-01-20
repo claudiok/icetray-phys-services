@@ -31,9 +31,13 @@ I3CalibrateStatusModule::I3CalibrateStatusModule(const I3Context& context) :
 
 void I3CalibrateStatusModule::DetectorStatus(I3Frame& frame)
 {
-  I3DetectorStatus& status = 
-    *frame.Get<I3DetectorStatusPtr>("DetectorStatus");
-  I3Calibration& calibration = *frame.Get<I3CalibrationPtr>("Calibration");
+  I3DetectorStatus& status = frame.Get<I3DetectorStatus>("DetectorStatus");
+  
+  //  I3DetectorStatus& status = 
+  //    *(frame.Get<I3DetectorStatusPtr>("DetectorStatus"));
+
+  I3Calibration& calibration = frame.Get<I3Calibration>("Calibration");
+
   I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
 
   I3IceCubeDOMStatusDict& icecubestatus = status.GetIceCubeDOMStatus();

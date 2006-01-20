@@ -39,12 +39,12 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 {
     log_debug("I3MCCalibrationFiller::Calibration");
 
-    I3Geometry& geo = *frame.Get<I3GeometryPtr>("Geometry");
+    I3Geometry& geo = frame.Get<I3Geometry>("Geometry");
     I3InIceGeometry& inice = geo.GetInIceGeometry();
 
     I3InIceGeometry::iterator iter;
 
-    I3Calibration& calib = *frame.Get<I3CalibrationPtr>("Calibration");
+    I3Calibration& calib = frame.Get<I3Calibration>("Calibration");
 
     for( iter  = inice.begin(); 
 	 iter != inice.end(); 

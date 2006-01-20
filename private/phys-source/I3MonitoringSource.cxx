@@ -42,17 +42,13 @@ void I3MonitoringSource::SendMonitoring()
   currentMonitoring_ = NextMonitoring();
   assert(currentMonitoring_);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Monitor"));
-  I3FrameAccess<I3Monitoring>::Put(frame,
-			      currentMonitoring_.monitoring,
-			      "Monitoring");
-  I3FrameAccess<I3MonitoringHeader>::Put(frame,
-				    currentMonitoring_.header,
-				    "MonitoringHeader");
+  frame.Put(currentMonitoring_.monitoring, "Monitoring");
+  frame.Put(currentMonitoring_.header, "MonitoringHeader");
  
   shared_ptr<I3Time> 
     eventTime(new I3Time(currentMonitoring_.header->GetStartTime()));;
 
-  I3FrameAccess<I3Time>::Put(frame,eventTime,"DrivingTime");
+  frame.Put(eventTime,"DrivingTime");
 
   PushFrame(frame,"OutBox");
 }

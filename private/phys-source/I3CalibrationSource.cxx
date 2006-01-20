@@ -30,8 +30,7 @@ void I3CalibrationSource::Process()
 {
   I3Frame& drivingFrame = GetBoxes().PopFrame();
 
-  I3Time& drivingFrameTime = 
-    I3FrameAccess<I3Time>::Get(drivingFrame,"DrivingTime");
+  I3Time& drivingFrameTime = drivingFrame.Get<I3Time>("DrivingTime");
 
   if(drivingFrame.Exists("Geometry") || 
      drivingFrame.Exists("GeometryHeader") )
@@ -45,12 +44,10 @@ void I3CalibrationSource::Process()
       SendCalibration(drivingFrameTime);
     }
 
-  I3FrameAccess<I3Calibration>::Put(drivingFrame,
-				    currentCalibration_.calibration,
-				    "Calibration");
-  I3FrameAccess<I3CalibrationHeader>::Put(drivingFrame,
-					     currentCalibration_.header,
-					     "CalibrationHeader");
+  drivingFrame.Put(currentCalibration_.calibration,
+		   "Calibration");
+  drivingFrame.Put(currentCalibration_.header,
+		   "CalibrationHeader");
   PushFrame(drivingFrame,"OutBox");
 
 }
@@ -71,18 +68,14 @@ void I3CalibrationSource::SendCalibration(I3Time nextEvent)
   assert(currentCalibration_);
   assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Calibration"));
-  I3FrameAccess<I3Calibration>::Put(frame,
-				    currentCalibration_.calibration,
-				    "Calibration");
-  I3FrameAccess<I3CalibrationHeader>::Put(frame,
-					  currentCalibration_.header,
-					  "CalibrationHeader");
+  frame.Put(currentCalibration_.calibration,
+	    "Calibration");
+  frame.Put(currentCalibration_.header,
+	    "CalibrationHeader");
 
   shared_ptr<I3Time> drivingTime(new I3Time(nextEvent));
   
-  I3FrameAccess<I3Time>::Put(frame,
-			     drivingTime,
-			     "DrivingTime");
+  frame.Put(drivingTime, "DrivingTime");
   
   PushFrame(frame,"OutBox");
 }

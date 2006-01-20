@@ -29,22 +29,19 @@ I3GeometrySource::I3GeometrySource(const I3Context& context) :
 
 void I3GeometrySource::Process()
 {
- I3Frame& drivingFrame = GetBoxes().PopFrame();
-
-  I3Time& drivingFrameTime = 
-    I3FrameAccess<I3Time>::Get(drivingFrame,"DrivingTime");
+  I3Frame& drivingFrame = GetBoxes().PopFrame();
+  
+  I3Time& drivingFrameTime = drivingFrame.Get<I3Time>("DrivingTime");
 
   if(!IsGeometryCurrent(drivingFrameTime))
     {
       SendGeometry(drivingFrameTime);
     }
 
-  I3FrameAccess<I3Geometry>::Put(drivingFrame,
-				 currentGeometry_.geometry,
-				 "Geometry");
-  I3FrameAccess<I3GeometryHeader>::Put(drivingFrame,
-				       currentGeometry_.header,
-				       "GeometryHeader");
+  drivingFrame.Put(currentGeometry_.geometry,
+		   "Geometry");
+  drivingFrame.Put(currentGeometry_.header,
+		   "GeometryHeader");
   PushFrame(drivingFrame,"OutBox");
 }
 
@@ -64,18 +61,14 @@ void I3GeometrySource::SendGeometry(I3Time nextEvent)
   assert(currentGeometry_);
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Geometry"));
-  I3FrameAccess<I3Geometry>::Put(frame,
-				 currentGeometry_.geometry,
-				 "Geometry");
-  I3FrameAccess<I3GeometryHeader>::Put(frame,
-				       currentGeometry_.header,
-				       "GeometryHeader");
+  frame.Put(currentGeometry_.geometry,
+	    "Geometry");
+  frame.Put(currentGeometry_.header,
+	    "GeometryHeader");
 
   shared_ptr<I3Time> drivingTime(new I3Time(nextEvent));
   
-  I3FrameAccess<I3Time>::Put(frame,
-			     drivingTime,
-			     "DrivingTime");
+  frame.Put(drivingTime, "DrivingTime");
   
   PushFrame(frame,"OutBox");
 }
