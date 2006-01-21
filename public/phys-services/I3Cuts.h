@@ -2,7 +2,7 @@
 #define I3CUTS_H
 
 #include "dataclasses/I3Units.h"
-#include "dataclasses/physics/I3Track.h"
+#include "dataclasses/physics/I3BasicTrack.h"
 //#include "dataclasses/I3OMResponseMap.h"
 #include "dataclasses/geometry/I3Geometry.h"
 
@@ -75,7 +75,7 @@ namespace I3Cuts
    * 
    * @todo Think about making the code more efficient...
    */
-  void DirectHits(const I3Track& track, 
+  void DirectHits(const I3BasicTrack& track, 
 		  I3Geometry& geom, 
 		  I3OMResponseMap& ommap, 
 		  const string hitseries,
@@ -92,7 +92,7 @@ namespace I3Cuts
    * one quantity from DirectHits(), use the DirectHits() function directly,
    * in order to save multiple calls to the function.
    */
-  int Ndir(const I3Track& track, 
+  int Ndir(const I3BasicTrack& track, 
 	   I3Geometry& geom, 
 	   I3OMResponseMap& ommap, 
 	   const string hitseries,
@@ -105,7 +105,7 @@ namespace I3Cuts
    * one quantity from DirectHits(), use the DirectHits() function directly, 
    * in order to save multiple calls to the function.
    */
-  double Ldir(const I3Track& track, 
+  double Ldir(const I3BasicTrack& track, 
 	      I3Geometry& geom, 
 	      I3OMResponseMap& ommap, 
 	      const string hitseries,
@@ -118,7 +118,7 @@ namespace I3Cuts
    * one quantity from DirectHits(), use the DirectHits() function directly, 
    * in order to save multiple calls to the function.
    */
-  double SmoothnessAll(const I3Track& track, 
+  double SmoothnessAll(const I3BasicTrack& track, 
 		       I3Geometry& geom, 
 		       I3OMResponseMap& ommap, 
 		       const string hitseries,
@@ -131,7 +131,7 @@ namespace I3Cuts
    * than one quantity from DirectHits(), use the DirectHits() function, 
    * directly in order to save multiple calls to the function.
    */
-  double SmoothnessDir(const I3Track& track, 
+  double SmoothnessDir(const I3BasicTrack& track, 
 		       I3Geometry& geom, 
 		       I3OMResponseMap& ommap, 
 		       const string hitseries,
@@ -154,7 +154,7 @@ namespace I3Cuts
   // This is useful, for instance, for making cuts on whether a track goes
   // through the physical volume of the in-ice detector, close to the center,
   // or outside of it.
-  double CylinderSize(const I3Track& track, 
+  double CylinderSize(const I3BasicTrack& track, 
 		      double H0, 
 		      double R0, 
 		      double center);

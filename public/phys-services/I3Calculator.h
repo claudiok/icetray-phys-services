@@ -12,8 +12,8 @@
 #define I3CALCULATOR_H
 
 #include <cmath>
-#include "dataclasses/physics/I3Track.h"
-#include "dataclasses/physics/I3Cascade.h"
+#include "dataclasses/physics/I3BasicTrack.h"
+class I3Cascade;
 #include "dataclasses/I3Units.h"
 #include "dataclasses/I3Constants.h"
 #include "dataclasses/geometry/I3OMGeo.h"
@@ -40,7 +40,7 @@ namespace I3Calculator
    * the position is shifted by 'dist' in the direction of the track; 
    * a negative 'dist' will shift the position in the opposite direction.
    */
-  I3Position ShiftAlongTrack(const I3Track& track, 
+  I3Position ShiftAlongTrack(const I3BasicTrack& track, 
 			     const double dist);
   
   /**
@@ -100,7 +100,7 @@ namespace I3Calculator
    * an issue, we can make these things more efficient at the expence of
    * complicating and repeating the code.
    */
-  void CherenkovCalc(const I3Track& track,
+  void CherenkovCalc(const I3BasicTrack& track,
 		     const I3Position& position,
 		     I3Position& appos,
 		     double& apdist,
@@ -120,7 +120,7 @@ namespace I3Calculator
    * simpler.  If processing time becomes an issue, we can make these routines 
    * more efficient.
    */
-  bool IsOnTrack(const I3Track& track, 
+  bool IsOnTrack(const I3BasicTrack& track, 
 		 const I3Position& position,
 		 const double Precision=0.1*I3Units::meter);
 
@@ -131,7 +131,7 @@ namespace I3Calculator
    * from CherenkovCalc(), use the CherenkovCalc() function directly, in
    * order to save multiple calls to the function.
    */
-  I3Position ClosestApproachPosition(const I3Track& track,
+  I3Position ClosestApproachPosition(const I3BasicTrack& track,
 				     const I3Position& position);
 
   /**
@@ -141,7 +141,7 @@ namespace I3Calculator
    * from CherenkovCalc(), use the CherenkovCalc() function directly, in
    * order to save multiple calls to the function.
    */
-  double ClosestApproachDistance(const I3Track& track,
+  double ClosestApproachDistance(const I3BasicTrack& track,
 				 const I3Position& position);
 
  /**
@@ -153,7 +153,7 @@ namespace I3Calculator
    * use the CherenkovCalc() function directly, in order to save multiple 
    * calls to the function.
    */
-  I3Position CherenkovPosition(const I3Track& track,
+  I3Position CherenkovPosition(const I3BasicTrack& track,
 			       const I3Position& position);
 
  /**
@@ -165,7 +165,7 @@ namespace I3Calculator
    * CherenkovCalc() function directly, in order to save multiple calls to 
    * the function.
    */
-  double CherenkovTime(const I3Track& track,
+  double CherenkovTime(const I3BasicTrack& track,
 		       const I3Position& position,
 		       const double IndexRef=I3Constants::n_ice);
 
@@ -176,7 +176,7 @@ namespace I3Calculator
    * from CherenkovCalc(), use the CherenkovCalc() function directly, in
    * order to save multiple calls to the function.
    */
-  double CherenkovDistance(const I3Track& track,
+  double CherenkovDistance(const I3BasicTrack& track,
 			   const I3Position& position);
 
  /**
@@ -187,7 +187,7 @@ namespace I3Calculator
    * quantity from CherenkovCalc(), use the CherenkovCalc() function 
    * directly, in order to save multiple calls to the function.
    */
-  double CherenkovApproachAngle(const I3Track& track,
+  double CherenkovApproachAngle(const I3BasicTrack& track,
 			    const I3Position& position,
 			    const I3OMGeo::Orientation orient=I3OMGeo::Down);
 
@@ -213,7 +213,7 @@ namespace I3Calculator
    * A time residual is defined as the difference between the measured hit time
    * and the expected time of arrival of a photon from the track.
    */
-  double TimeResidual(const I3Track& track, 
+  double TimeResidual(const I3BasicTrack& track, 
 		      const I3Position& hitpos, 
 		      const double hittime,
 		      const double IndexRef=I3Constants::n_ice);
@@ -232,8 +232,8 @@ namespace I3Calculator
   /**
    * Returns the spatial angle between two input tracks.
    */
-  double Angle(const I3Track& track1,
-	       const I3Track& track2);
+  double Angle(const I3BasicTrack& track1,
+	       const I3BasicTrack& track2);
 
   /**
    * Returns the distance between two input cascades.
@@ -259,14 +259,14 @@ namespace I3Calculator
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InTrackSystem().
    */
-  I3Position InTrackSystem(const I3Track& track, 
+  I3Position InTrackSystem(const I3BasicTrack& track, 
 			   const I3Position& pos);
 
   /**
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InTrackSystem().
    */
-  I3Direction InTrackSystem(const I3Track& track, 
+  I3Direction InTrackSystem(const I3BasicTrack& track, 
 			    const I3Direction& dir);
 
   /**
@@ -287,14 +287,14 @@ namespace I3Calculator
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InNominalSystem().
    */
-  I3Position InNominalSystem(const I3Track& track, 
+  I3Position InNominalSystem(const I3BasicTrack& track, 
 			     const I3Position& pos);
 
   /**
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InNominalSystem().
    */
-  I3Direction InNominalSystem(const I3Track& track, 
+  I3Direction InNominalSystem(const I3BasicTrack& track, 
 			      const I3Direction& dir);
 
 };

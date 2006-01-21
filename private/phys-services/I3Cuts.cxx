@@ -8,7 +8,7 @@ using namespace I3Calculator;
 
 
 //--------------------------------------------------------------
-void I3Cuts::DirectHits(const I3Track& track, I3Geometry& geom, 
+void I3Cuts::DirectHits(const I3BasicTrack& track, I3Geometry& geom, 
 			I3OMResponseMap& ommap, const string hitsName,
 			double t1, double t2, 
 			int& Ndir, double& Ldir, double& Sall, double& Sdir)
@@ -118,7 +118,7 @@ void I3Cuts::DirectHits(const I3Track& track, I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-int I3Cuts::Ndir(const I3Track& track, I3Geometry& geom, 
+int I3Cuts::Ndir(const I3BasicTrack& track, I3Geometry& geom, 
 		 I3OMResponseMap& ommap, const string hitsName,	
 		 double t1, double t2)
 {
@@ -130,7 +130,7 @@ int I3Cuts::Ndir(const I3Track& track, I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-double I3Cuts::Ldir(const I3Track& track, I3Geometry& geom, 
+double I3Cuts::Ldir(const I3BasicTrack& track, I3Geometry& geom, 
 		    I3OMResponseMap& ommap, const string hitsName,
 		    double t1, double t2)
 {
@@ -142,7 +142,7 @@ double I3Cuts::Ldir(const I3Track& track, I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-double I3Cuts::SmoothnessAll(const I3Track& track, I3Geometry& geom, 
+double I3Cuts::SmoothnessAll(const I3BasicTrack& track, I3Geometry& geom, 
 			     I3OMResponseMap& ommap, 
 			     const string hitsName, double t1, double t2)
 {
@@ -154,7 +154,7 @@ double I3Cuts::SmoothnessAll(const I3Track& track, I3Geometry& geom,
 
 
 //--------------------------------------------------------------
-double I3Cuts::SmoothnessDir(const I3Track& track, I3Geometry& geom, 
+double I3Cuts::SmoothnessDir(const I3BasicTrack& track, I3Geometry& geom, 
 			     I3OMResponseMap& ommap, 
 			     const string hitsName, double t1, double t2)
 {
@@ -168,7 +168,7 @@ double I3Cuts::SmoothnessDir(const I3Track& track, I3Geometry& geom,
 //--------------------------------------------------------------
 // Computes the size of the "cylinder of closest approach", as defined
 // in Kath's thesis appendix A
-double I3Cuts::CylinderSize(const I3Track& track, 
+double I3Cuts::CylinderSize(const I3BasicTrack& track, 
 			    //I3Geometry& geom, 
 			    //I3OMResponseMap& ommap, 
 			    double H0, double R0, double center) {
