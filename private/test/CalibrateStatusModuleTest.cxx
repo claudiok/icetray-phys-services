@@ -46,7 +46,7 @@ TEST(DoCalibTest1)
 
     //Compare the return values to values calculated by hand.
 
-    ENSURE_DISTANCE(1.9632,calibratedstatus->GetSPEMean()/I3Units::pC*1.0E12,
+    ENSURE_DISTANCE(1.9632,calibratedstatus->GetSPEMean()/I3Units::pC,
 		    0.001,"Failed to return the proper SPEMean value");
     ENSURE_DISTANCE(278.455,
 		    calibratedstatus->GetSamplingRateA()*I3Units::microsecond,
@@ -54,6 +54,9 @@ TEST(DoCalibTest1)
     ENSURE_DISTANCE(289.519,
  		    calibratedstatus->GetSamplingRateB()*I3Units::microsecond,
                     0.001,"Failed to return proper ATWD-B sampling rate");
+    ENSURE_DISTANCE(1.225e7,calibratedstatus->GetPMTGain(),
+		    0.001e7, "Failed to return proper PMT gain");
+    
 
 
 }

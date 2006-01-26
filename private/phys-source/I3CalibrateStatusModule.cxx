@@ -59,62 +59,75 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 		 I3CalibratedDOMStatusPtr calibratedstatus,
 		 I3DOMCalibrationPtr calib)
 {
-  //currently this method just calibrates the position of the SPE peak
-
-  //Now using the supplied HVGain relation: 
-  //  recall relation: log(10)Gain = slope*log(10)V + intercept
-
-  double predictedSpeMean;
-  double log_gain = 0.0;
-  double currentVoltage=(rawstatus->GetPMTHV()/I3Units::volt);
-  const LinearFit hvgain = calib->GetHVGainFit();
+    /**
+     * Calculate the SPE mean and PMT gain
+     * Use the supplied HVGain relation: 
+     * log(10)Gain = slope*log(10)V + intercept
+     */
+    double predictedSpeMean;
+    double log_gain = 0.0;
+    double gain = 0.0;
+    double currentVoltage=(rawstatus->GetPMTHV()/I3Units::volt);
+    const LinearFit hvgain = calib->GetHVGainFit();
   
-  if(currentVoltage >0.0)
+    if( currentVoltage > 0.0 )
     {
-      log_gain = hvgain.slope*log10(currentVoltage) + hvgain.intercept;
-      predictedSpeMean = pow(10.0,log_gain)*I3Units::eSI;
-      
-      log_trace("LOOK: predictedSPEMean %f",predictedSpeMean);
+	log_gain = hvgain.slope*log10(currentVoltage) + hvgain.intercept;
+	gain = pow(10.0,log_gain);
+	predictedSpeMean = gain*I3Units::eSI*1.0e12;
+	
+	log_trace("LOOK: predictedSPEMean %f", predictedSpeMean);
     }
-  else
-    {
-      log_warn("DOM voltage is zero.  No SPEMean possible");
-      predictedSpeMean = 0.0;
-    }
-
-
-  //Michelangelo's hack for MC data that doesn't have the charge histograms
-  if(hvgain.intercept==0.0&&hvgain.slope==0.0){
-    predictedSpeMean=1.6; //this is just some average, reasonable value
-  }
   
-  calibratedstatus->SetSPEMean(predictedSpeMean*I3Units::pC);
- //a
-  double rateCorrected=0; //sampling rate in MHz
-
-  for (int chip=0; chip<2; chip++)
+    else
     {
-      QuadraticFit atwdQFit  = calib->GetATWDFreqFit(chip);
+	log_warn("DOM voltage is zero. No SPEMean or PMTGain possible");
+	predictedSpeMean = 0.0;
+    }
 
-      if(isnan(atwdQFit.quadFitC)) // Old style linear fit
+    //Michelangelo's hack for MC data that doesn't have the charge histograms
+    if( hvgain.intercept == 0.0 && hvgain.slope == 0.0 )
+    {
+	predictedSpeMean = 1.6*I3Units::pC; //this is just some average, reasonable value
+    }
+  
+    calibratedstatus->SetPMTGain(gain);
+    calibratedstatus->SetSPEMean(predictedSpeMean*I3Units::pC); 
+
+    /**
+     * Calculate the sampling rate
+     * Use the sampling rate relation:
+     * sampling rate (MHz) = 20.0*(slope*DAC[0,4]+intercept)
+     */
+    double rateCorrected=0; //sampling rate in MHz
+
+    for (int chip=0; chip<2; chip++)
+    {
+	QuadraticFit atwdQFit  = calib->GetATWDFreqFit(chip);
+
+	if( isnan(atwdQFit.quadFitC) ) // Old style linear fit
 	{
-	  double slope = atwdQFit.quadFitB;
-	  double intercept = atwdQFit.quadFitA;
-	  double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
+	    double slope = atwdQFit.quadFitB;
+	    double intercept = atwdQFit.quadFitA;
+	    double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
 	  
-	  rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
-	  log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
+	    rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
+	    log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
 	  
-	  if(chip==0)calibratedstatus->SetSamplingRateA(rateCorrected / I3Units::microsecond);
-	  else if(chip==1)calibratedstatus->SetSamplingRateB(rateCorrected / I3Units::microsecond);
-	  else log_error("atwd chip %d not available", chip);
+	    if(chip==0)
+		calibratedstatus->SetSamplingRateA(rateCorrected / I3Units::microsecond);
+	    
+	    else if(chip==1)
+		calibratedstatus->SetSamplingRateB(rateCorrected / I3Units::microsecond);
+	    
+	    else 
+		log_error("atwd chip %d not available", chip);
 	}
-      else
+
+	else
 	{
-	  log_error("Quadratic fit found.  I need to be implemented!!");
-	  // @todo implement this
+	    log_error("Quadratic fit found.  I need to be implemented!!");
+	    // @todo implement this
 	}
     }
-  
-  //a
 }
