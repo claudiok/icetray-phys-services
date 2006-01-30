@@ -13,10 +13,12 @@
 #include <map>
 #include "icetray/I3TrayHeaders.h"
 
+I3_MODULE(I3Muxer);
+
 #warning null reference
-I3Muxer::I3Muxer(I3Context& context) : I3Source(context),
-						 currentEvent_(*(I3Stream*)NULL),
-						 currentEventQueued_(false)
+I3Muxer::I3Muxer(const I3Context& context) : I3Source(context),
+					     currentEvent_(*(I3Stream*)NULL),
+					     currentEventQueued_(false)
 {
   AddOutBox("OutBox");
   NoActiveInBox();

@@ -9,8 +9,8 @@
  * @author pretz
  */
 
-#ifndef I3UBERSOURCE_H
-#define I3UBERSOURCE_H
+#ifndef I3MUXER_H
+#define I3MUXER_H
 
 #include "phys-services/I3EventService.h"
 #include "phys-services/I3CalibrationService.h"
@@ -38,7 +38,7 @@
 class I3Muxer : public I3Source
 {
  public:
-  I3Muxer(I3Context& ctx);
+  I3Muxer(const I3Context& ctx);
 
   void Process();
 
