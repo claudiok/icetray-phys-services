@@ -105,8 +105,8 @@ void I3Muxer::SendCalibration()
   I3Time nextEvent = NextEventTime();
   currentCalibration_ = GetCalibrationService().GetCalibration(nextEvent);
   currentCalibrationRange_ 
-    = I3TimeRange(currentCalibration_.header->GetStartTime(),
-		  currentCalibration_.header->GetEndTime());
+    = I3TimeRange(currentCalibration_->GetStartTime(),
+		  currentCalibration_->GetEndTime());
   assert(currentCalibration_);
   assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Calibration"));
@@ -120,8 +120,8 @@ void I3Muxer::SendDetectorStatus()
   currentDetectorStatus_ = 
     GetDetectorStatusService().GetDetectorStatus(nextEvent);
   currentDetectorStatusRange_ 
-    = I3TimeRange(currentDetectorStatus_.header->GetStartTime(),
-		  currentDetectorStatus_.header->GetEndTime());
+    = I3TimeRange(currentDetectorStatus_->GetStartTime(),
+		  currentDetectorStatus_->GetEndTime());
   assert(currentDetectorStatus_);
   assert(currentDetectorStatusRange_.lower < 
 	 currentDetectorStatusRange_.upper);
@@ -135,8 +135,8 @@ void I3Muxer::SendGeometry()
   I3Time nextEvent = NextEventTime();
   currentGeometry_ = GetGeometryService().GetGeometry(nextEvent);
   currentGeometryRange_ = 
-    I3TimeRange(currentGeometry_.header->GetStartTime(),
-		currentGeometry_.header->GetEndTime());
+    I3TimeRange(currentGeometry_->GetStartTime(),
+		currentGeometry_->GetEndTime());
   assert(currentGeometry_);
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Geometry"));
@@ -157,18 +157,15 @@ void I3Muxer::SendAll(I3Frame& frame)
     }
   if(currentGeometry_)
     {
-      frame.Put("Geometry",currentGeometry_.geometry);
-      frame.Put("GeometryHeader",currentGeometry_.header);
+      frame.Put("Geometry",currentGeometry_);
     }
   if(currentCalibration_)
     {
-      frame.Put("Calibration",currentCalibration_.calibration);
-      frame.Put("CalibrationHeader",currentCalibration_.header);
+      frame.Put("Calibration",currentCalibration_);
     }
   if(currentDetectorStatus_)
     {
-      frame.Put("DetectorStatus",currentDetectorStatus_.status);
-      frame.Put("DetectorStatusHeader",currentDetectorStatus_.header);
+      frame.Put("DetectorStatus",currentDetectorStatus_);
     }
 
   PushFrame(frame,"OutBox");

@@ -78,11 +78,11 @@ class I3Muxer : public I3Source
  private:
   I3Frame currentEvent_;
   bool currentEventQueued_;
-  GeometryPair currentGeometry_;
+  I3GeometryPtr currentGeometry_;
   I3TimeRange currentGeometryRange_;
-  CalibrationPair currentCalibration_;
+  I3CalibrationPtr currentCalibration_;
   I3TimeRange currentCalibrationRange_;
-  DetectorStatusPair currentDetectorStatus_;
+  I3DetectorStatusPtr currentDetectorStatus_;
   I3TimeRange currentDetectorStatusRange_;
 };
 

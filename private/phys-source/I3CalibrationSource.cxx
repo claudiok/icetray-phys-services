@@ -45,7 +45,6 @@ void I3CalibrationSource::Process()
     }
 
   drivingFrame.Put("Calibration", currentCalibration_.calibration);
-  drivingFrame.Put("CalibrationHeader", currentCalibration_.header);
   PushFrame(drivingFrame,"OutBox");
 
 }
@@ -61,14 +60,12 @@ void I3CalibrationSource::SendCalibration(I3Time nextEvent)
   log_debug("Entering I3CalibrationSource::SendCalibration()");
   currentCalibration_ = GetCalibration(nextEvent);
   currentCalibrationRange_ 
-    = I3TimeRange(currentCalibration_.header->GetStartTime(),
-		  currentCalibration_.header->GetEndTime()); 
+    = I3TimeRange(currentCalibration_.calibration->GetStartTime(),
+		  currentCalibration_.calibration->GetEndTime()); 
   assert(currentCalibration_);
   assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Calibration"));
   frame.Put("Calibration", currentCalibration_.calibration);
-
-  frame.Put("CalibrationHeader", currentCalibration_.header);
 
   shared_ptr<I3Time> drivingTime(new I3Time(nextEvent));
   

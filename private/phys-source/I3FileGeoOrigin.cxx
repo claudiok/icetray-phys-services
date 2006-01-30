@@ -13,19 +13,18 @@ GeometryPair I3FileGeoOrigin::GetGeometry(I3Time time)
 {
   GeometryPair p;
   p.geometry = I3GeometryPtr(new I3Geometry());
-  p.header = I3GeometryHeaderPtr(new I3GeometryHeader());
-  FillGeometryFromFile(*p.geometry,*p.header);
+  FillGeometryFromFile(*p.geometry);
   I3Time start;
   start.SetDaqTime(0,0);
   I3Time end;
   end.SetDaqTime(3000,0);
-  p.header->SetStartTime(start);
-  p.header->SetEndTime(end);
+  p.geometry->SetStartTime(start);
+  p.geometry->SetEndTime(end);
   return p;
 }
 
-void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry, 
-					   I3GeometryHeader& GeometryHeader){
+void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry)
+{
   //
   // NB: This code was cut and pasted with minor tweaks from the I3Db code.
   // The author is Georges Kohnen
@@ -128,7 +127,6 @@ void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry,
   
   I3Time time;
   time.SetModJulianTime(0,0,0.0);
-  GeometryHeader.SetStartTime(time);
-  GeometryHeader.SetArrayName("FullIceCube+Amanda");
+  Geometry.SetStartTime(time);
 }
 

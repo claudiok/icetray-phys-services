@@ -8,11 +8,11 @@ class I3EmptyCalibrationService : public I3CalibrationService
  public:
   I3EmptyCalibrationService();
   
-  CalibrationPair GetCalibration(I3Time time);
+  I3CalibrationPtr GetCalibration(I3Time time);
 
  private:
 
-  CalibrationPair pair_;
+  I3CalibrationPtr calibration_;
 };
 
 #endif

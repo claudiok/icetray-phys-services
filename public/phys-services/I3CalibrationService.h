@@ -14,24 +14,7 @@
 
 #include "phys-services/I3TimeRange.h"
 #include "dataclasses/calibration/I3Calibration.h"
-#include "dataclasses/calibration/I3CalibrationHeader.h"
 #include "dataclasses/StoragePolicy.h"
-
-/**
- * @brief Dumb struct for holding an I3Calibration and its I3CalibrationHeader
- */
-struct CalibrationPair
-{
-  I3CalibrationPtr calibration;
-  I3CalibrationHeaderPtr header;
-
-  operator bool()
-  {
-    if(calibration && header)
-      return true;
-    return false;
-  }
-};
 
 /**
  * @brief Produces I3Calibration objects given a time.
@@ -50,7 +33,7 @@ class I3CalibrationService
    * It is expected that the 'start' and 'end' times of the data
    * header will be appropirately filled.
    */
-  virtual CalibrationPair GetCalibration(I3Time time) = 0;
+  virtual I3CalibrationPtr GetCalibration(I3Time time) = 0;
 };
 
 typedef shared_ptr<I3CalibrationService> I3CalibrationServicePtr;

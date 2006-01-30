@@ -2,13 +2,10 @@
 #define FRAMECHECKING_H
 
 #include "dataclasses/geometry/I3Geometry.h"
-#include "dataclasses/geometry/I3GeometryHeader.h"
 
 #include "dataclasses/calibration/I3Calibration.h"
-#include "dataclasses/calibration/I3CalibrationHeader.h"
 
 #include "dataclasses/status/I3DetectorStatus.h"
-#include "dataclasses/status/I3DetectorStatusHeader.h"
 
 #include "dataclasses/physics/I3EventHeader.h"
 
@@ -42,8 +39,7 @@ string DumpStop(I3Frame& frame)
 
 inline bool GeometryPresent(I3Frame& frame)
 {
-  if(frame.Get<I3GeometryPtr>("Geometry") &&
-     frame.Get<I3GeometryHeaderPtr>("GeometryHeader"))
+  if(frame.Get<I3GeometryPtr>("Geometry"))
     return true;
   return false;
 }
@@ -55,16 +51,14 @@ inline bool EventPresent(I3Frame& frame)
 
 inline bool CalibrationPresent(I3Frame& frame)
 {
-  if(frame.Get<I3CalibrationPtr>("Calibration") &&
-     frame.Get<I3CalibrationHeaderPtr>("CalibrationHeader"))
+  if(frame.Get<I3CalibrationPtr>("Calibration"))
     return true;
   return false;
 }
 
 inline bool DetectorStatusPresent(I3Frame& frame)
 {
-  if(frame.Get<I3DetectorStatusPtr>("DetectorStatus") &&
-     frame.Get<I3DetectorStatusHeaderPtr>("DetectorStatusHeader"))
+  if(frame.Get<I3DetectorStatusPtr>("DetectorStatus"))
     return true;
   return false;
 }

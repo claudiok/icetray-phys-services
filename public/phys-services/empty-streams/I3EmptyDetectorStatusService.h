@@ -8,11 +8,11 @@ class I3EmptyDetectorStatusService : public I3DetectorStatusService
  public:
   I3EmptyDetectorStatusService();
   
-  DetectorStatusPair GetDetectorStatus(I3Time time);
+  I3DetectorStatusPtr GetDetectorStatus(I3Time time);
 
  private:
 
-  DetectorStatusPair pair_;
+  I3DetectorStatusPtr status_;
 };
 
 #endif

@@ -26,8 +26,7 @@ void I3TextFileGeometrySource::Configure()
     GetParameter("IceCubeGeoFile",icecubeGeoFile_);
 }
 
-void I3TextFileGeometrySource::FillGeometry(I3Geometry& Geometry, 
-					   I3GeometryHeader& GeometryHeader)
+void I3TextFileGeometrySource::FillGeometry(I3Geometry& Geometry)
 {
   
     ifstream AmaGeoInFile;	
@@ -119,20 +118,18 @@ void I3TextFileGeometrySource::FillGeometry(I3Geometry& Geometry,
     AmaGeoInFile.close();
     I3GeoInFile.close();
   
-    GeometryHeader.SetArrayName("FullIceCube+Amanda");
 }
 
 GeometryPair I3TextFileGeometrySource::GetGeometry(I3Time eventTime)
 {
     GeometryPair p;
     p.geometry = I3GeometryPtr(new I3Geometry());
-    p.header = I3GeometryHeaderPtr(new I3GeometryHeader());
-    FillGeometry(*p.geometry,*p.header);
+    FillGeometry(*p.geometry);
     I3Time start;
     start.SetDaqTime(0,0);
     I3Time end;
     end.SetDaqTime(3000,0);
-    p.header->SetStartTime(start);
-    p.header->SetEndTime(end);
+    p.geometry->SetStartTime(start);
+    p.geometry->SetEndTime(end);
     return p;
 }

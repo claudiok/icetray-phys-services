@@ -9,9 +9,9 @@ I3DefaultGeometrySource::I3DefaultGeometrySource(const I3Context& context)
 GeometryPair I3DefaultGeometrySource::GetGeometry(I3Time eventTime)
 {
   GeometryPair toReturn;
-  toReturn.header = I3GeometryHeaderPtr(new I3GeometryHeader());
-  toReturn.header->SetStartTime(I3Time(0,0));
-  toReturn.header->SetEndTime(I3Time(3000,0));
   toReturn.geometry = I3GeometryPtr(new I3Geometry());
+  toReturn.geometry->SetStartTime(I3Time(0,0));
+  toReturn.geometry->SetEndTime(I3Time(3000,0));
+
   return toReturn;
 }

@@ -8,11 +8,11 @@ class I3EmptyGeometryService : public I3GeometryService
  public:
   I3EmptyGeometryService();
   
-  GeometryPair GetGeometry(I3Time time);
+  I3GeometryPtr GetGeometry(I3Time time);
 
  private:
 
-  GeometryPair pair_;
+  I3GeometryPtr geometry_;
 };
 
 #endif

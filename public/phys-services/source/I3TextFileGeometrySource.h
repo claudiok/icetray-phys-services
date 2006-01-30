@@ -13,8 +13,7 @@ public:
     GeometryPair GetGeometry(I3Time eventTime);
 
 private:
-    void FillGeometry(I3Geometry&, 
-		 I3GeometryHeader&);
+    void FillGeometry(I3Geometry&);
     
     string amaGeoFile_;
     string icecubeGeoFile_;

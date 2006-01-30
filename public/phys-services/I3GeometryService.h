@@ -14,24 +14,7 @@
 
 #include "phys-services/I3TimeRange.h"
 #include "dataclasses/geometry/I3Geometry.h"
-#include "dataclasses/geometry/I3GeometryHeader.h"
 #include "dataclasses/StoragePolicy.h"
-
-/**
- * @brief dumb struct for holding an I3Geometry and its I3GeometryHeader
- */
-struct GeometryPair
-{
-  I3GeometryPtr geometry;
-  I3GeometryHeaderPtr header;
-
-  operator bool()
-  {
-    if(geometry && header)
-      return true;
-    return false;
-  }
-};
 
 /**
  * @brief This is an interface to classes which generates I3Geometry and
@@ -51,7 +34,7 @@ class I3GeometryService
    * @brief gives the I3Geometry and I3GeometryHeader for the
    * indicated time.
    */
-  virtual GeometryPair GetGeometry(I3Time time) = 0;
+  virtual I3GeometryPtr GetGeometry(I3Time time) = 0;
 };
 
 typedef shared_ptr<I3GeometryService> I3GeometryServicePtr;

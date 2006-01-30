@@ -39,7 +39,6 @@ void I3GeometrySource::Process()
     }
 
   drivingFrame.Put("Geometry", currentGeometry_.geometry);
-  drivingFrame.Put("GeometryHeader", currentGeometry_.header);
 
   PushFrame(drivingFrame,"OutBox");
 }
@@ -55,14 +54,12 @@ void I3GeometrySource::SendGeometry(I3Time nextEvent)
 {
   log_debug("Entering IGeometrySource::SendGeometry()");
   currentGeometry_ = GetGeometry(nextEvent);
-  currentGeometryRange_ = I3TimeRange(currentGeometry_.header->GetStartTime(),
-				      currentGeometry_.header->GetEndTime());
+  currentGeometryRange_ = I3TimeRange(currentGeometry_.geometry->GetStartTime(),
+				      currentGeometry_.geometry->GetEndTime());
   assert(currentGeometry_);
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Geometry"));
   frame.Put("Geometry", currentGeometry_.geometry
-	    );
-  frame.Put("GeometryHeader", currentGeometry_.header
 	    );
 
   shared_ptr<I3Time> drivingTime(new I3Time(nextEvent));

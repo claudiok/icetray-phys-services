@@ -50,8 +50,6 @@ void I3DetectorStatusSource::Process()
 
   drivingFrame.Put("DetectorStatus", currentDetectorStatus_.status);
 
-  drivingFrame.Put("DetectorStatusHeader", currentDetectorStatus_.header);
-
   PushFrame(drivingFrame,"OutBox");
   
 }
@@ -67,15 +65,13 @@ void I3DetectorStatusSource::SendDetectorStatus(I3Time nextEvent)
   log_debug("Entering I3DetectorStatusSource::SendDetectorStatus()");
   currentDetectorStatus_ = GetDetectorStatus(nextEvent);
   currentDetectorStatusRange_ 
-    = I3TimeRange(currentDetectorStatus_.header->GetStartTime(),
-		  currentDetectorStatus_.header->GetEndTime()); 
+    = I3TimeRange(currentDetectorStatus_.status->GetStartTime(),
+		  currentDetectorStatus_.status->GetEndTime()); 
   assert(currentDetectorStatus_);
   assert(currentDetectorStatusRange_.lower < currentDetectorStatusRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("DetectorStatus"));
   frame.Put("DetectorStatus", currentDetectorStatus_.status);
 
-  frame.Put("DetectorStatusHeader", currentDetectorStatus_.header);
-  
   shared_ptr<I3Time> drivingTime(new I3Time(nextEvent));
 
   frame.Put("DrivingTime", drivingTime);

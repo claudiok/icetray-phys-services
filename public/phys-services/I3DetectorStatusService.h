@@ -14,25 +14,7 @@
 
 #include "phys-services/I3TimeRange.h"
 #include "dataclasses/status/I3DetectorStatus.h"
-#include "dataclasses/status/I3DetectorStatusHeader.h"
 #include "dataclasses/StoragePolicy.h"
-
-/**
- * @brief Dumb struct for holding an I3DetectorStatus and its 
- * I3DetectorStatusHeader
- */
-struct DetectorStatusPair
-{
-  I3DetectorStatusPtr status;
-  I3DetectorStatusHeaderPtr header;
-
-  operator bool()
-  {
-    if(status && header)
-      return true;
-    return false;
-  }
-};
 
 /**
  * @brief Produces I3DetectorStatus and I3DetectorStatus Header
@@ -43,7 +25,7 @@ class I3DetectorStatusService
 {
  public:
   static const char* DefaultName() { return "DetectorStatusService";}
-  virtual DetectorStatusPair GetDetectorStatus(I3Time time) = 0;
+  virtual I3DetectorStatusPtr GetDetectorStatus(I3Time time) = 0;
 };
 
 typedef shared_ptr<I3DetectorStatusService> I3DetectorStatusServicePtr;
