@@ -3,16 +3,16 @@
  * the icecube collaboration
  * $Id$
  *
- * @file I3GeometryOrigin.h
+ * @file I3GeometryService.h
  * @version $Revision:$
  * @date $Date$
  * @author pretz
  */
 
-#ifndef I3GEOMETRYORIGIN_H
-#define I3GEOMETRYORIGIN_H
+#ifndef I3GEOMETRYSERVICE_H
+#define I3GEOMETRYSERVICE_H
 
-#include "I3TimeRange.h"
+#include "phys-services/I3TimeRange.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "dataclasses/geometry/I3GeometryHeader.h"
 #include "dataclasses/StoragePolicy.h"
@@ -39,13 +39,13 @@ struct GeometryPair
  * This is intended to be an icetray services for getting the geometry
  * information into the system
  */
-class I3GeometryOrigin
+class I3GeometryService
 {
  public:
   /**
    * @brief This is the default name of the service in an I3Context
    */
-  static const char* DefaultName() { return "GeometryOrigin";}
+  static const char* DefaultName() { return "GeometryService";}
 
   /**
    * @brief gives the I3Geometry and I3GeometryHeader for the
@@ -54,7 +54,7 @@ class I3GeometryOrigin
   virtual GeometryPair GetGeometry(I3Time time) = 0;
 };
 
-typedef shared_ptr<I3GeometryOrigin> I3GeometryOriginPtr;
+typedef shared_ptr<I3GeometryService> I3GeometryServicePtr;
 
 
 #endif

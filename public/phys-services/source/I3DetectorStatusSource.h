@@ -13,7 +13,7 @@
 #define I3DETECTORSTATUSSOURCE_H
 
 #include "icetray/I3Module.h"
-#include "phys-services/source/I3TimeRange.h"
+#include "phys-services/I3TimeRange.h"
 #include "I3DetectorStatusPair.h"
 
 class I3Boxes;

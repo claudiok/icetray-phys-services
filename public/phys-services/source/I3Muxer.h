@@ -12,24 +12,24 @@
 #ifndef I3UBERSOURCE_H
 #define I3UBERSOURCE_H
 
-#include "phys-services/source/I3EventOrigin.h"
-#include "phys-services/source/I3CalibrationOrigin.h"
-#include "phys-services/source/I3GeometryOrigin.h"
-#include "phys-services/source/I3DetectorStatusOrigin.h"
+#include "phys-services/I3EventService.h"
+#include "phys-services/I3CalibrationService.h"
+#include "phys-services/I3GeometryService.h"
+#include "phys-services/I3DetectorStatusService.h"
 
 #include "icetray/I3Source.h"
 #include "icetray/I3Frame.h"
 
 #include "dataclasses/I3Time.h"
-#include "I3TimeRange.h"
+#include "phys-services/I3TimeRange.h"
 
 /**
  * @brief An I3Source which uses abstract interfaces
  * interfaces to get events, calibration and geometries.
  * from.
  *
- * Uses the I3GeometryOrigin, the I3DetectorStatusOrigin, the
- * I3EventOrigin, and the I3CalibrationOrigin interfaces
+ * Uses the I3GeometryService, the I3DetectorStatusService, the
+ * I3EventService, and the I3CalibrationService interfaces
  *
  * If you don't like the idea of this being one module, you can
  * use the four modules I3PhysicsSource, I3GeometrySource, 
@@ -46,13 +46,13 @@ class I3Muxer : public I3Source
 
   enum Stream {NONE,EVENT,GEOMETRY,CALIBRATION,DETECTORSTATUS};
 
-  I3EventOrigin& GetEventOrigin();
+  I3EventService& GetEventService();
 
-  I3GeometryOrigin& GetGeometryOrigin();
+  I3GeometryService& GetGeometryService();
 
-  I3CalibrationOrigin& GetCalibrationOrigin();
+  I3CalibrationService& GetCalibrationService();
   
-  I3DetectorStatusOrigin& GetDetectorStatusOrigin();
+  I3DetectorStatusService& GetDetectorStatusService();
 
   Stream NextStream();
 

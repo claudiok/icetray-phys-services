@@ -13,7 +13,7 @@
 #define I3CALIBRATIONSOURCE_H
 
 #include "icetray/I3Module.h"
-#include "I3TimeRange.h"
+#include "phys-services/I3TimeRange.h"
 #include "I3CalibrationPair.h"
 
 class I3Boxes;

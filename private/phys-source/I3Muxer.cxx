@@ -56,32 +56,32 @@ void I3Muxer::Process()
       }
 }
 
-I3EventOrigin& I3Muxer::GetEventOrigin()
+I3EventService& I3Muxer::GetEventService()
 {
   return 
-    I3ContextAccess<I3EventOrigin>::GetService(GetContext(),
-						I3EventOrigin::DefaultName());
+    I3ContextAccess<I3EventService>::GetService(GetContext(),
+						I3EventService::DefaultName());
 }
 
-I3GeometryOrigin& I3Muxer::GetGeometryOrigin()
+I3GeometryService& I3Muxer::GetGeometryService()
 {
-  return I3ContextAccess<I3GeometryOrigin>::
+  return I3ContextAccess<I3GeometryService>::
     GetService(GetContext(),
-	       I3GeometryOrigin::DefaultName());
+	       I3GeometryService::DefaultName());
 }
 
-I3CalibrationOrigin& I3Muxer::GetCalibrationOrigin()
+I3CalibrationService& I3Muxer::GetCalibrationService()
 {
-  return I3ContextAccess<I3CalibrationOrigin>::
+  return I3ContextAccess<I3CalibrationService>::
     GetService(GetContext(),
-	       I3CalibrationOrigin::DefaultName());
+	       I3CalibrationService::DefaultName());
 }
 
-I3DetectorStatusOrigin& I3Muxer::GetDetectorStatusOrigin()
+I3DetectorStatusService& I3Muxer::GetDetectorStatusService()
 {
-  return I3ContextAccess<I3DetectorStatusOrigin>::
+  return I3ContextAccess<I3DetectorStatusService>::
     GetService(GetContext(),
-	       I3DetectorStatusOrigin::DefaultName());
+	       I3DetectorStatusService::DefaultName());
 }
 
 void I3Muxer::SendEvent()
@@ -101,7 +101,7 @@ void I3Muxer::SendCalibration()
 {
   log_debug("Entering I3Muxer::SendCalibration()");
   I3Time nextEvent = NextEventTime();
-  currentCalibration_ = GetCalibrationOrigin().GetCalibration(nextEvent);
+  currentCalibration_ = GetCalibrationService().GetCalibration(nextEvent);
   currentCalibrationRange_ 
     = I3TimeRange(currentCalibration_.header->GetStartTime(),
 		  currentCalibration_.header->GetEndTime());
@@ -116,7 +116,7 @@ void I3Muxer::SendDetectorStatus()
   log_debug("Entering I3Muxer::SendDetectorStatus()");
   I3Time nextEvent = NextEventTime();
   currentDetectorStatus_ = 
-    GetDetectorStatusOrigin().GetDetectorStatus(nextEvent);
+    GetDetectorStatusService().GetDetectorStatus(nextEvent);
   currentDetectorStatusRange_ 
     = I3TimeRange(currentDetectorStatus_.header->GetStartTime(),
 		  currentDetectorStatus_.header->GetEndTime());
@@ -131,7 +131,7 @@ void I3Muxer::SendGeometry()
 {
   log_debug("Entering I3Muxer::SendGeometry()");
   I3Time nextEvent = NextEventTime();
-  currentGeometry_ = GetGeometryOrigin().GetGeometry(nextEvent);
+  currentGeometry_ = GetGeometryService().GetGeometry(nextEvent);
   currentGeometryRange_ = 
     I3TimeRange(currentGeometry_.header->GetStartTime(),
 		currentGeometry_.header->GetEndTime());
@@ -174,7 +174,7 @@ void I3Muxer::SendAll(I3Frame& frame)
 
 I3Muxer::Stream I3Muxer::NextStream()
 {
-  if(!GetEventOrigin().MoreEvents())
+  if(!GetEventService().MoreEvents())
     return NONE;
 
   I3Time eventTime = NextEventTime();
@@ -242,8 +242,8 @@ void I3Muxer::QueueUpEvent()
 {
   if(!currentEventQueued_)
     {
-      assert(GetEventOrigin().MoreEvents());
-      GetEventOrigin().PopEvent(currentEvent_);
+      assert(GetEventService().MoreEvents());
+      GetEventService().PopEvent(currentEvent_);
       currentEventQueued_ = true;
     }
 }

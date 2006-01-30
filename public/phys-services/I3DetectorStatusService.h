@@ -3,16 +3,16 @@
  * the icecube collaboration
  * $Id$
  *
- * @file I3DetectorStatusOrigin.h
+ * @file I3DetectorStatusService.h
  * @version $Revision:$
  * @date $Date$
  * @author pretz
  */
 
-#ifndef I3DETECTORSTATUSORIGIN_H
-#define I3DETECTORSTATUSORIGIN_H
+#ifndef I3DETECTORSTATUSSERVICE_H
+#define I3DETECTORSTATUSSERVICE_H
 
-#include "I3TimeRange.h"
+#include "phys-services/I3TimeRange.h"
 #include "dataclasses/status/I3DetectorStatus.h"
 #include "dataclasses/status/I3DetectorStatusHeader.h"
 #include "dataclasses/StoragePolicy.h"
@@ -39,13 +39,13 @@ struct DetectorStatusPair
  * objects given a I3Time.  Intended to be an icetray service 
  * which provides the detector status information
  */
-class I3DetectorStatusOrigin
+class I3DetectorStatusService
 {
  public:
-  static const char* DefaultName() { return "DetectorStatusOrigin";}
+  static const char* DefaultName() { return "DetectorStatusService";}
   virtual DetectorStatusPair GetDetectorStatus(I3Time time) = 0;
 };
 
-typedef shared_ptr<I3DetectorStatusOrigin> I3DetectorStatusOriginPtr;
+typedef shared_ptr<I3DetectorStatusService> I3DetectorStatusServicePtr;
 
 #endif
