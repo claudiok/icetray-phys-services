@@ -1,6 +1,5 @@
 #include "phys-services/empty-streams/I3EmptyEventService.h"
 #include <dataclasses/I3Time.h>
-#include <dataclasses/physics/I3EventHeader.h>
 #include <icetray/I3Frame.h>
 
 I3EmptyEventService::I3EmptyEventService(int nframes) : nframes_(nframes),
@@ -17,12 +16,8 @@ bool I3EmptyEventService::MoreEvents()
   return true;
 }
 
-void I3EmptyEventService::PopEvent(I3Frame& frame)
+I3Time I3EmptyEventService::PopEvent(I3Frame& frame)
 {
-//   I3EventHeaderPtr header(new I3EventHeader());
-//   header->SetStartTime(I3Time(2005,0));
-//   frame.Put("EventHeader",header);
-  I3TimePtr time(new I3Time(2005,0));
-  frame.Put("DrivingTime",time);
   currentCount_ +=1;
+  return I3Time(2006,0);
 }

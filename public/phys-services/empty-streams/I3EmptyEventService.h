@@ -8,7 +8,7 @@ class I3EmptyEventService : public I3EventService
  public:
   I3EmptyEventService(int nFrames);
   bool MoreEvents();
-  void PopEvent(I3Frame& frame);
+  I3Time PopEvent(I3Frame& frame);
  private:
   int nframes_;
   int currentCount_;

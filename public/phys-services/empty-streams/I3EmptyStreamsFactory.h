@@ -27,6 +27,11 @@ class I3EmptyStreamsFactory : public I3ServiceFactory
   // statoooos
   shared_ptr<I3DetectorStatusService> status_;
   shared_ptr<I3GeometryService> geometries_;
+
+  bool installEvents_;
+  bool installCalibrations_;
+  bool installStatus_;
+  bool installGeometries_;
 };
 
 #endif

@@ -1,22 +1,19 @@
 #ifndef FRAMECHECKING_H
 #define FRAMECHECKING_H
 
-#include "dataclasses/I3Geometry.h"
-#include "dataclasses/I3GeometryHeader.h"
+#include "dataclasses/geometry/I3Geometry.h"
+#include "dataclasses/geometry/I3GeometryHeader.h"
 
-#include "dataclasses/I3Monitoring.h"
-#include "dataclasses/I3MonitoringHeader.h"
+#include "dataclasses/calibration/I3Calibration.h"
+#include "dataclasses/calibration/I3CalibrationHeader.h"
 
-#include "dataclasses/I3Event.h"
-#include "dataclasses/I3EventHeader.h"
+#include "dataclasses/status/I3DetectorStatus.h"
+#include "dataclasses/status/I3DetectorStatusHeader.h"
 
-#include "dataclasses/I3Calibration.h"
-#include "dataclasses/I3CalibrationHeader.h"
-
-#include "dataclasses/I3DetectorStatus.h"
-#include "dataclasses/I3DetectorStatusHeader.h"
+#include "dataclasses/physics/I3EventHeader.h"
 
 #include "icetray/I3Stream.h"
+#include "icetray/I3Frame.h"
 
 // icetray doesn't normally allow you to get the string for the 
 // stream that your frame is on.  Had to hack in a way to do it.
@@ -45,40 +42,29 @@ string DumpStop(I3Frame& frame)
 
 inline bool GeometryPresent(I3Frame& frame)
 {
-  if(I3FrameAccess<I3Geometry>::Exists(frame,"Geometry") &&
-     I3FrameAccess<I3GeometryHeader>::Exists(frame,"GeometryHeader"))
+  if(frame.Get<I3GeometryPtr>("Geometry") &&
+     frame.Get<I3GeometryHeaderPtr>("GeometryHeader"))
     return true;
   return false;
 }
 
 inline bool EventPresent(I3Frame& frame)
 {
-  if(I3FrameAccess<I3Event>::Exists(frame,"Physics") &&
-     I3FrameAccess<I3EventHeader>::Exists(frame,"PhysicsHeader"))
-    return true;
-  return false;
+  return true;
 }
 
 inline bool CalibrationPresent(I3Frame& frame)
 {
-  if(I3FrameAccess<I3Calibration>::Exists(frame,"Calibration") &&
-     I3FrameAccess<I3CalibrationHeader>::Exists(frame,"CalibrationHeader"))
+  if(frame.Get<I3CalibrationPtr>("Calibration") &&
+     frame.Get<I3CalibrationHeaderPtr>("CalibrationHeader"))
     return true;
   return false;
 }
 
 inline bool DetectorStatusPresent(I3Frame& frame)
 {
-  if(I3FrameAccess<I3DetectorStatus>::Exists(frame,"DetectorStatus") &&
-     I3FrameAccess<I3DetectorStatusHeader>::Exists(frame,"DetectorStatusHeader"))
-    return true;
-  return false;
-}
-
-inline bool MonitoringPresent(I3Frame& frame)
-{
-  if(I3FrameAccess<I3Monitoring>::Exists(frame,"Monitoring") &&
-     I3FrameAccess<I3MonitoringHeader>::Exists(frame,"MonitoringHeader"))
+  if(frame.Get<I3DetectorStatusPtr>("DetectorStatus") &&
+     frame.Get<I3DetectorStatusHeaderPtr>("DetectorStatusHeader"))
     return true;
   return false;
 }

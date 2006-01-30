@@ -35,7 +35,12 @@ class I3EventService
    * 
    */
   virtual bool MoreEvents() = 0;
-  virtual void PopEvent(I3Frame& frame) = 0;
+
+  /**
+   * @brief This method should fill the frame with all the relevent
+   * frame data.  Returned is the time of the event.
+   */
+  virtual I3Time PopEvent(I3Frame& frame) = 0;
 };
 
 typedef shared_ptr<I3EventService> I3EventServicePtr;

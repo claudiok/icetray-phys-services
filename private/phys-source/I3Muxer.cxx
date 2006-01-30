@@ -245,7 +245,10 @@ void I3Muxer::QueueUpEvent()
   if(!currentEventQueued_)
     {
       assert(GetEventService().MoreEvents());
-      GetEventService().PopEvent(currentEvent_);
+      I3TimePtr eventTimePtr;
+      I3Time eventTime = GetEventService().PopEvent(currentEvent_);
+      eventTimePtr = I3TimePtr(new I3Time(eventTime));
+      currentEvent_.Put("DrivingTime",eventTimePtr);
       currentEventQueued_ = true;
     }
 }
