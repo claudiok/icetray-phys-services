@@ -3,7 +3,7 @@
  * the icecube collaboration
  * $Id$
  *
- * @file I3UberSource.h
+ * @file I3Muxer.h
  * @version $Revision:$
  * @date $Date$
  * @author pretz
@@ -35,10 +35,10 @@
  * use the four modules I3PhysicsSource, I3GeometrySource, 
  * I3CalibrationSource, and I3DetectorStatusSource together instead.
  */
-class I3UberSource : public I3Source
+class I3Muxer : public I3Source
 {
  public:
-  I3UberSource(I3Context& ctx);
+  I3Muxer(I3Context& ctx);
 
   void Process();
 

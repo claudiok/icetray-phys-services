@@ -3,18 +3,18 @@
  * the icecube collaboration
  * $Id$
  *
- * @file I3UberSource.cxx
+ * @file I3Muxer.cxx
  * @version $Revision:$
  * @date $Date$
  * @author pretz
  */
 
-#include "phys-services/source/I3UberSource.h"
+#include "phys-services/source/I3Muxer.h"
 #include <map>
 #include "icetray/I3TrayHeaders.h"
 
 #warning null reference
-I3UberSource::I3UberSource(I3Context& context) : I3Source(context),
+I3Muxer::I3Muxer(I3Context& context) : I3Source(context),
 						 currentEvent_(*(I3Stream*)NULL),
 						 currentEventQueued_(false)
 {
@@ -30,9 +30,9 @@ I3UberSource::I3UberSource(I3Context& context) : I3Source(context),
     I3Stream::AddStream("DetectorStatus","DetectorStatus Stream");
 }
 
-void I3UberSource::Process()
+void I3Muxer::Process()
 {
-  log_debug("Entering I3UberSource::Process()");
+  log_debug("Entering I3Muxer::Process()");
   Stream next = NextStream();
   switch (next)
       {
@@ -56,37 +56,37 @@ void I3UberSource::Process()
       }
 }
 
-I3EventOrigin& I3UberSource::GetEventOrigin()
+I3EventOrigin& I3Muxer::GetEventOrigin()
 {
   return 
     I3ContextAccess<I3EventOrigin>::GetService(GetContext(),
 						I3EventOrigin::DefaultName());
 }
 
-I3GeometryOrigin& I3UberSource::GetGeometryOrigin()
+I3GeometryOrigin& I3Muxer::GetGeometryOrigin()
 {
   return I3ContextAccess<I3GeometryOrigin>::
     GetService(GetContext(),
 	       I3GeometryOrigin::DefaultName());
 }
 
-I3CalibrationOrigin& I3UberSource::GetCalibrationOrigin()
+I3CalibrationOrigin& I3Muxer::GetCalibrationOrigin()
 {
   return I3ContextAccess<I3CalibrationOrigin>::
     GetService(GetContext(),
 	       I3CalibrationOrigin::DefaultName());
 }
 
-I3DetectorStatusOrigin& I3UberSource::GetDetectorStatusOrigin()
+I3DetectorStatusOrigin& I3Muxer::GetDetectorStatusOrigin()
 {
   return I3ContextAccess<I3DetectorStatusOrigin>::
     GetService(GetContext(),
 	       I3DetectorStatusOrigin::DefaultName());
 }
 
-void I3UberSource::SendEvent()
+void I3Muxer::SendEvent()
 {
-  log_debug("Entering I3UberSource::SendEvent()");
+  log_debug("Entering I3Muxer::SendEvent()");
   QueueUpEvent();
   //  assert(currentEvent_);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Physics"));
@@ -97,9 +97,9 @@ void I3UberSource::SendEvent()
 
 }
 
-void I3UberSource::SendCalibration()
+void I3Muxer::SendCalibration()
 {
-  log_debug("Entering I3UberSource::SendCalibration()");
+  log_debug("Entering I3Muxer::SendCalibration()");
   I3Time nextEvent = NextEventTime();
   currentCalibration_ = GetCalibrationOrigin().GetCalibration(nextEvent);
   currentCalibrationRange_ 
@@ -111,9 +111,9 @@ void I3UberSource::SendCalibration()
   SendAll(frame);
 }
 
-void I3UberSource::SendDetectorStatus()
+void I3Muxer::SendDetectorStatus()
 {
-  log_debug("Entering I3UberSource::SendDetectorStatus()");
+  log_debug("Entering I3Muxer::SendDetectorStatus()");
   I3Time nextEvent = NextEventTime();
   currentDetectorStatus_ = 
     GetDetectorStatusOrigin().GetDetectorStatus(nextEvent);
@@ -127,9 +127,9 @@ void I3UberSource::SendDetectorStatus()
   SendAll(frame);
 }
 
-void I3UberSource::SendGeometry()
+void I3Muxer::SendGeometry()
 {
-  log_debug("Entering I3UberSource::SendGeometry()");
+  log_debug("Entering I3Muxer::SendGeometry()");
   I3Time nextEvent = NextEventTime();
   currentGeometry_ = GetGeometryOrigin().GetGeometry(nextEvent);
   currentGeometryRange_ = 
@@ -141,9 +141,9 @@ void I3UberSource::SendGeometry()
   SendAll(frame);
 }
 
-void I3UberSource::SendAll(I3Frame& frame)
+void I3Muxer::SendAll(I3Frame& frame)
 {
-  log_debug("Entering I3UberSource::SendAll()");
+  log_debug("Entering I3Muxer::SendAll()");
   if(currentEventQueued_)
     {
       for(I3Frame::iterator iter = currentEvent_.begin () ; 
@@ -172,7 +172,7 @@ void I3UberSource::SendAll(I3Frame& frame)
   PushFrame(frame,"OutBox");
 }
 
-I3UberSource::Stream I3UberSource::NextStream()
+I3Muxer::Stream I3Muxer::NextStream()
 {
   if(!GetEventOrigin().MoreEvents())
     return NONE;
@@ -187,7 +187,7 @@ I3UberSource::Stream I3UberSource::NextStream()
   return EVENT;
 }
 
-bool I3UberSource::IsGeometryCurrent(I3Time time)
+bool I3Muxer::IsGeometryCurrent(I3Time time)
 {
   if(!currentGeometry_)
     {
@@ -203,7 +203,7 @@ bool I3UberSource::IsGeometryCurrent(I3Time time)
   return false;
 }
 
-bool I3UberSource::IsCalibrationCurrent(I3Time time)
+bool I3Muxer::IsCalibrationCurrent(I3Time time)
 {
   if(!currentCalibration_)
     {
@@ -220,7 +220,7 @@ bool I3UberSource::IsCalibrationCurrent(I3Time time)
   return false;
 }
 
-bool I3UberSource::IsDetectorStatusCurrent(I3Time time)
+bool I3Muxer::IsDetectorStatusCurrent(I3Time time)
 {
   if(!currentDetectorStatus_)
     {
@@ -238,7 +238,7 @@ bool I3UberSource::IsDetectorStatusCurrent(I3Time time)
   return false;
 }
 
-void I3UberSource::QueueUpEvent()
+void I3Muxer::QueueUpEvent()
 {
   if(!currentEventQueued_)
     {
@@ -248,7 +248,7 @@ void I3UberSource::QueueUpEvent()
     }
 }
 
-I3Time I3UberSource::NextEventTime()
+I3Time I3Muxer::NextEventTime()
 {
   QueueUpEvent();
   I3Time returned = currentEvent_.Get<I3Time>("DrivingTime");
