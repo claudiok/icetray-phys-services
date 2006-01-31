@@ -9,6 +9,7 @@
  * @author pretz
  */
 
+#include <icetray/I3Services.h>
 #include "phys-services/source/I3Muxer.h"
 #include <map>
 #include "icetray/I3TrayHeaders.h"
@@ -58,34 +59,6 @@ void I3Muxer::Process()
       }
 }
 
-I3EventService& I3Muxer::GetEventService()
-{
-  return 
-    I3ContextAccess<I3EventService>::GetService(GetContext(),
-						I3EventService::DefaultName());
-}
-
-I3GeometryService& I3Muxer::GetGeometryService()
-{
-  return I3ContextAccess<I3GeometryService>::
-    GetService(GetContext(),
-	       I3GeometryService::DefaultName());
-}
-
-I3CalibrationService& I3Muxer::GetCalibrationService()
-{
-  return I3ContextAccess<I3CalibrationService>::
-    GetService(GetContext(),
-	       I3CalibrationService::DefaultName());
-}
-
-I3DetectorStatusService& I3Muxer::GetDetectorStatusService()
-{
-  return I3ContextAccess<I3DetectorStatusService>::
-    GetService(GetContext(),
-	       I3DetectorStatusService::DefaultName());
-}
-
 void I3Muxer::SendEvent()
 {
   log_debug("Entering I3Muxer::SendEvent()");
@@ -117,7 +90,7 @@ void I3Muxer::SendCalibration()
 {
   log_debug("Entering I3Muxer::SendCalibration()");
   I3Time nextEvent = NextEventTime();
-  currentCalibration_ = GetCalibrationService().GetCalibration(nextEvent);
+  currentCalibration_ = GetService<I3CalibrationService>().GetCalibration(nextEvent);
   currentCalibrationRange_ 
     = I3TimeRange(currentCalibration_->GetStartTime(),
 		  currentCalibration_->GetEndTime());
@@ -137,7 +110,7 @@ void I3Muxer::SendDetectorStatus()
   log_debug("Entering I3Muxer::SendDetectorStatus()");
   I3Time nextEvent = NextEventTime();
   currentDetectorStatus_ = 
-    GetDetectorStatusService().GetDetectorStatus(nextEvent);
+    GetService<I3DetectorStatusService>().GetDetectorStatus(nextEvent);
   currentDetectorStatusRange_ 
     = I3TimeRange(currentDetectorStatus_->GetStartTime(),
 		  currentDetectorStatus_->GetEndTime());
@@ -159,7 +132,7 @@ void I3Muxer::SendGeometry()
 {
   log_debug("Entering I3Muxer::SendGeometry()");
   I3Time nextEvent = NextEventTime();
-  currentGeometry_ = GetGeometryService().GetGeometry(nextEvent);
+  currentGeometry_ = GetService<I3GeometryService>().GetGeometry(nextEvent);
   currentGeometryRange_ = 
     I3TimeRange(currentGeometry_->GetStartTime(),
 		currentGeometry_->GetEndTime());
@@ -172,7 +145,7 @@ void I3Muxer::SendGeometry()
 
 I3Muxer::Stream I3Muxer::NextStream()
 {
-  if(!GetEventService().MoreEvents())
+  if(!GetService<I3EventService>().MoreEvents())
     return NONE;
 
   I3Time eventTime = NextEventTime();
@@ -240,9 +213,9 @@ void I3Muxer::QueueUpEvent()
 {
   if(!currentEventQueued_)
     {
-      assert(GetEventService().MoreEvents());
+      assert(GetService<I3EventService>().MoreEvents());
       I3TimePtr eventTimePtr;
-      I3Time eventTime = GetEventService().PopEvent(currentEvent_);
+      I3Time eventTime = GetService<I3EventService>().PopEvent(currentEvent_);
       eventTimePtr = I3TimePtr(new I3Time(eventTime));
       currentEvent_.Put("DrivingTime",eventTimePtr);
       currentEventQueued_ = true;

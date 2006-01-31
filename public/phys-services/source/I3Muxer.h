@@ -35,6 +35,7 @@
  * use the four modules I3PhysicsSource, I3GeometrySource, 
  * I3CalibrationSource, and I3DetectorStatusSource together instead.
  */
+
 class I3Muxer : public I3Source
 {
  public:
@@ -45,14 +46,6 @@ class I3Muxer : public I3Source
  private:
 
   enum Stream {NONE,EVENT,GEOMETRY,CALIBRATION,DETECTORSTATUS};
-
-  I3EventService& GetEventService();
-
-  I3GeometryService& GetGeometryService();
-
-  I3CalibrationService& GetCalibrationService();
-  
-  I3DetectorStatusService& GetDetectorStatusService();
 
   Stream NextStream();
 
@@ -73,7 +66,9 @@ class I3Muxer : public I3Source
   void QueueUpEvent();
   
   I3Time NextEventTime();
+
  private:
+
   I3Frame currentEvent_;
   bool currentEventQueued_;
   I3GeometryPtr currentGeometry_;
