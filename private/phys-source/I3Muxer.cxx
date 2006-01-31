@@ -92,11 +92,25 @@ void I3Muxer::SendEvent()
   QueueUpEvent();
   //  assert(currentEvent_);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Physics"));
-  SendAll(frame);
+
+  assert(currentEventQueued_);
+  for(I3Frame::iterator iter = currentEvent_.begin () ; 
+      iter != currentEvent_.end() ; 
+      iter++)
+    {
+      frame[iter->first] = iter->second;
+    }
+  assert(currentGeometry_);
+  frame.Put("Geometry",currentGeometry_);
+  assert(currentCalibration_);
+  frame.Put("Calibration",currentCalibration_);
+  assert(currentDetectorStatus_);
+  frame.Put("DetectorStatus",currentDetectorStatus_);
 
   currentEventQueued_ = false;
   currentEvent_.clear();
 
+  PushFrame(frame,"OutBox");
 }
 
 void I3Muxer::SendCalibration()
@@ -110,7 +124,12 @@ void I3Muxer::SendCalibration()
   assert(currentCalibration_);
   assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Calibration"));
-  SendAll(frame);
+
+  assert(currentGeometry_);
+  frame.Put("Geometry",currentGeometry_);
+  frame.Put("Calibration",currentCalibration_);
+
+  PushFrame(frame,"OutBox");
 }
 
 void I3Muxer::SendDetectorStatus()
@@ -126,7 +145,14 @@ void I3Muxer::SendDetectorStatus()
   assert(currentDetectorStatusRange_.lower < 
 	 currentDetectorStatusRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("DetectorStatus"));
-  SendAll(frame);
+
+  assert(currentGeometry_);
+  frame.Put("Geometry",currentGeometry_);
+  assert(currentCalibration_);
+  frame.Put("Calibration",currentCalibration_);
+  frame.Put("DetectorStatus",currentDetectorStatus_);
+
+  PushFrame(frame,"OutBox");
 }
 
 void I3Muxer::SendGeometry()
@@ -140,34 +166,7 @@ void I3Muxer::SendGeometry()
   assert(currentGeometry_);
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
   I3Frame& frame = CreateFrame(I3Stream::FindStream("Geometry"));
-  SendAll(frame);
-}
-
-void I3Muxer::SendAll(I3Frame& frame)
-{
-  log_debug("Entering I3Muxer::SendAll()");
-  if(currentEventQueued_)
-    {
-      for(I3Frame::iterator iter = currentEvent_.begin () ; 
-	  iter != currentEvent_.end() ; 
-	  iter++)
-	{
-	  frame[iter->first] = iter->second;
-	}
-    }
-  if(currentGeometry_)
-    {
-      frame.Put("Geometry",currentGeometry_);
-    }
-  if(currentCalibration_)
-    {
-      frame.Put("Calibration",currentCalibration_);
-    }
-  if(currentDetectorStatus_)
-    {
-      frame.Put("DetectorStatus",currentDetectorStatus_);
-    }
-
+  frame.Put("Geometry",currentGeometry_);
   PushFrame(frame,"OutBox");
 }
 

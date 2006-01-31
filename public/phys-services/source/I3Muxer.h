@@ -64,8 +64,6 @@ class I3Muxer : public I3Source
 
   void SendDetectorStatus();
 
-  void SendAll(I3Frame& frame);
-
   bool IsGeometryCurrent(I3Time time);
   
   bool IsCalibrationCurrent(I3Time time);
