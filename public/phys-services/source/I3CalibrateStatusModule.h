@@ -28,7 +28,7 @@ class I3CalibrateStatusModule : public I3Module
  public:
   I3CalibrateStatusModule(const I3Context& context);
 
-  void DetectorStatus(I3Frame& frame);
+  void DetectorStatus(I3FramePtr frame);
 
   static void DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 			       I3CalibratedDOMStatusPtr calibratedstatus,

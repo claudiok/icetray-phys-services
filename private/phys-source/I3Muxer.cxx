@@ -16,21 +16,12 @@
 
 I3_MODULE(I3Muxer);
 
-#warning null reference
 I3Muxer::I3Muxer(const I3Context& context) : I3Source(context),
-					     currentEvent_(*(I3Stream*)NULL),
+					     currentEvent_(I3Frame::None),
 					     currentEventQueued_(false)
 {
   AddOutBox("OutBox");
   NoActiveInBox();
-  if(!I3Stream::StreamExists("Physics"))
-    I3Stream::AddStream("Physics","Event Stream");
-  if(!I3Stream::StreamExists("Geometry"))
-    I3Stream::AddStream("Geometry","Geometry Stream");
-  if(!I3Stream::StreamExists("Calibration"))
-    I3Stream::AddStream("Calibration","Calibration Stream");
-  if(!I3Stream::StreamExists("DetectorStatus"))
-    I3Stream::AddStream("DetectorStatus","DetectorStatus Stream");
 }
 
 void I3Muxer::Process()
@@ -64,21 +55,22 @@ void I3Muxer::SendEvent()
   log_debug("Entering I3Muxer::SendEvent()");
   QueueUpEvent();
   //  assert(currentEvent_);
-  I3Frame& frame = CreateFrame(I3Stream::FindStream("Physics"));
+
+  I3FramePtr frame(new I3Frame(I3Frame::Physics));
 
   assert(currentEventQueued_);
   for(I3Frame::iterator iter = currentEvent_.begin () ; 
       iter != currentEvent_.end() ; 
       iter++)
     {
-      frame[iter->first] = iter->second;
+      (*frame)[iter->first] = iter->second;
     }
   assert(currentGeometry_);
-  frame.Put("Geometry",currentGeometry_);
+  frame->Put("Geometry",currentGeometry_);
   assert(currentCalibration_);
-  frame.Put("Calibration",currentCalibration_);
+  frame->Put("Calibration",currentCalibration_);
   assert(currentDetectorStatus_);
-  frame.Put("DetectorStatus",currentDetectorStatus_);
+  frame->Put("DetectorStatus",currentDetectorStatus_);
 
   currentEventQueued_ = false;
   currentEvent_.clear();
@@ -96,11 +88,11 @@ void I3Muxer::SendCalibration()
 		  currentCalibration_->GetEndTime());
   assert(currentCalibration_);
   assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
-  I3Frame& frame = CreateFrame(I3Stream::FindStream("Calibration"));
+  I3FramePtr frame(new I3Frame(I3Frame::Calibration));
 
   assert(currentGeometry_);
-  frame.Put("Geometry",currentGeometry_);
-  frame.Put("Calibration",currentCalibration_);
+  frame->Put("Geometry",currentGeometry_);
+  frame->Put("Calibration",currentCalibration_);
 
   PushFrame(frame,"OutBox");
 }
@@ -117,13 +109,13 @@ void I3Muxer::SendDetectorStatus()
   assert(currentDetectorStatus_);
   assert(currentDetectorStatusRange_.lower < 
 	 currentDetectorStatusRange_.upper);
-  I3Frame& frame = CreateFrame(I3Stream::FindStream("DetectorStatus"));
+  I3FramePtr frame(new I3Frame(I3Frame::DetectorStatus));
 
   assert(currentGeometry_);
-  frame.Put("Geometry",currentGeometry_);
+  frame->Put("Geometry",currentGeometry_);
   assert(currentCalibration_);
-  frame.Put("Calibration",currentCalibration_);
-  frame.Put("DetectorStatus",currentDetectorStatus_);
+  frame->Put("Calibration",currentCalibration_);
+  frame->Put("DetectorStatus",currentDetectorStatus_);
 
   PushFrame(frame,"OutBox");
 }
@@ -138,8 +130,8 @@ void I3Muxer::SendGeometry()
 		currentGeometry_->GetEndTime());
   assert(currentGeometry_);
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
-  I3Frame& frame = CreateFrame(I3Stream::FindStream("Geometry"));
-  frame.Put("Geometry",currentGeometry_);
+  I3FramePtr frame(new I3Frame(I3Frame::Geometry));
+  frame->Put("Geometry",currentGeometry_);
   PushFrame(frame,"OutBox");
 }
 

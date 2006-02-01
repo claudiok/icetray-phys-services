@@ -35,16 +35,16 @@ void I3MCCalibrationFiller::Configure()
     GetParameter("FADCgain", fadcGain_);
 }
 
-void I3MCCalibrationFiller::Calibration(I3Frame& frame)
+void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
 {
     log_debug("I3MCCalibrationFiller::Calibration");
 
-    I3Geometry& geo = frame.Get<I3Geometry>("Geometry");
+    I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
     I3InIceGeometry& inice = geo.GetInIceGeometry();
 
     I3InIceGeometry::iterator iter;
 
-    I3Calibration& calib = frame.Get<I3Calibration>("Calibration");
+    I3Calibration& calib = frame->Get<I3Calibration>("Calibration");
 
     for( iter  = inice.begin(); 
 	 iter != inice.end(); 

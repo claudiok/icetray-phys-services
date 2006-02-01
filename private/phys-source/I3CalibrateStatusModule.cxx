@@ -19,7 +19,6 @@
 #include "dataclasses/I3Units.h"
 #include "icetray/I3Frame.h"
 #include "icetray/services/I3Boxes.h"
-#include "icetray/I3Stream.h"
 
 I3_MODULE(I3CalibrateStatusModule);
 
@@ -29,14 +28,14 @@ I3CalibrateStatusModule::I3CalibrateStatusModule(const I3Context& context) :
   AddOutBox("OutBox");
 }
 
-void I3CalibrateStatusModule::DetectorStatus(I3Frame& frame)
+void I3CalibrateStatusModule::DetectorStatus(I3FramePtr frame)
 {
-  I3DetectorStatus& status = frame.Get<I3DetectorStatus>("DetectorStatus");
+  I3DetectorStatus& status = frame->Get<I3DetectorStatus>("DetectorStatus");
   
   //  I3DetectorStatus& status = 
-  //    *(frame.Get<I3DetectorStatusPtr>("DetectorStatus"));
+  //    *(frame->Get<I3DetectorStatusPtr>("DetectorStatus"));
 
-  I3Calibration& calibration = frame.Get<I3Calibration>("Calibration");
+  I3Calibration& calibration = frame->Get<I3Calibration>("Calibration");
 
   I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
 

@@ -28,7 +28,7 @@ public:
     I3MCCalibrationFiller(const I3Context&);
 
     void Configure();
-    void Calibration(I3Frame& frame);
+    void Calibration(I3FramePtr frame);
 
     SET_LOGGER("I3MCCalibrationFiller");
 

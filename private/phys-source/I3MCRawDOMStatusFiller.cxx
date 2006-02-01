@@ -117,17 +117,17 @@ void I3MCRawDOMStatusFiller::Configure()
 }
 
 
-void I3MCRawDOMStatusFiller::DetectorStatus(I3Frame& frame)
+void I3MCRawDOMStatusFiller::DetectorStatus(I3FramePtr frame)
 {
     log_debug("I3MCRawDOMStatusFiller::DetectorStatus");
 
-    I3Geometry& geo = *frame.Get<I3GeometryPtr>("Geometry");
+    I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
     I3InIceGeometry& inice = geo.GetInIceGeometry();
 
     I3InIceGeometry::iterator iter;
 
     I3DetectorStatus& status = 
-      *frame.Get<I3DetectorStatusPtr>("DetectorStatus");
+      frame->Get<I3DetectorStatus>("DetectorStatus");
 
     // Trigger mode
     I3RawDOMStatus::TrigMode triggerMode = I3RawDOMStatus::SPE;

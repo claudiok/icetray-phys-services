@@ -30,7 +30,7 @@ public:
     I3MCRawDOMStatusFiller(const I3Context&);
 
     void Configure();
-    void DetectorStatus(I3Frame& frame);
+    void DetectorStatus(I3FramePtr frame);
 
     SET_LOGGER("I3MCRawDOMStatusFiller");
 
