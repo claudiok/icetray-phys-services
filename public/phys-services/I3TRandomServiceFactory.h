@@ -25,6 +25,7 @@ class I3Services;
 
 // namespace declarations
 
+
 using namespace std;
 
 /**
@@ -76,5 +77,7 @@ class I3TRandomServiceFactory
 
    SET_LOGGER("I3TRandomServiceFactory");
 };
+
+I3_SERVICE_FACTORY(I3TRandomServiceFactory);
 
 #endif 
