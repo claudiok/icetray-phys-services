@@ -121,12 +121,12 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3FramePtr frame)
 {
     log_debug("I3MCRawDOMStatusFiller::DetectorStatus");
 
-    I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
-    I3InIceGeometry& inice = geo.GetInIceGeometry();
+    const I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
+    const I3InIceGeometry& inice = geo.GetInIceGeometry();
 
-    I3InIceGeometry::iterator iter;
+    I3InIceGeometry::const_iterator iter;
 
-    I3DetectorStatus& status = 
+    const I3DetectorStatus& status = 
       frame->Get<I3DetectorStatus>("DetectorStatus");
 
     // Trigger mode
@@ -223,7 +223,7 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3FramePtr frame)
 
 	raw->SetNBinsFADC(fadcNbins_);
 
-	status.GetIceCubeDOMStatus()[thiskey]->SetRawStatus(raw);
+	const_cast<I3IceCubeDOMStatusDict&>(status.GetIceCubeDOMStatus())[thiskey]->SetRawStatus(raw);
     }
     
     PushFrame(frame,"OutBox");

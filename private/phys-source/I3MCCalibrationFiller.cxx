@@ -39,12 +39,12 @@ void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
 {
     log_debug("I3MCCalibrationFiller::Calibration");
 
-    I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
-    I3InIceGeometry& inice = geo.GetInIceGeometry();
+    const I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
+    const I3InIceGeometry& inice = geo.GetInIceGeometry();
 
-    I3InIceGeometry::iterator iter;
+    I3InIceGeometry::const_iterator iter;
 
-    I3Calibration& calib = frame->Get<I3Calibration>("Calibration");
+    const I3Calibration& calib = frame->Get<I3Calibration>("Calibration");
 
     for( iter  = inice.begin(); 
 	 iter != inice.end(); 
@@ -74,7 +74,7 @@ void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
 	    }
 	}
 	
-	calib.GetInIceCalibration()[thiskey] = domCalib;
+	const_cast<I3InIceCalibration&>(calib.GetInIceCalibration())[thiskey] = domCalib;
     }
     
     PushFrame(frame,"OutBox");

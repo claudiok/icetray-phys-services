@@ -30,18 +30,18 @@ I3CalibrateStatusModule::I3CalibrateStatusModule(const I3Context& context) :
 
 void I3CalibrateStatusModule::DetectorStatus(I3FramePtr frame)
 {
-  I3DetectorStatus& status = frame->Get<I3DetectorStatus>("DetectorStatus");
+  const I3DetectorStatus& status = frame->Get<I3DetectorStatus>("DetectorStatus");
   
   //  I3DetectorStatus& status = 
   //    *(frame->Get<I3DetectorStatusPtr>("DetectorStatus"));
 
-  I3Calibration& calibration = frame->Get<I3Calibration>("Calibration");
+  const I3Calibration& calibration = frame->Get<I3Calibration>("Calibration");
 
-  I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
+  const I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
 
-  I3IceCubeDOMStatusDict& icecubestatus = status.GetIceCubeDOMStatus();
+  const I3IceCubeDOMStatusDict& icecubestatus = status.GetIceCubeDOMStatus();
   
-  I3IceCubeDOMStatusDict::iterator iter;
+  I3IceCubeDOMStatusDict::const_iterator iter;
   for(iter = icecubestatus.begin() ; iter != icecubestatus.end() ; iter++)
     {
       OMKey thekey = iter->first;
@@ -51,7 +51,10 @@ void I3CalibrateStatusModule::DetectorStatus(I3FramePtr frame)
 	calibratedstatus(new I3CalibratedDOMStatus());      
       dstatptr->SetCalibratedStatus(calibratedstatus);
       assert(inicecalib.count(thekey)>0);
-      I3DOMCalibrationPtr domcalib = inicecalib[thekey];
+
+      I3InIceCalibration::const_iterator iter = inicecalib.find(thekey);
+      assert(iter != inicecalib.end());
+      const I3DOMCalibrationPtr domcalib = iter->second;
       DoTheCalibration(rawstatus,calibratedstatus,domcalib);
     }
 
