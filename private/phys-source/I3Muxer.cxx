@@ -183,7 +183,8 @@ bool I3Muxer::IsCalibrationCurrent(I3Time time)
   return false;
 }
 
-bool I3Muxer::IsDetectorStatusCurrent(I3Time time)
+bool 
+I3Muxer::IsDetectorStatusCurrent(I3Time time)
 {
   if(!currentDetectorStatus_)
     {
@@ -201,7 +202,8 @@ bool I3Muxer::IsDetectorStatusCurrent(I3Time time)
   return false;
 }
 
-void I3Muxer::QueueUpEvent()
+void 
+I3Muxer::QueueUpEvent()
 {
   if(!currentEventQueued_)
     {
@@ -214,9 +216,11 @@ void I3Muxer::QueueUpEvent()
     }
 }
 
-I3Time I3Muxer::NextEventTime()
+I3Time 
+I3Muxer::NextEventTime()
 {
   QueueUpEvent();
+  log_trace("About to look for DrivingTime in frame");
   I3Time returned = currentEvent_.Get<I3Time>("DrivingTime");
   return returned;
 }
