@@ -126,6 +126,10 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 
 	else
 	{
+	  if(atwdQFit.quadFitC == 0.0)
+	    {
+	      log_warn("Found a quadratic fit with C=0.0, are you sure this is is a quadratic fit??");
+	    }
 	    log_error("Quadratic fit found.  I need to be implemented!!");
 	    // @todo implement this
 	}
