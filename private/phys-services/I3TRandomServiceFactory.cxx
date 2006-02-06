@@ -17,6 +17,8 @@
 
 // Constructors
 
+I3_SERVICE_FACTORY(I3TRandomServiceFactory);
+
 I3TRandomServiceFactory::I3TRandomServiceFactory(const I3Context& context)
   : I3ServiceFactory(context),
   	seed_(-1), random_()
