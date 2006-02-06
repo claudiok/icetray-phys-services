@@ -196,6 +196,7 @@ namespace I3Calculator
    * the time it takes Cherenkov light to travel between an input cascade and
    * an OM position.  The index of refraction can be set by the user.
    */
+#if 0
   double CherenkovTime(const I3Cascade& cascade,
 		       const I3Position& position,
 		       const double IndexRef=I3Constants::n_ice);
@@ -206,6 +207,7 @@ namespace I3Calculator
    */
   double CherenkovDistance(const I3Cascade& cascade, 
 			   const I3Position& position);
+#endif
 
   /**
    * A convenience function that calls CherenkovTime() and calculates the time 
@@ -224,10 +226,12 @@ namespace I3Calculator
    * A time residual is defined as the difference between the measured hit time
    * and the expected time of arrival of a photon from the cascade.
    */
+#if 0
   double TimeResidual(const I3Cascade& cascade, 
 		      const I3Position& hitpos, 
 		      const double hittime,
 		      const double IndexRef=I3Constants::n_ice);
+#endif
 
   /**
    * Returns the spatial angle between two input tracks.
@@ -238,9 +242,11 @@ namespace I3Calculator
   /**
    * Returns the distance between two input cascades.
    */
+#if 0
   double Distance(const I3Cascade& casc1, 
 		  const I3Cascade& casc2);
-  
+#endif
+
   /**
    * Transform the input position into the coordinate system of the input 
    * track.  Effectively, the track is now in the z-dir.
