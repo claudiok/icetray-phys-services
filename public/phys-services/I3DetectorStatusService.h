@@ -14,7 +14,7 @@
 
 #include "phys-services/I3TimeRange.h"
 #include "dataclasses/status/I3DetectorStatus.h"
-#include "dataclasses/StoragePolicy.h"
+#include "dataclasses/Utility.h"
 
 /**
  * @brief Produces I3DetectorStatus and I3DetectorStatus Header

@@ -14,7 +14,7 @@
 
 #include "phys-services/I3TimeRange.h"
 #include "dataclasses/geometry/I3Geometry.h"
-#include "dataclasses/StoragePolicy.h"
+#include "dataclasses/Utility.h"
 
 /**
  * @brief This is an interface to classes which generates I3Geometry and

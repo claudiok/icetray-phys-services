@@ -12,7 +12,7 @@
 #ifndef I3EVENTSERVICE_H
 #define I3EVENTSERVICE_H
 
-#include "dataclasses/StoragePolicy.h"
+#include "dataclasses/Utility.h"
 #include "dataclasses/I3Time.h"
 
 class I3Frame;

@@ -14,7 +14,7 @@
 
 #include "phys-services/I3TimeRange.h"
 #include "dataclasses/calibration/I3Calibration.h"
-#include "dataclasses/StoragePolicy.h"
+#include "dataclasses/Utility.h"
 
 /**
  * @brief Produces I3Calibration objects given a time.
