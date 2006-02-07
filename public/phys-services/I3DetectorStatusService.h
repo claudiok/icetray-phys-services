@@ -25,7 +25,7 @@ class I3DetectorStatusService
 {
  public:
   static const char* DefaultName() { return "DetectorStatusService";}
-  virtual I3DetectorStatusPtr GetDetectorStatus(I3Time time) = 0;
+  virtual I3DetectorStatusConstPtr GetDetectorStatus(I3Time time) = 0;
 };
 
 typedef shared_ptr<I3DetectorStatusService> I3DetectorStatusServicePtr;

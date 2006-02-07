@@ -34,7 +34,7 @@ class I3GeometryService
    * @brief gives the I3Geometry and I3GeometryHeader for the
    * indicated time.
    */
-  virtual I3GeometryPtr GetGeometry(I3Time time) = 0;
+  virtual I3GeometryConstPtr GetGeometry(I3Time time) = 0;
 };
 
 typedef shared_ptr<I3GeometryService> I3GeometryServicePtr;

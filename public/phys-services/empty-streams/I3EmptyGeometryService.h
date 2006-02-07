@@ -8,7 +8,7 @@ class I3EmptyGeometryService : public I3GeometryService
  public:
   I3EmptyGeometryService();
   
-  I3GeometryPtr GetGeometry(I3Time time);
+  I3GeometryConstPtr GetGeometry(I3Time time);
 
  private:
 

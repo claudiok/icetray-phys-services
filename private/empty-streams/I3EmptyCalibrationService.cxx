@@ -10,7 +10,7 @@ I3EmptyCalibrationService::I3EmptyCalibrationService()
 
 }
 
-I3CalibrationPtr I3EmptyCalibrationService::GetCalibration(I3Time time)
+I3CalibrationConstPtr I3EmptyCalibrationService::GetCalibration(I3Time time)
 {
   return calibration_;
 }

@@ -34,7 +34,7 @@ class I3TextFileGeometryService : public I3GeometryService
     {}
   virtual ~I3TextFileGeometryService(){}
 
-  I3GeometryPtr GetGeometry(I3Time time);
+  I3GeometryConstPtr GetGeometry(I3Time time);
  private:
   void Fatal(const string& message);
 

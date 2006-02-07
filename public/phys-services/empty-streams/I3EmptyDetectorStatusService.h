@@ -8,7 +8,7 @@ class I3EmptyDetectorStatusService : public I3DetectorStatusService
  public:
   I3EmptyDetectorStatusService();
   
-  I3DetectorStatusPtr GetDetectorStatus(I3Time time);
+  I3DetectorStatusConstPtr GetDetectorStatus(I3Time time);
 
  private:
 

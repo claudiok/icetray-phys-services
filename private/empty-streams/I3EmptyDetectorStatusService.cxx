@@ -10,7 +10,8 @@ I3EmptyDetectorStatusService::I3EmptyDetectorStatusService()
 
 }
 
-I3DetectorStatusPtr I3EmptyDetectorStatusService::GetDetectorStatus(I3Time time)
+I3DetectorStatusConstPtr 
+I3EmptyDetectorStatusService::GetDetectorStatus(I3Time time)
 {
   return status_;
 }

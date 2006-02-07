@@ -10,7 +10,7 @@ I3EmptyGeometryService::I3EmptyGeometryService()
 
 }
 
-I3GeometryPtr I3EmptyGeometryService::GetGeometry(I3Time time)
+I3GeometryConstPtr I3EmptyGeometryService::GetGeometry(I3Time time)
 {
   return geometry_;
 }

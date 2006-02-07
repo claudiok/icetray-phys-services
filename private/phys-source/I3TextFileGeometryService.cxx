@@ -9,7 +9,7 @@ void I3TextFileGeometryService::Fatal(const string& message)
   log_fatal(message.c_str());
 }
 
-I3GeometryPtr I3TextFileGeometryService::GetGeometry(I3Time time)
+I3GeometryConstPtr I3TextFileGeometryService::GetGeometry(I3Time time)
 {
   I3GeometryPtr geometry = I3GeometryPtr(new I3Geometry());
   FillGeometryFromFile(*geometry);

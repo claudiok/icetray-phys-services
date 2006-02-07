@@ -33,7 +33,7 @@ class I3CalibrationService
    * It is expected that the 'start' and 'end' times of the data
    * header will be appropirately filled.
    */
-  virtual I3CalibrationPtr GetCalibration(I3Time time) = 0;
+  virtual I3CalibrationConstPtr GetCalibration(I3Time time) = 0;
 };
 
 typedef shared_ptr<I3CalibrationService> I3CalibrationServicePtr;
