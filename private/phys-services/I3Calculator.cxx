@@ -16,7 +16,7 @@ using namespace std;
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::ShiftAlongTrack(const I3Particle2& track, const double dist)
+I3Position I3Calculator::ShiftAlongTrack(const I3Particle& track, const double dist)
 {
   I3Position p;
   double x,y,z;
@@ -32,7 +32,7 @@ I3Position I3Calculator::ShiftAlongTrack(const I3Particle2& track, const double 
 
 
 //--------------------------------------------------------------
-void I3Calculator::CherenkovCalc(const I3Particle2& track,        // input
+void I3Calculator::CherenkovCalc(const I3Particle& track,        // input
 				 const I3Position& position,  // input
 				 I3Position& appos,     // output 
 				 double& apdist,        // output
@@ -83,7 +83,7 @@ void I3Calculator::CherenkovCalc(const I3Particle2& track,        // input
 
 
 //--------------------------------------------------------------
-bool I3Calculator::IsOnTrack(const I3Particle2& track, const I3Position& position, const double Precision)
+bool I3Calculator::IsOnTrack(const I3Particle& track, const I3Position& position, const double Precision)
 {
   I3Position appos,chpos;
   double apdist,chtime,chdist,chapangle;
@@ -94,7 +94,7 @@ bool I3Calculator::IsOnTrack(const I3Particle2& track, const I3Position& positio
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::ClosestApproachPosition(const I3Particle2& track, const I3Position& position)
+I3Position I3Calculator::ClosestApproachPosition(const I3Particle& track, const I3Position& position)
 {
   I3Position appos,chpos;
   double apdist,chtime,chdist,chapangle;
@@ -104,7 +104,7 @@ I3Position I3Calculator::ClosestApproachPosition(const I3Particle2& track, const
 
 
 //--------------------------------------------------------------
-double I3Calculator::ClosestApproachDistance(const I3Particle2& track, const I3Position& position)
+double I3Calculator::ClosestApproachDistance(const I3Particle& track, const I3Position& position)
 {
   I3Position appos,chpos;
   double apdist,chtime,chdist,chapangle;
@@ -114,7 +114,7 @@ double I3Calculator::ClosestApproachDistance(const I3Particle2& track, const I3P
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::CherenkovPosition(const I3Particle2& track, const I3Position& position)
+I3Position I3Calculator::CherenkovPosition(const I3Particle& track, const I3Position& position)
 {
   I3Position appos,chpos;
   double apdist,chtime,chdist,chapangle;
@@ -124,7 +124,7 @@ I3Position I3Calculator::CherenkovPosition(const I3Particle2& track, const I3Pos
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovTime(const I3Particle2& track, const I3Position& position, const double IndexRef)
+double I3Calculator::CherenkovTime(const I3Particle& track, const I3Position& position, const double IndexRef)
 {
   I3Position appos,chpos;
   double apdist,chtime,chdist,chapangle;
@@ -135,7 +135,7 @@ double I3Calculator::CherenkovTime(const I3Particle2& track, const I3Position& p
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovDistance(const I3Particle2& track, const I3Position& position)
+double I3Calculator::CherenkovDistance(const I3Particle& track, const I3Position& position)
 {
   I3Position appos,chpos;
   double apdist,chtime,chdist,chapangle;
@@ -145,7 +145,7 @@ double I3Calculator::CherenkovDistance(const I3Particle2& track, const I3Positio
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovApproachAngle(const I3Particle2& track, const I3Position& position, const I3OMGeo::Orientation orient)
+double I3Calculator::CherenkovApproachAngle(const I3Particle& track, const I3Position& position, const I3OMGeo::Orientation orient)
 {
   I3Position appos,chpos;
   double apdist,chtime,chdist,chapangle;
@@ -171,7 +171,7 @@ double I3Calculator::CherenkovDistance(const I3Cascade& cascade, const I3Positio
 #endif
 
 //--------------------------------------------------------------
-double I3Calculator::TimeResidual(const I3Particle2& track, const I3Position& hitpos, double hittime, const double IndexRef)
+double I3Calculator::TimeResidual(const I3Particle& track, const I3Position& hitpos, double hittime, const double IndexRef)
 {
   double T_exp = CherenkovTime(track, hitpos, IndexRef);
   double T_meas = hittime - track.GetT();
@@ -190,7 +190,7 @@ double I3Calculator::TimeResidual(const I3Cascade& cascade, const I3Position& hi
 #endif
 
 //--------------------------------------------------------------
-double I3Calculator::Angle(const I3Particle2& track1, const I3Particle2& track2)
+double I3Calculator::Angle(const I3Particle& track1, const I3Particle& track2)
 {
   I3Direction dir1(track1.GetDir());
   I3Direction dir2(track2.GetDir());
@@ -234,14 +234,14 @@ I3Direction I3Calculator::InTrackSystem(const I3Direction& direction, const I3Di
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::InTrackSystem(const I3Particle2& track, const I3Position& pos)
+I3Position I3Calculator::InTrackSystem(const I3Particle& track, const I3Position& pos)
 {
   return InTrackSystem(track.GetDir(), pos);
 }
 
 
 //--------------------------------------------------------------
-I3Direction I3Calculator::InTrackSystem(const I3Particle2& track, const I3Direction& dir)
+I3Direction I3Calculator::InTrackSystem(const I3Particle& track, const I3Direction& dir)
 {
   return InTrackSystem(track.GetDir(), dir);
 }
@@ -272,14 +272,14 @@ I3Direction I3Calculator::InNominalSystem(const I3Direction& direction, const I3
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::InNominalSystem(const I3Particle2& track, const I3Position& pos)
+I3Position I3Calculator::InNominalSystem(const I3Particle& track, const I3Position& pos)
 {
   return InNominalSystem(track.GetDir(), pos);
 }
 
 
 //--------------------------------------------------------------
-I3Direction I3Calculator::InNominalSystem(const I3Particle2& track, const I3Direction& dir)
+I3Direction I3Calculator::InNominalSystem(const I3Particle& track, const I3Direction& dir)
 {
   return InNominalSystem(track.GetDir(), dir);
 }

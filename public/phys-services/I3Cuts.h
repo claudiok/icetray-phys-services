@@ -2,7 +2,7 @@
 #define I3CUTS_H
 
 #include "dataclasses/I3Units.h"
-#include "dataclasses/physics/I3BasicTrack.h"
+#include "dataclasses/physics/I3Particle.h"
 //#include "dataclasses/I3OMResponseMap.h"
 #include "dataclasses/geometry/I3Geometry.h"
 
@@ -75,7 +75,7 @@ namespace I3Cuts
    * 
    * @todo Think about making the code more efficient...
    */
-  void CutsCalc(const I3BasicTrack& track, 
+  void CutsCalc(const I3Particle& track, 
 		I3Geometry& geom, 
 		I3OMResponseMap& ommap, 
 		const string hitseries,
@@ -92,7 +92,7 @@ namespace I3Cuts
    * one quantity from CutsCalc(), use the CutsCalc() function directly,
    * in order to save multiple calls to the function.
    */
-  int Ndir(const I3BasicTrack& track, 
+  int Ndir(const I3Particle& track, 
 	   I3Geometry& geom, 
 	   I3OMResponseMap& ommap, 
 	   const string hitseries,
@@ -105,7 +105,7 @@ namespace I3Cuts
    * one quantity from CutsCalc(), use the CutsCalc() function directly, 
    * in order to save multiple calls to the function.
    */
-  double Ldir(const I3BasicTrack& track, 
+  double Ldir(const I3Particle& track, 
 	      I3Geometry& geom, 
 	      I3OMResponseMap& ommap, 
 	      const string hitseries,
@@ -118,7 +118,7 @@ namespace I3Cuts
    * one quantity from CutsCalc(), use the CutsCalc() function directly, 
    * in order to save multiple calls to the function.
    */
-  double SmoothAll(const I3BasicTrack& track, 
+  double SmoothAll(const I3Particle& track, 
 		   I3Geometry& geom, 
 		   I3OMResponseMap& ommap, 
 		   const string hitseries,
@@ -131,7 +131,7 @@ namespace I3Cuts
    * than one quantity from CutsCalc(), use the CutsCalc() function, 
    * directly in order to save multiple calls to the function.
    */
-  double SmoothDir(const I3BasicTrack& track, 
+  double SmoothDir(const I3Particle& track, 
 		   I3Geometry& geom, 
 		   I3OMResponseMap& ommap, 
 		   const string hitseries,
@@ -155,7 +155,7 @@ namespace I3Cuts
    * through the physical volume of the in-ice detector, close to the center,
    * or outside of it.
    */
-  double CylinderSize(const I3BasicTrack& track, 
+  double CylinderSize(const I3Particle& track, 
 		      double H0, 
 		      double R0, 
 		      double center);
