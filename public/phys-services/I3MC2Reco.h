@@ -29,6 +29,8 @@ namespace I3MC2Reco
    */
   void mc2reco(const I3MCHit& src, I3RecoHit& dst);
 
+  void mc2reco(const I3MCHitSeries& src, I3RecoHitSeries& dst);
+
 }
 
 #endif
