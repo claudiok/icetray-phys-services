@@ -18,7 +18,6 @@
 
 // functions
 
-#pragma link C++ function I3Calculator::ShiftAlongTrack; //
 #pragma link C++ function I3Calculator::CherenkovCalc; //
 #pragma link C++ function I3Calculator::IsOnTrack; //
 #pragma link C++ function I3Calculator::ClosestApproachPosition; //
@@ -29,7 +28,7 @@
 #pragma link C++ function I3Calculator::CherenkovApproachAngle; //
 #pragma link C++ function I3Calculator::TimeResidual; //
 #pragma link C++ function I3Calculator::Angle; //
-//#pragma link C++ function I3Calculator::Distance; //
+#pragma link C++ function I3Calculator::Distance; //
 #pragma link C++ function I3Calculator::InTrackSystem; //
 #pragma link C++ function I3Calculator::InNominalSystem; //
 

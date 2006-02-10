@@ -13,7 +13,6 @@
 
 #include <cmath>
 #include "dataclasses/physics/I3Particle.h"
-class I3Cascade;
 #include "dataclasses/I3Units.h"
 #include "dataclasses/I3Constants.h"
 #include "dataclasses/geometry/I3OMGeo.h"
@@ -34,15 +33,6 @@ using namespace I3Units;
  */
 namespace I3Calculator
 {
-  /**
-   * Returns a position on the input track ('track'), which is a distance 
-   * 'dist' away from the track's nominal position.  If 'dist' is positive, 
-   * the position is shifted by 'dist' in the direction of the track; 
-   * a negative 'dist' will shift the position in the opposite direction.
-   */
-  I3Position ShiftAlongTrack(const I3Particle& track, 
-			     const double dist);
-  
   /**
    * The main calculation function, which calculates in one step the relevant 
    * quantities that relate a track to an OM position.  If you are interested
@@ -165,7 +155,7 @@ namespace I3Calculator
    * CherenkovCalc() function directly, in order to save multiple calls to 
    * the function.
    */
-  double CherenkovTime(const I3Particle& track,
+  double CherenkovTime(const I3Particle& particle,
 		       const I3Position& position,
 		       const double IndexRef=I3Constants::n_ice);
 
@@ -176,7 +166,7 @@ namespace I3Calculator
    * from CherenkovCalc(), use the CherenkovCalc() function directly, in
    * order to save multiple calls to the function.
    */
-  double CherenkovDistance(const I3Particle& track,
+  double CherenkovDistance(const I3Particle& particle,
 			   const I3Position& position);
 
  /**
@@ -191,47 +181,16 @@ namespace I3Calculator
 			    const I3Position& position,
 			    const I3OMGeo::Orientation orient=I3OMGeo::Down);
 
- /**
-   * A convenience function that calls I3Position::CalcDistance() to calculate
-   * the time it takes Cherenkov light to travel between an input cascade and
-   * an OM position.  The index of refraction can be set by the user.
-   */
-#if 0
-  double CherenkovTime(const I3Cascade& cascade,
-		       const I3Position& position,
-		       const double IndexRef=I3Constants::n_ice);
-
-  /**
-   * A convenience function that calls I3Position::CalcDistance() to calculate
-   * the distance between an input cascade and an OM position.   
-   */
-  double CherenkovDistance(const I3Cascade& cascade, 
-			   const I3Position& position);
-#endif
-
   /**
    * A convenience function that calls CherenkovTime() and calculates the time 
    * residual between a hit and a track.
    * A time residual is defined as the difference between the measured hit time
    * and the expected time of arrival of a photon from the track.
    */
-  double TimeResidual(const I3Particle& track, 
+  double TimeResidual(const I3Particle& particle, 
 		      const I3Position& hitpos, 
 		      const double hittime,
 		      const double IndexRef=I3Constants::n_ice);
-
-  /**
-   * A convenience function that calls CherenkovTime() and calculates the time 
-   * residual between a hit and a cascade.
-   * A time residual is defined as the difference between the measured hit time
-   * and the expected time of arrival of a photon from the cascade.
-   */
-#if 0
-  double TimeResidual(const I3Cascade& cascade, 
-		      const I3Position& hitpos, 
-		      const double hittime,
-		      const double IndexRef=I3Constants::n_ice);
-#endif
 
   /**
    * Returns the spatial angle between two input tracks.
@@ -242,10 +201,8 @@ namespace I3Calculator
   /**
    * Returns the distance between two input cascades.
    */
-#if 0
-  double Distance(const I3Cascade& casc1, 
-		  const I3Cascade& casc2);
-#endif
+  double Distance(const I3Particle& casc1, 
+		  const I3Particle& casc2);
 
   /**
    * Transform the input position into the coordinate system of the input 

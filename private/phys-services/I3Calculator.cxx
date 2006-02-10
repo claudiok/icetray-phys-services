@@ -16,22 +16,6 @@ using namespace std;
 
 
 //--------------------------------------------------------------
-I3Position I3Calculator::ShiftAlongTrack(const I3Particle& track, const double dist)
-{
-  I3Position p;
-  double x,y,z;
-  x = track.GetPos().GetX() 
-    - dist*sin(track.GetDir().GetZenith())*cos(track.GetDir().GetAzimuth());
-  y = track.GetPos().GetY() 
-    - dist*sin(track.GetDir().GetZenith())*sin(track.GetDir().GetAzimuth());
-  z = track.GetPos().GetZ() 
-    - dist*cos(track.GetDir().GetZenith());
-  p.SetPosition(x,y,z,I3Position::car);
-  return p;
-}
-
-
-//--------------------------------------------------------------
 void I3Calculator::CherenkovCalc(const I3Particle& track,        // input
 				 const I3Position& position,  // input
 				 I3Position& appos,     // output 
@@ -58,14 +42,14 @@ void I3Calculator::CherenkovCalc(const I3Particle& track,        // input
   double PA = sqrt(PT*PT-TA*TA);
   
   //--Return position and distance of closest approach
-  appos = ShiftAlongTrack(track,TA); // position A
+  appos = track.ShiftAlongTrack(TA); // position A
   apdist = PA; // distance of closest approach
   
   //--Calculate Cherenkov photon... position on track and time of PMT hit
   double CA = PA/tan(changle);
   double CP = PA/sin(changle);
   double TC = TA-CA;
-  chpos = ShiftAlongTrack(track,TC); // origin of Cherenkov light (C)
+  chpos = track.ShiftAlongTrack(TC); // origin of Cherenkov light (C)
   chtime = TC/c + CP/speed; //travel time:track Pos.I3Position
   // total photon time from T (on track) through C to P.
   // TC - particle's speed is c, but CP - photon's speed is c/n.
@@ -85,10 +69,13 @@ void I3Calculator::CherenkovCalc(const I3Particle& track,        // input
 //--------------------------------------------------------------
 bool I3Calculator::IsOnTrack(const I3Particle& track, const I3Position& position, const double Precision)
 {
-  I3Position appos,chpos;
-  double apdist,chtime,chdist,chapangle;
-  CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle);
-  if (apdist<=Precision) return true;
+  if (track.IsTrack()) {
+    I3Position appos,chpos;
+    double apdist,chtime,chdist,chapangle;
+    CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle);
+    if (apdist<=Precision) return true;
+    else return false;
+  }
   else return false;
 }
 
@@ -96,118 +83,126 @@ bool I3Calculator::IsOnTrack(const I3Particle& track, const I3Position& position
 //--------------------------------------------------------------
 I3Position I3Calculator::ClosestApproachPosition(const I3Particle& track, const I3Position& position)
 {
-  I3Position appos,chpos;
-  double apdist,chtime,chdist,chapangle;
-  CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle);
-  return appos;
+  if (track.IsTrack()) {
+    I3Position appos,chpos;
+    double apdist,chtime,chdist,chapangle;
+    CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle);
+    return appos;
+  }
+  else {
+    I3Position nullpos;
+    return nullpos;
+  }
 }
 
 
 //--------------------------------------------------------------
 double I3Calculator::ClosestApproachDistance(const I3Particle& track, const I3Position& position)
 {
-  I3Position appos,chpos;
-  double apdist,chtime,chdist,chapangle;
-  CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle);
-  return apdist;
+  if (track.IsTrack()) {
+    I3Position appos,chpos;
+    double apdist,chtime,chdist,chapangle;
+    CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle);
+    return apdist;
+  }
+  else return NAN;
 }
 
 
 //--------------------------------------------------------------
 I3Position I3Calculator::CherenkovPosition(const I3Particle& track, const I3Position& position)
 {
-  I3Position appos,chpos;
-  double apdist,chtime,chdist,chapangle;
-  CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle);
-  return chpos;
+  if (track.IsTrack()) {
+    I3Position appos,chpos;
+    double apdist,chtime,chdist,chapangle;
+    CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle);
+    return chpos;
+  }
+  else {
+    I3Position nullpos;
+    return nullpos;
+  }
 }
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovTime(const I3Particle& track, const I3Position& position, const double IndexRef)
+double I3Calculator::CherenkovTime(const I3Particle& particle, const I3Position& position, const double IndexRef)
 {
-  I3Position appos,chpos;
-  double apdist,chtime,chdist,chapangle;
-  CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle,
-		IndexRef);
-  return chtime;
+  if (particle.IsTrack()) {
+    I3Position appos,chpos;
+    double apdist,chtime,chdist,chapangle;
+    CherenkovCalc(particle, position, appos, apdist, chpos, chtime, chdist,
+		  chapangle, IndexRef);
+    return chtime;
+  }
+  else if (particle.IsCascade()) {
+    double speed = c/IndexRef;
+    return position.CalcDistance(particle.GetPos()) / speed;
+  }
+  else return NAN;
 }
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovDistance(const I3Particle& track, const I3Position& position)
+double I3Calculator::CherenkovDistance(const I3Particle& particle, const I3Position& position)
 {
-  I3Position appos,chpos;
-  double apdist,chtime,chdist,chapangle;
-  CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle);
-  return chdist;
+  if (particle.IsTrack()) {
+    I3Position appos,chpos;
+    double apdist,chtime,chdist,chapangle;
+    CherenkovCalc(particle, position, appos, apdist, chpos, chtime, chdist,
+		  chapangle);
+    return chdist;
+  }
+  else if (particle.IsCascade()) {
+    return position.CalcDistance(particle.GetPos());
+  }
+  else return NAN;
 }
 
 
 //--------------------------------------------------------------
 double I3Calculator::CherenkovApproachAngle(const I3Particle& track, const I3Position& position, const I3OMGeo::Orientation orient)
 {
-  I3Position appos,chpos;
-  double apdist,chtime,chdist,chapangle;
-  CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle,
-		I3Constants::n_ice,orient);
-  return chapangle;
-}
-
-#warning comment out cascade stuff
-#if 0
-//--------------------------------------------------------------
-double I3Calculator::CherenkovTime(const I3Cascade& cascade, const I3Position& position, const double IndexRef)
-{
-  double speed = c/IndexRef;
-  return position.CalcDistance(cascade.GetPos()) / speed;
+  if (track.IsTrack()) {
+    I3Position appos,chpos;
+    double apdist,chtime,chdist,chapangle;
+    CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle,
+		  I3Constants::n_ice,orient);
+    return chapangle;
+  }
+  else return NAN;
 }
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovDistance(const I3Cascade& cascade, const I3Position& position)
+double I3Calculator::TimeResidual(const I3Particle& particle, const I3Position& hitpos, double hittime, const double IndexRef)
 {
-  return position.CalcDistance(cascade.GetPos());
-}
-#endif
-
-//--------------------------------------------------------------
-double I3Calculator::TimeResidual(const I3Particle& track, const I3Position& hitpos, double hittime, const double IndexRef)
-{
-  double T_exp = CherenkovTime(track, hitpos, IndexRef);
-  double T_meas = hittime - track.GetT();
+  double T_exp = CherenkovTime(particle, hitpos, IndexRef);
+  double T_meas = hittime - particle.GetT();
   return T_meas - T_exp;
 }
-
-#warning comment out cascade stuff
-#if 0
-//--------------------------------------------------------------
-double I3Calculator::TimeResidual(const I3Cascade& cascade, const I3Position& hitpos, double hittime, const double IndexRef)
-{
-  double T_exp = CherenkovTime(cascade, hitpos, IndexRef);
-  double T_meas = hittime - cascade.GetT();
-  return T_meas - T_exp;
-}
-#endif
 
 //--------------------------------------------------------------
 double I3Calculator::Angle(const I3Particle& track1, const I3Particle& track2)
 {
-  I3Direction dir1(track1.GetDir());
-  I3Direction dir2(track2.GetDir());
-  dir1.RotateZ(-dir2.CalcPhi());
-  dir1.RotateY(-dir2.CalcTheta());
-  double theta = dir1.CalcTheta();
-  return theta;
+  if (track1.IsTrack() && track1.IsTrack()) {
+    I3Direction dir1(track1.GetDir());
+    I3Direction dir2(track2.GetDir());
+    dir1.RotateZ(-dir2.CalcPhi());
+    dir1.RotateY(-dir2.CalcTheta());
+    double theta = dir1.CalcTheta();
+    return theta;
+  }
+  else return NAN;
 }
 
-#warning comment out cascade stuff
-#if 0
 //--------------------------------------------------------------
-double I3Calculator::Distance(const I3Cascade& casc1, const I3Cascade& casc2)
+double I3Calculator::Distance(const I3Particle& casc1, const I3Particle& casc2)
 {
-  return casc1.GetPos().CalcDistance(casc2.GetPos());
+  if (casc1.IsCascade() && casc2.IsCascade()) {
+    return casc1.GetPos().CalcDistance(casc2.GetPos());
+  }
+  else return NAN;
 }
-#endif 
 
 //--------------------------------------------------------------
 I3Position I3Calculator::InTrackSystem(const I3Direction& direction, const I3Position& pos)
@@ -215,8 +210,7 @@ I3Position I3Calculator::InTrackSystem(const I3Direction& direction, const I3Pos
   I3Position p(pos);
   p.RotateZ(-direction.CalcPhi());
   p.RotateY(-direction.CalcTheta());
-  //p.RotateZ(direction.CalcPhi()); //get x-y orientation right
-  p.RotateZ(pi/2.); //###
+  p.RotateZ(direction.CalcPhi()); //get x-y orientation right
   return p;
 }
 
@@ -227,8 +221,7 @@ I3Direction I3Calculator::InTrackSystem(const I3Direction& direction, const I3Di
   I3Direction d(dir);
   d.RotateZ(-direction.CalcPhi());
   d.RotateY(-direction.CalcTheta());
-  //d.RotateZ(direction.CalcPhi()); //get x-y orientation right
-  d.RotateZ(pi/2.); //###
+  d.RotateZ(direction.CalcPhi()); //get x-y orientation right
   return d;
 }
 
@@ -236,14 +229,26 @@ I3Direction I3Calculator::InTrackSystem(const I3Direction& direction, const I3Di
 //--------------------------------------------------------------
 I3Position I3Calculator::InTrackSystem(const I3Particle& track, const I3Position& pos)
 {
-  return InTrackSystem(track.GetDir(), pos);
+  if (track.IsTrack()) {
+    return InTrackSystem(track.GetDir(), pos);
+  }
+  else {
+    I3Position nullpos;
+    return nullpos;
+  }
 }
 
 
 //--------------------------------------------------------------
 I3Direction I3Calculator::InTrackSystem(const I3Particle& track, const I3Direction& dir)
 {
-  return InTrackSystem(track.GetDir(), dir);
+  if (track.IsTrack()) {
+    return InTrackSystem(track.GetDir(), dir);
+  }
+  else {
+    I3Direction nulldir;
+    return nulldir;
+  }
 }
 
 
@@ -251,8 +256,7 @@ I3Direction I3Calculator::InTrackSystem(const I3Particle& track, const I3Directi
 I3Position I3Calculator::InNominalSystem(const I3Direction& direction, const I3Position& pos)
 {
   I3Position p(pos);
-  //p.RotateZ(-direction.CalcPhi()); //get x-y orientation right
-  p.RotateZ(-pi/2.); //###
+  p.RotateZ(-direction.CalcPhi()); //get x-y orientation right
   p.RotateY(direction.CalcTheta());
   p.RotateZ(direction.CalcPhi());
   return p;
@@ -263,8 +267,7 @@ I3Position I3Calculator::InNominalSystem(const I3Direction& direction, const I3P
 I3Direction I3Calculator::InNominalSystem(const I3Direction& direction, const I3Direction& dir)
 {
   I3Direction d(dir);
-  //d.RotateZ(-direction.CalcPhi()); //get x-y orientation right
-  d.RotateZ(-pi/2.); //###
+  d.RotateZ(-direction.CalcPhi()); //get x-y orientation right
   d.RotateY(direction.CalcTheta());
   d.RotateZ(direction.CalcPhi());
   return d;
@@ -274,13 +277,25 @@ I3Direction I3Calculator::InNominalSystem(const I3Direction& direction, const I3
 //--------------------------------------------------------------
 I3Position I3Calculator::InNominalSystem(const I3Particle& track, const I3Position& pos)
 {
-  return InNominalSystem(track.GetDir(), pos);
+  if (track.IsTrack()) {
+    return InNominalSystem(track.GetDir(), pos);
+  }
+  else {
+    I3Position nullpos;
+    return nullpos;
+  }
 }
 
 
 //--------------------------------------------------------------
 I3Direction I3Calculator::InNominalSystem(const I3Particle& track, const I3Direction& dir)
 {
-  return InNominalSystem(track.GetDir(), dir);
+  if (track.IsTrack()) {
+    return InNominalSystem(track.GetDir(), dir);
+  }
+  else {
+    I3Direction nulldir;
+    return nulldir;
+  }
 }
 

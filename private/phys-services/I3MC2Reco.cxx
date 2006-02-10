@@ -17,7 +17,7 @@ using namespace std;
 
 //--------------------------------------------------------------
 void I3MC2Reco::mc2reco(const I3MCHit& src, //input
-			I3Hit& dst)         //output
+			I3RecoHit& dst)         //output
 {
   dst.SetTime( src.GetTime());
   dst.SetID( src.GetHitID());
