@@ -59,11 +59,11 @@ void I3Muxer::SendEvent()
   I3FramePtr frame(new I3Frame(I3Frame::Physics));
 
   assert(currentEventQueued_);
-  for(I3Frame::iterator iter = currentEvent_.begin () ; 
+  for(I3Frame::const_iterator iter = currentEvent_.begin () ; 
       iter != currentEvent_.end() ; 
       iter++)
     {
-      (*frame)[iter->first] = iter->second;
+      frame->Put(iter->first, iter->second);
     }
   assert(currentGeometry_);
   frame->Put(currentGeometry_);
