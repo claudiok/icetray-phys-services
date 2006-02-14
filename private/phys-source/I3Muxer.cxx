@@ -46,7 +46,7 @@ void I3Muxer::Process()
 	RequestSuspension();
 	return;
       default:
-	Fatal("Something weird happened");
+	log_fatal("Something weird happened");
       }
 }
 
