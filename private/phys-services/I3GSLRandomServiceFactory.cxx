@@ -16,8 +16,6 @@ I3_SERVICE_FACTORY(I3GSLRandomServiceFactory);
 
 // Other header files
 
-#include "icetray/I3ServicesAccess.h"
-
 #include "phys-services/I3GSLRandomService.h"
 
 // Constructors
@@ -48,7 +46,7 @@ I3GSLRandomServiceFactory::InstallService(I3Services& services)
 		if(seed_ < 0) random_ = I3RandomServicePtr(new I3GSLRandomService());
 		else  random_ = I3RandomServicePtr(new I3GSLRandomService(seed_));
 		
-  return I3ServicesAccess<I3RandomService>::Put(services,
+  return I3ContextAccess<I3RandomService>::Put(services,
 						random_,
 						I3RandomService::DefaultName());
 }

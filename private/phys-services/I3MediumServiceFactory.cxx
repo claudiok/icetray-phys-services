@@ -15,7 +15,6 @@
 
 #include "phys-services/I3MediumServiceFactory.h"
 
-#include "icetray/I3ServicesAccess.h"
 #include "phys-services/I3MediumPropertiesFile.h"
 
 // namespace declarations
@@ -50,7 +49,7 @@ bool I3MediumServiceFactory::InstallService(I3Services& services){
 		else medium_ = I3MediumServicePtr(new I3MediumService);
 	}
 
-  return I3ServicesAccess<I3MediumService>::Put(services, medium_,
+  return I3ContextAccess<I3MediumService>::Put(services, medium_,
   	I3MediumService::DefaultName());
 }
 

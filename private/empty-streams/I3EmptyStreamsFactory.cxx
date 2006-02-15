@@ -4,7 +4,6 @@
 #include "phys-services/empty-streams/I3EmptyGeometryService.h"
 #include "phys-services/empty-streams/I3EmptyDetectorStatusService.h"
 #include "phys-services/empty-streams/I3EmptyCalibrationService.h"
-#include <icetray/I3ServicesAccess.h>
 
 I3_SERVICE_FACTORY(I3EmptyStreamsFactory);
 
@@ -64,25 +63,25 @@ bool I3EmptyStreamsFactory::InstallService(I3Services& services)
 
   if(installEvents_)
     success *= 
-      I3ServicesAccess<I3EventService>::Put(services,
+      I3ContextAccess<I3EventService>::Put(services,
 					    events_,
 					    I3EventService::DefaultName());
 
   if(installCalibrations_)
     success *=
-      I3ServicesAccess<I3CalibrationService>::Put(services,
+      I3ContextAccess<I3CalibrationService>::Put(services,
 						  calibrations_,
 						  I3CalibrationService::DefaultName());
 
   if(installStatus_)
     success *= 
-      I3ServicesAccess<I3DetectorStatusService>::Put(services,
+      I3ContextAccess<I3DetectorStatusService>::Put(services,
 						     status_,
 						     I3DetectorStatusService::DefaultName());
 
   if(installGeometries_)
     success *= 
-      I3ServicesAccess<I3GeometryService>::Put(services,
+      I3ContextAccess<I3GeometryService>::Put(services,
 					       geometries_,
 					       I3GeometryService::DefaultName());
 

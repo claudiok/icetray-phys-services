@@ -12,7 +12,6 @@
 
 #include "phys-services/I3TRandomServiceFactory.h"
 
-#include "icetray/I3ServicesAccess.h"
 #include "phys-services/I3TRandomService.h"
 
 // Constructors
@@ -44,7 +43,7 @@ I3TRandomServiceFactory::InstallService(I3Services& services)
 		else random_ = I3RandomServicePtr(new I3TRandomService(seed_));
 	}
 	
-  return I3ServicesAccess<I3RandomService>::Put(services,
+  return I3ContextAccess<I3RandomService>::Put(services,
 						random_,
 						I3RandomService::DefaultName());
 }

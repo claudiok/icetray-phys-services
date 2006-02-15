@@ -1,6 +1,5 @@
 #include "phys-services/source/I3TextFileGeometryServiceFactory.h"
 #include "phys-services/source/I3TextFileGeometryService.h"
-#include <icetray/I3ServicesAccess.h>
 
 I3_SERVICE_FACTORY(I3TextFileGeometryServiceFactory);
 
@@ -32,8 +31,8 @@ bool I3TextFileGeometryServiceFactory::InstallService(I3Services& services)
       (new I3TextFileGeometryService(amandaFile_,
 				    icecubeFile_));
   return 
-    I3ServicesAccess<I3GeometryService>::Put(services,
-					     geometry_,
-					     I3GeometryService::DefaultName());
+    I3ContextAccess<I3GeometryService>::Put(services,
+					    geometry_,
+					    I3GeometryService::DefaultName());
 }
 
