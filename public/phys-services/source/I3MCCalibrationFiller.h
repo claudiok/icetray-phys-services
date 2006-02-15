@@ -14,7 +14,7 @@
 #ifndef I3MCCALIBRATIONFILLER_H
 #define I3MCCALIBRATIONFILLER_H
 
-#include "phys-services/I3PhysicsModule.h"
+#include "icetray/I3Module.h"
 
 /**
  * @brief This module fills the 
@@ -22,13 +22,13 @@
  * DOM that it finds in the in ice geometry.
  * THIS IS MEANT TO BE A SHORT-TERM FIX.
  */
-class I3MCCalibrationFiller : public I3PhysicsModule
+class I3MCCalibrationFiller : public I3Module
 {
 public:
     I3MCCalibrationFiller(const I3Context&);
 
     void Configure();
-    void Calibration(I3Frame& frame);
+    void Calibration(I3FramePtr frame);
 
     SET_LOGGER("I3MCCalibrationFiller");
 

@@ -14,8 +14,6 @@
 I3_SERVICE_FACTORY(I3SPRNGRandomServiceFactory);
 
 
-#include "icetray/I3ServicesAccess.h"
-
 #include "phys-services/I3SPRNGRandomService.h"
 
 // Constructors
@@ -44,7 +42,7 @@ I3SPRNGRandomServiceFactory::~I3SPRNGRandomServiceFactory()
 // Member functions
 
 bool
-I3SPRNGRandomServiceFactory::InstallService(I3Services& services)
+I3SPRNGRandomServiceFactory::InstallService(I3Context& services)
 {
   if (!random_)  {
 	random_ = I3RandomServicePtr(
@@ -52,7 +50,7 @@ I3SPRNGRandomServiceFactory::InstallService(I3Services& services)
 						streamnum_, instatefile_, outstatefile_));
   }
 
-  return I3ServicesAccess<I3RandomService>::Put(services,
+  return I3ContextAccess<I3RandomService>::Put(services,
 						random_,
 						I3RandomService::DefaultName());
 }

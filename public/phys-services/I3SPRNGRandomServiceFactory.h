@@ -17,7 +17,6 @@
 // forward declarations
 
 class I3Context;
-class I3Services;
 
 // superclasses
 
@@ -50,10 +49,10 @@ class I3SPRNGRandomServiceFactory
   /**
    * Installed this objects service into the specified services object.
    *
-   * @param services the I3Services into which the service should be installed.
+   * @param services the I3Context into which the service should be installed.
    * @return true if the services is successfully installed.
    */
-  virtual bool InstallService(I3Services& services);
+  virtual bool InstallService(I3Context& services);
 
   /**
    * Configure service prior to installing it. 

@@ -2,7 +2,6 @@
 #define I3FILEOMKEY2MBIDFACTORY_H
 
 class I3Context;
-class I3Services;
 
 #include "icetray/I3ServiceFactory.h"
 #include "I3OMKey2MBID.h"
@@ -18,7 +17,7 @@ class I3FileOMKey2MBIDFactory
 
   virtual ~I3FileOMKey2MBIDFactory(){}
 
-  bool InstallService(I3Services& services);
+  bool InstallService(I3Context& services);
 
   void Configure();
 

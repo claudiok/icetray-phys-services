@@ -1,13 +1,15 @@
 #include "phys-services/source/I3MCCalibrationFiller.h"
-#include "dataclasses/I3Calibration.h"
-#include "dataclasses/I3DOMCalibration.h"
-#include "dataclasses/I3InIceGeometry.h"
-#include "dataclasses/I3Geometry.h"
+#include "dataclasses/calibration/I3Calibration.h"
+#include "dataclasses/calibration/I3DOMCalibration.h"
+#include "dataclasses/geometry/I3InIceGeometry.h"
+#include "dataclasses/geometry/I3Geometry.h"
+#include "icetray/I3Frame.h"
+#include "dataclasses/I3Units.h"
 
 I3_MODULE(I3MCCalibrationFiller);
 
 I3MCCalibrationFiller::I3MCCalibrationFiller(const I3Context& context) 
-: I3PhysicsModule(context)
+: I3Module(context)
 {
     atwd0gain_ = -16.0;
     AddParameter("ATWD0gain", "ATWD0 gain", atwd0gain_);
@@ -33,16 +35,16 @@ void I3MCCalibrationFiller::Configure()
     GetParameter("FADCgain", fadcGain_);
 }
 
-void I3MCCalibrationFiller::Calibration(I3Frame& frame)
+void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
 {
     log_debug("I3MCCalibrationFiller::Calibration");
 
-    I3Geometry& geo = GetGeometry(frame);
-    I3InIceGeometry& inice = geo.GetInIceGeometry();
+    const I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
+    const I3InIceGeometry& inice = geo.GetInIceGeometry();
 
-    I3InIceGeometry::iterator iter;
+    I3InIceGeometry::const_iterator iter;
 
-    I3Calibration& calib = GetCalibration(frame);
+    const I3Calibration& calib = frame->Get<I3Calibration>("Calibration");
 
     for( iter  = inice.begin(); 
 	 iter != inice.end(); 
@@ -55,25 +57,6 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 	domCalib->SetATWDGain(0, atwd0gain_);
 	domCalib->SetATWDGain(1, atwd1gain_);
 	domCalib->SetATWDGain(2, atwd2gain_);
-
-	QuadraticFit qfit0,qfit1;
-	
-	qfit0.quadFitA = 2.5858788;
-	qfit0.quadFitB = 0.013337472;
-	qfit0.quadFitC = NAN;
-	
-	qfit1.quadFitA = 2.3853257;
-	qfit1.quadFitB = 0.014224272;
-	qfit1.quadFitC = NAN; 
-
-	domCalib->SetATWDFreqFit(0,qfit0);
-	domCalib->SetATWDFreqFit(1,qfit1);
-
-	LinearFit hvgainfit;	
-	hvgainfit.intercept = -15.1997;
-	hvgainfit.slope = 7.0842533;
-    
-	domCalib->SetHVGainFit(hvgainfit);
 
 	for( unsigned int channel = 0; channel < 3; ++channel )
 	{
@@ -91,7 +74,7 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 	    }
 	}
 	
-	calib.GetInIceCalibration()[thiskey] = domCalib;
+	const_cast<I3InIceCalibration&>(calib.GetInIceCalibration())[thiskey] = domCalib;
     }
     
     PushFrame(frame,"OutBox");

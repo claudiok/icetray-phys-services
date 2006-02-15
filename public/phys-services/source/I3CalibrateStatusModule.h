@@ -13,26 +13,26 @@
 #ifndef I3CALIBRATESTATUSMODULE_H
 #define I3CALIBRATESTATUSMODULE_H
 
-#include "phys-services/I3PhysicsModule.h"
-#include "dataclasses/I3RawDOMStatus.h"
-#include "dataclasses/I3CalibratedDOMStatus.h"
-#include "dataclasses/I3DOMCalibration.h"
+#include "icetray/I3Module.h"
+#include "dataclasses/status/I3RawDOMStatus.h"
+#include "dataclasses/status/I3CalibratedDOMStatus.h"
+#include "dataclasses/calibration/I3DOMCalibration.h"
 
 /**
  * @brief Small icetray module which takes the calibration and the 
  * detector status and assigns some values to the I3CalibratedDOMStatus
  * structures based on the I3DOMCalibration and the I3RawDOMStatus
  */
-class I3CalibrateStatusModule : public I3PhysicsModule
+class I3CalibrateStatusModule : public I3Module
 {
  public:
   I3CalibrateStatusModule(const I3Context& context);
 
-  void DetectorStatus(I3Frame& frame);
+  void DetectorStatus(I3FramePtr frame);
 
   static void DoTheCalibration(I3RawDOMStatusPtr rawstatus,
-			I3CalibratedDOMStatusPtr calibratedstatus,
-			I3DOMCalibrationPtr calib);
+			       I3CalibratedDOMStatusPtr calibratedstatus,
+			       I3DOMCalibrationPtr calib);
 };
 
 #endif

@@ -13,31 +13,35 @@
 
 #include "phys-services/source/I3CalibrateStatusModule.h"
 
-#include "dataclasses/I3DigitalReadout.h"
-#include "dataclasses/I3DOMLaunch.h"
-#include "dataclasses/I3Event.h"
-#include "dataclasses/I3InIceCalibration.h"
-#include "dataclasses/I3Calibration.h"
-#include "dataclasses/I3DetectorStatus.h"
+#include "dataclasses/calibration/I3InIceCalibration.h"
+#include "dataclasses/calibration/I3Calibration.h"
+#include "dataclasses/status/I3DetectorStatus.h"
 #include "dataclasses/I3Units.h"
+#include "icetray/I3Frame.h"
+#include "icetray/services/I3Boxes.h"
 
 I3_MODULE(I3CalibrateStatusModule);
 
 I3CalibrateStatusModule::I3CalibrateStatusModule(const I3Context& context) : 
-  I3PhysicsModule(context)
+  I3Module(context)
 {
   AddOutBox("OutBox");
 }
 
-void I3CalibrateStatusModule::DetectorStatus(I3Frame& frame)
+void I3CalibrateStatusModule::DetectorStatus(I3FramePtr frame)
 {
-  I3DetectorStatus& status = GetDetectorStatus(frame);
-  I3Calibration& calibration = GetCalibration(frame);
-  I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
-
-  I3IceCubeDOMStatusDict& icecubestatus = status.GetIceCubeDOMStatus();
+  const I3DetectorStatus& status = frame->Get<I3DetectorStatus>("DetectorStatus");
   
-  I3IceCubeDOMStatusDict::iterator iter;
+  //  I3DetectorStatus& status = 
+  //    *(frame->Get<I3DetectorStatusPtr>("DetectorStatus"));
+
+  const I3Calibration& calibration = frame->Get<I3Calibration>("Calibration");
+
+  const I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
+
+  const I3IceCubeDOMStatusDict& icecubestatus = status.GetIceCubeDOMStatus();
+  
+  I3IceCubeDOMStatusDict::const_iterator iter;
   for(iter = icecubestatus.begin() ; iter != icecubestatus.end() ; iter++)
     {
       OMKey thekey = iter->first;
@@ -47,7 +51,10 @@ void I3CalibrateStatusModule::DetectorStatus(I3Frame& frame)
 	calibratedstatus(new I3CalibratedDOMStatus());      
       dstatptr->SetCalibratedStatus(calibratedstatus);
       assert(inicecalib.count(thekey)>0);
-      I3DOMCalibrationPtr domcalib = inicecalib[thekey];
+
+      I3InIceCalibration::const_iterator iter = inicecalib.find(thekey);
+      assert(iter != inicecalib.end());
+      const I3DOMCalibrationPtr domcalib = iter->second;
       DoTheCalibration(rawstatus,calibratedstatus,domcalib);
     }
 
@@ -59,79 +66,62 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 		 I3CalibratedDOMStatusPtr calibratedstatus,
 		 I3DOMCalibrationPtr calib)
 {
-    /**
-     * Calculate the SPE mean and PMT gain
-     * Use the supplied HVGain relation: 
-     * log(10)Gain = slope*log(10)V + intercept
-     */
-    double predictedSpeMean;
-    double log_gain = 0.0;
-    double gain = 0.0;
-    double currentVoltage=(rawstatus->GetPMTHV()/I3Units::volt);
-    const LinearFit hvgain = calib->GetHVGainFit();
+  //currently this method just calibrates the position of the SPE peak
+
+  //Now using the supplied HVGain relation: 
+  //  recall relation: log(10)Gain = slope*log(10)V + intercept
+
+  double predictedSpeMean;
+  double log_gain = 0.0;
+  double currentVoltage=(rawstatus->GetPMTHV()/I3Units::volt);
+  const LinearFit hvgain = calib->GetHVGainFit();
   
-    if( currentVoltage > 0.0 )
+  if(currentVoltage >0.0)
     {
-	log_gain = hvgain.slope*log10(currentVoltage) + hvgain.intercept;
-	gain = pow(10.0,log_gain);
-	predictedSpeMean = gain*I3Units::eSI*1.0e12;
-	
-	log_trace("LOOK: predictedSPEMean %f", predictedSpeMean);
+      log_gain = hvgain.slope*log10(currentVoltage) + hvgain.intercept;
+      predictedSpeMean = pow(10.0,log_gain)*I3Units::eSI;
+      
+      log_trace("LOOK: predictedSPEMean %f",predictedSpeMean);
     }
-  
-    else
+  else
     {
-	log_warn("DOM voltage is zero. No SPEMean or PMTGain possible");
-	predictedSpeMean = 0.0;
+      log_warn("DOM voltage is zero.  No SPEMean possible");
+      predictedSpeMean = 0.0;
     }
 
-    //Michelangelo's hack for MC data that doesn't have the charge histograms
-    if( hvgain.intercept == 0.0 && hvgain.slope == 0.0 )
-    {
-	predictedSpeMean = 1.6*I3Units::pC; //this is just some average, reasonable value
-    }
+
+  //Michelangelo's hack for MC data that doesn't have the charge histograms
+  if(hvgain.intercept==0.0&&hvgain.slope==0.0){
+    predictedSpeMean=1.6; //this is just some average, reasonable value
+  }
   
-    calibratedstatus->SetPMTGain(gain);
-    calibratedstatus->SetSPEMean(predictedSpeMean*I3Units::pC); 
+  calibratedstatus->SetSPEMean(predictedSpeMean*I3Units::pC);
+ //a
+  double rateCorrected=0; //sampling rate in MHz
 
-    /**
-     * Calculate the sampling rate
-     * Use the sampling rate relation:
-     * sampling rate (MHz) = 20.0*(slope*DAC[0,4]+intercept)
-     */
-    double rateCorrected=0; //sampling rate in MHz
-
-    for (int chip=0; chip<2; chip++)
+  for (int chip=0; chip<2; chip++)
     {
-	QuadraticFit atwdQFit  = calib->GetATWDFreqFit(chip);
+      QuadraticFit atwdQFit  = calib->GetATWDFreqFit(chip);
 
-	if( isnan(atwdQFit.quadFitC) ) // Old style linear fit
+      if(isnan(atwdQFit.quadFitC)) // Old style linear fit
 	{
-	    double slope = atwdQFit.quadFitB;
-	    double intercept = atwdQFit.quadFitA;
-	    double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
+	  double slope = atwdQFit.quadFitB;
+	  double intercept = atwdQFit.quadFitA;
+	  double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
 	  
-	    rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
-	    log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
+	  rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
+	  log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
 	  
-	    if(chip==0)
-		calibratedstatus->SetSamplingRateA(rateCorrected / I3Units::microsecond);
-	    
-	    else if(chip==1)
-		calibratedstatus->SetSamplingRateB(rateCorrected / I3Units::microsecond);
-	    
-	    else 
-		log_error("atwd chip %d not available", chip);
+	  if(chip==0)calibratedstatus->SetSamplingRateA(rateCorrected / I3Units::microsecond);
+	  else if(chip==1)calibratedstatus->SetSamplingRateB(rateCorrected / I3Units::microsecond);
+	  else log_error("atwd chip %d not available", chip);
 	}
-
-	else
+      else
 	{
-	  if(atwdQFit.quadFitC == 0.0)
-	    {
-	      log_warn("Found a quadratic fit with C=0.0, are you sure this is is a quadratic fit??");
-	    }
 	  log_error("Quadratic fit found.  I need to be implemented!!");
 	  // @todo implement this
 	}
     }
+  
+  //a
 }

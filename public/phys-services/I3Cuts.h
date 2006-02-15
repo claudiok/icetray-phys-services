@@ -2,9 +2,12 @@
 #define I3CUTS_H
 
 #include "dataclasses/I3Units.h"
-#include "dataclasses/I3Track.h"
-#include "dataclasses/I3OMResponseMap.h"
-#include "dataclasses/I3Geometry.h"
+#include "dataclasses/physics/I3Particle.h"
+//#include "dataclasses/I3OMResponseMap.h"
+#include "dataclasses/geometry/I3Geometry.h"
+
+class I3OMResponse;
+class I3OMResponseMap;
 
 using namespace I3Units;
 
@@ -72,24 +75,24 @@ namespace I3Cuts
    * 
    * @todo Think about making the code more efficient...
    */
-  void DirectHits(const I3Track& track, 
-		  I3Geometry& geom, 
-		  I3OMResponseMap& ommap, 
-		  const string hitseries,
-		  double t1, 
-		  double t2, 
-		  int& Ndir, 
-		  double& Ldir,
-		  double& Sall,
-		  double& Sdir);
+  void CutsCalc(const I3Particle& track, 
+		I3Geometry& geom, 
+		I3OMResponseMap& ommap, 
+		const string hitseries,
+		double t1, 
+		double t2, 
+		int& Ndir, 
+		double& Ldir,
+		double& Sall,
+		double& Sdir);
 
   /**
-   * A convenience function that calls DirectHits() and returns the number 
+   * A convenience function that calls CutsCalc() and returns the number 
    * of direct hits from a given track.  If you are interested in more than 
-   * one quantity from DirectHits(), use the DirectHits() function directly,
+   * one quantity from CutsCalc(), use the CutsCalc() function directly,
    * in order to save multiple calls to the function.
    */
-  int Ndir(const I3Track& track, 
+  int Ndir(const I3Particle& track, 
 	   I3Geometry& geom, 
 	   I3OMResponseMap& ommap, 
 	   const string hitseries,
@@ -97,12 +100,12 @@ namespace I3Cuts
 	   double t2 = plusTWindow);
 
   /**
-   * A convenience function that calls DirectHits() and returns the 
+   * A convenience function that calls CutsCalc() and returns the 
    * "direct-hits length" of the event.  If you are interested in more than  
-   * one quantity from DirectHits(), use the DirectHits() function directly, 
+   * one quantity from CutsCalc(), use the CutsCalc() function directly, 
    * in order to save multiple calls to the function.
    */
-  double Ldir(const I3Track& track, 
+  double Ldir(const I3Particle& track, 
 	      I3Geometry& geom, 
 	      I3OMResponseMap& ommap, 
 	      const string hitseries,
@@ -110,48 +113,49 @@ namespace I3Cuts
 	      double t2 = plusTWindow);
 
   /**
-   * A convenience function that calls DirectHits() and returns the 
+   * A convenience function that calls CutsCalc() and returns the 
    * "all-hits smoothness" of the event.  If you are interested in more than  
-   * one quantity from DirectHits(), use the DirectHits() function directly, 
+   * one quantity from CutsCalc(), use the CutsCalc() function directly, 
    * in order to save multiple calls to the function.
    */
-  double SmoothnessAll(const I3Track& track, 
-		       I3Geometry& geom, 
-		       I3OMResponseMap& ommap, 
-		       const string hitseries,
-		       double t1 = minusTWindow, 
-		       double t2 = plusTWindow);
+  double SmoothAll(const I3Particle& track, 
+		   I3Geometry& geom, 
+		   I3OMResponseMap& ommap, 
+		   const string hitseries,
+		   double t1 = minusTWindow, 
+		   double t2 = plusTWindow);
 
   /**
-   * A convenience function that calls DirectHits() and returns the 
+   * A convenience function that calls CutsCalc() and returns the 
    * "direct-hits smoothness" of the event.  If you are interested in more   
-   * than one quantity from DirectHits(), use the DirectHits() function, 
+   * than one quantity from CutsCalc(), use the CutsCalc() function, 
    * directly in order to save multiple calls to the function.
    */
-  double SmoothnessDir(const I3Track& track, 
-		       I3Geometry& geom, 
-		       I3OMResponseMap& ommap, 
-		       const string hitseries,
-		       double t1 = minusTWindow, 
-		       double t2 = plusTWindow);
+  double SmoothDir(const I3Particle& track, 
+		   I3Geometry& geom, 
+		   I3OMResponseMap& ommap, 
+		   const string hitseries,
+		   double t1 = minusTWindow, 
+		   double t2 = plusTWindow);
 
 
-
-  // Computes the size of the "cylinder of closest approach", 
-  // which is the amount by which one must expand a "reference cylinder"
-  // (such as the volume of the in-ice detector) in order to just barely
-  // contain the track.
-  // For grusome defail, see Kath's thesis appendix A.
-  //
-  // "H0" = height of reference cylinder
-  // "R0" = radius of reference cylinder
-  // "center" = z-coordinate of center of reference cylinder
-  //           (the x- and y-coordinates are assumed to be at zero)
-  //
-  // This is useful, for instance, for making cuts on whether a track goes
-  // through the physical volume of the in-ice detector, close to the center,
-  // or outside of it.
-  double CylinderSize(const I3Track& track, 
+  /**
+   * Computes the size of the "cylinder of closest approach", 
+   * which is the amount by which one must expand a "reference cylinder"
+   * (such as the volume of the in-ice detector) in order to just barely
+   * contain the track.
+   * For grusome defail, see Kath's thesis appendix A.
+   *
+   * "H0" = height of reference cylinder
+   * "R0" = radius of reference cylinder
+   * "center" = z-coordinate of center of reference cylinder
+   *           (the x- and y-coordinates are assumed to be at zero)
+   *
+   * This is useful, for instance, for making cuts on whether a track goes
+   * through the physical volume of the in-ice detector, close to the center,
+   * or outside of it.
+   */
+  double CylinderSize(const I3Particle& track, 
 		      double H0, 
 		      double R0, 
 		      double center);

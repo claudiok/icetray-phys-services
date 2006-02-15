@@ -1,8 +1,8 @@
 #ifndef I3MONITORINGPAIR_H
 #define I3MONITORINGPAIR_H
 
-#include "dataclasses/I3Monitoring.h"
-#include "dataclasses/I3MonitoringHeader.h"
+#include "dataclasses/monitoring/I3Monitoring.h"
+#include "dataclasses/monitoring/I3MonitoringHeader.h"
 
 
 /**

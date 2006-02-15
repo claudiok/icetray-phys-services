@@ -15,8 +15,7 @@
 #ifndef I3MCRAWDOMSTATUSFILLER_H
 #define I3MCRAWDOMSTATUSFILLER_H
 
-#include "phys-services/I3PhysicsModule.h"
-#include "dataclasses/I3RawDOMStatus.h"
+#include "icetray/I3Module.h"
 
 /**
  *
@@ -25,13 +24,13 @@
  *	The information gets cloned for all of the IceCube
  * 	DOMs contained in the geometry.
  */
-class I3MCRawDOMStatusFiller : public I3PhysicsModule
+class I3MCRawDOMStatusFiller : public I3Module
 {
 public:
     I3MCRawDOMStatusFiller(const I3Context&);
 
     void Configure();
-    void DetectorStatus(I3Frame& frame);
+    void DetectorStatus(I3FramePtr frame);
 
     SET_LOGGER("I3MCRawDOMStatusFiller");
 

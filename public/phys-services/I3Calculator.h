@@ -12,11 +12,10 @@
 #define I3CALCULATOR_H
 
 #include <cmath>
-#include "dataclasses/I3Track.h"
-#include "dataclasses/I3Cascade.h"
+#include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/I3Units.h"
 #include "dataclasses/I3Constants.h"
-#include "dataclasses/I3OMGeo.h"
+#include "dataclasses/geometry/I3OMGeo.h"
 
 using namespace I3Units;
 
@@ -34,15 +33,6 @@ using namespace I3Units;
  */
 namespace I3Calculator
 {
-  /**
-   * Returns a position on the input track ('track'), which is a distance 
-   * 'dist' away from the track's nominal position.  If 'dist' is positive, 
-   * the position is shifted by 'dist' in the direction of the track; 
-   * a negative 'dist' will shift the position in the opposite direction.
-   */
-  I3Position ShiftAlongTrack(const I3Track& track, 
-			     const double dist);
-  
   /**
    * The main calculation function, which calculates in one step the relevant 
    * quantities that relate a track to an OM position.  If you are interested
@@ -100,7 +90,7 @@ namespace I3Calculator
    * an issue, we can make these things more efficient at the expence of
    * complicating and repeating the code.
    */
-  void CherenkovCalc(const I3Track& track,
+  void CherenkovCalc(const I3Particle& track,
 		     const I3Position& position,
 		     I3Position& appos,
 		     double& apdist,
@@ -109,7 +99,7 @@ namespace I3Calculator
 		     double& chdist,
 		     double& changle,
 		     const double IndexRef=I3Constants::n_ice,
-		     const I3OMGeo::EOrientation orient=I3OMGeo::Down);
+		     const I3OMGeo::Orientation orient=I3OMGeo::Down);
 
   /**
    * Check if the input position ('position') lies on the input track 
@@ -120,7 +110,7 @@ namespace I3Calculator
    * simpler.  If processing time becomes an issue, we can make these routines 
    * more efficient.
    */
-  bool IsOnTrack(const I3Track& track, 
+  bool IsOnTrack(const I3Particle& track, 
 		 const I3Position& position,
 		 const double Precision=0.1*I3Units::meter);
 
@@ -131,7 +121,7 @@ namespace I3Calculator
    * from CherenkovCalc(), use the CherenkovCalc() function directly, in
    * order to save multiple calls to the function.
    */
-  I3Position ClosestApproachPosition(const I3Track& track,
+  I3Position ClosestApproachPosition(const I3Particle& track,
 				     const I3Position& position);
 
   /**
@@ -141,7 +131,7 @@ namespace I3Calculator
    * from CherenkovCalc(), use the CherenkovCalc() function directly, in
    * order to save multiple calls to the function.
    */
-  double ClosestApproachDistance(const I3Track& track,
+  double ClosestApproachDistance(const I3Particle& track,
 				 const I3Position& position);
 
  /**
@@ -153,7 +143,7 @@ namespace I3Calculator
    * use the CherenkovCalc() function directly, in order to save multiple 
    * calls to the function.
    */
-  I3Position CherenkovPosition(const I3Track& track,
+  I3Position CherenkovPosition(const I3Particle& track,
 			       const I3Position& position);
 
  /**
@@ -165,7 +155,7 @@ namespace I3Calculator
    * CherenkovCalc() function directly, in order to save multiple calls to 
    * the function.
    */
-  double CherenkovTime(const I3Track& track,
+  double CherenkovTime(const I3Particle& particle,
 		       const I3Position& position,
 		       const double IndexRef=I3Constants::n_ice);
 
@@ -176,7 +166,7 @@ namespace I3Calculator
    * from CherenkovCalc(), use the CherenkovCalc() function directly, in
    * order to save multiple calls to the function.
    */
-  double CherenkovDistance(const I3Track& track,
+  double CherenkovDistance(const I3Particle& particle,
 			   const I3Position& position);
 
  /**
@@ -187,25 +177,9 @@ namespace I3Calculator
    * quantity from CherenkovCalc(), use the CherenkovCalc() function 
    * directly, in order to save multiple calls to the function.
    */
-  double CherenkovApproachAngle(const I3Track& track,
+  double CherenkovApproachAngle(const I3Particle& track,
 			    const I3Position& position,
-			    const I3OMGeo::EOrientation orient=I3OMGeo::Down);
-
- /**
-   * A convenience function that calls I3Position::CalcDistance() to calculate
-   * the time it takes Cherenkov light to travel between an input cascade and
-   * an OM position.  The index of refraction can be set by the user.
-   */
-  double CherenkovTime(const I3Cascade& cascade,
-		       const I3Position& position,
-		       const double IndexRef=I3Constants::n_ice);
-
-  /**
-   * A convenience function that calls I3Position::CalcDistance() to calculate
-   * the distance between an input cascade and an OM position.   
-   */
-  double CherenkovDistance(const I3Cascade& cascade, 
-			   const I3Position& position);
+			    const I3OMGeo::Orientation orient=I3OMGeo::Down);
 
   /**
    * A convenience function that calls CherenkovTime() and calculates the time 
@@ -213,18 +187,7 @@ namespace I3Calculator
    * A time residual is defined as the difference between the measured hit time
    * and the expected time of arrival of a photon from the track.
    */
-  double TimeResidual(const I3Track& track, 
-		      const I3Position& hitpos, 
-		      const double hittime,
-		      const double IndexRef=I3Constants::n_ice);
-
-  /**
-   * A convenience function that calls CherenkovTime() and calculates the time 
-   * residual between a hit and a cascade.
-   * A time residual is defined as the difference between the measured hit time
-   * and the expected time of arrival of a photon from the cascade.
-   */
-  double TimeResidual(const I3Cascade& cascade, 
+  double TimeResidual(const I3Particle& particle, 
 		      const I3Position& hitpos, 
 		      const double hittime,
 		      const double IndexRef=I3Constants::n_ice);
@@ -232,15 +195,15 @@ namespace I3Calculator
   /**
    * Returns the spatial angle between two input tracks.
    */
-  double Angle(const I3Track& track1,
-	       const I3Track& track2);
+  double Angle(const I3Particle& track1,
+	       const I3Particle& track2);
 
   /**
    * Returns the distance between two input cascades.
    */
-  double Distance(const I3Cascade& casc1, 
-		  const I3Cascade& casc2);
-  
+  double Distance(const I3Particle& casc1, 
+		  const I3Particle& casc2);
+
   /**
    * Transform the input position into the coordinate system of the input 
    * track.  Effectively, the track is now in the z-dir.
@@ -259,14 +222,14 @@ namespace I3Calculator
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InTrackSystem().
    */
-  I3Position InTrackSystem(const I3Track& track, 
+  I3Position InTrackSystem(const I3Particle& track, 
 			   const I3Position& pos);
 
   /**
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InTrackSystem().
    */
-  I3Direction InTrackSystem(const I3Track& track, 
+  I3Direction InTrackSystem(const I3Particle& track, 
 			    const I3Direction& dir);
 
   /**
@@ -287,14 +250,14 @@ namespace I3Calculator
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InNominalSystem().
    */
-  I3Position InNominalSystem(const I3Track& track, 
+  I3Position InNominalSystem(const I3Particle& track, 
 			     const I3Position& pos);
 
   /**
    * Convenience function overload that extracts the direction out of a track
    * and then calls the regular InNominalSystem().
    */
-  I3Direction InNominalSystem(const I3Track& track, 
+  I3Direction InNominalSystem(const I3Particle& track, 
 			      const I3Direction& dir);
 
 };

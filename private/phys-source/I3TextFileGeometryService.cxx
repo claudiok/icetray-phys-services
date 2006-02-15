@@ -1,29 +1,28 @@
-#include "phys-services/source/I3FileGeoOrigin.h"
+#include "phys-services/source/I3TextFileGeometryService.h"
 #include "dataclasses/geometry/I3OMGeo.h"
 #include "dataclasses/geometry/I3StationMap.h"
 #include "dataclasses/geometry/I3SurfModuleGeo.h"
 #include "icetray/I3TrayHeaders.h"
 
-void I3FileGeoOrigin::Fatal(const string& message)
+void I3TextFileGeometryService::Fatal(const string& message)
 {
   log_fatal(message.c_str());
 }
 
-GeometryPair I3FileGeoOrigin::GetGeometry(I3Time time)
+I3GeometryConstPtr I3TextFileGeometryService::GetGeometry(I3Time time)
 {
-  GeometryPair p;
-  p.geometry = I3GeometryPtr(new I3Geometry());
-  FillGeometryFromFile(*p.geometry);
+  I3GeometryPtr geometry = I3GeometryPtr(new I3Geometry());
+  FillGeometryFromFile(*geometry);
   I3Time start;
   start.SetDaqTime(0,0);
   I3Time end;
   end.SetDaqTime(3000,0);
-  p.geometry->SetStartTime(start);
-  p.geometry->SetEndTime(end);
-  return p;
+  geometry->SetStartTime(start);
+  geometry->SetEndTime(end);
+  return geometry;
 }
 
-void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry)
+void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
 {
   //
   // NB: This code was cut and pasted with minor tweaks from the I3Db code.

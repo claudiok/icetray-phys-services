@@ -19,7 +19,7 @@
 #define I3RANDOMSERVICE_H
 
 #include "Rtypes.h"
-#include "dataclasses/StoragePolicy.h"
+#include "dataclasses/Utility.h"
 
 /**
  * @brief This class provides an interface to random numbers suitable for use

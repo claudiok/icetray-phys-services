@@ -6,3 +6,6 @@ USES_PROJECTS := dataclasses icetray root-icetray
 
 USES_TOOLS := root log4cplus gsl boost sprng
 
+ROOT_DICTIONARY_HEADERS := \
+phys-services/I3Calculator.h \
+phys-services/I3Cuts.h \

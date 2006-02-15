@@ -38,7 +38,7 @@ class I3FileGeoOrigin
  private:
   void Fatal(const string& message);
 
-  void FillGeometryFromFile(I3Geometry& geo, I3GeometryHeader& header);
+  void FillGeometryFromFile(I3Geometry& geo);
 };
 
 typedef boost::shared_ptr<I3FileGeoOrigin> I3FileGeoOriginPtr;

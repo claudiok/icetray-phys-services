@@ -17,7 +17,6 @@
 // forward declarations
 
 class I3Context;
-class I3Services;
 
 // header files
 
@@ -61,7 +60,7 @@ public:
    * @param services The services object into which the service should be installed.
    * @return True, if the service is successfully installed.
    */
-  virtual bool InstallService(I3Services& services);
+  virtual bool InstallService(I3Context& services);
 
   /**
    * @brief Configure service prior to installing it. 

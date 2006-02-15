@@ -39,11 +39,4 @@ icetray session.  The so-called 'Source Modules' inherit from these classes so
 that common functionality is all in one place.
 @li @ref phys-services-phys-source
 
-<hr>
-
-Module that allows the user to select specific strings to
-use from a larger set (e.g. use only the current 8 strings from an 80 string geometry).
-
-@li @ref geo-selector 
-
 */

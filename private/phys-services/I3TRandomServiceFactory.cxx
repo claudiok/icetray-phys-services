@@ -12,10 +12,11 @@
 
 #include "phys-services/I3TRandomServiceFactory.h"
 
-#include "icetray/I3ServicesAccess.h"
 #include "phys-services/I3TRandomService.h"
 
 // Constructors
+
+I3_SERVICE_FACTORY(I3TRandomServiceFactory);
 
 I3TRandomServiceFactory::I3TRandomServiceFactory(const I3Context& context)
   : I3ServiceFactory(context),
@@ -35,14 +36,14 @@ I3TRandomServiceFactory::~I3TRandomServiceFactory()
 // Member functions
 
 bool
-I3TRandomServiceFactory::InstallService(I3Services& services)
+I3TRandomServiceFactory::InstallService(I3Context& services)
 {
 	if(!random_){
 		if(seed_ < 0) random_ = I3RandomServicePtr(new I3TRandomService());
 		else random_ = I3RandomServicePtr(new I3TRandomService(seed_));
 	}
 	
-  return I3ServicesAccess<I3RandomService>::Put(services,
+  return I3ContextAccess<I3RandomService>::Put(services,
 						random_,
 						I3RandomService::DefaultName());
 }
