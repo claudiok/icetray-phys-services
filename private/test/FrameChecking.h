@@ -9,7 +9,6 @@
 
 #include "dataclasses/physics/I3EventHeader.h"
 
-#include "icetray/I3Stream.h"
 #include "icetray/I3Frame.h"
 
 // icetray doesn't normally allow you to get the string for the 
