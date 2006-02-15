@@ -9,7 +9,6 @@
  * @author pretz
  */
 
-#include <icetray/I3Services.h>
 #include "phys-services/source/I3Muxer.h"
 #include <map>
 #include "icetray/I3TrayHeaders.h"

@@ -38,7 +38,7 @@ I3MediumServiceFactory::~I3MediumServiceFactory(){
 }
 
 
-bool I3MediumServiceFactory::InstallService(I3Services& services){
+bool I3MediumServiceFactory::InstallService(I3Context& services){
 	
   if(!medium_){
   	if(!mediumPropInFilename_.empty()){

@@ -57,7 +57,7 @@ void I3EmptyStreamsFactory::Configure()
       shared_ptr<I3GeometryService>(new I3EmptyGeometryService());
 }
 
-bool I3EmptyStreamsFactory::InstallService(I3Services& services)
+bool I3EmptyStreamsFactory::InstallService(I3Context& services)
 {
   bool success = true;
 

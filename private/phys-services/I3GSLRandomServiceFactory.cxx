@@ -40,7 +40,7 @@ I3GSLRandomServiceFactory::~I3GSLRandomServiceFactory()
 // Member functions
 
 bool
-I3GSLRandomServiceFactory::InstallService(I3Services& services)
+I3GSLRandomServiceFactory::InstallService(I3Context& services)
 {
   if(!random_)
 		if(seed_ < 0) random_ = I3RandomServicePtr(new I3GSLRandomService());

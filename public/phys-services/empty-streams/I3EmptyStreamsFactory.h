@@ -13,7 +13,7 @@ class I3EmptyStreamsFactory : public I3ServiceFactory
  public:
   I3EmptyStreamsFactory(const I3Context& context);
   
-  bool InstallService(I3Services& services);
+  bool InstallService(I3Context& services);
 
   void Configure();
  private:

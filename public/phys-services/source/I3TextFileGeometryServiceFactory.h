@@ -16,7 +16,6 @@
 // forward declarations
 
 class I3Context;
-class I3Services;
 
 #include "icetray/I3ServiceFactory.h"
 class I3TextFileGeometryService;
@@ -32,7 +31,7 @@ class I3TextFileGeometryServiceFactory
 
   virtual ~I3TextFileGeometryServiceFactory();
 
-  virtual bool InstallService(I3Services& services);
+  virtual bool InstallService(I3Context& services);
 
   virtual void Configure();
 

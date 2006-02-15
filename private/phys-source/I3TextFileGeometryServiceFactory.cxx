@@ -23,7 +23,7 @@ void I3TextFileGeometryServiceFactory::Configure()
   GetParameter("IceCubeGeoFile",icecubeFile_);
 }
 
-bool I3TextFileGeometryServiceFactory::InstallService(I3Services& services)
+bool I3TextFileGeometryServiceFactory::InstallService(I3Context& services)
 {
   if(!geometry_)
     geometry_ = 

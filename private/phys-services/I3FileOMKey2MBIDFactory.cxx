@@ -14,7 +14,7 @@ I3FileOMKey2MBIDFactory::I3FileOMKey2MBIDFactory(const I3Context& context)
 }
 
 bool
-I3FileOMKey2MBIDFactory::InstallService(I3Services& services)
+I3FileOMKey2MBIDFactory::InstallService(I3Context& services)
 {
   if(!service_)
     service_ = I3OMKey2MBIDPtr ( new I3FileOMKey2MBID(infile_));

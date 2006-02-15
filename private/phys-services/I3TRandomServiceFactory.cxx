@@ -36,7 +36,7 @@ I3TRandomServiceFactory::~I3TRandomServiceFactory()
 // Member functions
 
 bool
-I3TRandomServiceFactory::InstallService(I3Services& services)
+I3TRandomServiceFactory::InstallService(I3Context& services)
 {
 	if(!random_){
 		if(seed_ < 0) random_ = I3RandomServicePtr(new I3TRandomService());

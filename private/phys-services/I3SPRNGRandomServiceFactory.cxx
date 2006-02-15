@@ -42,7 +42,7 @@ I3SPRNGRandomServiceFactory::~I3SPRNGRandomServiceFactory()
 // Member functions
 
 bool
-I3SPRNGRandomServiceFactory::InstallService(I3Services& services)
+I3SPRNGRandomServiceFactory::InstallService(I3Context& services)
 {
   if (!random_)  {
 	random_ = I3RandomServicePtr(
