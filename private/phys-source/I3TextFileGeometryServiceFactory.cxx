@@ -30,9 +30,7 @@ bool I3TextFileGeometryServiceFactory::InstallService(I3Context& services)
       shared_ptr<I3TextFileGeometryService>
       (new I3TextFileGeometryService(amandaFile_,
 				    icecubeFile_));
-  return 
-    I3ContextAccess<I3GeometryService>::Put(services,
-					    geometry_,
-					    I3GeometryService::DefaultName());
+
+  return services.Put<I3GeometryService>(geometry_);
 }
 

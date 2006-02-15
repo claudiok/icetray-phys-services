@@ -50,9 +50,8 @@ I3SPRNGRandomServiceFactory::InstallService(I3Context& services)
 						streamnum_, instatefile_, outstatefile_));
   }
 
-  return I3ContextAccess<I3RandomService>::Put(services,
-						random_,
-						I3RandomService::DefaultName());
+  return services.Put(random_);
+
 }
 
 void I3SPRNGRandomServiceFactory::Configure()

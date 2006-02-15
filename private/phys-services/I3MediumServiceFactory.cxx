@@ -49,8 +49,8 @@ bool I3MediumServiceFactory::InstallService(I3Context& services){
 		else medium_ = I3MediumServicePtr(new I3MediumService);
 	}
 
-  return I3ContextAccess<I3MediumService>::Put(services, medium_,
-  	I3MediumService::DefaultName());
+  return services.Put(medium_);
+
 }
 
 

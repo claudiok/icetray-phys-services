@@ -43,9 +43,7 @@ I3TRandomServiceFactory::InstallService(I3Context& services)
 		else random_ = I3RandomServicePtr(new I3TRandomService(seed_));
 	}
 	
-  return I3ContextAccess<I3RandomService>::Put(services,
-						random_,
-						I3RandomService::DefaultName());
+	return services.Put(random_);
 }
 
 void I3TRandomServiceFactory::Configure()

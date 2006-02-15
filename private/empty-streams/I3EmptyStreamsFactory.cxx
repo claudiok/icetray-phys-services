@@ -63,28 +63,19 @@ bool I3EmptyStreamsFactory::InstallService(I3Context& services)
 
   if(installEvents_)
     success *= 
-      I3ContextAccess<I3EventService>::Put(services,
-					    events_,
-					    I3EventService::DefaultName());
+      services.Put<I3EventService>(events_);
 
   if(installCalibrations_)
     success *=
-      I3ContextAccess<I3CalibrationService>::Put(services,
-						  calibrations_,
-						  I3CalibrationService::DefaultName());
+      services.Put<I3CalibrationService>(calibrations_);
 
   if(installStatus_)
     success *= 
-      I3ContextAccess<I3DetectorStatusService>::Put(services,
-						     status_,
-						     I3DetectorStatusService::DefaultName());
+      services.Put<I3DetectorStatusService>(status_);
 
   if(installGeometries_)
     success *= 
-      I3ContextAccess<I3GeometryService>::Put(services,
-					       geometries_,
-					       I3GeometryService::DefaultName());
-
+      services.Put<I3GeometryService>(geometries_);
 
   return success;
 
