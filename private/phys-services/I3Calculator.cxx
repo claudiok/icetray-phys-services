@@ -177,7 +177,7 @@ double I3Calculator::CherenkovApproachAngle(const I3Particle& track, const I3Pos
 double I3Calculator::TimeResidual(const I3Particle& particle, const I3Position& hitpos, double hittime, const double IndexRef)
 {
   double T_exp = CherenkovTime(particle, hitpos, IndexRef);
-  double T_meas = hittime - particle.GetT();
+  double T_meas = hittime - particle.GetTime();
   return T_meas - T_exp;
 }
 
