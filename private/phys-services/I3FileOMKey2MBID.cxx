@@ -17,7 +17,7 @@ I3FileOMKey2MBID::I3FileOMKey2MBID(const string& infile)
   ifstream fin(infile.c_str());
   if(!fin)
     {
-      log_fatal("Cannot find the DOMId to mainboard mapping file %s",
+      log_fatal("Cannot find the DOMId to mainboard mapping file (%s)",
 		infile.c_str());
       Fatal("cannot find the DOMid to mainboard mapping file");
     }

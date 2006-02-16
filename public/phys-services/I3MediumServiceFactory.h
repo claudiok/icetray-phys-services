@@ -23,7 +23,7 @@ class I3Context;
 #include <string>
 #include "icetray/I3ServiceFactory.h"
 #include "phys-services/I3MediumService.h"
-#include "icetray/services/I3Logging.h"
+#include <icetray/I3Logging.h>
 
 // definitions
 

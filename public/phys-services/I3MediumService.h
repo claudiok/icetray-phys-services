@@ -24,7 +24,7 @@ class I3MediumProperties;
 #include <string>
 #include "TH1D.h"
 #include "TH2D.h"
-#include "icetray/services/I3Logging.h"
+#include <icetray/I3Logging.h>
 
 // definitions
 
