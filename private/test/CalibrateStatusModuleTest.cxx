@@ -42,7 +42,7 @@ TEST(DoCalibTest1)
 
     I3CalibrateStatusModule::DoTheCalibration(rawstatus,
 					      calibratedstatus,
-					      calib);
+					      *calib);
 
     //Compare the return values to values calculated by hand.
 

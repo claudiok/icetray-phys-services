@@ -84,8 +84,8 @@ void I3Muxer::SendCalibration()
   I3Time nextEvent = NextEventTime();
   currentCalibration_ = GetService<I3CalibrationService>().GetCalibration(nextEvent);
   currentCalibrationRange_ 
-    = I3TimeRange(currentCalibration_->GetStartTime(),
-		  currentCalibration_->GetEndTime());
+    = I3TimeRange(currentCalibration_->startTime,
+		  currentCalibration_->endTime);
   assert(currentCalibration_);
   assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
   I3FramePtr frame(new I3Frame(I3Frame::Calibration));

@@ -5,8 +5,8 @@
 I3EmptyCalibrationService::I3EmptyCalibrationService()
 {
   calibration_ = I3CalibrationPtr(new I3Calibration());
-  calibration_->SetStartTime(I3Time(0,0));
-  calibration_->SetEndTime(I3Time(3000,0));
+  calibration_->startTime = I3Time(0,0);
+  calibration_->endTime = I3Time(3000,0);
 
 }
 

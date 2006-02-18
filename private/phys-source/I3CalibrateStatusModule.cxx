@@ -13,7 +13,6 @@
 
 #include "phys-services/source/I3CalibrateStatusModule.h"
 
-#include "dataclasses/calibration/I3InIceCalibration.h"
 #include "dataclasses/calibration/I3Calibration.h"
 #include "dataclasses/status/I3DetectorStatus.h"
 #include "dataclasses/I3Units.h"
@@ -37,7 +36,7 @@ void I3CalibrateStatusModule::DetectorStatus(I3FramePtr frame)
 
   const I3Calibration& calibration = frame->Get<I3Calibration>("Calibration");
 
-  const I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
+  //const I3InIceCalibration& inicecalib = calibration.GetInIceCalibration();
 
   const I3IceCubeDOMStatusDict& icecubestatus = status.GetIceCubeDOMStatus();
   
@@ -50,11 +49,11 @@ void I3CalibrateStatusModule::DetectorStatus(I3FramePtr frame)
       I3CalibratedDOMStatusPtr 
 	calibratedstatus(new I3CalibratedDOMStatus());      
       dstatptr->SetCalibratedStatus(calibratedstatus);
-      assert(inicecalib.count(thekey)>0);
+      assert(calibration.domcal.count(thekey)>0);
 
-      I3InIceCalibration::const_iterator iter = inicecalib.find(thekey);
-      assert(iter != inicecalib.end());
-      const I3DOMCalibrationPtr domcalib = iter->second;
+      map<OMKey,I3DOMCalibration>::const_iterator iter = calibration.domcal.find(thekey);
+      assert(iter != calibration.domcal.end());
+      I3DOMCalibration domcalib = iter->second;
       DoTheCalibration(rawstatus,calibratedstatus,domcalib);
     }
 
@@ -64,7 +63,7 @@ void I3CalibrateStatusModule::DetectorStatus(I3FramePtr frame)
 void I3CalibrateStatusModule::
 DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 		 I3CalibratedDOMStatusPtr calibratedstatus,
-		 I3DOMCalibrationPtr calib)
+		 I3DOMCalibration calib)
 {
   //currently this method just calibrates the position of the SPE peak
 
@@ -74,7 +73,7 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
   double predictedSpeMean;
   double log_gain = 0.0;
   double currentVoltage=(rawstatus->GetPMTHV()/I3Units::volt);
-  const LinearFit hvgain = calib->GetHVGainFit();
+  const LinearFit hvgain = calib.GetHVGainFit();
   
   if(currentVoltage >0.0)
     {
@@ -101,7 +100,7 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 
   for (int chip=0; chip<2; chip++)
     {
-      QuadraticFit atwdQFit  = calib->GetATWDFreqFit(chip);
+      const QuadraticFit atwdQFit  = calib.GetATWDFreqFit(chip);
 
       if(isnan(atwdQFit.quadFitC)) // Old style linear fit
 	{

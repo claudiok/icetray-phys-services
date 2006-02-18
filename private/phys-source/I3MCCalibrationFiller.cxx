@@ -52,11 +52,11 @@ void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
     {
 	OMKey thiskey = iter->first;
 
-	I3DOMCalibrationPtr domCalib(new I3DOMCalibration());
+	I3DOMCalibration domCalib;
 	
-	domCalib->SetATWDGain(0, atwd0gain_);
-	domCalib->SetATWDGain(1, atwd1gain_);
-	domCalib->SetATWDGain(2, atwd2gain_);
+	domCalib.SetATWDGain(0, atwd0gain_);
+	domCalib.SetATWDGain(1, atwd1gain_);
+	domCalib.SetATWDGain(2, atwd2gain_);
 
 	for( unsigned int channel = 0; channel < 3; ++channel )
 	{
@@ -68,13 +68,14 @@ void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
 		    binfit.slope = -0.002*I3Units::V;
 		    binfit.intercept = 2.9*I3Units::V;
 	   
-		    domCalib->SetATWDBinCalibFit(id,channel,bin,
+		    domCalib.SetATWDBinCalibFit(id,channel,bin,
 						   binfit);
 		}
 	    }
 	}
 	
-	const_cast<I3InIceCalibration&>(calib.GetInIceCalibration())[thiskey] = domCalib;
+	//const_cast<I3InIceCalibration&>(calib.GetInIceCalibration())[thiskey] = domCalib;
+	const_cast<I3Calibration&>(calib).domcal[thiskey] = domCalib;
     }
     
     PushFrame(frame,"OutBox");

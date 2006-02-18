@@ -32,7 +32,7 @@ class I3CalibrateStatusModule : public I3Module
 
   static void DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 			       I3CalibratedDOMStatusPtr calibratedstatus,
-			       I3DOMCalibrationPtr calib);
+			       I3DOMCalibration calib);
 };
 
 #endif
