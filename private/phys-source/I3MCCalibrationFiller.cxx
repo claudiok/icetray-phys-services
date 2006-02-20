@@ -3,7 +3,9 @@
 #include "dataclasses/calibration/I3DOMCalibration.h"
 #include "dataclasses/geometry/I3InIceGeometry.h"
 #include "dataclasses/geometry/I3Geometry.h"
-#include "icetray/I3Frame.h"
+#include <icetray/I3Frame.h>
+#include <icetray/I3Context.h>
+#include <icetray/I3Configuration.h>
 #include "dataclasses/I3Units.h"
 
 I3_MODULE(I3MCCalibrationFiller);

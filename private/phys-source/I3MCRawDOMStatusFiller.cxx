@@ -4,6 +4,8 @@
 #include "dataclasses/geometry/I3Geometry.h"
 #include "dataclasses/status/I3DetectorStatus.h"
 #include "dataclasses/I3Units.h"
+#include <icetray/I3Context.h>
+#include <icetray/I3Configuration.h>
 #include "icetray/I3Frame.h"
 
 I3_MODULE(I3MCRawDOMStatusFiller);

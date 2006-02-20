@@ -16,12 +16,11 @@
 
 I3_MODULE(I3Muxer);
 
-I3Muxer::I3Muxer(const I3Context& context) : I3Source(context),
+I3Muxer::I3Muxer(const I3Context& context) : I3Module(context),
 					     currentEvent_(I3Frame::None),
 					     currentEventQueued_(false)
 {
   AddOutBox("OutBox");
-  NoActiveInBox();
 }
 
 void I3Muxer::Process()
@@ -82,7 +81,7 @@ void I3Muxer::SendCalibration()
 {
   log_debug("Entering I3Muxer::SendCalibration()");
   I3Time nextEvent = NextEventTime();
-  currentCalibration_ = GetService<I3CalibrationService>().GetCalibration(nextEvent);
+  currentCalibration_ = context_.Get<I3CalibrationService>().GetCalibration(nextEvent);
   currentCalibrationRange_ 
     = I3TimeRange(currentCalibration_->startTime,
 		  currentCalibration_->endTime);
@@ -102,7 +101,7 @@ void I3Muxer::SendDetectorStatus()
   log_debug("Entering I3Muxer::SendDetectorStatus()");
   I3Time nextEvent = NextEventTime();
   currentDetectorStatus_ = 
-    GetService<I3DetectorStatusService>().GetDetectorStatus(nextEvent);
+    context_.Get<I3DetectorStatusService>().GetDetectorStatus(nextEvent);
   currentDetectorStatusRange_ 
     = I3TimeRange(currentDetectorStatus_->GetStartTime(),
 		  currentDetectorStatus_->GetEndTime());
@@ -124,7 +123,7 @@ void I3Muxer::SendGeometry()
 {
   log_debug("Entering I3Muxer::SendGeometry()");
   I3Time nextEvent = NextEventTime();
-  currentGeometry_ = GetService<I3GeometryService>().GetGeometry(nextEvent);
+  currentGeometry_ = context_.Get<I3GeometryService>().GetGeometry(nextEvent);
   currentGeometryRange_ = 
     I3TimeRange(currentGeometry_->GetStartTime(),
 		currentGeometry_->GetEndTime());
@@ -137,7 +136,7 @@ void I3Muxer::SendGeometry()
 
 I3Muxer::Stream I3Muxer::NextStream()
 {
-  if(!GetService<I3EventService>().MoreEvents())
+  if(!context_.Get<I3EventService>().MoreEvents())
     return NONE;
 
   I3Time eventTime = NextEventTime();
@@ -207,9 +206,9 @@ I3Muxer::QueueUpEvent()
 {
   if(!currentEventQueued_)
     {
-      assert(GetService<I3EventService>().MoreEvents());
+      assert(context_.Get<I3EventService>().MoreEvents());
       I3TimePtr eventTimePtr;
-      I3Time eventTime = GetService<I3EventService>().PopEvent(currentEvent_);
+      I3Time eventTime = context_.Get<I3EventService>().PopEvent(currentEvent_);
       eventTimePtr = I3TimePtr(new I3Time(eventTime));
       currentEvent_.Put("DrivingTime",eventTimePtr);
       currentEventQueued_ = true;

@@ -24,7 +24,7 @@ I3_MODULE(I3CalibrateStatusModule);
 I3CalibrateStatusModule::I3CalibrateStatusModule(const I3Context& context) : 
   I3Module(context)
 {
-  AddOutBox("OutBox");
+  //  AddOutBox("OutBox");
 }
 
 void I3CalibrateStatusModule::DetectorStatus(I3FramePtr frame)

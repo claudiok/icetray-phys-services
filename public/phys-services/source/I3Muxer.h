@@ -17,14 +17,13 @@
 #include "phys-services/I3GeometryService.h"
 #include "phys-services/I3DetectorStatusService.h"
 
-#include "icetray/I3Source.h"
 #include "icetray/I3Frame.h"
 
 #include "dataclasses/I3Time.h"
 #include "phys-services/I3TimeRange.h"
 
 /**
- * @brief An I3Source which uses abstract interfaces
+ * @brief An I3Module which uses abstract interfaces
  * interfaces to get events, calibration and geometries.
  * from.
  *
@@ -36,7 +35,7 @@
  * I3CalibrationSource, and I3DetectorStatusSource together instead.
  */
 
-class I3Muxer : public I3Source
+class I3Muxer : public I3Module
 {
  public:
   I3Muxer(const I3Context& ctx);
