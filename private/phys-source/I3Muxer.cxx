@@ -125,8 +125,8 @@ void I3Muxer::SendGeometry()
   I3Time nextEvent = NextEventTime();
   currentGeometry_ = context_.Get<I3GeometryService>().GetGeometry(nextEvent);
   currentGeometryRange_ = 
-    I3TimeRange(currentGeometry_->GetStartTime(),
-		currentGeometry_->GetEndTime());
+    I3TimeRange(currentGeometry_->startTime,
+		currentGeometry_->endTime);
   assert(currentGeometry_);
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
   I3FramePtr frame(new I3Frame(I3Frame::Geometry));

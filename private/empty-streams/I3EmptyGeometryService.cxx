@@ -5,8 +5,8 @@
 I3EmptyGeometryService::I3EmptyGeometryService()
 {
   geometry_ = I3GeometryPtr(new I3Geometry());
-  geometry_->SetStartTime(I3Time(0,0));
-  geometry_->SetEndTime(I3Time(3000,0));
+  geometry_->startTime = I3Time(0,0);
+  geometry_->endTime = I3Time(3000,0);
 
 }
 

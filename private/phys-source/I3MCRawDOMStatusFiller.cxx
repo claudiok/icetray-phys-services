@@ -124,9 +124,11 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3FramePtr frame)
     log_debug("I3MCRawDOMStatusFiller::DetectorStatus");
 
     const I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
-    const I3InIceGeometry& inice = geo.GetInIceGeometry();
+    const I3OMGeoMap& om_geo = geo.omgeo;
+    //const I3InIceGeometry& inice = geo.GetInIceGeometry();
 
-    I3InIceGeometry::const_iterator iter;
+    //I3InIceGeometry::const_iterator iter;
+    I3OMGeoMap::const_iterator iter;
 
     const I3DetectorStatus& status = 
       frame->Get<I3DetectorStatus>("DetectorStatus");
@@ -197,8 +199,9 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3FramePtr frame)
 	fadcOn = I3RawDOMStatus::Off;
     }
 
-    for( iter  = inice.begin(); 
-	 iter != inice.end(); 
+    //changed all inice to om_geo
+    for( iter  = om_geo.begin(); 
+	 iter != om_geo.end(); 
 	 iter++ )
     {
 	OMKey thiskey = iter->first;

@@ -1,7 +1,7 @@
 #include "phys-services/source/I3FileGeoOrigin.h"
+#include "dataclasses/I3Units.h"
+#include "dataclasses/I3Map.h"
 #include "dataclasses/geometry/I3OMGeo.h"
-#include "dataclasses/geometry/I3StationMap.h"
-#include "dataclasses/geometry/I3SurfModuleGeo.h"
 #include "icetray/I3TrayHeaders.h"
 
 void I3FileGeoOrigin::Fatal(const string& message)
@@ -18,8 +18,8 @@ GeometryPair I3FileGeoOrigin::GetGeometry(I3Time time)
   start.SetDaqTime(0,0);
   I3Time end;
   end.SetDaqTime(3000,0);
-  p.geometry->SetStartTime(start);
-  p.geometry->SetEndTime(end);
+  p.geometry->startTime = start;
+  p.geometry->endTime = end;
   return p;
 }
 
@@ -66,15 +66,16 @@ void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry)
   while(AmaGeoInFile>>string_F>>tube_F>>x_F>>y_F>>z_F>>orientation_F)
     {    
       I3OMGeoPtr amanda = I3OMGeoPtr(new I3OMGeo());
-      Geometry.GetInIceGeometry()[OMKey(string_F,tube_F)] = amanda;
+      Geometry.omgeo[OMKey(string_F,tube_F)] = amanda;
       
-      amanda->SetPos(x_F * I3Units::m,
+      amanda->position.SetPosition(x_F * I3Units::m,
 		     y_F * I3Units::m,
 		     z_F * I3Units::m);
-      if (orientation_F == -1) amanda->SetOrientation(I3OMGeo::Down);
-      else if (orientation_F == 1) amanda->SetOrientation(I3OMGeo::Up);
-      amanda->SetArea(0.0284 * I3Units::m2);
-      amanda->SetRelativeQE(1.0);
+      if (orientation_F == -1) amanda->orientation = I3OMGeo::Down;
+      else if (orientation_F == 1) amanda->orientation = I3OMGeo::Up;
+      amanda->area = (0.0284 * I3Units::m2);
+      amanda->omtype = I3OMGeo::AMANDA;
+      //amanda->relativeQE = 1.0;
     }
   
   while(I3GeoInFile>>string_F>>tube_F>>x_F>>y_F>>z_F>>orientation_F)
@@ -82,26 +83,32 @@ void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry)
       if(tube_F<61)
       {
         I3OMGeoPtr icecube = I3OMGeoPtr(new I3OMGeo());
-        Geometry.GetInIceGeometry()[OMKey(string_F,tube_F)] = icecube;
+        Geometry.omgeo[OMKey(string_F,tube_F)] = icecube;
       
-        icecube->SetPos(x_F * I3Units::m,
+        icecube->position.SetPosition(x_F * I3Units::m,
                         y_F * I3Units::m,
 		        z_F * I3Units::m);
-        icecube->SetOrientation(I3OMGeo::Down); 
-        icecube->SetArea(0.0444 * I3Units::m2);
-        icecube->SetRelativeQE(1.0);
+        icecube->orientation = (I3OMGeo::Down); 
+        icecube->area = (0.0444 * I3Units::m2);
+	icecube->omtype = I3OMGeo::IceCube;
+        //icecube->relativeQE = 1.0;
       }
       else
       {
-        I3StationMap &station_map = Geometry.GetIceTopGeometry().GetStationMap();
-        if(station_map.find(string_F)==station_map.end()) 
+	I3StationGeoMap &station_geo = Geometry.stationgeo;
+
+        if(station_geo.find(string_F)==station_geo.end()) 
         {
-          station_map[string_F] = I3StationGeoPtr(new I3StationGeo);
-          station_map[string_F]->push_back(I3SurfModuleGeoPtr(new I3SurfModuleGeo()));
-          station_map[string_F]->push_back(I3SurfModuleGeoPtr(new I3SurfModuleGeo()));
+          station_geo[string_F] = I3StationGeoPtr(new I3StationGeo);
+          station_geo[string_F]->push_back(I3TankGeoPtr(new I3TankGeo()));
+          station_geo[string_F]->push_back(I3TankGeoPtr(new I3TankGeo()));
         }
 
-        I3OMGeoPtr icecube = I3OMGeoPtr(new I3OMGeo());
+         I3OMGeoPtr icecube = I3OMGeoPtr(new I3OMGeo());
+	 Geometry.omgeo[OMKey(string_F, tube_F)] = icecube;
+
+#warning As far as I can tell, this section is just assigning OM info to the Tanks.  Seems to no longer be needed.
+#if 0
         switch(tube_F)
         {
           case 61:
@@ -110,12 +117,14 @@ void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry)
           case 64: (*(*station_map[string_F])[1])[OMKey(string_F, tube_F)] = icecube; break;
           default: Fatal("Got a wrong tube number.");
         }
-        icecube->SetPos(x_F * I3Units::m,
+#endif
+        icecube->position.SetPosition(x_F * I3Units::m,
                         y_F * I3Units::m,
 		        z_F * I3Units::m);
-        icecube->SetOrientation(I3OMGeo::Down); 
-        icecube->SetArea(0.0444 * I3Units::m2);
-        icecube->SetRelativeQE(1.0);
+        icecube->orientation = (I3OMGeo::Down); 
+        icecube->area = (0.0444 * I3Units::m2);
+	icecube->omtype = I3OMGeo::IceTop;
+        //icecube->relativeQE = 1.0;
       }
     }
   
@@ -127,6 +136,6 @@ void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry)
   
   I3Time time;
   time.SetModJulianTime(0,0,0.0);
-  Geometry.SetStartTime(time);
+  Geometry.startTime = time;
 }
 

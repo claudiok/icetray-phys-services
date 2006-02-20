@@ -1,7 +1,6 @@
 #include "phys-services/source/I3MCCalibrationFiller.h"
 #include "dataclasses/calibration/I3Calibration.h"
 #include "dataclasses/calibration/I3DOMCalibration.h"
-#include "dataclasses/geometry/I3InIceGeometry.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include <icetray/I3Frame.h>
 #include <icetray/I3Context.h>
@@ -42,14 +41,16 @@ void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
     log_debug("I3MCCalibrationFiller::Calibration");
 
     const I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
-    const I3InIceGeometry& inice = geo.GetInIceGeometry();
+    const I3OMGeoMap& om_geo = geo.omgeo;
+    //const I3InIceGeometry& inice = geo.GetInIceGeometry();
 
-    I3InIceGeometry::const_iterator iter;
-
+    //I3InIceGeometry::const_iterator iter;
+    I3OMGeoMap::const_iterator iter;
     const I3Calibration& calib = frame->Get<I3Calibration>("Calibration");
 
-    for( iter  = inice.begin(); 
-	 iter != inice.end(); 
+    //replaced all inice with om_geo
+    for( iter  = om_geo.begin(); 
+	 iter != om_geo.end(); 
 	 iter++ )
     {
 	OMKey thiskey = iter->first;
