@@ -68,7 +68,7 @@ TEST(Ndir_DownTrack)
   I3BasicTrack track;
   track.SetPos(0,0,0);
   track.SetDir(0,0);
-  track.SetT(103.5);
+  track.SetTime(103.5);
 
   int size = 6;
   double r[] =   {10,   5, 20,   7,   10,  15};
@@ -120,7 +120,7 @@ TEST(AllCuts_TiltedTrack)
   I3BasicTrack track;
   track.SetPos(10,10,0);
   track.SetDir(180*deg-ang,90*deg);
-  track.SetT(15);
+  track.SetTime(15);
 
   double size = 3;
   vector<I3Position> pos;

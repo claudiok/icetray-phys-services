@@ -63,7 +63,7 @@ static I3BasicCascade casc1()
 {
   I3BasicCascade casc1;
   casc1.SetPos(2,2,2);
-  casc1.SetT(100);
+  casc1.SetTime(100);
   return casc1;
 }
 
