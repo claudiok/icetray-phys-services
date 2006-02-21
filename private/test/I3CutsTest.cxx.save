@@ -84,10 +84,10 @@ TEST(Ndir_DownTrack)
     I3Position p(r[i],ang,phi[i]*deg,I3Position::sph); p.SetZ(p.GetZ()-z[i]);
     pos.push_back(p);
     double t = (z[i]/c + sqrt(pow(pos[i].GetX(),2)+pow(pos[i].GetY(),2))*A
-		+ track.GetT() + off[i]*ns);
+		+ track.GetTime() + off[i]*ns);
     time.push_back(t);
     ENSURE_DISTANCE(CherenkovTime(track,pos[i])+off[i],
-		    time[i]-track.GetT(), 0.0001,
+		    time[i]-track.GetTime(), 0.0001,
 		    "The time of this hit was somehow calculated wrong.");
   }
 

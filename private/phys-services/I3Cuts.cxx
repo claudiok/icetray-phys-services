@@ -21,7 +21,7 @@ void I3Cuts::CutsCalc(const I3Particle& track, I3Geometry& geom,
   vector<double> lengthDir;
   double min = 999999;
   double max = -999999;
-  double Ttrack = track.GetT();
+  double Ttrack = track.GetTime();
   double Thit, Tarr, Tres;
   I3OMResponseMap::iterator om;
   for (om=ommap.begin(); om!=ommap.end(); om++) 
