@@ -66,7 +66,7 @@ void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry)
   while(AmaGeoInFile>>string_F>>tube_F>>x_F>>y_F>>z_F>>orientation_F)
     {    
       I3OMGeoPtr amanda = I3OMGeoPtr(new I3OMGeo());
-      Geometry.omgeo[OMKey(string_F,tube_F)] = amanda;
+      Geometry.omgeo[OMKey(string_F,tube_F)] =*amanda;
       
       amanda->position.SetPosition(x_F * I3Units::m,
 		     y_F * I3Units::m,
@@ -83,8 +83,7 @@ void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry)
       if(tube_F<61)
       {
         I3OMGeoPtr icecube = I3OMGeoPtr(new I3OMGeo());
-        Geometry.omgeo[OMKey(string_F,tube_F)] = icecube;
-      
+        Geometry.omgeo[OMKey(string_F,tube_F)] = *icecube;
         icecube->position.SetPosition(x_F * I3Units::m,
                         y_F * I3Units::m,
 		        z_F * I3Units::m);
@@ -96,16 +95,16 @@ void I3FileGeoOrigin::FillGeometryFromFile(I3Geometry& Geometry)
       else
       {
 	I3StationGeoMap &station_geo = Geometry.stationgeo;
-
+	//Initializes a new I3StationGeo Object if it does not already exist.
+	//Condensed initialization into one step (originally created new vector
+	//and added pushed two new TankGeo objects into it.
         if(station_geo.find(string_F)==station_geo.end()) 
         {
-          station_geo[string_F] = I3StationGeoPtr(new I3StationGeo);
-          station_geo[string_F]->push_back(I3TankGeoPtr(new I3TankGeo()));
-          station_geo[string_F]->push_back(I3TankGeoPtr(new I3TankGeo()));
+          station_geo[string_F] = I3StationGeo(2);
         }
 
          I3OMGeoPtr icecube = I3OMGeoPtr(new I3OMGeo());
-	 Geometry.omgeo[OMKey(string_F, tube_F)] = icecube;
+	 Geometry.omgeo[OMKey(string_F, tube_F)] = *icecube;
 
 #warning As far as I can tell, this section is just assigning OM info to the Tanks.  Seems to no longer be needed.
 #if 0
