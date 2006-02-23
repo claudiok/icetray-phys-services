@@ -103,8 +103,8 @@ void I3Muxer::SendDetectorStatus()
   currentDetectorStatus_ = 
     context_.Get<I3DetectorStatusService>().GetDetectorStatus(nextEvent);
   currentDetectorStatusRange_ 
-    = I3TimeRange(currentDetectorStatus_->GetStartTime(),
-		  currentDetectorStatus_->GetEndTime());
+    = I3TimeRange(currentDetectorStatus_->startTime,
+		  currentDetectorStatus_->endTime);
   assert(currentDetectorStatus_);
   assert(currentDetectorStatusRange_.lower < 
 	 currentDetectorStatusRange_.upper);

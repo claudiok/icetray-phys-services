@@ -1,6 +1,5 @@
 #include "phys-services/source/I3MCRawDOMStatusFiller.h"
-#include "dataclasses/status/I3RawDOMStatus.h"
-#include "dataclasses/status/I3MCRawDOMStatus.h"
+#include "dataclasses/status/I3DOMStatus.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "dataclasses/status/I3DetectorStatus.h"
 #include "dataclasses/I3Units.h"
@@ -134,69 +133,69 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3FramePtr frame)
       frame->Get<I3DetectorStatus>("DetectorStatus");
 
     // Trigger mode
-    I3RawDOMStatus::TrigMode triggerMode = I3RawDOMStatus::SPE;
+    I3DOMStatus::TrigMode triggerMode = I3DOMStatus::SPE;
 
     // What's the LC mode?
-    I3RawDOMStatus::LCMode lcMode;
+    I3DOMStatus::LCMode lcMode;
 
     if ( lcMode_ == 0 )
     {
-	lcMode = I3RawDOMStatus::LCOff;
+	lcMode = I3DOMStatus::LCOff;
     }
     
     else if ( lcMode_ == 1 )
     {
-	lcMode = I3RawDOMStatus::UpOrDown;
+	lcMode = I3DOMStatus::UpOrDown;
     }
     
     else if ( lcMode_ == 2 )
     {
-	lcMode = I3RawDOMStatus::Up;
+	lcMode = I3DOMStatus::Up;
     }
     
     else if ( lcMode_ == 3 )
     {
-	lcMode = I3RawDOMStatus::Down;
+	lcMode = I3DOMStatus::Down;
     }
     
     
     // Is ATWD A on?
-    I3RawDOMStatus::OnOff atwdAOn;
+    I3DOMStatus::OnOff atwdAOn;
 
     if ( atwdAOn_ )
     {
-	atwdAOn = I3RawDOMStatus::On;
+	atwdAOn = I3DOMStatus::On;
     }
     
     else 
     {
-	atwdAOn = I3RawDOMStatus::Off;
+	atwdAOn = I3DOMStatus::Off;
     }
     
     // Is ATWD B on?
-    I3RawDOMStatus::OnOff atwdBOn;
+    I3DOMStatus::OnOff atwdBOn;
 
     if ( atwdBOn_ )
     {
-	atwdBOn = I3RawDOMStatus::On;
+	atwdBOn = I3DOMStatus::On;
     }
     
     else 
     {
-	atwdBOn = I3RawDOMStatus::Off;
+	atwdBOn = I3DOMStatus::Off;
     }
 
     // Is the FADC on?
-    I3RawDOMStatus::OnOff fadcOn;
+    I3DOMStatus::OnOff fadcOn;
 
     if ( fadcOn_ )
     {
-	fadcOn = I3RawDOMStatus::On;
+	fadcOn = I3DOMStatus::On;
     }
     
     else 
     {
-	fadcOn = I3RawDOMStatus::Off;
+	fadcOn = I3DOMStatus::Off;
     }
 
     //changed all inice to om_geo
@@ -206,29 +205,29 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3FramePtr frame)
     {
 	OMKey thiskey = iter->first;
 
-	I3MCRawDOMStatusPtr raw(new I3MCRawDOMStatus());
+	I3DOMStatus raw;
 
-	raw->SetTrigMode(triggerMode);
-	raw->SetLCMode(lcMode);
+	raw.trigMode = triggerMode;
+	raw.lcMode = lcMode;
 	
-	raw->SetLCWindowPre(lcWindowPre_);
-	raw->SetLCWindowPost(lcWindowPost_);
+	raw.lcWindowPre = lcWindowPre_;
+	raw.lcWindowPost = lcWindowPost_;
 
-	raw->SetStatusATWD_A(atwdAOn);
-	raw->SetStatusATWD_B(atwdBOn);
-	raw->SetStatusFADC(fadcOn);
+	raw.statusATWDa = atwdAOn;
+	raw.statusATWDb = atwdBOn;
+	raw.statusFADC = fadcOn;
 	
-	raw->SetPMTHV(pmtHV_);
-	raw->SetSingleSPEThreshold(speThreshold_);
-	raw->SetFEPedestal(2.6*I3Units::volt);
+	raw.pmtHV = pmtHV_;
+	raw.speThreshold= speThreshold_;
+	raw.fePedestal = 2.6*I3Units::volt;
     
-	raw->SetNBinsATWD(0, atwd0Nbins_);
-	raw->SetNBinsATWD(1, atwd1Nbins_);
-	raw->SetNBinsATWD(2, atwd2Nbins_);
+	raw.nBinsATWD0 = atwd0Nbins_;
+	raw.nBinsATWD1 = atwd1Nbins_;
+	raw.nBinsATWD2  = atwd2Nbins_;
 
-	raw->SetNBinsFADC(fadcNbins_);
+	raw.nBinsFADC = fadcNbins_;
 
-	const_cast<I3IceCubeDOMStatusDict&>(status.GetIceCubeDOMStatus())[thiskey]->SetRawStatus(raw);
+	const_cast<I3DetectorStatus&>(status).domStatus[thiskey] = raw;
     }
     
     PushFrame(frame,"OutBox");

@@ -5,8 +5,8 @@
 I3EmptyDetectorStatusService::I3EmptyDetectorStatusService()
 {
   status_ = I3DetectorStatusPtr(new I3DetectorStatus());
-  status_->SetStartTime(I3Time(0,0));
-  status_->SetEndTime(I3Time(3000,0));
+  status_->startTime = I3Time(0,0);
+  status_->endTime = I3Time(3000,0);
 
 }
 
