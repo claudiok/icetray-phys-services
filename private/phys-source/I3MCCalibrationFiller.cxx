@@ -78,7 +78,7 @@ void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
 	}
 	
 	//const_cast<I3InIceCalibration&>(calib.GetInIceCalibration())[thiskey] = domCalib;
-	const_cast<I3Calibration&>(calib).domcal[thiskey] = domCalib;
+	const_cast<I3Calibration&>(calib).domCal[thiskey] = domCalib;
     }
     
     PushFrame(frame,"OutBox");
