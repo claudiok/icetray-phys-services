@@ -65,35 +65,33 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
   
   while(AmaGeoInFile>>string_F>>tube_F>>x_F>>y_F>>z_F>>orientation_F)
     {    
-      I3OMGeoPtr amanda = I3OMGeoPtr(new I3OMGeo());
-      Geometry.omgeo[OMKey(string_F, tube_F)] = *amanda;
-      
-      amanda->position.SetPosition(x_F * I3Units::m,
-		     y_F * I3Units::m,
-		     z_F * I3Units::m);
-      if (orientation_F == -1) amanda->orientation = (I3OMGeo::Down);
-      else if (orientation_F == 1) amanda->orientation = (I3OMGeo::Up);
-      amanda->area = (0.0284 * I3Units::m2);
-      amanda->omtype = I3OMGeo::AMANDA;
-      //amanda->relativeQE = 1.0;
+      I3OMGeo amanda;
+      amanda.position.SetPosition(x_F * I3Units::m,
+				  y_F * I3Units::m,
+				  z_F * I3Units::m,
+				  I3Position::car);
+      if (orientation_F == -1) amanda.orientation = (I3OMGeo::Down);
+      else if (orientation_F == 1) amanda.orientation = (I3OMGeo::Up);
+      amanda.area = (0.0284 * I3Units::m2);
+      amanda.omtype = I3OMGeo::AMANDA;
+      Geometry.omgeo[OMKey(string_F, tube_F)] = amanda;
     }
   
   while(I3GeoInFile>>string_F>>tube_F>>x_F>>y_F>>z_F>>orientation_F)
     {
-      if(tube_F<61)
+      if(tube_F<61)  //InIce
       {
-        I3OMGeoPtr icecube = I3OMGeoPtr(new I3OMGeo());
-	Geometry.omgeo[OMKey(string_F, tube_F)] = *icecube;
-
-        icecube->position.SetPosition(x_F * I3Units::m,
-                        y_F * I3Units::m,
-		        z_F * I3Units::m);
-        icecube->orientation = (I3OMGeo::Down); 
-        icecube->area = (0.0444 * I3Units::m2);
-	icecube->omtype = I3OMGeo::IceCube;
-        //icecube->relativeQE = 1.0;
+        I3OMGeo icecube;
+        icecube.position.SetPosition(x_F * I3Units::m,
+				     y_F * I3Units::m,
+				     z_F * I3Units::m,
+				     I3Position::car);
+        icecube.orientation = (I3OMGeo::Down); 
+        icecube.area = (0.0444 * I3Units::m2);
+	icecube.omtype = I3OMGeo::IceCube;
+	Geometry.omgeo[OMKey(string_F, tube_F)] = icecube;
       }
-      else
+      else //IceTop
       {
 	I3StationGeoMap &station_geo = Geometry.stationgeo;
 	//Initializes a new I3StationGeo Object if it does not already exist.
@@ -104,26 +102,15 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
           station_geo[string_F] = I3StationGeo(2);
         }
 
-        I3OMGeoPtr icecube = I3OMGeoPtr(new I3OMGeo());
-	Geometry.omgeo[OMKey(string_F, tube_F)] = *icecube;
-#warning Not sure this is needed with updated Geometry (TankGeo has no OMGeoPtr info
-#if 0
-        switch(tube_F)
-        {
-          case 61:
-          case 62: (*(*station_map[string_F])[0])[OMKey(string_F, tube_F)] = icecube; break;
-          case 63:
-          case 64: (*(*station_map[string_F])[1])[OMKey(string_F, tube_F)] = icecube; break;
-          default: Fatal("Got a wrong tube number.");
-        }
-#endif
-        icecube->position.SetPosition(x_F * I3Units::m,
-                        y_F * I3Units::m,
-		        z_F * I3Units::m);
-        icecube->orientation = (I3OMGeo::Down); 
-        icecube->area = (0.0444 * I3Units::m2);
-	icecube->omtype = I3OMGeo::IceTop;
-        //icecube->relativeQE = 1.0;
+        I3OMGeo icecube;
+        icecube.position.SetPosition(x_F * I3Units::m,
+				      y_F * I3Units::m,
+				      z_F * I3Units::m,
+				      I3Position::car);
+        icecube.orientation = (I3OMGeo::Down); 
+        icecube.area = (0.0444 * I3Units::m2);
+	icecube.omtype = I3OMGeo::IceTop;
+	Geometry.omgeo[OMKey(string_F, tube_F)] = icecube;
       }
     }
   
