@@ -36,10 +36,10 @@ struct I3TimeRange
   {
     o<<"[ I3TimeRange: \n"
      <<"Lower: \n"
-     <<lower
+     //<<ToString(lower)
      <<"\n"
      <<"Upper: \n"
-     <<upper
+     //<<ToString(upper)
      <<"\n";
   }
 };
