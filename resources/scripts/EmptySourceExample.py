@@ -8,7 +8,7 @@ tray.AddService("I3EmptyStreamsFactory","emptystreams")
 
 tray.AddModule("I3Muxer","muxer")
 
-#tray.AddModule("Dump","dump")
+tray.AddModule("Dump","dump")
 
 tray.AddModule("TrashCan","trash")
 
