@@ -1,5 +1,6 @@
 from I3Tray import *
 
+load("libdataclasses")
 load("libphys-services")
 
 tray = I3Tray()
