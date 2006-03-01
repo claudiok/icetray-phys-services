@@ -3,7 +3,6 @@ from I3Tray import *
 from os.path import expandvars
 
 load("libicetray")
-load("libroot-icetray")
 load("libdataclasses")
 load("libphys-services")
 
@@ -12,16 +11,20 @@ icecubegeofile = expandvars("$I3_WORK/phys-services/resources/icecube.geo")
 
 tray = I3Tray()
 
-tray.AddModule("I3DefaultPhysicsSource","events")
+tray.AddService("I3EmptyStreamsFactory","streams")(
+              ("InstallGeometry",False)
+                )
 
-tray.AddModule("I3DefaultDetectorStatusSource","status")
+tray.AddService("I3TextFileGeometryServiceFactory","geometry")(
+              ("AmandaGeoFile",amageofile),
+              ("IceCubeGeoFile",icecubegeofile),
+              )
 
-tray.AddModule("I3DefaultCalibrationSource","calib")
+tray.AddModule("I3Muxer","muxme")
 
-tray.AddModule("I3FileGeometrySource","geometry")(
-    ("AmandaGeoFile",amageofile),
-    ("IceCubeGeoFile",icecubegeofile),
-    )
+tray.AddModule("Dump","dump")
+
+tray.AddModule("TrashCan","trash")
 
 tray.Execute()
 tray.Finish()
