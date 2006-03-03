@@ -38,7 +38,7 @@ string DumpStop(I3Frame& frame)
 
 inline bool GeometryPresent(I3Frame& frame)
 {
-  if(frame.Get<I3GeometryPtr>("Geometry"))
+  if(frame.Get<I3GeometryPtr>())
     return true;
   return false;
 }
@@ -50,14 +50,14 @@ inline bool EventPresent(I3Frame& frame)
 
 inline bool CalibrationPresent(I3Frame& frame)
 {
-  if(frame.Get<I3CalibrationPtr>("Calibration"))
+  if(frame.Get<I3CalibrationPtr>())
     return true;
   return false;
 }
 
 inline bool DetectorStatusPresent(I3Frame& frame)
 {
-  if(frame.Get<I3DetectorStatusPtr>("DetectorStatus"))
+  if(frame.Get<I3DetectorStatusPtr>())
     return true;
   return false;
 }

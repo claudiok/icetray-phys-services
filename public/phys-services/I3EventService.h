@@ -12,6 +12,9 @@
 #ifndef I3EVENTSERVICE_H
 #define I3EVENTSERVICE_H
 
+#include <icetray/I3FrameObject.h>
+#include <icetray/I3DefaultName.h>
+
 #include "dataclasses/Utility.h"
 #include "dataclasses/I3Time.h"
 
@@ -25,10 +28,6 @@ class I3Frame;
 class I3EventService
 {
  public:
-  /**
-   * @brief default name of this service in an icetray I3Context
-   */
-  static const char* DefaultName() { return "EventService";}
 
   /**
    * @brief indicates whether or not there are more events to find.
@@ -43,6 +42,7 @@ class I3EventService
   virtual I3Time PopEvent(I3Frame& frame) = 0;
 };
 
-typedef shared_ptr<I3EventService> I3EventServicePtr;
+I3_DEFAULT_NAME(I3EventService);
+I3_POINTER_TYPEDEFS(I3EventService);
 
 #endif

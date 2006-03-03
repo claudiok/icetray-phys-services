@@ -40,13 +40,13 @@ void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
 {
     log_debug("I3MCCalibrationFiller::Calibration");
 
-    const I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
+    const I3Geometry& geo = frame->Get<I3Geometry>();
     const I3OMGeoMap& om_geo = geo.omgeo;
     //const I3InIceGeometry& inice = geo.GetInIceGeometry();
 
     //I3InIceGeometry::const_iterator iter;
     I3OMGeoMap::const_iterator iter;
-    const I3Calibration& calib = frame->Get<I3Calibration>("Calibration");
+    const I3Calibration& calib = frame->Get<I3Calibration>();
 
     //replaced all inice with om_geo
     for( iter  = om_geo.begin(); 

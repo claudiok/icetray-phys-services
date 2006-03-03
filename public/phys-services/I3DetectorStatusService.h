@@ -12,6 +12,9 @@
 #ifndef I3DETECTORSTATUSSERVICE_H
 #define I3DETECTORSTATUSSERVICE_H
 
+#include <icetray/I3FrameObject.h>
+#include <icetray/I3DefaultName.h>
+
 #include "phys-services/I3TimeRange.h"
 #include "dataclasses/status/I3DetectorStatus.h"
 #include "dataclasses/Utility.h"
@@ -24,10 +27,10 @@
 class I3DetectorStatusService
 {
  public:
-  static const char* DefaultName() { return "DetectorStatusService";}
   virtual I3DetectorStatusConstPtr GetDetectorStatus(I3Time time) = 0;
 };
 
-typedef shared_ptr<I3DetectorStatusService> I3DetectorStatusServicePtr;
+I3_DEFAULT_NAME(I3DetectorStatusService);
+I3_POINTER_TYPEDEFS(I3DetectorStatusService);
 
 #endif

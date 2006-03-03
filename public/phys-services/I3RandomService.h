@@ -20,6 +20,8 @@
 
 #include "Rtypes.h"
 #include "dataclasses/Utility.h"
+#include <icetray/I3DefaultName.h>
+#include <icetray/I3FrameObject.h>
 
 /**
  * @brief This class provides an interface to random numbers suitable for use
@@ -84,11 +86,6 @@ class I3RandomService {
    */
   virtual double Gaus(double mean,double stddev) = 0;
 
-  /**
-   * gives a default name for this service
-   */
-  static const char* DefaultName(){ return "RandomService"; }
-
  private:
   // copy and assignment private
   I3RandomService(const I3RandomService&);
@@ -98,6 +95,7 @@ class I3RandomService {
 
 };
 
-typedef shared_ptr<I3RandomService> I3RandomServicePtr;
+I3_DEFAULT_NAME(I3RandomService);
+I3_POINTER_TYPEDEFS(I3RandomService);
 
 #endif //I3RANDOMSERVICE_H

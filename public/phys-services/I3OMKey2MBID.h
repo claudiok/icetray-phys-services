@@ -12,6 +12,9 @@
 #ifndef I3OMKEY2MBID_H
 #define I3OMKEY2MBID_H
 
+#include <icetray/IcetrayFwd.h>
+#include <icetray/I3DefaultName.h>
+
 #include "dataclasses/OMKey.h"
 
 #include <map>
@@ -38,14 +41,10 @@ class I3OMKey2MBID
    */
   virtual long long int GetMBID(OMKey key) = 0;
 
-  /**
-   * @brief Gets the default name of this service in the context.
-   */
-  static const char* DefaultName() { return "OMKey2MBID";}
-
-   SET_LOGGER("I3OMKey2MBID");
+  SET_LOGGER("I3OMKey2MBID");
 };
 
-typedef boost::shared_ptr<I3OMKey2MBID> I3OMKey2MBIDPtr;
+I3_POINTER_TYPEDEFS(I3OMKey2MBID);
+I3_DEFAULT_NAME(I3OMKey2MBID);
 
 #endif

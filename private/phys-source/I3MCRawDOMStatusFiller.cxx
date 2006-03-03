@@ -122,7 +122,7 @@ void I3MCRawDOMStatusFiller::DetectorStatus(I3FramePtr frame)
 {
     log_debug("I3MCRawDOMStatusFiller::DetectorStatus");
 
-    const I3Geometry& geo = frame->Get<I3Geometry>("Geometry");
+    const I3Geometry& geo = frame->Get<I3Geometry>();
     const I3OMGeoMap& om_geo = geo.omgeo;
     //const I3InIceGeometry& inice = geo.GetInIceGeometry();
 

@@ -12,6 +12,9 @@
 #ifndef I3GEOMETRYSERVICE_H
 #define I3GEOMETRYSERVICE_H
 
+#include <icetray/I3FrameObject.h>
+#include <icetray/I3DefaultName.h>
+
 #include "phys-services/I3TimeRange.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "dataclasses/Utility.h"
@@ -25,10 +28,6 @@
 class I3GeometryService
 {
  public:
-  /**
-   * @brief This is the default name of the service in an I3Context
-   */
-  static const char* DefaultName() { return "GeometryService";}
 
   /**
    * @brief gives the I3Geometry and I3GeometryHeader for the
@@ -37,7 +36,8 @@ class I3GeometryService
   virtual I3GeometryConstPtr GetGeometry(I3Time time) = 0;
 };
 
-typedef shared_ptr<I3GeometryService> I3GeometryServicePtr;
+I3_DEFAULT_NAME(I3GeometryService);
+I3_POINTER_TYPEDEFS(I3GeometryService);
 
 
 #endif
