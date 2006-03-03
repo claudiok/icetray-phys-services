@@ -8,11 +8,15 @@ using namespace I3Calculator;
 
 
 //--------------------------------------------------------------
-void I3Cuts::CutsCalc(const I3Particle& track, I3Geometry& geom, 
-		      I3OMResponseMap& ommap, const string hitsName,
-		      double t1, double t2, 
+void I3Cuts::CutsCalc(const I3Particle& particle, const I3Geometry& geom, 
+		      const I3RecoHitSeriesMap& hitmap, 
+		      const double t1, const double t2, 
 		      int& Ndir, double& Ldir, double& Sall, double& Sdir)
 {
+  Ndir = 3; // teporary -- test
+  Ldir = 4.1; // teporary -- test
+  Sdir = 5.2; // teporary -- test
+  Sall = 6.3; // teporary -- test
 #warning Commented out for dc retool
 #if 0
   Ndir = 0;
@@ -116,54 +120,52 @@ void I3Cuts::CutsCalc(const I3Particle& track, I3Geometry& geom,
 #endif
 }
 
-
 //--------------------------------------------------------------
-int I3Cuts::Ndir(const I3Particle& track, I3Geometry& geom, 
-		 I3OMResponseMap& ommap, const string hitsName,	
+int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom, 
+		 const I3RecoHitSeriesMap& hitmap,
 		 double t1, double t2)
 {
   int Ndir;
   double Ldir, Sall, Sdir;
-  CutsCalc(track, geom, ommap, hitsName, t1, t2, Ndir, Ldir, Sall, Sdir);
+  CutsCalc(track, geom, hitmap, t1, t2, Ndir, Ldir, Sall, Sdir);
   return Ndir;
 }
 
 
 //--------------------------------------------------------------
-double I3Cuts::Ldir(const I3Particle& track, I3Geometry& geom, 
-		    I3OMResponseMap& ommap, const string hitsName,
+double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom, 
+		    const I3RecoHitSeriesMap& hitmap,
 		    double t1, double t2)
 {
   int Ndir;
   double Ldir, Sall, Sdir;
-  CutsCalc(track, geom, ommap, hitsName, t1, t2, Ndir, Ldir, Sall, Sdir);
+  CutsCalc(track, geom, hitmap, t1, t2, Ndir, Ldir, Sall, Sdir);
   return Ldir;
 }
 
 
 //--------------------------------------------------------------
-double I3Cuts::SmoothAll(const I3Particle& track, I3Geometry& geom, 
-			 I3OMResponseMap& ommap, 
-			 const string hitsName, double t1, double t2)
+double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom, 
+			 const I3RecoHitSeriesMap& hitmap,
+			 double t1, double t2)
 {
   int Ndir;
   double Ldir, Sall, Sdir;
-  CutsCalc(track, geom, ommap, hitsName, t1, t2, Ndir, Ldir, Sall, Sdir);
+  CutsCalc(track, geom, hitmap, t1, t2, Ndir, Ldir, Sall, Sdir);
   return Sall;
 }
 
 
 //--------------------------------------------------------------
-double I3Cuts::SmoothDir(const I3Particle& track, I3Geometry& geom, 
-			 I3OMResponseMap& ommap, 
-			 const string hitsName, double t1, double t2)
+double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom, 
+			 const I3RecoHitSeriesMap& hitmap,
+			 double t1, double t2)
 {
   int Ndir;
   double Ldir, Sall, Sdir;
-  CutsCalc(track, geom, ommap, hitsName, t1, t2, Ndir, Ldir, Sall, Sdir);
+  CutsCalc(track, geom, hitmap, t1, t2, Ndir, Ldir, Sall, Sdir);
   return Sdir;
 }
-
 
 //--------------------------------------------------------------
 // Computes the size of the "cylinder of closest approach", as defined

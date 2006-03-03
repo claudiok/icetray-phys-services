@@ -3,7 +3,7 @@
 
 #include "dataclasses/I3Units.h"
 #include "dataclasses/physics/I3Particle.h"
-//#include "dataclasses/I3OMResponseMap.h"
+#include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/geometry/I3Geometry.h"
 
 class I3OMResponse;
@@ -76,15 +76,14 @@ namespace I3Cuts
    * @todo Think about making the code more efficient...
    */
   void CutsCalc(const I3Particle& track, 
-		I3Geometry& geom, 
-		I3OMResponseMap& ommap, 
-		const string hitseries,
-		double t1, 
-		double t2, 
+		const I3Geometry& geom, 
+		const I3RecoHitSeriesMap& hitmap, 
+		const double t1, 
+		const double t2, 
 		int& Ndir, 
 		double& Ldir,
-		double& Sall,
-		double& Sdir);
+		double& Sdir,
+		double& Sall);
 
   /**
    * A convenience function that calls CutsCalc() and returns the number 
@@ -93,9 +92,8 @@ namespace I3Cuts
    * in order to save multiple calls to the function.
    */
   int Ndir(const I3Particle& track, 
-	   I3Geometry& geom, 
-	   I3OMResponseMap& ommap, 
-	   const string hitseries,
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
 	   double t1 = minusTWindow, 
 	   double t2 = plusTWindow);
 
@@ -106,24 +104,10 @@ namespace I3Cuts
    * in order to save multiple calls to the function.
    */
   double Ldir(const I3Particle& track, 
-	      I3Geometry& geom, 
-	      I3OMResponseMap& ommap, 
-	      const string hitseries,
+	      const I3Geometry& geom, 
+	      const I3RecoHitSeriesMap& hitmap, 
 	      double t1 = minusTWindow, 
 	      double t2 = plusTWindow);
-
-  /**
-   * A convenience function that calls CutsCalc() and returns the 
-   * "all-hits smoothness" of the event.  If you are interested in more than  
-   * one quantity from CutsCalc(), use the CutsCalc() function directly, 
-   * in order to save multiple calls to the function.
-   */
-  double SmoothAll(const I3Particle& track, 
-		   I3Geometry& geom, 
-		   I3OMResponseMap& ommap, 
-		   const string hitseries,
-		   double t1 = minusTWindow, 
-		   double t2 = plusTWindow);
 
   /**
    * A convenience function that calls CutsCalc() and returns the 
@@ -132,12 +116,22 @@ namespace I3Cuts
    * directly in order to save multiple calls to the function.
    */
   double SmoothDir(const I3Particle& track, 
-		   I3Geometry& geom, 
-		   I3OMResponseMap& ommap, 
-		   const string hitseries,
+		   const I3Geometry& geom, 
+		   const I3RecoHitSeriesMap& hitmap, 
 		   double t1 = minusTWindow, 
 		   double t2 = plusTWindow);
 
+  /**
+   * A convenience function that calls CutsCalc() and returns the 
+   * "all-hits smoothness" of the event.  If you are interested in more than  
+   * one quantity from CutsCalc(), use the CutsCalc() function directly, 
+   * in order to save multiple calls to the function.
+   */
+  double SmoothAll(const I3Particle& track, 
+		   const I3Geometry& geom, 
+		   const I3RecoHitSeriesMap& hitmap, 
+		   double t1 = minusTWindow, 
+		   double t2 = plusTWindow);
 
   /**
    * Computes the size of the "cylinder of closest approach", 
