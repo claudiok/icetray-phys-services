@@ -11,6 +11,10 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 
+// classes
+
+#pragma link C++ namespace I3CutValues+;
+
 // namespaces
 
 #pragma link C++ namespace I3Calculator;
