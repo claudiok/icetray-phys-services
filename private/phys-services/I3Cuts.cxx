@@ -8,17 +8,11 @@ using namespace I3Calculator;
 
 
 //--------------------------------------------------------------
-void I3Cuts::CutsCalc(const I3Particle& particle, const I3Geometry& geom, 
+void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
 		      const I3RecoHitSeriesMap& hitmap, 
 		      const double t1, const double t2, 
 		      int& Ndir, double& Ldir, double& Sall, double& Sdir)
 {
-  Ndir = 3; // teporary -- test
-  Ldir = 4.1; // teporary -- test
-  Sdir = 5.2; // teporary -- test
-  Sall = 6.3; // teporary -- test
-#warning Commented out for dc retool
-#if 0
   Ndir = 0;
   int ntot = 0;
   vector<double> lengthAll;
@@ -27,34 +21,31 @@ void I3Cuts::CutsCalc(const I3Particle& particle, const I3Geometry& geom,
   double max = -999999;
   double Ttrack = track.GetTime();
   double Thit, Tarr, Tres;
-  I3OMResponseMap::iterator om;
-  for (om=ommap.begin(); om!=ommap.end(); om++) 
-    {
-      I3OMResponsePtr omr = om->second;
-      I3RecoHitSeriesDict& hitsDict = omr->GetRecoHitSeriesDict();
-      I3RecoPulseSeriesDict& pulsesDict = omr->GetRecoPulseSeriesDict();
 
-      // Check that the RecoHits or RecoPulses is present
-      if (hitsDict.find(hitsName) != hitsDict.end())
-	Thit = hitsDict[hitsName]->GetFirstHitTime();
-      else if (pulsesDict.find(hitsName) != pulsesDict.end())
-	Thit = pulsesDict[hitsName]->GetFirstPulseTime();
-      else {
-	log_info("\n   RecoHitSeries or RecoPulseSeries '%s' is not present "
-		 "in the current OM response. ", hitsName.c_str());
-	continue;
-      }
+  I3RecoHitSeriesMap::const_iterator hits_i;
+  for (hits_i=hitmap.begin(); hits_i!=hitmap.end(); hits_i++) {
+    const I3RecoHitSeries& hits = hits_i->second;
+    OMKey omkey = hits_i->first;
+    I3OMGeoMap::const_iterator geom = geometry.omgeo.find(omkey);
+    if (geom==geometry.omgeo.end()) {
+      log_debug("Didn't find the current OMKey in Geometry");
+      continue;
+    }
+    const I3Position& ompos = geom->second.position;
 
-      I3Position ompos = geom.GetInIceGeometry()[om->first]->GetPos();
-      Tarr = CherenkovTime(track, ompos);
+    Tarr = CherenkovTime(track, ompos);
+
+    I3RecoHitSeries::const_iterator hit;
+    for (hit=hits.begin(); hit!=hits.end(); hit++) {
+      Thit = hit->GetTime();
       Tres = Thit - Ttrack - Tarr;
-      log_debug("--------------------------");
-      log_debug("ompos: %f %f %f",ompos.GetX(),ompos.GetY(),ompos.GetZ());
-      log_debug("Thit: %f - Ttrack: %f - Tarr: %f = Tres: %f",
+      log_trace("--------------------------");
+      log_trace("ompos: %f %f %f",ompos.GetX(),ompos.GetY(),ompos.GetZ());
+      log_trace("Thit: %f - Ttrack: %f - Tarr: %f = Tres: %f",
 		Thit,Ttrack,Tarr,Tres);
 
       // calculate projections of hits onto track...
-      ntot++;
+      ntot++; // keep track of total hits
       I3Position pos(ompos);
       pos.ShiftCoordSystem(track.GetPos());
       pos.RotateZ(-track.GetDir().CalcPhi());
@@ -71,9 +62,11 @@ void I3Cuts::CutsCalc(const I3Particle& particle, const I3Geometry& geom,
 	lengthDir.push_back(dist);  // set up for SmoothnessDir calculation
       }
 
-    } // end for loop
+    } // end loop over hitseries
 
-  // calculate SmoothnessAll...
+  } // end loop over hitseriesmap
+
+    // calculate SmoothnessAll...
   {
     sort(lengthAll.begin(),lengthAll.end());
     for (unsigned int i=0; i<lengthAll.size(); i++) 
@@ -88,8 +81,7 @@ void I3Cuts::CutsCalc(const I3Particle& particle, const I3Geometry& geom,
       if (fabs(S)>fabs(Sall)) Sall = S;
     }
     // calculation is meaningless for less than 3 hits
-    if(lengthAll.size() <= 2)
-      Sall = NAN;
+    if(lengthAll.size() <= 2) Sall = NAN;
   }
 
   // calculate SmoothnessDir...
@@ -107,8 +99,7 @@ void I3Cuts::CutsCalc(const I3Particle& particle, const I3Geometry& geom,
       if (fabs(S)>fabs(Sdir)) Sdir = S;
     }
     // calculation is meaningless for less than 3 direct hits
-    if(lengthDir.size() <= 2)
-      Sdir = NAN;
+    if(lengthDir.size() <= 2) Sdir = NAN;
   }
 
   Ldir = max-min; // length of event
@@ -117,7 +108,6 @@ void I3Cuts::CutsCalc(const I3Particle& particle, const I3Geometry& geom,
   log_debug("-----> Sall: %f",Sall);
   log_debug("-----> Sdir: %f",Sdir);
   return;
-#endif
 }
 
 //--------------------------------------------------------------

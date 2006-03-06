@@ -76,7 +76,7 @@ namespace I3Cuts
    * @todo Think about making the code more efficient...
    */
   void CutsCalc(const I3Particle& track, 
-		const I3Geometry& geom, 
+		const I3Geometry& geometry, 
 		const I3RecoHitSeriesMap& hitmap, 
 		const double t1, 
 		const double t2, 
