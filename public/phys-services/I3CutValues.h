@@ -21,12 +21,14 @@
 class I3CutValues : public I3FrameObject
 {
  public:
+  int Nhit;
   int Ndir;
   double Ldir;
   double Sdir;
   double Sall;
 
   I3CutValues() :
+    Nhit(-1),
     Ndir(-1),
     Ldir(NAN),
     Sdir(NAN),

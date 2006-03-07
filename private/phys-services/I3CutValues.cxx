@@ -9,7 +9,7 @@ void I3CutValues::Calculate(const I3Particle& track,
 			    const double& endTWindow)
 {
   I3Cuts::CutsCalc(track, geometry, hitmap, begTWindow, endTWindow,
-  Ndir, Ldir, Sdir, Sall);
+		   Nhit, Ndir, Ldir, Sdir, Sall);
 }
 
 I3CutValues::~I3CutValues() { }
@@ -18,6 +18,7 @@ template <class Archive>
 void I3CutValues::serialize(Archive& ar, unsigned version)
 {
   ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
+  ar & make_nvp("Nhit",Nhit);
   ar & make_nvp("Ndir",Ndir);
   ar & make_nvp("Ldir",Ldir);
   ar & make_nvp("Sdir",Sdir);

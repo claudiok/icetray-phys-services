@@ -10,11 +10,11 @@ using namespace I3Calculator;
 //--------------------------------------------------------------
 void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
 		      const I3RecoHitSeriesMap& hitmap, 
-		      const double t1, const double t2, 
+		      const double t1, const double t2, int& Nhit, 
 		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
   Ndir = 0;
-  int ntot = 0;
+  Nhit = 0;
   vector<double> lengthAll;
   vector<double> lengthDir;
   double min = 999999;
@@ -45,7 +45,7 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
 		Thit,Ttrack,Tarr,Tres);
 
       // calculate projections of hits onto track...
-      ntot++; // keep track of total hits
+      Nhit++; // keep track of total hits
       I3Position pos(ompos);
       pos.ShiftCoordSystem(track.GetPos());
       pos.RotateZ(-track.GetDir().CalcPhi());
@@ -103,6 +103,7 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
   }
 
   Ldir = max-min; // length of event
+  log_debug("-----> Nhit: %i",Nhit);
   log_debug("-----> Ndir: %i",Ndir);
   log_debug("-----> Ldir: %f",Ldir);
   log_debug("-----> Sall: %f",Sall);
@@ -110,14 +111,27 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
   return;
 }
 
+
+//--------------------------------------------------------------
+int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom, 
+		 const I3RecoHitSeriesMap& hitmap,
+		 double t1, double t2)
+{
+  int Nhit, Ndir;
+  double Ldir, Sall, Sdir;
+  CutsCalc(track, geom, hitmap, t1, t2, Nhit, Ndir, Ldir, Sall, Sdir);
+  return Nhit;
+}
+
+
 //--------------------------------------------------------------
 int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom, 
 		 const I3RecoHitSeriesMap& hitmap,
 		 double t1, double t2)
 {
-  int Ndir;
+  int Nhit, Ndir;
   double Ldir, Sall, Sdir;
-  CutsCalc(track, geom, hitmap, t1, t2, Ndir, Ldir, Sall, Sdir);
+  CutsCalc(track, geom, hitmap, t1, t2, Nhit, Ndir, Ldir, Sall, Sdir);
   return Ndir;
 }
 
@@ -127,9 +141,9 @@ double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom,
 		    const I3RecoHitSeriesMap& hitmap,
 		    double t1, double t2)
 {
-  int Ndir;
+  int Nhit, Ndir;
   double Ldir, Sall, Sdir;
-  CutsCalc(track, geom, hitmap, t1, t2, Ndir, Ldir, Sall, Sdir);
+  CutsCalc(track, geom, hitmap, t1, t2, Nhit, Ndir, Ldir, Sall, Sdir);
   return Ldir;
 }
 
@@ -139,9 +153,9 @@ double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom,
 			 const I3RecoHitSeriesMap& hitmap,
 			 double t1, double t2)
 {
-  int Ndir;
+  int Nhit, Ndir;
   double Ldir, Sall, Sdir;
-  CutsCalc(track, geom, hitmap, t1, t2, Ndir, Ldir, Sall, Sdir);
+  CutsCalc(track, geom, hitmap, t1, t2, Nhit, Ndir, Ldir, Sall, Sdir);
   return Sall;
 }
 
@@ -151,9 +165,9 @@ double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom,
 			 const I3RecoHitSeriesMap& hitmap,
 			 double t1, double t2)
 {
-  int Ndir;
+  int Nhit, Ndir;
   double Ldir, Sall, Sdir;
-  CutsCalc(track, geom, hitmap, t1, t2, Ndir, Ldir, Sall, Sdir);
+  CutsCalc(track, geom, hitmap, t1, t2, Nhit, Ndir, Ldir, Sall, Sdir);
   return Sdir;
 }
 
