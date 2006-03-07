@@ -11,7 +11,7 @@ using namespace I3Calculator;
 void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
 		      const I3RecoHitSeriesMap& hitmap, 
 		      const double t1, const double t2, 
-		      int& Ndir, double& Ldir, double& Sall, double& Sdir)
+		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
   Ndir = 0;
   int ntot = 0;
