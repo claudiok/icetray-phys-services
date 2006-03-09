@@ -15,7 +15,7 @@ I3EmptyStreamsFactory::I3EmptyStreamsFactory(const I3Context& context) :
   installStatus_(true),
   installGeometries_(true)
 {
-  cout<<"entering "<<__PRETTY_FUNCTION__<<endl;
+  log_trace("constructing I3EmptyStreamsFactory");
   AddParameter("NFrames","Number of event frames to spit out",nframes_);
   AddParameter("InstallEvent",
 	       "Whether or not to install the Event Service",
@@ -29,12 +29,12 @@ I3EmptyStreamsFactory::I3EmptyStreamsFactory(const I3Context& context) :
   AddParameter("InstallStatus",
 	       "Whether or not to install the DetectorStatus Service",
 	       installStatus_);
-  cout<<"exiting "<<__PRETTY_FUNCTION__<<endl;
 }
 
 void I3EmptyStreamsFactory::Configure()
 {
-  cout<<"entering "<<__PRETTY_FUNCTION__<<endl;
+  log_trace("Configuring I3EmptyStreamsFactory");
+
   GetParameter("NFrames",nframes_);
 
   GetParameter("InstallEvent",
@@ -58,7 +58,6 @@ void I3EmptyStreamsFactory::Configure()
   if(installGeometries_)
     geometries_ = 
       shared_ptr<I3GeometryService>(new I3EmptyGeometryService());
-  cout<<"exiting "<<__PRETTY_FUNCTION__<<endl;
 }
 
 bool I3EmptyStreamsFactory::InstallService(I3Context& services)
