@@ -14,15 +14,6 @@ tray.AddModule("I3Muxer","muxer")
 tray.AddModule("Dump","dump")
 
 tray.AddModule("FrameCheck","check")(
-    ("GeometryKeys",
-     "I3Geometry"),
-    ("CalibrationKeys",
-     "I3Calibration "
-     "I3Geometry"),
-    ("DetectorStatusKeys",
-     "I3Calibration "
-     "I3Geometry "
-     "I3DetectorStatus"),
     ("PhysicsKeys",
      "I3Calibration "
      "I3Geometry "
