@@ -45,7 +45,8 @@ TEST(DoCalibTest1)
       
       double atwdrate0 =  ATWDSamplingRate(0,rawstatus,calib);
       double atwdrate1 =  ATWDSamplingRate(1,rawstatus,calib);
-      double gain = PMTGain(rawstatus,calib);
+      // if we're going to get the gain, you oughta check it, but oh well.
+      PMTGain(rawstatus,calib);
       double spemean = SPEMean(rawstatus,calib);
 
       //Compare the return values to values calculated by hand.
