@@ -7,6 +7,8 @@ class I3EmptyCalibrationService : public I3CalibrationService
 {
  public:
   I3EmptyCalibrationService();
+
+  virtual ~I3EmptyCalibrationService();
   
   I3CalibrationConstPtr GetCalibration(I3Time time);
 

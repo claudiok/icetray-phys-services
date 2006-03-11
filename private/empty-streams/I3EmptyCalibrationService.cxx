@@ -2,6 +2,10 @@
 
 #include <dataclasses/calibration/I3Calibration.h>
 
+I3EmptyCalibrationService::~I3EmptyCalibrationService()
+{
+}
+
 I3EmptyCalibrationService::I3EmptyCalibrationService()
 {
   calibration_ = I3CalibrationPtr(new I3Calibration());

@@ -2,6 +2,10 @@
 
 #include <dataclasses/status/I3DetectorStatus.h>
 
+I3EmptyDetectorStatusService::~I3EmptyDetectorStatusService()
+{
+}
+
 I3EmptyDetectorStatusService::I3EmptyDetectorStatusService()
 {
   status_ = I3DetectorStatusPtr(new I3DetectorStatus());

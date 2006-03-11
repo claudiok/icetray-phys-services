@@ -2,6 +2,10 @@
 
 #include <dataclasses/geometry/I3Geometry.h>
 
+I3EmptyGeometryService::~I3EmptyGeometryService()
+{
+}
+
 I3EmptyGeometryService::I3EmptyGeometryService()
 {
   geometry_ = I3GeometryPtr(new I3Geometry());

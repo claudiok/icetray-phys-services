@@ -9,6 +9,10 @@ I3EmptyEventService::I3EmptyEventService(int nframes) : nframes_(nframes),
     log_fatal("Can't have fewer than 0 frames.");
 }
 
+I3EmptyEventService::~I3EmptyEventService()
+{
+}
+
 bool I3EmptyEventService::MoreEvents()
 {
   if(currentCount_ >= nframes_)

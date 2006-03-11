@@ -7,7 +7,11 @@ class I3EmptyEventService : public I3EventService
 {
  public:
   I3EmptyEventService(int nFrames);
+
+  virtual ~I3EmptyEventService();
+
   bool MoreEvents();
+
   I3Time PopEvent(I3Frame& frame);
  private:
   int nframes_;

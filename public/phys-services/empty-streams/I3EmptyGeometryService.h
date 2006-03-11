@@ -7,6 +7,8 @@ class I3EmptyGeometryService : public I3GeometryService
 {
  public:
   I3EmptyGeometryService();
+
+  virtual ~I3EmptyGeometryService();
   
   I3GeometryConstPtr GetGeometry(I3Time time);
 
