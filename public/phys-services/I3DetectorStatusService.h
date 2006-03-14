@@ -27,7 +27,10 @@
 class I3DetectorStatusService
 {
  public:
+
   virtual I3DetectorStatusConstPtr GetDetectorStatus(I3Time time) = 0;
+
+  virtual ~I3DetectorStatusService() { }
 };
 
 I3_DEFAULT_NAME(I3DetectorStatusService);

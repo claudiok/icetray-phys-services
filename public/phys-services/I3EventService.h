@@ -40,6 +40,8 @@ class I3EventService
    * frame data.  Returned is the time of the event.
    */
   virtual I3Time PopEvent(I3Frame& frame) = 0;
+
+  virtual ~I3EventService() { }
 };
 
 I3_DEFAULT_NAME(I3EventService);

@@ -34,6 +34,9 @@ class I3GeometryService
    * indicated time.
    */
   virtual I3GeometryConstPtr GetGeometry(I3Time time) = 0;
+
+  virtual ~I3GeometryService() { }
+
 };
 
 I3_DEFAULT_NAME(I3GeometryService);

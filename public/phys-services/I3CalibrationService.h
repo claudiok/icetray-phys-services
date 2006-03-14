@@ -33,6 +33,9 @@ class I3CalibrationService
    * header will be appropirately filled.
    */
   virtual I3CalibrationConstPtr GetCalibration(I3Time time) = 0;
+
+  virtual ~I3CalibrationService() { }
+
 };
 
 I3_DEFAULT_NAME(I3CalibrationService);
