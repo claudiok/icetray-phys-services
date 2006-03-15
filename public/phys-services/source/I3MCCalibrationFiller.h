@@ -38,6 +38,7 @@ private:
     double atwd2gain_;
 
     double fadcGain_;
+    double fadcPedestal_;
 };
 
 #endif

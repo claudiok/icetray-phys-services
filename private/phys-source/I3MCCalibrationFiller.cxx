@@ -20,6 +20,9 @@ I3MCCalibrationFiller::I3MCCalibrationFiller(const I3Context& context)
     
     fadcGain_ = 2.5*9;
     AddParameter("FADCgain", "FADC gain", fadcGain_);
+
+    fadcPedestal_ = 0.0;
+    AddParameter("FADCpedestal", "FADC pedestal", fadcPedestal_);
     
     AddOutBox("OutBox");  
 } 
@@ -31,6 +34,7 @@ void I3MCCalibrationFiller::Configure()
     GetParameter("ATWD2gain", atwd2gain_);
 
     GetParameter("FADCgain", fadcGain_);
+    GetParameter("FADCpedestal", fadcPedestal_);
 }
 
 void I3MCCalibrationFiller::Calibration(I3Frame& frame)
@@ -52,6 +56,8 @@ void I3MCCalibrationFiller::Calibration(I3Frame& frame)
 
 	I3DOMCalibrationPtr domCalib(new I3DOMCalibration());
 	
+	domCalib->SetFADCParameters(fadcPedestal_, fadcGain_);
+
 	domCalib->SetATWDGain(0, atwd0gain_);
 	domCalib->SetATWDGain(1, atwd1gain_);
 	domCalib->SetATWDGain(2, atwd2gain_);
