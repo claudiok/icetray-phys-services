@@ -2,49 +2,46 @@
 
 #include "phys-services/I3Calculator.h"
 #include "phys-services/I3Cuts.h"
-#include "dataclasses/I3BasicTrack.h"
 #include "dataclasses/I3Position.h"
-#include "dataclasses/I3Geometry.h"
-#include "dataclasses/I3OMGeoIceCube.h"
-#include "dataclasses/I3OMResponseMap.h"
-#include "dataclasses/I3OMResponse.h"
+#include "dataclasses/physics/I3Particle.h"
+#include "dataclasses/physics/I3RecoHit.h"
+#include "dataclasses/geometry/I3Geometry.h"
 
 using namespace I3Calculator;
 using namespace I3Cuts;
 
-I3Geometry CalcGeom(double size, vector<I3Position> pos)
+I3Geometry CalcGeom(vector<I3Position> pos)
 {
   I3Geometry geometry;
-  for (int i=0; i<size; i++) {
+  for (unsigned int i=0; i<pos.size(); i++) {
     OMKey om(1,i);
-    geometry.GetInIceGeometry()[om] = 
-      I3OMGeoIceCubePtr(new I3OMGeoIceCube);
-    geometry.GetInIceGeometry()[om]->SetPos(pos[i]);
+    I3OMGeo geo;
+    geo.position.SetPos(pos[i]);
+    geometry.omgeo[om] = geo;
   }
   return geometry;
 }
 
-I3OMResponseMap CalcResp(double size, vector<double> time, string hitseries)
+I3RecoHitSeriesMap CalcHits(vector<double> time)
 {
-  I3OMResponseMap ommap;
-  for (int i=0; i<size; i++) {
+  I3RecoHitSeriesMap hitsmap;
+  for (unsigned int i=0; i<time.size(); i++) {
     OMKey om(1,i);
-    ommap[om] = I3OMResponsePtr(new I3OMResponse);
-    I3RecoHitSeriesDict& dict = ommap[om]->GetRecoHitSeriesDict();
-    dict[hitseries] = I3RecoHitSeriesPtr(new I3RecoHitSeries);
-    I3RecoHitSeriesPtr hits = dict[hitseries];
-    hits->push_back(I3RecoHitPtr (new I3RecoHit));
-    I3RecoHitPtr h = hits->back();
-    h->SetTime(time[i]);
+    I3RecoHitSeries hits;
+    I3RecoHit h;
+    h.SetTime(time[i]);
+    hits.push_back(h);
+    hitsmap[om] = hits;
   }
-  return ommap;
+  return hitsmap;
 }
+
 
 TEST_GROUP(I3Cuts)
 
 TEST(FakeTrack)
 {
-  I3BasicTrack track;
+  I3Particle track(I3Particle::InfiniteTrack);
   track.SetPos(0,0,0);
   track.SetDir(0,0);
   double ang = 180*deg-acos(1/1.31);
@@ -65,7 +62,7 @@ TEST(FakeTrack)
 
 TEST(Ndir_DownTrack)
 {
-  I3BasicTrack track;
+  I3Particle track(I3Particle::InfiniteTrack);
   track.SetPos(0,0,0);
   track.SetDir(0,0);
   track.SetTime(103.5);
@@ -91,24 +88,23 @@ TEST(Ndir_DownTrack)
 		    "The time of this hit was somehow calculated wrong.");
   }
 
-  string hitseries = "NdirTest";
-  I3Geometry geometry = CalcGeom(size,pos);
-  I3OMResponseMap ommap = CalcResp(size,time,hitseries);
+  I3Geometry geometry = CalcGeom(pos);
+  I3RecoHitSeriesMap hitsmap = CalcHits(time);
 
   double ndir;
-  ndir = Ndir(track,geometry,ommap,hitseries,-15.,25.);
+  ndir = Ndir(track,geometry,hitsmap,-15.,25.);
   ENSURE_DISTANCE(ndir,3.,0.0001,
 		  "Wrong number of direct hits calculated.");
 
-  ndir = Ndir(track,geometry,ommap,hitseries,-15.,15.);
+  ndir = Ndir(track,geometry,hitsmap,-15.,15.);
   ENSURE_DISTANCE(ndir,2.,0.0001,
 		  "Wrong number of direct hits calculated.");
 
-  ndir = Ndir(track,geometry,ommap,hitseries,-15.,75.);
+  ndir = Ndir(track,geometry,hitsmap,-15.,75.);
   ENSURE_DISTANCE(ndir,4.,0.0001,
 		  "Wrong number of direct hits calculated.");
 
-  ndir = Ndir(track,geometry,ommap,hitseries,-15.,150.);
+  ndir = Ndir(track,geometry,hitsmap,-15.,150.);
   ENSURE_DISTANCE(ndir,5.,0.0001,
 		  "Wrong number of direct hits calculated.");
 }
@@ -117,12 +113,11 @@ TEST(AllCuts_TiltedTrack)
 {
   double ang = acos(1/1.31); // Cherenkov angle
 
-  I3BasicTrack track;
+  I3Particle track(I3Particle::InfiniteTrack);
   track.SetPos(10,10,0);
   track.SetDir(180*deg-ang,90*deg);
   track.SetTime(15);
 
-  double size = 3;
   vector<I3Position> pos;
   I3Position p(10,10,20);  pos.push_back(p);
   p.SetPos(10,0,100);  pos.push_back(p);
@@ -134,17 +129,22 @@ TEST(AllCuts_TiltedTrack)
   t = 40/c * (1.31/tan(ang) - 1/sin(ang)) + 15 + 3;  time.push_back(t);
 
   string hitseries = "NdirTest";
-  I3Geometry geometry = CalcGeom(size,pos);
-  I3OMResponseMap ommap = CalcResp(size,time,hitseries);
-  double ndir = Ndir(track,geometry,ommap,hitseries,-15.,25.);
+  I3Geometry geometry = CalcGeom(pos);
+  I3RecoHitSeriesMap hitsmap = CalcHits(time);
+
+  double ndir = Ndir(track,geometry,hitsmap,-15.,25.);
   ENSURE_DISTANCE(ndir,3.,0.0001,
 		  "Wrong number of direct hits calculated.");
 
-  double ldir = Ldir(track,geometry,ommap,hitseries,-15.,15.);
+  double ldir = Ldir(track,geometry,hitsmap,-15.,15.);
   ENSURE_DISTANCE(ldir,108.635,0.001,
 		  "Wrong Ldir distance calculated.");
 
-  double smooth = SmoothnessAll(track,geometry,ommap,hitseries);
+  double smooth = SmoothAll(track,geometry,hitsmap);
   ENSURE_DISTANCE(smooth,0.121611,0.0001,
 		 "Wrong smoothness calculated.");
+
+  double smoothdir = SmoothDir(track,geometry,hitsmap);
+  ENSURE_DISTANCE(smoothdir,0.121611,0.0001,
+		 "Wrong smoothnessDir calculated.");
 }
