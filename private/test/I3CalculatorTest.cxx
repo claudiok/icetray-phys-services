@@ -13,9 +13,7 @@
 #include <I3Test.h>
 
 #include "phys-services/I3Calculator.h"
-#include "dataclasses/I3BasicTrack.h"
-#include "dataclasses/I3BasicCascade.h"
-#include "dataclasses/I3DirectionalCascade.h"
+#include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/I3Position.h"
 #include "dataclasses/I3Direction.h"
 #include "TFile.h"
@@ -25,52 +23,50 @@ using std::string;
 using std::cout;
 using std::endl;
 using namespace I3Units;
-
-#include "dataclasses/I3Starting.h"
-#include "dataclasses/I3NonEnergetic.h"
-#include "dataclasses/I3Composite.h"
-typedef I3TrackImpl<I3Starting, I3NonEnergetic, I3Composite> I3StartingTrack;
-typedef shared_ptr<I3StartingTrack> I3StartingTrackPtr;
-
 using namespace I3Calculator;
 
-static I3BasicTrack inftrack()
+static I3Particle inftrack()
 {
-  I3BasicTrack inftrack;
+  I3Particle inftrack;
   inftrack.SetPos(0,0,0);
   inftrack.SetDir(0,1,1);
+  inftrack.SetShape(I3Particle::InfiniteTrack);
   return inftrack;
 }
 
-static I3BasicTrack muon()
+static I3Particle muon()
 {
-  I3BasicTrack muon;
+  I3Particle muon;
   muon.SetPos(10,0,0);
   muon.SetDir(90*deg,0); // muon moving toward -x axis
+  muon.SetShape(I3Particle::InfiniteTrack);
   return muon;
 }
 
-static I3StartingTrack starttrack()
+static I3Particle starttrack()
 {
-  I3StartingTrack starttrack;
-  starttrack.SetStartPos(1,1,1);
+  I3Particle starttrack;
+  starttrack.SetPos(1,1,1);
   starttrack.SetDir(0,0);
-  starttrack.SetStartT(100);
+  starttrack.SetTime(100);
+  starttrack.SetShape(I3Particle::StartingTrack);
   return starttrack;
 }
 
-static I3BasicCascade casc1()
+static I3Particle casc1()
 {
-  I3BasicCascade casc1;
+  I3Particle casc1;
   casc1.SetPos(2,2,2);
   casc1.SetTime(100);
+  casc1.SetShape(I3Particle::Cascade);
   return casc1;
 }
 
-static I3BasicCascade casc2()
+static I3Particle casc2()
 {
-  I3BasicCascade casc2;
+  I3Particle casc2;
   casc2.SetPos(2,2,7);
+  casc2.SetShape(I3Particle::Cascade);
   return casc2;
 }
 
@@ -84,13 +80,13 @@ TEST_GROUP(I3Calculator)
 
 TEST(ShiftAlongTrack)
 {
-  I3Position n = ShiftAlongTrack(inftrack(),sqrt(2.));
+  I3Position n = inftrack().ShiftAlongTrack(sqrt(2.));
 
   ENSURE_DISTANCE(n.GetX(),0.,0.0001);
   ENSURE_DISTANCE(n.GetY(),1.,0.0001);
   ENSURE_DISTANCE(n.GetZ(),1.,0.0001);
 
-  ENSURE_DISTANCE(ShiftAlongTrack(muon(),15).GetX(),-5.,0.0001);
+  ENSURE_DISTANCE(muon().ShiftAlongTrack(15).GetX(),-5.,0.0001);
 }
 
 TEST(IsOnTrack)
@@ -98,7 +94,7 @@ TEST(IsOnTrack)
   I3Position on(2,0.09*m,0);
   ENSURE(IsOnTrack(muon(),on,0.1*m));
 
-  I3Position n = ShiftAlongTrack(inftrack(),2.38);
+  I3Position n = inftrack().ShiftAlongTrack(2.38);
   ENSURE(IsOnTrack(inftrack(),n,0.1*m));
 
   ENSURE(!IsOnTrack(starttrack(),on,0.1*m));
@@ -205,9 +201,9 @@ TEST(Angle)
 {
   ENSURE_DISTANCE(Angle(inftrack(),muon())/deg,90.,0.001);
     
-  I3BasicTrack track1;
+  I3Particle track1(I3Particle::InfiniteTrack);
   track1.SetDir(0,1,-1);
-  I3BasicTrack track2;
+  I3Particle track2(I3Particle::InfiniteTrack);
   track2.SetDir(1,0,-1);
 
   ENSURE_DISTANCE(Angle(track1,track2)/deg,60.,0.001);
