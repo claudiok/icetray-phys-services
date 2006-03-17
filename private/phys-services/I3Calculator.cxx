@@ -27,41 +27,122 @@ void I3Calculator::CherenkovCalc(const I3Particle& track,        // input
 				 const double IndexRef,       // input
 				 const I3OMGeo::Orientation orient) // input
 {
-  I3Position P(position);   // position (P) of a DOM or whatnot
-  double theta = pi - track.GetZenith();
-  double phi = track.GetAzimuth() - pi;
-  double changle = acos(1/IndexRef); // calculate Cherenkov angle
-  double speed = c/IndexRef;
+  //--Only calculate if particle is track
+  if (track.IsTrack()) {
+
+    I3Position P(position);   // position (P) of a DOM or whatnot
+    double theta = pi - track.GetZenith();
+    double phi = track.GetAzimuth() - pi;
+    double changle = acos(1/IndexRef); // calculate Cherenkov angle
+    double speed = c/IndexRef;
   
-  //--Calculate position and distance of closest approach
-  double PT = P.CalcDistance(track.GetPos()); // T=track.Pos()
-  P.ShiftCoordSystem(track.GetPos());
-  P.RotateZ(-phi);
-  P.RotateY(pi/2-theta);
-  double TA = P.GetX();
-  double PA = sqrt(PT*PT-TA*TA);
+    //--Calculate position and distance of closest approach
+    double PT = P.CalcDistance(track.GetPos()); // T=track.Pos()
+    P.ShiftCoordSystem(track.GetPos());
+    P.RotateZ(-phi);
+    P.RotateY(pi/2-theta);
+    double TA = P.GetX();
+    double PA = sqrt(PT*PT-TA*TA);
   
-  //--Return position and distance of closest approach
-  appos = track.ShiftAlongTrack(TA); // position A
-  apdist = PA; // distance of closest approach
+    //--Return position and distance of closest approach
+    appos = track.ShiftAlongTrack(TA); // position A
+    apdist = PA; // distance of closest approach
   
-  //--Calculate Cherenkov photon... position on track and time of PMT hit
-  double CA = PA/tan(changle);
-  double CP = PA/sin(changle);
-  double TC = TA-CA;
-  chpos = track.ShiftAlongTrack(TC); // origin of Cherenkov light (C)
-  chtime = TC/c + CP/speed; //travel time:track Pos.I3Position
-  // total photon time from T (on track) through C to P.
-  // TC - particle's speed is c, but CP - photon's speed is c/n.
-  chdist = CP; // distance between origin of Cherenkov light to I3Position
+    //--Calculate Cherenkov photon... position on track and time of PMT hit
+    double CA = PA/tan(changle);
+    double CP = PA/sin(changle);
+    double TC = TA-CA;
+    chpos = track.ShiftAlongTrack(TC); // origin of Cherenkov light (C)
+    chtime = TC/c + CP/speed; //travel time:track Pos.I3Position
+    // total photon time from T (on track) through C to P.
+    // TC - particle's speed is c, but CP - photon's speed is c/n.
+    chdist = CP; // distance between origin of Cherenkov light to I3Position
   
-  //--Calculate the Cherenkov angle
-  I3Position P2(position);             // position (P) of a DOM or whatnot
-  P2.ShiftCoordSystem(chpos);     // get coordinates where C is origin.
-  double angle = P2.GetTheta(); // return theta of new P
-  if (orient==I3OMGeo::Up) { angle = pi-angle; } // in case OM points UP
-  chapangle = angle;
-  
+    //--Calculate the Cherenkov angle
+    I3Position P2(position);             // position (P) of a DOM or whatnot
+    P2.ShiftCoordSystem(chpos);     // get coordinates where C is origin.
+    double angle = P2.GetTheta(); // return theta of new P
+    if (orient==I3OMGeo::Up) { angle = pi-angle; } // in case OM points UP
+    chapangle = angle;
+
+    // The effective distance (d_eff) due to scattering in the ice.
+    // We don't really expect direct hits ever.
+    // Maybe we should use this d_eff instead of d (CP) in calculating 
+    // expected time of arrival of photons.
+    //double d_eff=3.1-3.9*cos_eta+4.6*cos_eta*cos_eta+0.84 * sin(changle)*CP;
+
+    //--Is point of closest approach (A) on track?
+    //--Is Cherenkov origin point (C) on track?
+    if (track.GetShape()==I3Particle::StartingTrack) 
+      if (track.GetShape()==I3Particle::StoppingTrack) {
+	//-contained track...............................
+	if (TA<0) {
+	  // if A is before STARTING position
+	  appos = track.GetStartPos();
+	  apdist = position.CalcDistance(appos);
+	} else if (TA>track.GetLength()) {
+	  // if A is beyond STOPPING position
+	  appos = track.GetStopPos();
+	  apdist = position.CalcDistance(appos);
+	}
+	if (TC<0) {
+	  // if C is before STARTING position
+	  chpos.NullPosition();
+	  chtime = NAN;
+	  chdist = NAN;
+	  chapangle = NAN;
+	} else if (TC>track.GetLength()) {
+	  // if C is beyond STOPPING position
+	  chpos.NullPosition();                                               
+	  chtime = NAN;
+	  chdist = NAN;
+	  chapangle = NAN;
+	}
+      } else {
+	//-starting track................................
+	if (TA<0) {
+	  // if A is before STARTING position
+	  appos = track.GetStartPos();
+	  apdist = position.CalcDistance(appos);
+	}
+	if (TC<0) {
+	  // if C is before STARTING position
+	  chpos.NullPosition();
+	  chtime = NAN;
+	  chdist = NAN;
+	  chapangle = NAN;
+	}
+      }
+    else
+      if (track.GetShape()==I3Particle::StoppingTrack) {
+	//-stopping track................................
+	if (TA>0) {
+	  // if A is beyond STOPPING position
+	  appos = track.GetStopPos();
+	  apdist = position.CalcDistance(appos);
+	}
+	if (TC>0) {
+	  // if C is beyond STOPPING position
+	  chpos.NullPosition();
+	  chtime = NAN;
+	  chdist = NAN;
+	  chapangle = NAN;
+	}
+      } else {
+	//-infitine track................................
+      }
+
+  } else {
+    //--Don't calculate if track does not have direction
+    log_info("CherenkovCalc() - I3Particle is no a track. Not calculating.");
+    appos.NullPosition();
+    apdist=NAN;
+    chpos.NullPosition();
+    chtime=NAN;
+    chdist=NAN;
+    chapangle = NAN;
+  }
+
   return;
 }
 

@@ -1,8 +1,7 @@
 #include <I3Test.h>
 
 #include "phys-services/I3Calculator.h"
-#include "dataclasses/I3BasicTrack.h"
-#include "dataclasses/I3BasicCascade.h"
+#include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/I3Position.h"
 
 using namespace I3Calculator;

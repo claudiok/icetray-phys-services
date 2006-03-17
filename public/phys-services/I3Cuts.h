@@ -80,6 +80,7 @@ namespace I3Cuts
 		const I3RecoHitSeriesMap& hitmap, 
 		const double t1, 
 		const double t2, 
+		int& Nchan, 
 		int& Nhit, 
 		int& Ndir, 
 		double& Ldir,
@@ -88,7 +89,19 @@ namespace I3Cuts
 
   /**
    * A convenience function that calls CutsCalc() and returns the total 
-   * number of hits from a given track.  If you are interested in more than 
+   * number of channels (hit OMs) in the event.  If you are interested in
+   * more than one quantity from CutsCalc(), use the CutsCalc() function 
+   * directly, in order to save multiple calls to the function.
+   */
+  int Nchan(const I3Particle& track, 
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = minusTWindow, 
+	   double t2 = plusTWindow);
+
+  /**
+   * A convenience function that calls CutsCalc() and returns the total 
+   * number of hits in the event.  If you are interested in more than 
    * one quantity from CutsCalc(), use the CutsCalc() function directly,
    * in order to save multiple calls to the function.
    */

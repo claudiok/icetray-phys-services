@@ -1,6 +1,6 @@
 #include <I3Test.h>
 
-#include "root-icetray/RootI3Tray.h"
+#include "icetray/I3Tray.h"
 
 #include "phys-services/source/I3Muxer.h"
 #include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
