@@ -213,3 +213,33 @@ TEST(Distance)
 { 
   ENSURE_DISTANCE(Distance(casc1(),casc2()),5.0,0.0001);
 }
+
+
+TEST(garbage)
+{
+  try
+    {
+      I3Particle particle;
+      I3Position position;
+      I3Position appos;
+      double apdist;
+      I3Position chpos;
+      double chtime;
+      double chdist;
+      double chapangle;
+
+      CherenkovCalc(particle,
+		    position,
+		    appos,
+		    apdist,
+		    chpos,
+		    chtime,
+		    chdist,
+		    chapangle);
+      ENSURE(0,"That should have thrown");
+    }
+  catch(const exception& e)
+    {
+      // that should have thrown 'cause the particle shape wasn't set
+    }
+}

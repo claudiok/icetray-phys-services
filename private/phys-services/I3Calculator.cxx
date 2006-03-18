@@ -134,13 +134,7 @@ void I3Calculator::CherenkovCalc(const I3Particle& track,        // input
 
   } else {
     //--Don't calculate if track does not have direction
-    log_trace("CherenkovCalc() - I3Particle is no a track. Not calculating.");
-    appos.NullPosition();
-    apdist=NAN;
-    chpos.NullPosition();
-    chtime=NAN;
-    chdist=NAN;
-    chapangle = NAN;
+    log_fatal("CherenkovCalc() - I3Particle is no a track. Not calculating.");
   }
 
   return;
