@@ -63,5 +63,24 @@ TEST(d52b66ab6861)
   ENSURE(service->GetMBID(OMKey(30,64)) == innum,"d52b66ab6861");
   
 }
+//Test one on a 2006 string
+TEST(543c1369639d)
+{
+  I3OMKey2MBIDPtr service;
+  ENSURE(getenv("I3_WORK"));
+  string infile(getenv("I3_WORK"));
+  infile.append("/phys-services/resources/doms.txt");
+  service = I3OMKey2MBIDPtr(new I3FileOMKey2MBID(infile));
+
+  istringstream in;
+  long long int innum;
+
+  in.str("543c1369639d");
+  in>>hex>>innum;
+  cout<<service->GetMBID(OMKey(21,28))<<" =?= "<<innum<<endl;
+  ENSURE(service->GetMBID(OMKey(49,43)) == innum,"d52b66ab6861");
+
+}
+
 
 

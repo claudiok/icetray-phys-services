@@ -56,10 +56,31 @@ void I3MCCalibrationFiller::Calibration(I3FramePtr frame)
 	OMKey thiskey = iter->first;
 
 	I3DOMCalibration domCalib;
-	
+
 	domCalib.SetATWDGain(0, atwd0gain_);
 	domCalib.SetATWDGain(1, atwd1gain_);
 	domCalib.SetATWDGain(2, atwd2gain_);
+	
+	QuadraticFit qfit0,qfit1;
+	
+	qfit0.quadFitA = 2.5858788;
+	qfit0.quadFitB = 0.013337472;
+	qfit0.quadFitC = NAN;
+	
+	qfit1.quadFitA = 2.3853257;
+	qfit1.quadFitB = 0.014224272;
+	qfit1.quadFitC = NAN; 
+
+	domCalib.SetATWDFreqFit(0,qfit0);
+	domCalib.SetATWDFreqFit(1,qfit1);
+
+	LinearFit hvgainfit;	
+	hvgainfit.intercept = -15.1997;
+	hvgainfit.slope = 7.0842533;
+
+    	domCalib.SetHVGainFit(hvgainfit);
+
+
 
 	for( unsigned int channel = 0; channel < 3; ++channel )
 	{
