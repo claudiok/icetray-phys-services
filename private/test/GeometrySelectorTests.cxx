@@ -149,9 +149,6 @@ TEST(icetray_test){
   string amanda_geo(getenv("I3_WORK"));
   amanda_geo += "/phys-services/resources/amanda.geo";
 
-  cout<<icecube_geo<<endl;
-  cout<<amanda_geo<<endl;
-
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
     ("IceCubeGeoFile",icecube_geo.c_str())
     ("AmandaGeoFile",amanda_geo.c_str());

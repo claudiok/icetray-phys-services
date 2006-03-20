@@ -121,6 +121,7 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   for(siter = geoPtr->stationgeo.begin();
       siter != geoPtr->stationgeo.end(); ++siter){
     int station = siter->first;
+    log_trace("Station: %d",station));    
     ENSURE(geo_sel_utils::exists(station,goodStrings_));
     ENSURE(!geo_sel_utils::exists(station,exclude_list));
   }

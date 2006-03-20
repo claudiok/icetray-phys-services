@@ -7,13 +7,17 @@
 This module now has four parameters
 
 - StringsToUse - Default is -19:80
-- StringsToExclude - Default is empty
+- StringsToExclude - Default is empty (i.e. nothing is excluded)
 - StationsToUse - Default is 1:80
-- StationsToExclude - Default is empty
-- NewGeometryName - Default is "NewGeometryName"
+- StationsToExclude - Default is empty (i.e. nothing is excluded)
+- NewGeometryName - Default is "NewGeometryName"  This is the name of the
+new Geometry that is put in the frame.  Modules later on down the road will
+need to use this geometry instead.
 
 The default values for StringsToUse is the entire 80 string IceCube 
 detector and AMANDA (i.e. "-19:80").  No strings are excluded by default.
+
+The default for IceTop is to use all tanks (1:80).
 
 Examples values for the parameters are...
 
@@ -25,7 +29,7 @@ Examples values for the parameters are...
  Set StringsToUse to "21,29,30,38,39,-19:-1"
 
 There's one simple example script (FileGeometrySelectorExample.py) in
-phys-services/resources/scripts.  This illustrates its use but doens't
+phys-services/resources/scripts.  This illustrates its use but doesn't
 really show that it works.  I should probably come up with something more
 convincing.  One could always tack on the eventviewer at the end and
 "see" that the strings are correctly removed.  There are also various tests
