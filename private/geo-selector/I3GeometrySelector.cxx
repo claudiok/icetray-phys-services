@@ -89,10 +89,10 @@ void I3GeometrySelector::Geometry(I3FramePtr frame) {
 
   log_trace("***before*** geoPtr->omgeo.size(): %zu",geoPtr->omgeo.size());
 
-  I3Geometry new_geo; //making a new geometry
+  I3GeometryPtr new_geo(new I3Geometry); //making a new geometry
 
-  new_geo.startTime = geoPtr->startTime;
-  new_geo.endTime = geoPtr->endTime;
+  new_geo->startTime = geoPtr->startTime;
+  new_geo->endTime = geoPtr->endTime;
 
   //erasing is too problematic
   I3OMGeoMap::const_iterator iter;
@@ -101,7 +101,7 @@ void I3GeometrySelector::Geometry(I3FramePtr frame) {
     OMKey omkey = iter->first;
     if(geoPtr->omgeo.count(omkey)>1) log_error("***how the hell did that happen?***");
     if(geo_sel_utils::exists(omkey.GetString(),goodStrings_))
-      new_geo.omgeo[omkey] = iter->second;
+      new_geo->omgeo[omkey] = iter->second;
   }
 
   I3StationGeoMap::const_iterator siter;
@@ -110,11 +110,13 @@ void I3GeometrySelector::Geometry(I3FramePtr frame) {
     int station = siter->first;
     if(geoPtr->stationgeo.count(station)>1) log_error("***how the hell did that happen?***");
     if(geo_sel_utils::exists(station,goodStrings_))
-      new_geo.stationgeo[station] = siter->second;
+      new_geo->stationgeo[station] = siter->second;
   }
 
   log_trace("***after*** geoPtr->omgeo().size(): %zu",geoPtr->omgeo.size());
   log_trace("***after*** geoPtr->stationgeo.size(): %zu",geoPtr->stationgeo.size());
+
+  frame->Put(newGeometryName_,new_geo);
 
   PushFrame(frame,"OutBox");  
 }

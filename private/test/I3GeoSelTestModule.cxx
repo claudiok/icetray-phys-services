@@ -84,10 +84,12 @@ void I3GeoSelTestModule::Configure() {
 
 void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
 
+  cout<<frame<<endl;
+
   log_debug("Entering Geometry method.");
   
   // Get the event information out of the Frame
-  I3GeometryConstPtr geoPtr = frame->Get<I3GeometryConstPtr>();
+  I3GeometryConstPtr geoPtr = frame->Get<I3GeometryConstPtr>(newGeometryName_);
   if(!geoPtr) log_fatal("Couldn't get geometry");
 
   //loop through the in ice geometry and make sure that

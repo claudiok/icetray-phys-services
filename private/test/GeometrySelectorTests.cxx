@@ -137,11 +137,12 @@ TEST(good_input){
 
 }
 
-TEST(icetray_test_soon){
+TEST(icetray_test){
 
   I3Tray tray;
 
-  std::string to_use("21,29,39");
+  std::string strings_to_use("21,29,39,38,30,40,49");
+  std::string stations_to_use("21,29,39,38,30,40,49,50");
 
   string icecube_geo(getenv("I3_WORK"));
   icecube_geo += "/phys-services/resources/icecube.geo";
@@ -159,10 +160,12 @@ TEST(icetray_test_soon){
     ("InstallGeometry",false);
   tray.AddModule("I3Muxer","muxer");
   tray.AddModule("I3GeometrySelector","geo_selector")
-    ("StringsToUse",to_use.c_str());
+    ("StringsToUse",strings_to_use.c_str())
+    ("StationsToUse",stations_to_use.c_str());
   //I3GeoSelTestModule contains ENSURE statements
   tray.AddModule("I3GeoSelTestModule","geo_test") 
-    ("StringsToUse",to_use.c_str());
+    ("StringsToUse",strings_to_use.c_str())
+    ("StationsToUse",stations_to_use.c_str());
   tray.AddModule("TrashCan","trash");
 
   tray.Execute();
