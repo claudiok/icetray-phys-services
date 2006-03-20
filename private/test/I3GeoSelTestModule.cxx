@@ -74,7 +74,10 @@ void I3GeoSelTestModule::Configure() {
   if(!geo_sel_utils::good_input(stationsToExclude_)) 
     log_fatal("couldn't parse %s",stationsToExclude_.c_str());
 
-  cout<<"stringsToUse_"<<stringsToUse_<<endl;
+  log_trace("stringsToUse_ %s",stringsToUse_.c_str());
+  log_trace("stringsToExclude %s",stringsToUse_.c_str());
+  log_trace("stationsToUse_ %s",stationsToUse_.c_str());
+  log_trace("stationsToExclude_ %s",stationsToUse_.c_str());
 
   goodStrings_ = geo_sel_utils::make_good_strings(stringsToUse_, stringsToExclude_);
   goodStations_ = geo_sel_utils::make_good_strings(stationsToUse_, stationsToExclude_);}
@@ -93,24 +96,21 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
 
   log_trace("***before*** geoPtr->omgeo.size(): %zu",geoPtr->omgeo.size());
 
-  cout<<"goodStrings_.size(): "<<goodStrings_.size()<<endl;
+  log_trace("goodStrings_.size(): %zu",goodStrings_.size());
   for(vector<int>::iterator iter = goodStrings_.begin(); iter != goodStrings_.end(); ++iter)
-    cout<<*iter<<" ";
-  cout<<endl;
+    log_trace("%d ",*iter);
 
-  cout<<"goodStations_.size(): "<<goodStations_.size()<<endl;
+  log_trace("goodStations_.size(): %zu",goodStations_.size());
   for(vector<int>::iterator iter = goodStations_.begin(); iter != goodStations_.end(); ++iter)
-    cout<<*iter<<" ";
-  cout<<endl;
+    log_trace("%d ",*iter);
 
-  cout<<endl;
   std::vector<int> exclude_list = geo_sel_utils::parse_string_list(stringsToExclude_);
 
   I3OMGeoMap::const_iterator iter;
   for(iter = geoPtr->omgeo.begin();
       iter != geoPtr->omgeo.end(); ++iter){
     OMKey omkey = iter->first;
-    cout<<omkey<<" ";
+    log_trace("OM: %s",omkey.str().c_str());    
     ENSURE(geo_sel_utils::exists(omkey.GetString(),goodStrings_));
     ENSURE(!geo_sel_utils::exists(omkey.GetString(),exclude_list));
   }
@@ -119,7 +119,6 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   for(siter = geoPtr->stationgeo.begin();
       siter != geoPtr->stationgeo.end(); ++siter){
     int station = siter->first;
-    cout<<station<<" ";
     ENSURE(geo_sel_utils::exists(station,goodStrings_));
     ENSURE(!geo_sel_utils::exists(station,exclude_list));
   }

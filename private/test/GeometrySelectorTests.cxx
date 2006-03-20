@@ -5,6 +5,8 @@
 #include "icetray/I3Tray.h"
 #include "phys-services/source/I3TextFileGeometryServiceFactory.h"
 #include "icetray/modules/TrashCan.h"
+#include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
+#include "phys-services/source/I3Muxer.h"
 
 using geo_sel_utils::make_good_strings;
 using geo_sel_utils::exists;
@@ -135,30 +137,34 @@ TEST(good_input){
 
 }
 
-//TEST(icetray_test_soon){
-//
-//  I3Tray tray;
-//
-//  std::string to_use("21,29,39");
-//
-//  string icecube_geo(getenv("I3_WORK"));
-//  icecube_geo += "/phys-services/resources/icecube.geo";
-//  string amanda_geo(getenv("I3_WORK"));
-//  amanda_geo += "/phys-services/resources/amanda.geo";
-//
-//  cout<<icecube_geo<<endl;
-//  cout<<amanda_geo<<endl;
-//
-//  tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
-//    ("IceCubeGeoFile",icecube_geo.c_str())
-//    ("AmandaGeoFile",amanda_geo.c_str());
-//  tray.AddModule("I3GeometrySelector","geo_selector")
-//    ("StringsToUse",to_use.c_str());
-//  //I3GeoSelTestModule contains ENSURE statements
-//  tray.AddModule("I3GeoSelTestModule","geo_test") 
-//    ("StringsToUse",to_use.c_str());
-//  tray.AddModule("TrashCan","trash");
-//
-//  tray.Execute();
-//  tray.Finish();
-//}
+TEST(icetray_test_soon){
+
+  I3Tray tray;
+
+  std::string to_use("21,29,39");
+
+  string icecube_geo(getenv("I3_WORK"));
+  icecube_geo += "/phys-services/resources/icecube.geo";
+  string amanda_geo(getenv("I3_WORK"));
+  amanda_geo += "/phys-services/resources/amanda.geo";
+
+  cout<<icecube_geo<<endl;
+  cout<<amanda_geo<<endl;
+
+  tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
+    ("IceCubeGeoFile",icecube_geo.c_str())
+    ("AmandaGeoFile",amanda_geo.c_str());
+  tray.AddService("I3EmptyStreamsFactory","empty_streams")
+    ("NFrames",1)
+    ("InstallGeometry",false);
+  tray.AddModule("I3Muxer","muxer");
+  tray.AddModule("I3GeometrySelector","geo_selector")
+    ("StringsToUse",to_use.c_str());
+  //I3GeoSelTestModule contains ENSURE statements
+  tray.AddModule("I3GeoSelTestModule","geo_test") 
+    ("StringsToUse",to_use.c_str());
+  tray.AddModule("TrashCan","trash");
+
+  tray.Execute();
+  tray.Finish();
+}
