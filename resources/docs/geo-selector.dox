@@ -1,0 +1,34 @@
+/**
+@page geo-selector Using the Geometry Selector
+@author Alex Olivas (olivas@icecube.umd.edu)
+
+@section desc Description:
+
+This module now has four parameters
+
+- StringsToUse - Default is -19:80
+- StringsToExclude - Default is empty
+- StationsToUse - Default is 1:80
+- StationsToExclude - Default is empty
+- NewGeometryName - Default is "NewGeometryName"
+
+The default values for StringsToUse is the entire 80 string IceCube 
+detector and AMANDA (i.e. "-19:80").  No strings are excluded by default.
+
+Examples values for the parameters are...
+
+ 1) Use only the IceCube detector.
+ Either set StringsToUse to "1:80" or set StringsToExclude to "-19:0" 
+ (remember the default value for StringsToUse is "-19:80").
+
+ 2) Use the current geometry (as of mid Jan '06).
+ Set StringsToUse to "21,29,30,38,39,-19:-1"
+
+There's one simple example script (FileGeometrySelectorExample.py) in
+phys-services/resources/scripts.  This illustrates its use but doens't
+really show that it works.  I should probably come up with something more
+convincing.  One could always tack on the eventviewer at the end and
+"see" that the strings are correctly removed.  There are also various tests
+one could look at.
+
+*/
