@@ -112,6 +112,6 @@ class I3SPRNGRandomService : public I3RandomService{
 
 };
 
-typedef shared_ptr<I3SPRNGRandomService> I3SPRNGRandomServicePtr;
+I3_POINTER_TYPEDEFS(I3SPRNGRandomService);
 
 #endif // I3SPRNGRANDOMSERVICE_H

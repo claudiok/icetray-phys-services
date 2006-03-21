@@ -81,10 +81,11 @@ class I3TRandomService : public I3RandomService{
  private:
   TRandom rand_;
 
-  SET_LOGGER("I3TRandomService");
-
+  SET_LOGGER("I3TRandomService")
 
 };
+
+I3_POINTER_TYPEDEFS(I3TRandomService);
 
 
 #endif //I3TRANDOMSERVICE_H

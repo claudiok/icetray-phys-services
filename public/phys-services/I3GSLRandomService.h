@@ -97,8 +97,7 @@ class I3GSLRandomService : public I3RandomService{
 
 };
 
-typedef shared_ptr<I3GSLRandomService> I3GSLRandomServicePtr;
-
+I3_POINTER_TYPEDEFS(I3GSLRandomService);
 
 inline void I3GSLRandomService::construct()
 {
