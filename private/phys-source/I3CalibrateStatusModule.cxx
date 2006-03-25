@@ -107,31 +107,41 @@ DoTheCalibration(I3RawDOMStatusPtr rawstatus,
 
 	if( isnan(atwdQFit.quadFitC) ) // Old style linear fit
 	{
-	    double slope = atwdQFit.quadFitB;
-	    double intercept = atwdQFit.quadFitA;
-	    double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
-	  
-	    rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
-	    log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
-	  
-	    if(chip==0)
-		calibratedstatus->SetSamplingRateA(rateCorrected / I3Units::microsecond);
-	    
-	    else if(chip==1)
-		calibratedstatus->SetSamplingRateB(rateCorrected / I3Units::microsecond);
-	    
-	    else 
-		log_error("atwd chip %d not available", chip);
-	}
+	  log_debug("Linear Fit from DOMcal");
 
-	else
-	{
-	  if(atwdQFit.quadFitC == 0.0)
-	    {
-	      log_warn("Found a quadratic fit with C=0.0, are you sure this is is a quadratic fit??");
-	    }
-	    log_error("Quadratic fit found.  I need to be implemented!!");
-	    // @todo implement this
+	  double slope = atwdQFit.quadFitB;
+	  double intercept = atwdQFit.quadFitA;
+	  double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
+	  
+	  rateCorrected = (slope * dacTriggerBias + intercept)*20.;  //
+	  log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
+	  
 	}
+	else	// if not linear fit
+	{
+	  log_debug("Quadratic Fit from DOMcal");
+
+	  if (atwdQFit.quadFitC == 0.0)	// PD: leave this as it is (?)
+	  {
+	    log_warn("Found a quadratic fit with C=0.0, are you sure this is is a quadratic fit??");
+	  } else {			// PD: there is indeed a quadratic fit from DOMcal
+	    double c0 = atwdQFit.quadFitA;
+	    double c1 = atwdQFit.quadFitB;
+	    double c2 = atwdQFit.quadFitC;
+	    double dacTriggerBias =  rawstatus->GetDACTriggerBias(chip);
+
+	    // f(MHz) = c2*dac*dac + c1*dac + c0
+	    rateCorrected = (c2 * dacTriggerBias * dacTriggerBias + c1 * dacTriggerBias + c0);
+	    log_trace("filled rate corrected %f MHz, for chip %d", rateCorrected, chip);
+	  }				// PD
+	}
+	if(chip==0)
+	  calibratedstatus->SetSamplingRateA(rateCorrected / I3Units::microsecond);
+	    
+	else if(chip==1)
+	  calibratedstatus->SetSamplingRateB(rateCorrected / I3Units::microsecond);
+	    
+	else 
+	  log_error("atwd chip %d not available", chip);
     }
 }
