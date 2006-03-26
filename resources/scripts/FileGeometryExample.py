@@ -26,11 +26,7 @@ tray.AddModule("I3Muxer","muxme")
 tray.AddModule("Dump","dump")
 
 tray.AddModule("FrameCheck","check")(
-    ("PhysicsKeys",
-     "I3Calibration "
-     "I3Geometry "
-     "I3DetectorStatus "
-     "DrivingTime"),
+    ("ensure_physics_has", ["I3Calibration", "I3Geometry", "I3DetectorStatus", "DrivingTime"])
     )
 
 tray.AddModule("TrashCan","trash")

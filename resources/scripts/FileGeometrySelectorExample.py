@@ -31,12 +31,8 @@ tray.AddModule("I3GeometrySelector","geo_selector")(
 tray.AddModule("Dump","dump")
 
 tray.AddModule("FrameCheck","check")(
-    ("PhysicsKeys",
-     "I3Calibration "
-     "I3Geometry "
-     "NewGeometry "
-     "I3DetectorStatus "
-     "DrivingTime"),
+    ("ensure_physics_has", ["I3Calibration", "I3Geometry", "NewGeometry", "I3DetectorStatus",
+                            "DrivingTime"])
     )
 
 tray.AddModule("TrashCan","trash")
