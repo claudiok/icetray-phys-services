@@ -12,15 +12,16 @@
 #ifndef I3MUXER_H
 #define I3MUXER_H
 
-#include "phys-services/I3EventService.h"
-#include "phys-services/I3CalibrationService.h"
-#include "phys-services/I3GeometryService.h"
-#include "phys-services/I3DetectorStatusService.h"
+#include <phys-services/I3EventService.h>
+#include <phys-services/I3CalibrationService.h>
+#include <phys-services/I3GeometryService.h>
+#include <phys-services/I3DetectorStatusService.h>
+#include <phys-services/I3MetaService.h>
 
-#include "icetray/I3Frame.h"
+#include <icetray/I3Frame.h>
 
-#include "dataclasses/I3Time.h"
-#include "phys-services/I3TimeRange.h"
+#include <dataclasses/I3Time.h>
+#include <phys-services/I3TimeRange.h>
 
 /**
  * @brief An I3Module which uses abstract interfaces
@@ -44,9 +45,9 @@ class I3Muxer : public I3Module
 
  private:
 
-  enum Stream {NONE,EVENT,GEOMETRY,CALIBRATION,DETECTORSTATUS};
+  //  enum Stream {NONE,EVENT,GEOMETRY,CALIBRATION,DETECTORSTATUS};
 
-  Stream NextStream();
+  I3Frame::Stream NextStream();
 
   void SendEvent();
   

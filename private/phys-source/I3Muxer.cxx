@@ -26,28 +26,67 @@ I3Muxer::I3Muxer(const I3Context& context) : I3Module(context),
 void I3Muxer::Process()
 {
   log_debug("Entering I3Muxer::Process()");
-  Stream next = NextStream();
-  switch (next)
-      {
-      case EVENT:
-	SendEvent();
-	return;
-      case GEOMETRY:
-	SendGeometry();
-	return;
-      case CALIBRATION:
-	SendCalibration();
-	return;
-      case DETECTORSTATUS:
-	SendDetectorStatus();
-	return;
-      case NONE:
-	RequestSuspension();
-	return;
-      default:
-	log_fatal("Something weird happened");
-      }
+
+  //
+  // first check for 'meta streams', like TrayInfo, send em if they
+  // exist.  These run at "speeds" unrelated to G/C/S/P
+  //
+  if (context_.Has<I3MetaService>())
+    {
+      I3FramePtr frame = context_.Get<I3MetaService>().PopMeta();
+      if (frame)
+	{
+	  PushFrame(frame, "OutBox");
+	  return;
+	}
+    }
+    
+  I3Frame::Stream next = NextStream();
+  if (next == I3Frame::Physics)
+    {
+      SendEvent();
+      return;
+    }
+  else if (next == I3Frame::Geometry)
+    {
+      SendGeometry();
+      return;
+    }
+  else if (next == I3Frame::Calibration)
+    {
+      SendCalibration();
+      return;
+    }
+  else if (next == I3Frame::DetectorStatus)
+    {
+      SendDetectorStatus();
+      return;
+    }
+  else
+    {
+      RequestSuspension();
+      return;
+    }
+  log_fatal("Something weird happened");
 }
+
+I3Frame::Stream 
+I3Muxer::NextStream()
+{
+  if(!context_.Get<I3EventService>().MoreEvents())
+    return I3Frame::None;
+
+  I3Time eventTime = NextEventTime();
+  if(!IsGeometryCurrent(eventTime))
+    return I3Frame::Geometry;
+  if(!IsCalibrationCurrent(eventTime))
+    return I3Frame::Calibration;
+  if(!IsDetectorStatusCurrent(eventTime))
+    return I3Frame::DetectorStatus;
+
+  return I3Frame::Physics;
+}
+
 
 void I3Muxer::SendEvent()
 {
@@ -58,7 +97,7 @@ void I3Muxer::SendEvent()
   I3FramePtr frame(new I3Frame(I3Frame::Physics));
 
   assert(currentEventQueued_);
-  for(I3Frame::const_iterator iter = currentEvent_.begin () ; 
+  for(I3Frame::const_iterator iter = currentEvent_.begin (); 
       iter != currentEvent_.end() ; 
       iter++)
     {
@@ -132,21 +171,6 @@ void I3Muxer::SendGeometry()
   I3FramePtr frame(new I3Frame(I3Frame::Geometry));
   frame->Put(currentGeometry_);
   PushFrame(frame,"OutBox");
-}
-
-I3Muxer::Stream I3Muxer::NextStream()
-{
-  if(!context_.Get<I3EventService>().MoreEvents())
-    return NONE;
-
-  I3Time eventTime = NextEventTime();
-  if(!IsGeometryCurrent(eventTime))
-    return GEOMETRY;
-  if(!IsCalibrationCurrent(eventTime))
-    return CALIBRATION;
-  if(!IsDetectorStatusCurrent(eventTime))
-    return DETECTORSTATUS;
-  return EVENT;
 }
 
 bool I3Muxer::IsGeometryCurrent(I3Time time)
