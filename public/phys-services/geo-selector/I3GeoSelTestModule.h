@@ -91,6 +91,4 @@ v   */
   
 };  // end of class I3GeoSelTestModule
 
-I3_MODULE(I3GeoSelTestModule);
-
 #endif //I3GEOSELTESTMODULE_H

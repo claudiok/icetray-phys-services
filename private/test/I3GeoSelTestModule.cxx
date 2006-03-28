@@ -27,6 +27,8 @@
 
 using namespace std;
 
+I3_MODULE(I3GeoSelTestModule);
+
 I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) : 
   I3Module(ctx),
   stringsToUse_("-19:80"),
@@ -121,7 +123,7 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   for(siter = geoPtr->stationgeo.begin();
       siter != geoPtr->stationgeo.end(); ++siter){
     int station = siter->first;
-    log_trace("Station: %d",station));    
+    log_trace("Station: %d",station);    
     ENSURE(geo_sel_utils::exists(station,goodStrings_));
     ENSURE(!geo_sel_utils::exists(station,exclude_list));
   }
