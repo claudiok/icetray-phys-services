@@ -22,6 +22,9 @@
  *that are in stringsToUse_ and does not contain any DOMs that are in stringsToExclude_.
  */
 
+//This needs to be turned into a service that gets the geometry from another service
+//and not the frame.  The muxer can then be pointed to this service to get the trimmed geometry.
+
 class I3GeoSelTestModule : public I3Module
 {
 public:
