@@ -20,10 +20,10 @@ TEST(multiple_MCHits){
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
     ("NFrames",1);
   tray.AddModule("I3Muxer","muxer");
-  tray.AddModule("I3TestSource<I3MCHit>","test_source")
+  tray.AddModule("I3TestSource<I3Vector<I3MCHit> >","test_source")
     ("OutputMap","ParticleMap")
     ("NObjects",nObjects);
-  tray.AddModule("I3TestSourceTestModule<I3MCHit>","test_module")
+  tray.AddModule("I3TestSourceTestModule<I3Vector<I3MCHit> >","test_module")
     ("MapName","ParticleMap")
     ("NObjects",nObjects);
   tray.AddModule("TrashCan","trash");
@@ -43,10 +43,10 @@ TEST(multiple_MCHits_stress_test){
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
     ("NFrames",1);
   tray.AddModule("I3Muxer","muxer");
-  tray.AddModule("I3TestSource<I3MCHit>","test_source")
+  tray.AddModule("I3TestSource<I3Vector<I3MCHit> >","test_source")
     ("OutputMap","ParticleMap")
     ("NObjects",nObjects);
-  tray.AddModule("I3TestSourceTestModule<I3MCHit>","test_module")
+  tray.AddModule("I3TestSourceTestModule<I3Vector<I3MCHit> >","test_module")
     ("MapName","ParticleMap")
     ("NObjects",nObjects);
   tray.AddModule("TrashCan","trash");
@@ -66,10 +66,10 @@ TEST(multiple_MCHits_super_stress_test){
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
     ("NFrames",10);
   tray.AddModule("I3Muxer","muxer");
-  tray.AddModule("I3TestSource<I3MCHit>","test_source")
+  tray.AddModule("I3TestSource<I3Vector<I3MCHit> >","test_source")
     ("OutputMap","ParticleMap")
     ("NObjects",nObjects);
-  tray.AddModule("I3TestSourceTestModule<I3MCHit>","test_module")
+  tray.AddModule("I3TestSourceTestModule<I3Vector<I3MCHit> >","test_module")
     ("MapName","ParticleMap")
     ("NObjects",nObjects);
   tray.AddModule("TrashCan","trash");

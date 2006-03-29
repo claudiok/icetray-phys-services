@@ -19,6 +19,7 @@
 #include "icetray/I3TrayHeaders.h"
 #include "dataclasses/OMKey.h"
 #include "dataclasses/I3Map.h"
+#include "dataclasses/I3Vector.h"
 #include "dataclasses/physics/I3AMANDAAnalogReadout.h"
 #include "dataclasses/physics/I3DOMLaunch.h"
 #include "dataclasses/physics/I3MCHit.h"
@@ -69,14 +70,14 @@ void I3TestSourceTestModule<T>::Physics(I3FramePtr frame) {
 
 template class I3TestSourceTestModule<I3AMANDAAnalogReadout>;
 template class I3TestSourceTestModule<I3DOMLaunch>;
-template class I3TestSourceTestModule<I3MCHit>;
-template class I3TestSourceTestModule<I3RecoHit>;
-template class I3TestSourceTestModule<I3RecoPulse>;
+template class I3TestSourceTestModule<I3Vector<I3MCHit> >;
+template class I3TestSourceTestModule<I3Vector<I3RecoHit> >;
+template class I3TestSourceTestModule<I3Vector<I3RecoPulse> >;
 template class I3TestSourceTestModule<I3TWRLaunch>;
 
 I3_MODULE(I3TestSourceTestModule<I3AMANDAAnalogReadout>);
 I3_MODULE(I3TestSourceTestModule<I3DOMLaunch>);
-I3_MODULE(I3TestSourceTestModule<I3MCHit>);
-I3_MODULE(I3TestSourceTestModule<I3RecoHit>);
-I3_MODULE(I3TestSourceTestModule<I3RecoPulse>);
+I3_MODULE(I3TestSourceTestModule<I3Vector<I3MCHit> >);
+I3_MODULE(I3TestSourceTestModule<I3Vector<I3RecoHit> >);
+I3_MODULE(I3TestSourceTestModule<I3Vector<I3RecoPulse> >);
 I3_MODULE(I3TestSourceTestModule<I3TWRLaunch>);
