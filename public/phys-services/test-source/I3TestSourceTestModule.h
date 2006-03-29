@@ -15,6 +15,7 @@
 // header files
 #include "icetray/I3Module.h"
 
+template <class T> 
 class I3TestSourceTestModule : public I3Module
 {
 public:

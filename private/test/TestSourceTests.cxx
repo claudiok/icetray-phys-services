@@ -9,7 +9,7 @@
 
 TEST_GROUP(I3TestSource);
 
-TEST(multiple_DOMLaunches){
+TEST(multiple_MCHits){
 
   I3Tray tray;
 
@@ -20,10 +20,10 @@ TEST(multiple_DOMLaunches){
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
     ("NFrames",1);
   tray.AddModule("I3Muxer","muxer");
-  tray.AddModule("I3TestSource<I3DOMLaunch>","test_source")
+  tray.AddModule("I3TestSource<I3MCHit>","test_source")
     ("OutputMap","ParticleMap")
     ("NObjects",nObjects);
-  tray.AddModule("I3TestSourceTestModule","test_module")
+  tray.AddModule("I3TestSourceTestModule<I3MCHit>","test_module")
     ("MapName","ParticleMap")
     ("NObjects",nObjects);
   tray.AddModule("TrashCan","trash");
@@ -32,7 +32,7 @@ TEST(multiple_DOMLaunches){
   tray.Finish();
 }
 
-TEST(multiple_DOMLaunches_stress_test){
+TEST(multiple_MCHits_stress_test){
 
   I3Tray tray;
 
@@ -43,10 +43,10 @@ TEST(multiple_DOMLaunches_stress_test){
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
     ("NFrames",1);
   tray.AddModule("I3Muxer","muxer");
-  tray.AddModule("I3TestSource<I3DOMLaunch>","test_source")
+  tray.AddModule("I3TestSource<I3MCHit>","test_source")
     ("OutputMap","ParticleMap")
     ("NObjects",nObjects);
-  tray.AddModule("I3TestSourceTestModule","test_module")
+  tray.AddModule("I3TestSourceTestModule<I3MCHit>","test_module")
     ("MapName","ParticleMap")
     ("NObjects",nObjects);
   tray.AddModule("TrashCan","trash");
@@ -55,7 +55,7 @@ TEST(multiple_DOMLaunches_stress_test){
   tray.Finish();
 }
 
-TEST(multiple_DOMLaunches_super_stress_test){
+TEST(multiple_MCHits_super_stress_test){
 
   I3Tray tray;
 
@@ -66,10 +66,10 @@ TEST(multiple_DOMLaunches_super_stress_test){
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
     ("NFrames",10);
   tray.AddModule("I3Muxer","muxer");
-  tray.AddModule("I3TestSource<I3DOMLaunch>","test_source")
+  tray.AddModule("I3TestSource<I3MCHit>","test_source")
     ("OutputMap","ParticleMap")
     ("NObjects",nObjects);
-  tray.AddModule("I3TestSourceTestModule","test_module")
+  tray.AddModule("I3TestSourceTestModule<I3MCHit>","test_module")
     ("MapName","ParticleMap")
     ("NObjects",nObjects);
   tray.AddModule("TrashCan","trash");
