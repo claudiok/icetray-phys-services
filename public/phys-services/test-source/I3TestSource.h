@@ -13,8 +13,6 @@
 
 #include "boost/random.hpp"
 
-
-
 template <class T>
 class I3TestSource : public I3Module
 {
@@ -80,17 +78,29 @@ void I3TestSource<T>::Physics(I3FramePtr frame)
 
   //Make a list of random om keys
   vector<OMKey> om_list;
+  vector<OMKey>::iterator i;
   while(om_list.size() < nObjects_){
     int om_string = string_rng(rng);
     unsigned int om_number = om_rng(rng);
     OMKey om(om_string,om_number);
-    om_list.push_back(om);
+    bool exists(false);
+    for(i=om_list.begin(); i != om_list.end(); ++i){
+      if(*i == om){
+	exists = true;
+	break;
+      }
+    }
+    if(!exists) om_list.push_back(om);
   }
 
-  vector<OMKey>::iterator i;
   for(i=om_list.begin(); i != om_list.end(); ++i){
     Randomize(test_object);
     (*test_map)[*i] = test_object;
+  }
+
+  if(test_map->size() != om_list.size()){
+    log_trace("om_list.size(): %zu", om_list.size());
+    log_trace("test_map->size(): %zu", test_map->size());
   }
 
   frame->Put(outputMapName_, test_map);
