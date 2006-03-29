@@ -11,6 +11,10 @@
 #include "dataclasses/OMKey.h"
 #include <string>
 
+#include "boost/random.hpp"
+
+
+
 template <class T>
 class I3TestSource : public I3Module
 {
@@ -30,7 +34,7 @@ class I3TestSource : public I3Module
   /**
    *Number of objects to put in the map
    */
-  int nObjects_; 
+  unsigned nObjects_; 
   /**
    * Randomizes the class you want to put in the frame.
    * This is going to be very module/class specific so have
@@ -70,19 +74,23 @@ void I3TestSource<T>::Physics(I3FramePtr frame)
 
   T test_object;
 
-  srand(time(0));
+  boost::rand48 rng(static_cast<int>(time(0)));
+  boost::uniform_smallint<int> string_rng(1,80);
+  boost::uniform_smallint<unsigned int> om_rng(1,60);
 
-  for(int i=0; i<nObjects_; ++i){
-    int om_string = (rand() % 79) + 1;
-    unsigned int om_number = (rand() % 59) + 1;
+  //Make a list of random om keys
+  vector<OMKey> om_list;
+  while(om_list.size() < nObjects_){
+    int om_string = string_rng(rng);
+    unsigned int om_number = om_rng(rng);
     OMKey om(om_string,om_number);
-    Randomize(test_object);
-    (*test_map)[om] = test_object;
-    //These keys need to be unique
+    om_list.push_back(om);
   }
 
-  if(test_map->size() != nObjects_){
-    log_fatal("Something bad happened here.");
+  vector<OMKey>::iterator i;
+  for(i=om_list.begin(); i != om_list.end(); ++i){
+    Randomize(test_object);
+    (*test_map)[*i] = test_object;
   }
 
   frame->Put(outputMapName_, test_map);
