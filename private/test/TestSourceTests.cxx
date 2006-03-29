@@ -64,7 +64,7 @@ TEST(multiple_DOMLaunches_super_stress_test){
   unsigned nObjects = nObjects_rng(rng);
 
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
-    ("NFrames",100);
+    ("NFrames",10);
   tray.AddModule("I3Muxer","muxer");
   tray.AddModule("I3TestSource<I3DOMLaunch>","test_source")
     ("OutputMap","ParticleMap")
