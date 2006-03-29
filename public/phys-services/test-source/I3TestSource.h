@@ -70,13 +70,21 @@ void I3TestSource<T>::Physics(I3FramePtr frame)
 
   T test_object;
 
+  srand(time(0));
+
   for(int i=0; i<nObjects_; ++i){
     int om_string = (rand() % 79) + 1;
     unsigned int om_number = (rand() % 59) + 1;
     OMKey om(om_string,om_number);
     Randomize(test_object);
     (*test_map)[om] = test_object;
+    //These keys need to be unique
   }
+
+  if(test_map->size() != nObjects_){
+    log_fatal("Something bad happened here.");
+  }
+
   frame->Put(outputMapName_, test_map);
   PushFrame(frame,"OutBox");
 }
