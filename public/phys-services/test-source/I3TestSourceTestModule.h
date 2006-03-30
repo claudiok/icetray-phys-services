@@ -42,7 +42,6 @@ private:
   I3TestSourceTestModule(const I3TestSourceTestModule& source);
   I3TestSourceTestModule& operator=(const I3TestSourceTestModule& source);
 
-  unsigned  nObjects_;
   string mapName_;
 
   SET_LOGGER("I3TestSourceTestModule");
@@ -52,14 +51,10 @@ private:
 template <class T>
 I3TestSourceTestModule<T>::I3TestSourceTestModule(const I3Context& ctx) : 
   I3Module(ctx),
-  nObjects_(1),
   mapName_("Default")
 {
   AddOutBox("OutBox");
   
-  AddParameter("NObjects", 
-	       "Number of objects in the frame", 
-	       nObjects_);
   AddParameter("MapName", 
 	       "Name of the map that contains the objects", 
 	       mapName_);
@@ -72,7 +67,6 @@ I3TestSourceTestModule<T>::~I3TestSourceTestModule() {
 // transitions
 template <class T>
 void I3TestSourceTestModule<T>::Configure() {
-  GetParameter("NObjects", nObjects_);
   GetParameter("MapName", mapName_);
 }
 
