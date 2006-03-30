@@ -76,19 +76,4 @@ void I3TestSourceTestModule<T>::Configure() {
   GetParameter("MapName", mapName_);
 }
 
-template <class T>
-void I3TestSourceTestModule<T>::Physics(I3FramePtr frame) {
-
-  // Get the event information out of the Frame
-  const I3Map<OMKey,T>& m = frame->Get< I3Map<OMKey,T> >(mapName_);
-
-  log_trace("m.size(): %zu",m.size());
-  log_trace("nObjects_: %d",nObjects_);
- 
-  ENSURE(m.size() == nObjects_,"Wrong number of objects in the map.");
-
-  PushFrame(frame,"OutBox");
-}
-
-
 #endif 
