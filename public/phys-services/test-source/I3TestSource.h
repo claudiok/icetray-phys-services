@@ -68,6 +68,8 @@ I3TestSource<T>::I3TestSource(const I3Context& ctx) :
 template <class T>
 void I3TestSource<T>::Physics(I3FramePtr frame)
 {
+
+  log_debug("I3TestSource: Entering Physics...");
   shared_ptr< I3Map<OMKey,T> > test_map(new I3Map<OMKey,T>);
 
   T test_object;
@@ -101,6 +103,8 @@ void I3TestSource<T>::Physics(I3FramePtr frame)
   if(test_map->size() != om_list.size()){
     log_trace("om_list.size(): %zu", om_list.size());
     log_trace("test_map->size(): %zu", test_map->size());
+  }else{
+    log_debug("Bob is your uncle!");
   }
 
   frame->Put(outputMapName_, test_map);

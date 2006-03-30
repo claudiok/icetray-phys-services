@@ -63,7 +63,7 @@ TEST(multiple_MCHits){
   unsigned nObjects = nObjects_rng(rng);
 
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
-    ("NFrames",1);
+    ("NFrames",2);
   tray.AddModule("I3Muxer","muxer");
   tray.AddModule("I3TestSource<I3Vector<I3MCHit> >","test_source")
     ("OutputMap","ParticleMap")
@@ -86,7 +86,7 @@ TEST(multiple_MCHits_stress_test){
   unsigned nObjects = nObjects_rng(rng);
 
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
-    ("NFrames",1);
+    ("NFrames",2);
   tray.AddModule("I3Muxer","muxer");
   tray.AddModule("I3TestSource<I3Vector<I3MCHit> >","test_source")
     ("OutputMap","ParticleMap")
