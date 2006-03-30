@@ -14,6 +14,9 @@
 
 // header files
 #include "icetray/I3Module.h"
+#include "icetray/I3Frame.h"
+#include "dataclasses/OMKey.h"
+#include "dataclasses/I3Map.h"
 
 template <class T> 
 class I3TestSourceTestModule : public I3Module
@@ -45,5 +48,47 @@ private:
   SET_LOGGER("I3TestSourceTestModule");
   
 };  // end of class I3TestSourceTestModule
+
+template <class T>
+I3TestSourceTestModule<T>::I3TestSourceTestModule(const I3Context& ctx) : 
+  I3Module(ctx),
+  nObjects_(1),
+  mapName_("Default")
+{
+  AddOutBox("OutBox");
+  
+  AddParameter("NObjects", 
+	       "Number of objects in the frame", 
+	       nObjects_);
+  AddParameter("MapName", 
+	       "Name of the map that contains the objects", 
+	       mapName_);
+}
+
+template <class T>
+I3TestSourceTestModule<T>::~I3TestSourceTestModule() {
+}
+
+// transitions
+template <class T>
+void I3TestSourceTestModule<T>::Configure() {
+  GetParameter("NObjects", nObjects_);
+  GetParameter("MapName", mapName_);
+}
+
+template <class T>
+void I3TestSourceTestModule<T>::Physics(I3FramePtr frame) {
+
+  // Get the event information out of the Frame
+  const I3Map<OMKey,T>& m = frame->Get< I3Map<OMKey,T> >(mapName_);
+
+  log_trace("m.size(): %zu",m.size());
+  log_trace("nObjects_: %d",nObjects_);
+ 
+  ENSURE(m.size() == nObjects_,"Wrong number of objects in the map.");
+
+  PushFrame(frame,"OutBox");
+}
+
 
 #endif 
