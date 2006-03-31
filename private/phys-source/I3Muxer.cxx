@@ -126,6 +126,8 @@ void I3Muxer::SendCalibration()
 		  currentCalibration_->endTime);
   assert(currentCalibration_);
   assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
+  assert(nextEvent > currentCalibrationRange_.lower);
+  assert(nextEvent < currentCalibrationRange_.upper);
   I3FramePtr frame(new I3Frame(I3Frame::Calibration));
 
   assert(currentGeometry_);
@@ -147,6 +149,8 @@ void I3Muxer::SendDetectorStatus()
   assert(currentDetectorStatus_);
   assert(currentDetectorStatusRange_.lower < 
 	 currentDetectorStatusRange_.upper);
+  assert(nextEvent > currentDetectorStatusRange_.lower);
+  assert(nextEvent < currentDetectorStatusRange_.upper);
   I3FramePtr frame(new I3Frame(I3Frame::DetectorStatus));
 
   assert(currentGeometry_);
@@ -168,6 +172,8 @@ void I3Muxer::SendGeometry()
 		currentGeometry_->endTime);
   assert(currentGeometry_);
   assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
+  assert(nextEvent > currentGeometryRange_.lower);
+  assert(nextEvent < currentGeometryRange_.upper);
   I3FramePtr frame(new I3Frame(I3Frame::Geometry));
   frame->Put(currentGeometry_);
   PushFrame(frame,"OutBox");
