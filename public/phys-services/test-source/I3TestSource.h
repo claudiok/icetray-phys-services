@@ -75,7 +75,7 @@ void I3TestSource<T>::Physics(I3FramePtr frame)
   T test_object;
 
   boost::rand48 rng(static_cast<int>(time(0)));
-  boost::uniform_smallint<int> string_rng(1,80);
+  boost::uniform_smallint<int> string_rng(-19,80);
   boost::uniform_smallint<unsigned int> om_rng(1,60);
 
   //Make a list of random om keys
@@ -83,6 +83,7 @@ void I3TestSource<T>::Physics(I3FramePtr frame)
   vector<OMKey>::iterator i;
   while(om_list.size() < nObjects_){
     int om_string = string_rng(rng);
+    if(!om_string) continue; //spin again
     unsigned int om_number = om_rng(rng);
     OMKey om(om_string,om_number);
     bool exists(false);
