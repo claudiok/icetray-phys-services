@@ -32,7 +32,10 @@ class I3TestSource : public I3Module
   /**
    *Number of objects to put in the map
    */
-  unsigned nObjects_; 
+  unsigned nObjects_;
+
+  int minString_;
+  int maxString_;
   /**
    * Randomizes the class you want to put in the frame.
    * This is going to be very module/class specific so have
@@ -46,6 +49,8 @@ class I3TestSource : public I3Module
   void Configure(){
     GetParameter("OutputMap",outputMapName_);
     GetParameter("NObjects",nObjects_);
+    GetParameter("MinString", minString_);
+    GetParameter("MaxString", maxString_);
   };
   void Physics(I3FramePtr frame);
 };
@@ -54,14 +59,16 @@ class I3TestSource : public I3Module
 //there's probably a better way to organize this
 
 template <class T>
-I3TestSource<T>::I3TestSource(const I3Context& ctx) : 
-  I3Module(ctx),
-  outputMapName_("TestSourceMap"),
-  nObjects_(1)
-
+I3TestSource<T>::I3TestSource(const I3Context& ctx) : I3Module(ctx),
+     outputMapName_("TestSourceMap"),
+     nObjects_(1),
+     minString_(-19),
+     maxString_(80)
 {
   AddParameter("OutputMap","Key of the Output Map",outputMapName_);
   AddParameter("NObjects","Number of Objects to put in the Map",nObjects_);
+  AddParameter("MinString","MinimumString", minString_);
+  AddParameter("MaxString","MaximumString", maxString_);
   AddOutBox("OutBox");
 }
 
@@ -75,7 +82,7 @@ void I3TestSource<T>::Physics(I3FramePtr frame)
   T test_object;
 
   boost::rand48 rng(static_cast<int>(time(0)));
-  boost::uniform_smallint<int> string_rng(-19,80);
+  boost::uniform_smallint<int> string_rng(minString_,maxString_);
   boost::uniform_smallint<unsigned int> om_rng(1,60);
 
   //Make a list of random om keys
