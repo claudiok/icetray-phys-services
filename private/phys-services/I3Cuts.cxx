@@ -34,6 +34,7 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
     I3RecoHitSeries::const_iterator hit;
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
       double Tres = TimeResidual(track, ompos, hit->GetTime());
+      log_debug("residual: %f",Tres);
 
       // calculate projections of hits onto track...
       Nhit++; // keep track of total hits
@@ -238,7 +239,7 @@ double I3Cuts::CylinderSize(const I3Particle& track,
     }
 
   } else {
-    bestcorner = 1.E9;
+    bestcorner = NAN;
   }
 
   // 2) Solve for cylinder-clipper
@@ -266,12 +267,12 @@ double I3Cuts::CylinderSize(const I3Particle& track,
     if (r/zcyl >= k) {
       bestcyl = r/R0;
     } else {
-      bestcyl = 1.E9;
+      bestcyl = NAN;
     }
   }
 
   // Which is smaller?
-  if (bestcorner<bestcyl) {
+  if ((bestcorner<bestcyl)||isnan(bestcyl)) {
     return bestcorner;
   } else {
     return bestcyl;
