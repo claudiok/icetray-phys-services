@@ -31,7 +31,7 @@ class I3MCRawDOMStatusService : public I3DetectorStatusService
 public:
 
   virtual I3DetectorStatusConstPtr GetDetectorStatus(I3Time time);
-  virtual ~I3DetectorStatusService() { };
+  virtual ~I3MCRawDOMStatusService() { };
   void Fill(I3GeometryConstPtr);
 
     SET_LOGGER("I3MCRawDOMStatusService");
