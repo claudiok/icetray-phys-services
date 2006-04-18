@@ -7,12 +7,77 @@ using namespace I3Constants;
 using namespace I3Calculator;
 
 
+I3Position I3Cuts::calculateCog(I3RecoPulseSeriesMap pulse_map, const I3Geometry& geometry)
+{
+  double ampWeight=1;
+  const I3OMGeoMap& om_geo=geometry.omgeo;
+  double cog[3];
+  cog[0]=0.0;
+  cog[1]=0.0;
+  cog[2]=0.0;
+  double ampsum=0.0;
+  
+  // I need to loop over all hit OMs, first to calculate the center of gravity of the hits 
+  // and then to get the tensor of inertia.  
+ 
+  
+  I3RecoPulseSeriesMap::const_iterator iter;
+  iter=pulse_map.begin();
+  while(iter !=  pulse_map.end()) {
+    
+    const I3Vector<I3RecoPulse> pulsevect=iter->second;
+    
+    if(pulsevect.empty()==true) {
+      iter++;
+      log_debug("empty  RecoPulseSeries!");
+      continue;
+    }
+    
+    for (int i=0; i < pulsevect.size(); i++) {
+      I3RecoPulse pulse = pulsevect[i];
+    
+      double amp_tmp = (pulse.GetCharge() >= 2.0) ? pulse.GetCharge() : 1;
+   
+      double amp=pow(amp_tmp,ampWeight);
+      ampsum+=amp;
+    
+      const OMKey om = iter->first;
+      I3OMGeoMap::const_iterator iter2 = om_geo.find(om);
+      assert(iter2 != om_geo.end());
+      const I3Position ompos = (iter2->second).position;
+    
+      double r[3];
+      r[0] = ompos.GetX();
+      r[1] = ompos.GetY();
+      r[2] = ompos.GetZ();
+
+      // calculate the center of gravity             
+      for (int j=0; j < 3; j++) {
+      
+	cog[j]+=amp*r[j];
+      }
+    }
+    iter++;
+  }
+  
+  if(ampsum==0){
+    ampsum=1.0;
+  }
+  I3Position cogPosition;
+  cogPosition.SetX(cog[0]/ampsum);
+  cogPosition.SetY(cog[1]/ampsum);
+  cogPosition.SetZ(cog[2]/ampsum);
+  return cogPosition;
+}
+
+
 //--------------------------------------------------------------
 void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
-		      const I3RecoHitSeriesMap& hitmap, 
-		      const double t1, const double t2, int& Nchan, int& Nhit,
+		      const I3RecoHitSeriesMap& hitmap,
+		      const double t1, const double t2,int& Nchan, int& Nhit,
 		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
+
   Ndir = 0;
   Nhit = 0;
   vector<double> lengthAll;

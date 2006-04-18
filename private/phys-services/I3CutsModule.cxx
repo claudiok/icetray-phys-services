@@ -26,6 +26,11 @@ I3CutsModule::I3CutsModule(const I3Context& ctx) : I3Module(ctx)
   hitsName_ = "";
   AddParameter("HitsName", "Name of the hit series to be used for cut calc.", 
 	       hitsName_);
+
+ hitsName_ = "";
+  AddParameter("PulseName", "Name of the pulse series to be used for cut calc.", 
+	       pulseName_);
+
 }
 
 
@@ -48,6 +53,13 @@ void I3CutsModule::Physics(I3FramePtr frame)
   I3RecoHitSeriesMapConstPtr hitmap = 
     frame->Get<I3RecoHitSeriesMapConstPtr>(hitsName_);
   if (!hitmap) {
+    PushFrame(frame,"OutBox");
+    return;
+  }
+
+ I3RecoPulseSeriesMapConstPtr pulsemap = 
+    frame->Get<I3RecoPulseSeriesMapConstPtr>(pulseName_);
+  if (!pulsemap) {
     PushFrame(frame,"OutBox");
     return;
   }
@@ -78,7 +90,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
     log_debug(" ---> calculating cuts for I3Particle '%s'...", name.c_str());
 
     I3CutValuesPtr cuts(new I3CutValues());
-    cuts->Calculate(*particle, geometry, *hitmap);
+    cuts->Calculate(*particle, geometry, *hitmap,*pulsemap);
     frame->Put(name+"Cuts", cuts);
     log_debug("%s",ToString(cuts).c_str());
   }

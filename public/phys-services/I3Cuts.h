@@ -5,7 +5,7 @@
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/geometry/I3Geometry.h"
-
+#include "dataclasses/physics/I3RecoPulse.h"
 class I3OMResponse;
 class I3OMResponseMap;
 
@@ -87,6 +87,12 @@ namespace I3Cuts
 		double& Sdir,
 		double& Sall);
 
+  /**
+   * A function which calculates the center of gravity of the hits. It takes a recopulse series map and the geometry,
+   * and returns an I3Position of the hits
+   */
+
+  I3Position calculateCog(I3RecoPulseSeriesMap pulse_map, const I3Geometry& geometry);
   /**
    * A convenience function that calls CutsCalc() and returns the total 
    * number of channels (hit OMs) in the event.  If you are interested in

@@ -13,6 +13,7 @@
 #include "dataclasses/I3Units.h"
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/physics/I3RecoHit.h"
+#include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
 
 /**
@@ -27,6 +28,9 @@ class I3CutValues : public I3FrameObject
   double Ldir;
   double Sdir;
   double Sall;
+  double cogx;
+  double cogy;
+  double cogz;
 
   I3CutValues() :
     Nchan(-1),
@@ -40,6 +44,7 @@ class I3CutValues : public I3FrameObject
   void Calculate(const I3Particle& track, 
 		 const I3Geometry& geometry, 
 		 const I3RecoHitSeriesMap& hitmap,
+		 const I3RecoPulseSeriesMap& pulsemap,
 		 const double& begTWindow = -15.*I3Units::ns,
 		 const double& endTWindow = +25.*I3Units::ns);
 
