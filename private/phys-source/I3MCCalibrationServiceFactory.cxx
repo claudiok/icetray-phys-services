@@ -21,7 +21,6 @@ bool I3MCCalibrationServiceFactory::InstallService(I3Context& services)
       (new I3MCCalibrationService());
     I3Time t(2006,0);
     log_debug("Attempting to get geometry...");
-    context_.dump();
     I3GeometryConstPtr geo = context_.Get<I3GeometryService>().GetGeometry(t);
     log_debug("Successfully got the geometry.");
     if(!geo) log_fatal("Couldn't get geometry.");
