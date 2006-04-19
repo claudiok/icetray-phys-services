@@ -15,19 +15,28 @@ void I3MCSourceServiceFactory::Configure(){}
 
 bool I3MCSourceServiceFactory::InstallService(I3Context& services)
 {
+
   if(!status_){
     status_ = 
       shared_ptr<I3MCRawDOMStatusService>
-      (new I3MCRawDOMStatusService());
+      (new I3MCRawDOMStatusService(context_.Get<I3GeometryServicePtr>()));
+    log_debug("Made new I3MCRawDOMStatusService.");
   }
-  return services.Put<I3DetectorStatusService>(status_);
 
   if(!calibration_){
     calibration_ = 
       shared_ptr<I3MCCalibrationService>
-      (new I3MCCalibrationService());
+      (new I3MCCalibrationService(context_.Get<I3GeometryServicePtr>()));
+    log_debug("Made new I3MCCalibrationService.");
   }
-  return services.Put<I3CalibrationService>(calibration_);
 
+
+  bool good_calib = services.Put<I3CalibrationService>(calibration_);
+  log_debug("good_calib %d",good_calib);
+  bool good_status = services.Put<I3DetectorStatusService>(status_);
+  log_debug("good_status %d",good_status);
+
+  return (good_calib && good_status);
+	  
 }
 

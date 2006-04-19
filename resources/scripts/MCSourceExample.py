@@ -28,9 +28,7 @@ tray.AddService("I3TextFileGeometryServiceFactory","geometry")(
               ("AmandaGeoFile",amageofile),
               ("IceCubeGeoFile",icecubegeofile))
 
-tray.AddService("I3MCRawDOMStatusServiceFactory","status")
-
-tray.AddService("I3MCCalibrationServiceFactory","calibration")
+tray.AddService("I3MCSourceServiceFactory","mcsource")
 
 tray.AddModule("I3Muxer","muxer")
 

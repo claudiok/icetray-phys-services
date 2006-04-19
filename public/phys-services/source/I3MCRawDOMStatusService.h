@@ -16,6 +16,7 @@
 #define I3MCRAWDOMSTATUSSERVICE_H
 
 #include "phys-services/I3DetectorStatusService.h"
+#include "phys-services/I3GeometryService.h"
 
 class I3Geometry;
 I3_POINTER_TYPEDEFS(I3Geometry);
@@ -30,15 +31,19 @@ class I3MCRawDOMStatusService : public I3DetectorStatusService
 {
 public:
 
+  I3MCRawDOMStatusService(I3GeometryServicePtr g){
+    geo_service_ = g;
+  }
+
   virtual I3DetectorStatusConstPtr GetDetectorStatus(I3Time time);
   virtual ~I3MCRawDOMStatusService() { };
-  void Fill(I3GeometryConstPtr);
 
-    SET_LOGGER("I3MCRawDOMStatusService");
+  SET_LOGGER("I3MCRawDOMStatusService");
 
-private:
+ private:
+  I3MCRawDOMStatusService();
+  I3GeometryServicePtr geo_service_;
 
-    I3DetectorStatusPtr status_;
 };
 
 #endif

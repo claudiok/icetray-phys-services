@@ -16,6 +16,7 @@
 #define I3MCCALIBRATIONSERVICE_H
 
 #include "phys-services/I3CalibrationService.h"
+#include "phys-services/I3GeometryService.h"
 
 class I3Geometry;
 I3_POINTER_TYPEDEFS(I3Geometry);
@@ -30,15 +31,17 @@ class I3MCCalibrationService : public I3CalibrationService
 {
 public:
 
+  I3MCCalibrationService(I3GeometryServicePtr g){
+    geo_service_ = g;
+  }
   virtual I3CalibrationConstPtr GetCalibration(I3Time time);
   virtual ~I3MCCalibrationService() { };
-  void Fill(I3GeometryConstPtr);
 
-    SET_LOGGER("I3MCCalibrationService");
+  SET_LOGGER("I3MCCalibrationService");
 
-private:
-
-    I3CalibrationPtr calibration_;
+ private:
+  I3MCCalibrationService();
+  I3GeometryServicePtr geo_service_;
 };
 
 #endif
