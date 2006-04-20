@@ -19,6 +19,7 @@
 #include <phys-services/I3MetaService.h>
 
 #include <icetray/I3Frame.h>
+#include <icetray/I3Logging.h>
 
 #include <dataclasses/I3Time.h>
 #include <phys-services/I3TimeRange.h>
@@ -77,6 +78,10 @@ class I3Muxer : public I3Module
   I3TimeRange currentCalibrationRange_;
   I3DetectorStatusConstPtr currentDetectorStatus_;
   I3TimeRange currentDetectorStatusRange_;
+  
+  
+  // logging
+  SET_LOGGER ("I3Muxer");
 };
 
 

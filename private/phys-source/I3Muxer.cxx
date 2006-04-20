@@ -73,7 +73,7 @@ void I3Muxer::Process()
 I3Frame::Stream 
 I3Muxer::NextStream()
 {
-  if(!context_.Get<I3EventService>().MoreEvents())
+  if(!currentEventQueued_ && !context_.Get<I3EventService>().MoreEvents())
     return I3Frame::None;
 
   I3Time eventTime = NextEventTime();
