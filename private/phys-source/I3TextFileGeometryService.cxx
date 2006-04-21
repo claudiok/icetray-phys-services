@@ -34,7 +34,7 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
   //Create GeoInFile
   ifstream AmaGeoInFile;	
   ifstream I3GeoInFile;		
-  log_warn("I3Db: Reading IceCube Geometry from file");
+  log_warn("Reading IceCube Geometry from file");
   
   //Open the files ama.geo and icecube.geo
   AmaGeoInFile.open(fAmaGeoInputFile.c_str(), ifstream::in); 	
@@ -42,13 +42,13 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
   
   //Did the files open correctly?
   if (AmaGeoInFile.fail())
-    Fatal("I3Db: The specified AMANDA geometry file does not exist "
+    log_fatal("The specified AMANDA geometry file does not exist "
 	  "or did not want to be opened!");
   if (I3GeoInFile.fail())
-    Fatal("I3Db: The specified IceCube geometry file does not exist "
+    log_fatal("The specified IceCube geometry file does not exist "
 	  "or did not want to be opened!");	
   
-  log_info("I3Db: FILES opened successfully. Getting the geometry "
+  log_info("FILES opened successfully. Getting the geometry "
 	   "and filling it into the frame");
   log_info("Coordinates of OM's in meters \n\n");
   
@@ -118,7 +118,7 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
   I3GeoInFile.close();
   
   //Integrate into DB Access part too?
-  log_warn("I3Db::FillFileGeometry: ATTENTION: No date set in header or date set to 0.");
+  log_warn("FillFileGeometry: ATTENTION: No date set in header or date set to 0.");
   
   I3Time time;
   time.SetModJulianTime(0,0,0.0);
