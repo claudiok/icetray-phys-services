@@ -113,6 +113,41 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
 	Geometry.omgeo[OMKey(string_F, tube_F)] = icecube;
       }
     }
+
+  // average the dom positions to calculate the tank positions
+  for (I3StationGeoMap::iterator
+	 i_station = Geometry.stationgeo.begin ();
+       i_station != Geometry.stationgeo.end ();
+       ++i_station) {
+
+    int station_id = i_station->first;
+
+    // now, set the position of each tank
+    // first tank, OMs 61 & 62
+    I3Position p61 (Geometry.omgeo[OMKey (station_id, 61)].position);
+    I3Position p62 (Geometry.omgeo[OMKey (station_id, 62)].position);
+    I3Position p63 (Geometry.omgeo[OMKey (station_id, 63)].position);
+    I3Position p64 (Geometry.omgeo[OMKey (station_id, 64)].position);
+
+    i_station->second[0].position
+      = I3Position (.5 * (p61.GetX () + p62.GetX ()),
+		    .5 * (p61.GetY () + p62.GetY ()),
+		    .5 * (p61.GetZ () + p62.GetZ ()));
+
+    // enter these oms. Needed for simulation
+    i_station->second[0].omKeyList_.push_back (OMKey (i_station->first, 61));
+    i_station->second[0].omKeyList_.push_back (OMKey (i_station->first, 62));
+    
+    i_station->second[1].position
+      = I3Position (.5 * (p63.GetX () + p64.GetX ()),
+		    .5 * (p63.GetY () + p64.GetY ()),
+		    .5 * (p63.GetZ () + p64.GetZ ()));
+
+    // enter these oms. Needed for simulation
+    i_station->second[1].omKeyList_.push_back (OMKey (i_station->first, 63));
+    i_station->second[1].omKeyList_.push_back (OMKey (i_station->first, 64));
+
+  }
   
   AmaGeoInFile.close();
   I3GeoInFile.close();
