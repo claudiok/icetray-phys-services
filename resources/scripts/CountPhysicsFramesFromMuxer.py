@@ -15,7 +15,6 @@ import sys
 load("libdataclasses")
 load("libphys-services")
 load("libdataio")
-load("libmuon-llh-reco")
 
 tray = I3Tray()
 
