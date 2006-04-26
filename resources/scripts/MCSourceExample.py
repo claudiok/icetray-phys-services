@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-#  photonics example
+#  Simple Geometry, Calibration, and Detector Status source example
 #
 from I3Tray import *
 
