@@ -25,7 +25,7 @@ I3Position I3Cuts::calculateCog(I3RecoPulseSeriesMap pulse_map, const I3Geometry
   iter=pulse_map.begin();
   while(iter !=  pulse_map.end()) {
     
-    const I3Vector<I3RecoPulse> pulsevect=iter->second;
+    const I3RecoPulseSeries pulsevect=iter->second;
     
     if(pulsevect.empty()==true) {
       iter++;
