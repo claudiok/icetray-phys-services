@@ -33,7 +33,7 @@ I3Position I3Cuts::calculateCog(I3RecoPulseSeriesMap pulse_map, const I3Geometry
       continue;
     }
     
-    for (int i=0; i < pulsevect.size(); i++) {
+    for (unsigned i=0; i < pulsevect.size(); i++) {
       I3RecoPulse pulse = pulsevect[i];
     
       double amp_tmp = (pulse.GetCharge() >= 2.0) ? pulse.GetCharge() : 1;
