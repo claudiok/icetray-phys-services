@@ -13,4 +13,9 @@ I3FrameObject* Clone(I3FrameObject* ptr);
 
 void Copy(shared_ptr<const I3FrameObject> oldp,shared_ptr<I3FrameObject>& newp);
 
+void COMPARE(double left, double right, double precision, 
+	     string message = "Test FAILED");
+
+void TRUE(bool expression, string message = "Test FAILED");
+
 #endif
