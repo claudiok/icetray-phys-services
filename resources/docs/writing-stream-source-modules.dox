@@ -56,8 +56,4 @@ this logic, you may do so by overridding
 'bool I3DetectorStatus::IsDetectorStatusCurrent(I3Time time)' and put whatever
 logic you want into that call.
 
-One more thing to note is that these modules must be ordered in order from 
-fastest-changing stream to the slowest-changing stream.  See the 
-@ref phys-source-using-stream-source-modules page for more details.
-
 */

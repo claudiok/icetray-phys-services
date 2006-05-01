@@ -11,18 +11,6 @@ examples are in projects that depend on phys-services.  So this section
 will just contain a short intro into how these things are generally used.  
 You'll have to look elsewhere for docs on specific modules.
 
-To begin with, let's look at one functional example:  If you've built 
-offline-software you can run this example:
-@code
-% python phys-services/resources/scripts/DefaultSourceExample.py
-@endcode
-
-There's not much output at the default logging level, but if you turn down
-the logging to 'TRACE' you will see that it is doing something.
-
-Here's the text of that example so you can see what's going on:
-@include DefaultSourceExample.py
-
 The real power of this approach comes because different modules which
 fill the same stream can be swapped to change where the data comes from.  For
 instance the following script is identical to the DefaultSourceExample.py 
