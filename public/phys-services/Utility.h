@@ -1,5 +1,5 @@
-#ifndef ANALYSIS_TREE_UTILITY_H
-#define ANALYSIS_TREE_UTILITY_H
+#ifndef PHYS_SERVICES_UTILITY_H
+#define PHYS_SERVICES_UTILITY_H
 
 #include "icetray/I3FrameObject.h"
 #include <string>
