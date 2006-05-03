@@ -45,6 +45,9 @@ I3MCRawDOMStatusService::GetDetectorStatus(I3Time time)
       raw.pmtHV = 1350*I3Units::volt;
       raw.speThreshold= 4.0*I3Units::mV;
       raw.fePedestal = 2.6*I3Units::volt;
+
+      raw.dacTriggerBias0 = 850;
+      raw.dacTriggerBias1 = 850;
     
       raw.nBinsATWD0 = 128;
       raw.nBinsATWD1 = 128;
