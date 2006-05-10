@@ -69,6 +69,7 @@ class I3Muxer : public I3Module
   I3Time NextEventTime();
 
  private:
+  static string toString(I3Time& time);
 
   I3Frame currentEvent_;
   bool currentEventQueued_;
