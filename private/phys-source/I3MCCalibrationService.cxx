@@ -27,7 +27,14 @@ I3MCCalibrationService::GetCalibration(I3Time time){
 
     I3DOMCalibration domCalib;
 
-    //fadcGain_ = 2.5*9;
+    LinearFit fadcBaselineFit;
+    fadcBaselineFit.slope = 1.248;
+    fadcBaselineFit.intercept = -864.32;
+    
+    domCalib.SetFADCBaselineFit(fadcBaselineFit);
+
+    // Units are actually V/count
+    domCalib.SetFADCGain(9.733e-5*I3Units::V);
 
     domCalib.SetATWDGain(0, -16.0);
     domCalib.SetATWDGain(1, -2.0);

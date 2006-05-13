@@ -48,6 +48,8 @@ I3MCRawDOMStatusService::GetDetectorStatus(I3Time time)
 
       raw.dacTriggerBias0 = 850;
       raw.dacTriggerBias1 = 850;
+
+      raw.dacFADCRef = 800;
     
       raw.nBinsATWD0 = 128;
       raw.nBinsATWD1 = 128;
