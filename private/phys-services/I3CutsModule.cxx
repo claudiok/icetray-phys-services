@@ -20,16 +20,16 @@ I3CutsModule::I3CutsModule(const I3Context& ctx) : I3Module(ctx)
   AddOutBox("OutBox");
   
   particleName_ = "";
-  AddParameter("ParticleNames", "Name of I3Particle to be used for cut calc.", 
-	       particleName_);
+  AddParameter("ParticleNames", "Name of I3Particle to be used for cut calc"
+	       ,particleName_);
 
   hitsName_ = "";
-  AddParameter("HitsName", "Name of the hit series to be used for cut calc.", 
-	       hitsName_);
+  AddParameter("HitsName", "Name of the hit series to be used for cut calc"
+	       ,hitsName_);
 
- hitsName_ = "";
-  AddParameter("PulseName", "Name of the pulse series to be used for cut calc.", 
-	       pulseName_);
+  pulsesName_ = "";
+  AddParameter("PulsesName", "Name of the pulse series to be used for cut calc"
+	       ,pulsesName_);
 
 }
 
@@ -38,34 +38,27 @@ I3CutsModule::I3CutsModule(const I3Context& ctx) : I3Module(ctx)
 void I3CutsModule::Configure()
 {
   GetParameter("ParticleNames",particleName_);   
-  log_info("ParticleNames: %s",particleName_.c_str());
-
   GetParameter("HitsName",hitsName_);
-  if (hitsName_=="") log_fatal("Parameter 'HitsName' HAS to be set!!");
-  log_info("HitsName: %s",hitsName_.c_str());
+  GetParameter("PulsesName",pulsesName_);
+
+  if (hitsName_.empty() && pulsesName_.empty()) 
+    log_fatal("Either 'HitsName' or 'PulsesName' parameter HAS to be set!");
+  if (!hitsName_.empty() && !pulsesName_.empty()) 
+    log_fatal("Can't set both 'HitsName' and 'PulsesName' parameters!");
 }
 
 
 //--------------------------------------------------------------
 void I3CutsModule::Physics(I3FramePtr frame)
 {
+  //---Get geometry......
+  const I3Geometry& geometry = frame->Get<I3Geometry>();
+
   //---Get hit map......
   I3RecoHitSeriesMapConstPtr hitmap = 
     frame->Get<I3RecoHitSeriesMapConstPtr>(hitsName_);
-  if (!hitmap) {
-    PushFrame(frame,"OutBox");
-    return;
-  }
-
- I3RecoPulseSeriesMapConstPtr pulsemap = 
-    frame->Get<I3RecoPulseSeriesMapConstPtr>(pulseName_);
-  if (!pulsemap) {
-    PushFrame(frame,"OutBox");
-    return;
-  }
-
-  //---Get geometry......
-  const I3Geometry& geometry = frame->Get<I3Geometry>();
+  I3RecoPulseSeriesMapConstPtr pulsemap = 
+    frame->Get<I3RecoPulseSeriesMapConstPtr>(pulsesName_);
 
   //---Get all particle names......
   set<string> particleNames = I3Functions::ParseString(particleName_);
@@ -90,7 +83,11 @@ void I3CutsModule::Physics(I3FramePtr frame)
     log_debug(" ---> calculating cuts for I3Particle '%s'...", name.c_str());
 
     I3CutValuesPtr cuts(new I3CutValues());
-    cuts->Calculate(*particle, geometry, *hitmap,*pulsemap);
+    if (hitmap)
+      cuts->Calculate(*particle, geometry, *hitmap);
+    else if (pulsemap)
+      cuts->Calculate(*particle, geometry, *pulsemap);
+
     frame->Put(name+"Cuts", cuts);
     log_debug("%s",ToString(cuts).c_str());
   }

@@ -1,81 +1,19 @@
-#include <vector>
+//#include <vector>
 #include "phys-services/I3Cuts.h"
-#include "phys-services/I3Calculator.h"
 #include "dataclasses/I3Constants.h"
+#include "phys-services/Utility.h"
+#include "phys-services/I3Calculator.h"
 
 using namespace I3Constants;
 using namespace I3Calculator;
 
 
-I3Position I3Cuts::calculateCog(I3RecoPulseSeriesMap pulse_map, const I3Geometry& geometry)
-{
-  double ampWeight=1;
-  const I3OMGeoMap& om_geo=geometry.omgeo;
-  double cog[3];
-  cog[0]=0.0;
-  cog[1]=0.0;
-  cog[2]=0.0;
-  double ampsum=0.0;
-  
-  // I need to loop over all hit OMs, first to calculate the center of gravity of the hits 
-  // and then to get the tensor of inertia.  
- 
-  
-  I3RecoPulseSeriesMap::const_iterator iter;
-  iter=pulse_map.begin();
-  while(iter !=  pulse_map.end()) {
-    
-    const I3RecoPulseSeries pulsevect=iter->second;
-    
-    if(pulsevect.empty()==true) {
-      iter++;
-      log_debug("empty  RecoPulseSeries!");
-      continue;
-    }
-    
-    for (unsigned i=0; i < pulsevect.size(); i++) {
-      I3RecoPulse pulse = pulsevect[i];
-    
-      double amp_tmp = (pulse.GetCharge() >= 2.0) ? pulse.GetCharge() : 1;
-   
-      double amp=pow(amp_tmp,ampWeight);
-      ampsum+=amp;
-    
-      const OMKey om = iter->first;
-      I3OMGeoMap::const_iterator iter2 = om_geo.find(om);
-      assert(iter2 != om_geo.end());
-      const I3Position ompos = (iter2->second).position;
-    
-      double r[3];
-      r[0] = ompos.GetX();
-      r[1] = ompos.GetY();
-      r[2] = ompos.GetZ();
-
-      // calculate the center of gravity             
-      for (int j=0; j < 3; j++) {
-      
-	cog[j]+=amp*r[j];
-      }
-    }
-    iter++;
-  }
-  
-  if(ampsum==0){
-    ampsum=1.0;
-  }
-  I3Position cogPosition;
-  cogPosition.SetX(cog[0]/ampsum);
-  cogPosition.SetY(cog[1]/ampsum);
-  cogPosition.SetZ(cog[2]/ampsum);
-  return cogPosition;
-}
-
-
 //--------------------------------------------------------------
-void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
-		      const I3RecoHitSeriesMap& hitmap,
-		      const double t1, const double t2,int& Nchan, int& Nhit,
-		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
+template<class HitType>
+void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
+		  const I3Map<OMKey, vector<HitType> >& hitmap,
+		  const double t1, const double t2,int& Nchan, int& Nhit,
+		  int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
 
   Ndir = 0;
@@ -85,9 +23,9 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
   double min = 999999;
   double max = -999999;
 
-  I3RecoHitSeriesMap::const_iterator hits_i;
+  typename I3Map<OMKey, vector<HitType> >::const_iterator hits_i;
   for (hits_i=hitmap.begin(); hits_i!=hitmap.end(); hits_i++) {
-    const I3RecoHitSeries& hits = hits_i->second;
+    const vector<HitType>& hits = hits_i->second;
     OMKey omkey = hits_i->first;
     I3OMGeoMap::const_iterator geom = geometry.omgeo.find(omkey);
     if (geom==geometry.omgeo.end()) {
@@ -96,7 +34,7 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
     }
     const I3Position& ompos = geom->second.position;
 
-    I3RecoHitSeries::const_iterator hit;
+    typename vector<HitType>::const_iterator hit;
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
       double Tres = TimeResidual(track, ompos, hit->GetTime());
       log_debug("residual: %f",Tres);
@@ -173,13 +111,108 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
 
 
 //--------------------------------------------------------------
+template<class HitType>
+I3Position COGImpl(const I3Geometry& geometry,
+		   const I3Map<OMKey, vector<HitType> >& hitmap)
+{
+  double ampWeight=1;
+  const I3OMGeoMap& om_geo=geometry.omgeo;
+  double cog[3];
+  cog[0]=0.0;
+  cog[1]=0.0;
+  cog[2]=0.0;
+  double ampsum=0.0;
+  
+  // I need to loop over all hit OMs, first to calculate the center of 
+  // gravity of the hits and then to get the tensor of inertia.  
+ 
+  typename I3Map<OMKey, vector<HitType> >::const_iterator iter;
+  iter = hitmap.begin();
+  while(iter != hitmap.end()) {
+    
+    const vector<HitType>& pulsevect = iter->second;
+
+    if(pulsevect.empty()) {
+      iter++;
+      log_debug("empty RecoHitSeries or RecoPulseSeries!");
+      continue;
+    }
+    
+    for (unsigned i=0; i < pulsevect.size(); i++) {
+      HitType pulse = pulsevect[i];
+    
+      double amp_tmp = GetCharge(pulse);
+      double amp = pow(amp_tmp,ampWeight);
+      ampsum+=amp;
+    
+      const OMKey om = iter->first;
+      I3OMGeoMap::const_iterator iter2 = om_geo.find(om);
+      assert(iter2 != om_geo.end());
+      const I3Position& ompos = (iter2->second).position;
+    
+      // calculate the center of gravity             
+      cog[0] += amp*ompos.GetX();
+      cog[1] += amp*ompos.GetY();
+      cog[2] += amp*ompos.GetZ();
+    }
+    iter++;
+  }
+  
+  if (ampsum==0) ampsum=1.0;
+  I3Position cogPosition(cog[0]/ampsum, cog[1]/ampsum, cog[2]/ampsum);
+  return cogPosition;
+}
+
+
+//--------------------------------------------------------------
+I3Position I3Cuts::COG(const I3Geometry& geometry,
+		       const I3RecoHitSeriesMap& hitmap)
+{
+  I3Position cog(COGImpl<I3RecoHit>(geometry, hitmap));
+  return cog;
+}
+
+
+//--------------------------------------------------------------
+I3Position I3Cuts::COG(const I3Geometry& geometry,
+		       const I3RecoPulseSeriesMap& pulsemap)
+{
+  I3Position cog(COGImpl<I3RecoPulse>(geometry, pulsemap));
+  return cog;
+}
+
+
+//--------------------------------------------------------------
+void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
+		      const I3RecoHitSeriesMap& hitmap,
+		      const double t1, const double t2,int& Nchan, int& Nhit,
+		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
+{
+  CutsCalcImpl<I3RecoHit>
+    (track, geometry, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+}
+
+
+//--------------------------------------------------------------
+void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
+		      const I3RecoPulseSeriesMap& pulsemap,
+		      const double t1, const double t2,int& Nchan, int& Nhit,
+		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
+{
+  CutsCalcImpl<I3RecoPulse>
+    (track, geometry, pulsemap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+}
+
+
+//--------------------------------------------------------------
 int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom, 
 		  const I3RecoHitSeriesMap& hitmap,
 		  double t1, double t2)
 {
   int Nchan, Nhit, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalc(track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+  CutsCalcImpl<I3RecoHit>
+    (track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
   return Nchan;
 }
 
@@ -191,7 +224,8 @@ int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalc(track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+  CutsCalcImpl<I3RecoHit>
+    (track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
   return Nhit;
 }
 
@@ -203,7 +237,8 @@ int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalc(track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+  CutsCalcImpl<I3RecoHit>
+    (track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
   return Ndir;
 }
 
@@ -215,7 +250,8 @@ double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalc(track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+  CutsCalcImpl<I3RecoHit>
+    (track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
   return Ldir;
 }
 
@@ -227,7 +263,8 @@ double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalc(track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+  CutsCalcImpl<I3RecoHit>
+    (track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
   return Sall;
 }
 
@@ -239,7 +276,8 @@ double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalc(track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+  CutsCalcImpl<I3RecoHit>
+    (track, geom, hitmap, t1, t2, Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
   return Sdir;
 }
 

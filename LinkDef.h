@@ -42,6 +42,7 @@
 #pragma link C++ function I3Cuts::SmoothAll; //
 #pragma link C++ function I3Cuts::SmoothDir; //
 #pragma link C++ function I3Cuts::CylinderSize; //
+#pragma link C++ function I3Cuts::COG; //
 
 #endif
 

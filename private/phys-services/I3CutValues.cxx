@@ -5,17 +5,23 @@
 void I3CutValues::Calculate(const I3Particle& track, 
 			    const I3Geometry& geometry, 
 			    const I3RecoHitSeriesMap& hitmap,
-			    const I3RecoPulseSeriesMap& pulsemap,
 			    const double& begTWindow,
 			    const double& endTWindow)
 {
   I3Cuts::CutsCalc(track, geometry, hitmap, begTWindow, endTWindow,
 		   Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+  cog = I3Cuts::COG(geometry, hitmap);
+}
 
-  I3Position cog=I3Cuts::calculateCog(pulsemap,geometry);
-  cogx=cog.GetX();
-  cogy=cog.GetY();
-  cogz=cog.GetZ();
+void I3CutValues::Calculate(const I3Particle& track, 
+			    const I3Geometry& geometry, 
+			    const I3RecoPulseSeriesMap& pulsemap,
+			    const double& begTWindow,
+			    const double& endTWindow)
+{
+  I3Cuts::CutsCalc(track, geometry, pulsemap, begTWindow, endTWindow,
+		   Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+  cog = I3Cuts::COG(geometry, pulsemap);
 }
 
 I3CutValues::~I3CutValues() { }
@@ -29,9 +35,7 @@ void I3CutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("Ndir",Ndir);
   ar & make_nvp("Ldir",Ldir);
   ar & make_nvp("Sdir",Sdir);
-  ar & make_nvp("cogx",cogx);
-  ar & make_nvp("cogy",cogy);
-  ar & make_nvp("cogz",cogz);
+  ar & make_nvp("cog",cog);
 }
   
 

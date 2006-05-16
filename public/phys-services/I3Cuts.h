@@ -3,13 +3,9 @@
 
 #include "dataclasses/I3Units.h"
 #include "dataclasses/physics/I3Particle.h"
+#include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/geometry/I3Geometry.h"
-#include "dataclasses/physics/I3RecoPulse.h"
-class I3OMResponse;
-class I3OMResponseMap;
-
-using namespace I3Units;
 
 
 /**
@@ -27,17 +23,17 @@ namespace I3Cuts
    * The default value for the lower edge of the residual time window for
    * direct hits.
    */
-  static const double minusTWindow = -15*ns;
+  static const double minusTWindow = -15*I3Units::ns;
 
   /**
    * The default value for the upper edge of the residual time window for
    * direct hits.
    */
-  static const double plusTWindow  = +25*ns;
+  static const double plusTWindow  = +25*I3Units::ns;
 
   /**
-   * Main function that does the actual calculation of Ndir, Ldir, and 
-   * Smoothness, based on direct hits.  First, it loops over all hits 
+   * Main function that does the actual calculation of all of the cut 
+   * parameters.  First, it loops over all hits 
    * (or pulses), makes "projections" of the hits onto the input track, and 
    * calculates the time residual for each hit (difference between the 
    * expected and actual time of arrival of the Cherenkov photon from the 
@@ -48,12 +44,9 @@ namespace I3Cuts
    * 
    * 
    * INPUT:
-   * @param track -- Smart pointer to the track object.
-   * @param geom -- The geometry object from the event.
-   * @param ommap -- The OMResponseMap object from which to extract the 
-   *                 OMResponse.
-   * @param hitseries -- Name of the RecoHitSeries or RecoPulseSeries which 
-   *                     contains the desired hit information.
+   * @param track --  Track used in calculation.
+   * @param geometry -- Geometry object from the event.
+   * @param hitmap -- Map of I3RecoHitSeries used in calculation. 
    * @param t1 -- Lower edge of the time residual window for direct hits.
    *              Generally, this value is -15ns.
    * @param t2 -- Upper edge of the time residual window for direct hits.
@@ -61,6 +54,8 @@ namespace I3Cuts
    * 
    * 
    * OUTPUT:
+   * @param Nchan -- The Nchan cut parameter: total number of hit channels.
+   * @param Nhit -- The Nhit cut parameter: total number of hits.
    * @param Ndir -- The Ndir cut parameter: number of direct hits.
    * @param Ldir -- The Ldir cut parameter (based on direct hits): "length" 
    *                of the event.  This is the length between the two most 
@@ -77,7 +72,7 @@ namespace I3Cuts
    */
   void CutsCalc(const I3Particle& track, 
 		const I3Geometry& geometry, 
-		const I3RecoHitSeriesMap& hitmap, 
+		const I3RecoHitSeriesMap& hitmap,
 		const double t1, 
 		const double t2, 
 		int& Nchan, 
@@ -88,11 +83,35 @@ namespace I3Cuts
 		double& Sall);
 
   /**
-   * A function which calculates the center of gravity of the hits. It takes a recopulse series map and the geometry,
-   * and returns an I3Position of the hits
+   * INPUT:
+   * @parameter pulsemap -- Map of I3RecoPulseSeries to be used.
    */
+  void CutsCalc(const I3Particle& track, 
+		const I3Geometry& geometry, 
+		const I3RecoPulseSeriesMap& pulsemap,
+		const double t1, 
+		const double t2, 
+		int& Nchan, 
+		int& Nhit, 
+		int& Ndir, 
+		double& Ldir,
+		double& Sdir,
+		double& Sall);
 
-  I3Position calculateCog(I3RecoPulseSeriesMap pulse_map, const I3Geometry& geometry);
+  /**
+   * A function which calculates the center of gravity of the hits. 
+   * It takes a I3RecoPulseSeries map and the geometry,
+   * and returns an I3Position of the COG.
+   */
+  I3Position COG(const I3Geometry& geometry,
+		 const I3RecoPulseSeriesMap& pulsemap);
+
+  /**
+   * Use I3RecoHitSeries instead of I3RecoPulseSeries.
+   */
+  I3Position COG(const I3Geometry& geometry,
+		 const I3RecoHitSeriesMap& hitmap);
+
   /**
    * A convenience function that calls CutsCalc() and returns the total 
    * number of channels (hit OMs) in the event.  If you are interested in

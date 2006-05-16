@@ -15,6 +15,7 @@
 #include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
+#include "phys-services/I3Cuts.h"
 
 /**
  * @brief A class to store the basic hit information from the event
@@ -28,9 +29,7 @@ class I3CutValues : public I3FrameObject
   double Ldir;
   double Sdir;
   double Sall;
-  double cogx;
-  double cogy;
-  double cogz;
+  I3Position cog;
 
   I3CutValues() :
     Nchan(-1),
@@ -39,11 +38,16 @@ class I3CutValues : public I3FrameObject
     Ldir(NAN),
     Sdir(NAN),
     Sall(NAN)
-    {};
+    { cog.NullPos(); };
 
   void Calculate(const I3Particle& track, 
 		 const I3Geometry& geometry, 
 		 const I3RecoHitSeriesMap& hitmap,
+		 const double& begTWindow = -15.*I3Units::ns,
+		 const double& endTWindow = +25.*I3Units::ns);
+
+  void Calculate(const I3Particle& track, 
+		 const I3Geometry& geometry, 
 		 const I3RecoPulseSeriesMap& pulsemap,
 		 const double& begTWindow = -15.*I3Units::ns,
 		 const double& endTWindow = +25.*I3Units::ns);

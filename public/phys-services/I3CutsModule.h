@@ -44,10 +44,13 @@ private:
    * cut parameters.
    */
   string hitsName_;
-  /** Parameter: name of the pulse series map to use in the calculation of the COG
+
+  /**
+   * Parameter: name of the pulse series map to use in the calculation of 
+   * the COG
    */
 
-  string pulseName_;
+  string pulsesName_;
 
   /**
    * Named stream for my logging messages.  Allows my messages to be

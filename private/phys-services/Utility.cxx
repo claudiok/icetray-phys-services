@@ -82,3 +82,14 @@ void ENSURE(bool expression, string message)
 {
   if (!expression) log_fatal("%s",message.c_str());
 }
+
+// Functions to get charge from either RecoPulse or RecoHit.
+double GetCharge(const I3RecoHit& hit)
+{ 
+  return 1.; 
+}
+
+double GetCharge(const I3RecoPulse& pulse)
+{
+  return (pulse.GetCharge() >= 2.0) ? pulse.GetCharge() : 1; 
+}
