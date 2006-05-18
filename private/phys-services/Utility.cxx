@@ -2,6 +2,9 @@
 #include "dataclasses/Utility.h"
 #include "phys-services/Utility.h"
 #include "icetray/I3TrayHeaders.h"
+#include "dataclasses/physics/I3RecoHit.h"
+#include "dataclasses/physics/I3MCHit.h"
+#include "dataclasses/physics/I3RecoPulse.h"
 
 string ToString(shared_ptr<const I3FrameObject> obj)
 {
@@ -83,13 +86,19 @@ void ENSURE(bool expression, string message)
   if (!expression) log_fatal("%s",message.c_str());
 }
 
-// Functions to get charge from either RecoPulse or RecoHit.
+// Functions to get charge from either RecoPulse or RecoHit or MCHit.
 double GetCharge(const I3RecoHit& hit)
+{ 
+  return 1.; 
+}
+
+double GetCharge(const I3MCHit& mchit)
 { 
   return 1.; 
 }
 
 double GetCharge(const I3RecoPulse& pulse)
 {
-  return (pulse.GetCharge() >= 2.0) ? pulse.GetCharge() : 1; 
+  //return (pulse.GetCharge() >= 2.0) ? pulse.GetCharge() : 1; 
+  return pulse.GetCharge(); 
 }

@@ -24,7 +24,8 @@ void I3Calculator::CherenkovCalc(const I3Particle& track,        // input
 				 double& chtime,        // output
 				 double& chdist,        // output
 				 double& chapangle,       // output
-				 const double IndexRef,       // input
+				 const double IndexRefG,       // input
+				 const double IndexRefP,       // input
 				 const I3OMGeo::Orientation orient) // input
 {
   //--Only calculate if particle is track
@@ -33,8 +34,8 @@ void I3Calculator::CherenkovCalc(const I3Particle& track,        // input
     I3Position P(position);   // position (P) of a DOM or whatnot
     double theta = pi - track.GetZenith();
     double phi = track.GetAzimuth() - pi;
-    double changle = acos(1/IndexRef); // calculate Cherenkov angle
-    double speed = c/IndexRef;
+    double changle = acos(1/IndexRefP); // calculate Cherenkov angle
+    double speed = c/IndexRefG;
   
     //--Calculate position and distance of closest approach
     double PT = P.CalcDistance(track.GetPos()); // T=track.Pos()
@@ -201,17 +202,17 @@ I3Position I3Calculator::CherenkovPosition(const I3Particle& track, const I3Posi
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovTime(const I3Particle& particle, const I3Position& position, const double IndexRef)
+double I3Calculator::CherenkovTime(const I3Particle& particle, const I3Position& position, const double IndexRefG, const double IndexRefP )
 {
   if (particle.IsTrack()) {
     I3Position appos,chpos;
     double apdist,chtime,chdist,chapangle;
     CherenkovCalc(particle, position, appos, apdist, chpos, chtime, chdist,
-		  chapangle, IndexRef);
+		  chapangle, IndexRefG, IndexRefP);
     return chtime;
   }
   else if (particle.IsCascade()) {
-    double speed = c/IndexRef;
+    double speed = c/IndexRefG;
     return position.CalcDistance(particle.GetPos()) / speed;
   }
   else return NAN;
@@ -242,16 +243,16 @@ double I3Calculator::CherenkovApproachAngle(const I3Particle& track, const I3Pos
     I3Position appos,chpos;
     double apdist,chtime,chdist,chapangle;
     CherenkovCalc(track,position,appos,apdist,chpos,chtime,chdist,chapangle,
-		  I3Constants::n_ice,orient);
+		  I3Constants::n_ice_group,n_ice_phase,orient);
     return chapangle;
   }
   else return NAN;
 }
 
 //--------------------------------------------------------------
-double I3Calculator::TimeResidual(const I3Particle& particle, const I3Position& hitpos, double hittime, const double IndexRef)
+double I3Calculator::TimeResidual(const I3Particle& particle, const I3Position& hitpos, double hittime, const double IndexRefG, const double IndexRefP)
 {
-  double T_exp = CherenkovTime(particle, hitpos, IndexRef);
+  double T_exp = CherenkovTime(particle, hitpos, IndexRefG, IndexRefP );
   double T_meas = hittime - particle.GetTime();
   return T_meas - T_exp;
 }

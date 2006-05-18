@@ -40,11 +40,16 @@ namespace I3Calculator
    * 
    * 
    * INPUT:
-   * @param track -- Smart pointer to a track.
+   * @param track -- const reference to a track.
    *
    * @param position -- Position of an OM.
    *
-   * @param IndexRef -- Index of refraction (default=1.31).
+   * @param IndexRefG -- Index of refraction (group), default=1.3195.
+   *                     This is used to define the speed of light through ice.
+   *
+   * @param IndexRefP -- Index of refraction (phase), default=1.35634.
+   *                     This is used to define the angle (w.r.t. the track)
+   *                     under which Cherenkov photons are emitted in ice.
    *
    * @param orient -- Orientation of the OM.
    *
@@ -89,6 +94,8 @@ namespace I3Calculator
    * of the code, but it is not the most efficient.  If processing time becomes
    * an issue, we can make these things more efficient at the expence of
    * complicating and repeating the code.
+   *
+   * @sa I3Constants for refractive index (phase, group)
    */
   void CherenkovCalc(const I3Particle& track,
 		     const I3Position& position,
@@ -98,7 +105,8 @@ namespace I3Calculator
 		     double& chtime,
 		     double& chdist,
 		     double& changle,
-		     const double IndexRef=I3Constants::n_ice,
+		     const double IndexRefG=I3Constants::n_ice_group,
+		     const double IndexRefP=I3Constants::n_ice_phase,
 		     const I3OMGeo::Orientation orient=I3OMGeo::Down);
 
   /**
@@ -157,7 +165,8 @@ namespace I3Calculator
    */
   double CherenkovTime(const I3Particle& particle,
 		       const I3Position& position,
-		       const double IndexRef=I3Constants::n_ice);
+		       const double IndexRefG=I3Constants::n_ice_group,
+		       const double IndexRefP=I3Constants::n_ice_phase);
 
  /**
    * A convenience function that calls CherenkovCalc() and returns the 
@@ -190,7 +199,8 @@ namespace I3Calculator
   double TimeResidual(const I3Particle& particle, 
 		      const I3Position& hitpos, 
 		      const double hittime,
-		      const double IndexRef=I3Constants::n_ice);
+		      const double IndexRefG=I3Constants::n_ice_group,
+		      const double IndexRefP=I3Constants::n_ice_phase);
 
   /**
    * Returns the spatial angle between two input tracks.

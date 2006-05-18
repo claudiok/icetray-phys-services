@@ -2,10 +2,13 @@
 #define PHYS_SERVICES_UTILITY_H
 
 #include "icetray/I3FrameObject.h"
-#include "dataclasses/physics/I3RecoHit.h"
-#include "dataclasses/physics/I3RecoPulse.h"
 #include <string>
 using namespace std;
+
+// forward declaration
+class I3RecoHit;
+class I3MCHit;
+class I3RecoPulse;
 
 string ToString(shared_ptr<const I3FrameObject> obj);
 string ToString(I3FrameObject* obj);
@@ -23,6 +26,8 @@ void ENSURE(bool expression, string message = "Test FAILED");
 
 // Functions to get charge from either RecoPulse or RecoHit.
 double GetCharge(const I3RecoHit& hit);
+
+double GetCharge(const I3MCHit& mchit);
 
 double GetCharge(const I3RecoPulse& pulse);
 
