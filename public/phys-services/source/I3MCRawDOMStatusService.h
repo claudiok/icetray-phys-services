@@ -17,6 +17,8 @@
 
 #include "phys-services/I3DetectorStatusService.h"
 #include "phys-services/I3GeometryService.h"
+#include "dataclasses/physics/I3Trigger.h"
+#include "dataclasses/status/I3TriggerStatus.h"
 
 class I3Geometry;
 I3_POINTER_TYPEDEFS(I3Geometry);
@@ -36,6 +38,8 @@ public:
   }
 
   virtual I3DetectorStatusConstPtr GetDetectorStatus(I3Time time);
+  void SetTriggerStatus(I3Trigger trig, I3TriggerStatus trigstatus);
+
   virtual ~I3MCRawDOMStatusService() { };
 
   SET_LOGGER("I3MCRawDOMStatusService");
@@ -44,6 +48,7 @@ public:
   I3MCRawDOMStatusService();
   I3GeometryServicePtr geo_service_;
 
+  shared_ptr<I3DetectorStatus> status_;
 };
 
 #endif

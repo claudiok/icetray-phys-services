@@ -5,6 +5,15 @@
 #include "dataclasses/I3Units.h"
 #include "icetray/I3TrayHeaders.h"
 #include "phys-services/I3GeometryService.h"
+#include "dataclasses/physics/I3Trigger.h"
+#include "dataclasses/status/I3TriggerStatus.h"
+
+void I3MCRawDOMStatusService::SetTriggerStatus(I3Trigger trig, I3TriggerStatus trigstatus)
+{
+  status_ = I3DetectorStatusPtr(new I3DetectorStatus);
+  if(!status_->triggerStatus.insert(make_pair(trig.GetTriggerKey(), trigstatus)).second)
+    log_fatal("trigger status insertion in detector status failed.");
+}
 
 I3DetectorStatusConstPtr
 I3MCRawDOMStatusService::GetDetectorStatus(I3Time time)
@@ -14,15 +23,16 @@ I3MCRawDOMStatusService::GetDetectorStatus(I3Time time)
   I3GeometryConstPtr geo = geo_service_->GetGeometry(time);
   const I3OMGeoMap& om_geo = geo->omgeo;
 
-  I3OMGeoMap::const_iterator iter;
+  if (!status_)
+    status_ = I3DetectorStatusPtr(new I3DetectorStatus);
 
-  I3DetectorStatusPtr status = I3DetectorStatusPtr(new I3DetectorStatus);
+  I3OMGeoMap::const_iterator iter;
 
   I3Time start(2000,0);
   I3Time end(3000,0);
 
-  status->startTime = start;
-  status->endTime = end;
+  status_->startTime = start;
+  status_->endTime = end;
   //changed all inice to om_geo
   for( iter  = om_geo.begin(); 
        iter != om_geo.end(); 
@@ -57,9 +67,7 @@ I3MCRawDOMStatusService::GetDetectorStatus(I3Time time)
 
       raw.nBinsFADC = 256;
 
-      status->domStatus[thiskey] = raw;
+      status_->domStatus[thiskey] = raw;
     }
-  return static_cast<I3DetectorStatusConstPtr>(status);
+  return static_cast<I3DetectorStatusConstPtr>(status_);
 }
-
-

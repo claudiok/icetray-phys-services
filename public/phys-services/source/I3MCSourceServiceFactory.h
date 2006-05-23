@@ -13,6 +13,9 @@
 class I3Context;
 
 #include "icetray/I3ServiceFactory.h"
+#include "dataclasses/physics/I3Trigger.h"
+#include "dataclasses/status/I3TriggerStatus.h"
+
 class I3MCRawDOMStatusService;
 class I3MCCalibrationService;
 
@@ -32,6 +35,12 @@ class I3MCSourceServiceFactory
   virtual void Configure();
 
  private:
+
+  int configID_;
+  int threshold_;
+  int timeWindow_;
+  I3Trigger Trigger;
+  I3TriggerStatus TrigStatus;
 
   shared_ptr<I3MCRawDOMStatusService> status_;
   shared_ptr<I3MCCalibrationService> calibration_;
