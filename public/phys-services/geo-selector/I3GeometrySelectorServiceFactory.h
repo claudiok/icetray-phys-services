@@ -1,19 +1,9 @@
-/**
- * copyright  (C) 2004
- * the IceCube collaboration
- *  $Id: I3Selection.h 2601 2005-02-08 20:05:42Z olivas $
- *
- * @file I3Selection.h
- * @version $Revision: 1.3 $
- * @date $Date: 2005-02-08 21:05:42 +0100 (Tue, 08 Feb 2005) $
- * @author olivas
- */
+#ifndef I3GEOMETRYSELECTORSERVICEFACTORY_H
+#define I3GEOMETRYSELECTORSERVICEFACTORY_H
 
-#ifndef I3GEOMETRYSELECTOR_H
-#define I3GEOMETRYSELECTOR_H
+#include "icetray/I3ServiceFactory.h"
 
-#include "icetray/I3Module.h"
-
+class I3GeometrySelectorService;
 /**
  * @brief IceTray module that selects the strings to use.
 
@@ -30,30 +20,26 @@
  * 2) Use the current geometry (as of mid Jan '06).
  * Set StringsToUse to "21,29,30,38,39,-19:-1"
  */
-class I3GeometrySelector : public I3Module
+class I3GeometrySelectorServiceFactory : public I3ServiceFactory
 {
 public:
 
   /*
    * Constructor.
    */ 
-  I3GeometrySelector(const I3Context& ctx);
+  I3GeometrySelectorServiceFactory(const I3Context& ctx);
   
   /*
    * Destructor.
    */ 
-  ~I3GeometrySelector();
+  virtual ~I3GeometrySelectorServiceFactory();
   
   /**
    * Checks the two parameters StringsToUse and StringsToExclude are valid.
    */
-  void Configure();
+  virtual void Configure();
   
-  /** 
-   * Gets the current geometry, constructs a new geometry based on the desired 
-   * strings, and swaps them.
-   */ 
-  void Geometry(I3FramePtr frame);
+  virtual bool InstallService(I3Context& services);
 
 private:
 
@@ -61,10 +47,11 @@ private:
    *default constructor, assignment operator, and copy constructor
    * declared private to prevent use
    */
-  I3GeometrySelector();
-  I3GeometrySelector(const I3GeometrySelector& source);
-  I3GeometrySelector& operator=(const I3GeometrySelector& source);
+  I3GeometrySelectorServiceFactory();
+  I3GeometrySelectorServiceFactory(const I3GeometrySelectorServiceFactory& source);
+  I3GeometrySelectorServiceFactory& operator=(const I3GeometrySelectorServiceFactory& source);
 
+  shared_ptr<I3GeometrySelectorService> geometry_;
   /**
    * Parameter - The strings to use.
    * Default value is "-19:80".
@@ -102,12 +89,12 @@ private:
   vector<int> goodStations_;
 
   /**
-   *Name of the new geometry to put in the frame
+   *Name of the new geometry service.  The muxer needs this name.
    */
-  string newGeometryName_;
+  std::string geoSelectorName_;
 
-  SET_LOGGER("I3GeometrySelector");
+  SET_LOGGER("I3GeometrySelectorServiceFactory");
   
-};  // end of class I3GeometrySelector
+};  // end of class I3GeometrySelectorServiceFactory
 
-#endif //I3GEOMETRYSELECTOR_H
+#endif 

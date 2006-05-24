@@ -31,16 +31,14 @@
  *
  * Uses the I3GeometryService, the I3DetectorStatusService, the
  * I3EventService, and the I3CalibrationService interfaces
- *
- * If you don't like the idea of this being one module, you can
- * use the four modules I3PhysicsSource, I3GeometrySource, 
- * I3CalibrationSource, and I3DetectorStatusSource together instead.
  */
 
 class I3Muxer : public I3Module
 {
  public:
   I3Muxer(const I3Context& ctx);
+
+  void Configure();
 
   void Process();
 
@@ -79,7 +77,8 @@ class I3Muxer : public I3Module
   I3DetectorStatusConstPtr currentDetectorStatus_;
   I3TimeRange currentDetectorStatusRange_;
   
-  
+  //Allows the redirect of the geometry
+  std::string geoServiceName_;  
   // logging
   SET_LOGGER ("I3Muxer");
 };

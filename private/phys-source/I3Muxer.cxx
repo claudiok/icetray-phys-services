@@ -18,10 +18,19 @@ I3_MODULE(I3Muxer);
 
 I3Muxer::I3Muxer(const I3Context& context) : I3Module(context),
 					     currentEvent_(I3Frame::None),
-					     currentEventQueued_(false)
+					     currentEventQueued_(false),
+					     geoServiceName_("I3GeometryService")
 {
+  AddParameter("GeometryService","Name of the geometry service to use",geoServiceName_);
   AddOutBox("OutBox");
 }
+
+void I3Muxer::Configure()
+{
+  GetParameter("GeometryService",geoServiceName_);
+}
+
+
 
 void I3Muxer::Process()
 {
@@ -166,7 +175,9 @@ void I3Muxer::SendGeometry()
 {
   log_debug("Entering I3Muxer::SendGeometry()");
   I3Time nextEvent = NextEventTime();
-  currentGeometry_ = context_.Get<I3GeometryService>().GetGeometry(nextEvent);
+  I3GeometryServicePtr geo = context_.Get<I3GeometryServicePtr>(geoServiceName_);
+  if(!geo) log_fatal("Couldn't get the geometry service.");
+  currentGeometry_ = geo->GetGeometry(nextEvent);
   currentGeometryRange_ = 
     I3TimeRange(currentGeometry_->startTime,
 		currentGeometry_->endTime);

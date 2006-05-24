@@ -80,8 +80,6 @@ private:
    */
   string stationsToExclude_;
 
-  string newGeometryName_;
-
   /**
    *This is the list of strings to use
 v   */

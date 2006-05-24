@@ -34,8 +34,7 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
   stringsToUse_("-19:80"),
   stringsToExclude_(""),
   stationsToUse_("1:80"),
-  stationsToExclude_(""),
-  newGeometryName_("NewGeometry")
+  stationsToExclude_("")
 {
     AddOutBox("OutBox");
 
@@ -51,9 +50,6 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
     AddParameter("StationsToExclude", 
 		 "The stations that should be excluded", 
 		 stationsToExclude_);
-    AddParameter("NewGeometryName", 
-		 "Name of the geometry that's going into the frame", 
-		 newGeometryName_);
 }
 
 I3GeoSelTestModule::~I3GeoSelTestModule() {
@@ -65,7 +61,6 @@ void I3GeoSelTestModule::Configure() {
   GetParameter("StringsToExclude",stringsToExclude_);
   GetParameter("StationsToUse",stationsToUse_);
   GetParameter("StationsToExclude",stationsToExclude_);
-  GetParameter("NewGeometryName",newGeometryName_);
 
   if(!geo_sel_utils::good_input(stringsToUse_)) 
     log_fatal("couldn't parse %s",stringsToUse_.c_str());
@@ -91,7 +86,7 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   log_debug("Entering Geometry method.");
   
   // Get the event information out of the Frame
-  I3GeometryConstPtr geoPtr = frame->Get<I3GeometryConstPtr>(newGeometryName_);
+  I3GeometryConstPtr geoPtr = frame->Get<I3GeometryConstPtr>();
   if(!geoPtr) log_fatal("Couldn't get geometry");
 
   //loop through the in ice geometry and make sure that
