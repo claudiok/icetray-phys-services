@@ -13,9 +13,11 @@ I3MCSourceServiceFactory(const I3Context& context) :
   threshold_(16),
   timeWindow_(7000)
 {
+  calServiceName_ = I3DefaultName<I3CalibrationService>::value();
   AddParameter("Threshold","Multiplicity Trigger Threshold",threshold_);
   AddParameter("TimeWindow","Multiplicity Trigger Time Window",timeWindow_);
   AddParameter("ConfigID","Trigger Status Config ID",configID_);
+  AddParameter("CalServiceName","Name of calibration service",calServiceName_);
 }
 
 I3MCSourceServiceFactory::
@@ -26,6 +28,7 @@ void I3MCSourceServiceFactory::Configure()
   GetParameter("Threshold",threshold_);
   GetParameter("TimeWindow",timeWindow_);
   GetParameter("ConfigID",configID_);
+  GetParameter("CalServiceName",calServiceName_);
 
   Trigger.GetTriggerKey() = TriggerKey(TriggerKey::IN_ICE, TriggerKey::SIMPLE_MULTIPLICITY, configID_);
 
@@ -54,7 +57,7 @@ bool I3MCSourceServiceFactory::InstallService(I3Context& services)
   }
 
 
-  bool good_calib = services.Put<I3CalibrationService>(calibration_);
+  bool good_calib = services.Put<I3CalibrationService>(calServiceName_,calibration_);
   log_debug("good_calib %d",good_calib);
   bool good_status = services.Put<I3DetectorStatusService>(status_);
   log_debug("good_status %d",good_status);

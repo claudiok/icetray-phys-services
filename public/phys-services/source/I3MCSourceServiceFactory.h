@@ -39,6 +39,7 @@ class I3MCSourceServiceFactory
   int configID_;
   int threshold_;
   int timeWindow_;
+  string calServiceName_;
   I3Trigger Trigger;
   I3TriggerStatus TrigStatus;
 
