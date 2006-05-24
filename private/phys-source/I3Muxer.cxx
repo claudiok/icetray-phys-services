@@ -24,18 +24,36 @@ I3_MODULE(I3Muxer);
 I3Muxer::I3Muxer(const I3Context& context) : I3Module(context),
 					     currentEvent_(I3Frame::None),
 					     currentEventQueued_(false),
-                                             geoServiceName_("I3GeometryService")
+                                             geometryServiceName_(I3DefaultName<I3GeometryService>::value()),
+                                             statusServiceName_(I3DefaultName<I3DetectorStatusService>::value()),
+                                             calibrationServiceName_(I3DefaultName<I3CalibrationService>::value()),
+                                             eventServiceName_(I3DefaultName<I3EventService>::value())
 {
   AddParameter("GeometryService",
                "Name of the geometry service to use",
-               geoServiceName_);
+               geometryServiceName_);
+
+  AddParameter("CalibrationService",
+               "Name of the calibration service to use",
+               calibrationServiceName_);
+
+  AddParameter("DetectorStatusService",
+               "Name of the detector status service to use",
+               statusServiceName_);
+
+  AddParameter("EventService",
+               "Name of the event (or 'driving time') service to use",
+               eventServiceName_);
 
   AddOutBox("OutBox");
 }
 
 void I3Muxer::Configure()
 {
-  GetParameter("GeometryService",geoServiceName_);
+  GetParameter("GeometryService",geometryServiceName_);
+  GetParameter("CalibrationService",calibrationServiceName_);
+  GetParameter("DetectorStatusService",statusServiceName_);
+  GetParameter("EventService",eventServiceName_);
 }
 
 
@@ -89,7 +107,7 @@ void I3Muxer::Process()
 I3Frame::Stream 
 I3Muxer::NextStream()
 {
-  if(!currentEventQueued_ && !context_.Get<I3EventService>().MoreEvents())
+  if(!currentEventQueued_ && !context_.Get<I3EventService>(eventServiceName_).MoreEvents())
     return I3Frame::None;
 
   I3Time eventTime = NextEventTime();
@@ -136,7 +154,7 @@ void I3Muxer::SendCalibration()
   log_debug("Entering I3Muxer::SendCalibration()");
   I3Time nextEvent = NextEventTime();
   currentCalibration_ = 
-    context_.Get<I3CalibrationService>().GetCalibration(nextEvent);
+    context_.Get<I3CalibrationService>(calibrationServiceName_).GetCalibration(nextEvent);
   if(!currentCalibration_)
     log_fatal("got null calibration from the calibration service");
   currentCalibrationRange_ 
@@ -171,7 +189,7 @@ void I3Muxer::SendDetectorStatus()
   log_debug("Entering I3Muxer::SendDetectorStatus()");
   I3Time nextEvent = NextEventTime();
   currentDetectorStatus_ = 
-    context_.Get<I3DetectorStatusService>().GetDetectorStatus(nextEvent);
+    context_.Get<I3DetectorStatusService>(statusServiceName_).GetDetectorStatus(nextEvent);
   if(!currentDetectorStatus_)
     log_fatal("got null status from the status service");
   currentDetectorStatusRange_ 
@@ -209,7 +227,7 @@ void I3Muxer::SendGeometry()
 {
   log_debug("Entering I3Muxer::SendGeometry()");
   I3Time nextEvent = NextEventTime();
-  currentGeometry_ = context_.Get<I3GeometryService>(geoServiceName_).GetGeometry(nextEvent);
+  currentGeometry_ = context_.Get<I3GeometryService>(geometryServiceName_).GetGeometry(nextEvent);
   if(!currentGeometry_)
     log_fatal("got null geometry from the geometry service");
   currentGeometryRange_ = 

@@ -82,7 +82,10 @@ class I3Muxer : public I3Module
   I3DetectorStatusConstPtr currentDetectorStatus_;
   I3TimeRange currentDetectorStatusRange_;
  
-  string geoServiceName_;
+  std::string geometryServiceName_;
+  std::string statusServiceName_;
+  std::string calibrationServiceName_;
+  std::string eventServiceName_;
   
   
   // logging
