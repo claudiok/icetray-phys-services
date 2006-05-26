@@ -21,17 +21,20 @@ tray.AddService("I3TextFileGeometryServiceFactory","geometry")(
               ("IceCubeGeoFile",icecubegeofile),
               )
 
-tray.AddModule("I3Muxer","muxme")
-
-tray.AddModule("I3GeometrySelector","geo_selector")(
+tray.AddService("I3GeometrySelectorServiceFactory","geo_selector")(
     ("StringsToUse","21,29,39,38,30,40,49"),
-    ("StationsToUse","21,29,39,38,30,40,49,50")
+    ("StationsToUse","21,29,39,38,30,40,49,50"),
+    ("GeoSelectorName","I3GeometrySelectorService")
     )
+
+tray.AddModule("I3Muxer","muxme")(
+   ("GeometryService","I3GeometrySelectorService")
+   )
 
 tray.AddModule("Dump","dump")
 
 tray.AddModule("FrameCheck","check")(
-    ("ensure_physics_has", ["I3Calibration", "I3Geometry", "NewGeometry", "I3DetectorStatus",
+    ("ensure_physics_has", ["I3Calibration", "I3Geometry", "I3DetectorStatus",
                             "DrivingTime"])
     )
 
