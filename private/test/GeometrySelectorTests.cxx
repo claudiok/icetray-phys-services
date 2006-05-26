@@ -1,5 +1,5 @@
 #include <I3Test.h>
-#include "phys-services/geo-selector/I3GeometrySelector.h"
+#include "phys-services/geo-selector/I3GeometrySelectorServiceFactory.h"
 #include "phys-services/geo-selector/I3GeoSelTestModule.h"
 #include "phys-services/geo-selector/GeoSelUtils.h"
 #include "icetray/I3Tray.h"
@@ -155,10 +155,12 @@ TEST(icetray_test){
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
     ("NFrames",1)
     ("InstallGeometry",false);
-  tray.AddModule("I3Muxer","muxer");
-  tray.AddModule("I3GeometrySelector","geo_selector")
+  tray.AddService("I3GeometrySelectorServiceFactory","geo_selector")
     ("StringsToUse",strings_to_use.c_str())
-    ("StationsToUse",stations_to_use.c_str());
+    ("StationsToUse",stations_to_use.c_str())
+    ("GeoSelectorName","I3GeometrySelectorService");
+  tray.AddModule("I3Muxer","muxer")
+    ("GeometryService","I3GeometrySelectorService");
   //I3GeoSelTestModule contains ENSURE statements
   tray.AddModule("I3GeoSelTestModule","geo_test") 
     ("StringsToUse",strings_to_use.c_str())

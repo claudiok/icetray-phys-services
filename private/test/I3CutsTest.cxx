@@ -9,6 +9,7 @@
 
 using namespace I3Calculator;
 using namespace I3Cuts;
+using namespace I3Constants;
 
 I3Geometry CalcGeom(vector<I3Position> pos)
 {
@@ -44,12 +45,12 @@ TEST(FakeTrack)
   I3Particle track(I3Particle::InfiniteTrack);
   track.SetPos(0,0,0);
   track.SetDir(0,0);
-  double ang = 180*deg-acos(1/1.31);
+  double ang = 180*deg-theta_cherenkov;
   I3Position aa(10,ang,45*deg,I3Position::sph);
   I3Position bb(5,ang,-30*deg,I3Position::sph);
   I3Position cc(20,ang,45*deg,I3Position::sph); cc.SetZ(cc.GetZ()-100);
   I3Position dd(50,ang,180*deg,I3Position::sph); dd.SetZ(dd.GetZ()+50);
-  double A = 1.31/(c*sin(acos(1/1.31)));
+  double A = 1./(c_ice*sin(theta_cherenkov));
   double ta = sqrt(pow(aa.GetX(),2)+pow(aa.GetY(),2))*A + 7*ns;
   double tb = sqrt(pow(bb.GetX(),2)+pow(bb.GetY(),2))*A - 9*ns;
   double tc = 100/c + sqrt(pow(cc.GetX(),2)+pow(cc.GetY(),2))*A + 5*ns;
@@ -73,9 +74,9 @@ TEST(Ndir_DownTrack)
   double z[] =   { 0,   0,  0, 100, -250, -50};
   double off[] = {17, -19,  5,  -3,   78,  50};
 
-  double ang = 180*deg-acos(1/1.31);
+  double ang = 180*deg-theta_cherenkov;
   vector<I3Position> pos;
-  double A = 1.31/(c*sin(acos(1/1.31)));
+  double A = 1./(c_ice*sin(theta_cherenkov));
   vector<double> time;
   for (int i=0; i<size; i++) {
     I3Position p(r[i],ang,phi[i]*deg,I3Position::sph); p.SetZ(p.GetZ()-z[i]);
@@ -111,7 +112,7 @@ TEST(Ndir_DownTrack)
 
 TEST(AllCuts_TiltedTrack)
 {
-  double ang = acos(1/1.31); // Cherenkov angle
+  double ang = theta_cherenkov; // Cherenkov angle
 
   I3Particle track(I3Particle::InfiniteTrack);
   track.SetPos(10,10,0);
@@ -124,9 +125,9 @@ TEST(AllCuts_TiltedTrack)
   p.SetPos(10,50,0);  pos.push_back(p);
 
   vector<double> time;
-  double t = 20*1.31/c + 15 + 17;  time.push_back(t);
-  t = (10/sin(ang) + 1.31*(100-10/tan(ang)))/c + 15 - 9;  time.push_back(t);
-  t = 40/c * (1.31/tan(ang) - 1/sin(ang)) + 15 + 3;  time.push_back(t);
+  double t = 20/c_ice + 15 + 17;  time.push_back(t);
+  t = (10/sin(ang) + (100-10/tan(ang)))/c_ice + 15 - 9;  time.push_back(t);
+  t = 40*(1/(c_ice*tan(ang)) - 1/(c*sin(ang))) + 15 + 3;  time.push_back(t);
 
   string hitseries = "NdirTest";
   I3Geometry geometry = CalcGeom(pos);
@@ -137,14 +138,14 @@ TEST(AllCuts_TiltedTrack)
 		  "Wrong number of direct hits calculated.");
 
   double ldir = Ldir(track,geometry,hitsmap,-15.,15.);
-  ENSURE_DISTANCE(ldir,108.635,0.001,
+  ENSURE_DISTANCE(ldir,108.40697,0.001,
 		  "Wrong Ldir distance calculated.");
 
   double smooth = SmoothAll(track,geometry,hitsmap);
-  ENSURE_DISTANCE(smooth,0.121611,0.0001,
+  ENSURE_DISTANCE(smooth,0.119454,0.0001,
 		 "Wrong smoothness calculated.");
 
   double smoothdir = SmoothDir(track,geometry,hitsmap);
-  ENSURE_DISTANCE(smoothdir,0.121611,0.0001,
+  ENSURE_DISTANCE(smoothdir,0.119454,0.0001,
 		 "Wrong smoothnessDir calculated.");
 }

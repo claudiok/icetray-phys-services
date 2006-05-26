@@ -12,16 +12,50 @@
 #include <icetray/I3Context.h>
 #include "phys-services/source/I3Muxer.h"
 #include <map>
+#include <sstream>
 #include "icetray/I3TrayHeaders.h"
+
+#include <boost/preprocessor/stringize.hpp>
+#define MUXER_ASSERT(condition) if(!(condition)) \
+log_fatal("Muxer logic error %s",BOOST_PP_STRINGIZE(condition));
 
 I3_MODULE(I3Muxer);
 
 I3Muxer::I3Muxer(const I3Context& context) : I3Module(context),
 					     currentEvent_(I3Frame::None),
-					     currentEventQueued_(false)
+					     currentEventQueued_(false),
+                                             geometryServiceName_(I3DefaultName<I3GeometryService>::value()),
+                                             statusServiceName_(I3DefaultName<I3DetectorStatusService>::value()),
+                                             calibrationServiceName_(I3DefaultName<I3CalibrationService>::value()),
+                                             eventServiceName_(I3DefaultName<I3EventService>::value())
 {
+  AddParameter("GeometryService",
+               "Name of the geometry service to use",
+               geometryServiceName_);
+
+  AddParameter("CalibrationService",
+               "Name of the calibration service to use",
+               calibrationServiceName_);
+
+  AddParameter("DetectorStatusService",
+               "Name of the detector status service to use",
+               statusServiceName_);
+
+  AddParameter("EventService",
+               "Name of the event (or 'driving time') service to use",
+               eventServiceName_);
+
   AddOutBox("OutBox");
 }
+
+void I3Muxer::Configure()
+{
+  GetParameter("GeometryService",geometryServiceName_);
+  GetParameter("CalibrationService",calibrationServiceName_);
+  GetParameter("DetectorStatusService",statusServiceName_);
+  GetParameter("EventService",eventServiceName_);
+}
+
 
 void I3Muxer::Process()
 {
@@ -73,7 +107,7 @@ void I3Muxer::Process()
 I3Frame::Stream 
 I3Muxer::NextStream()
 {
-  if(!currentEventQueued_ && !context_.Get<I3EventService>().MoreEvents())
+  if(!currentEventQueued_ && !context_.Get<I3EventService>(eventServiceName_).MoreEvents())
     return I3Frame::None;
 
   I3Time eventTime = NextEventTime();
@@ -92,22 +126,21 @@ void I3Muxer::SendEvent()
 {
   log_debug("Entering I3Muxer::SendEvent()");
   QueueUpEvent();
-  //  assert(currentEvent_);
 
   I3FramePtr frame(new I3Frame(I3Frame::Physics));
 
-  assert(currentEventQueued_);
+  MUXER_ASSERT(currentEventQueued_);
   for(I3Frame::const_iterator iter = currentEvent_.begin (); 
       iter != currentEvent_.end() ; 
       iter++)
     {
       frame->Put(iter->first, iter->second);
     }
-  assert(currentGeometry_);
+  MUXER_ASSERT(currentGeometry_);
   frame->Put(currentGeometry_);
-  assert(currentCalibration_);
+  MUXER_ASSERT(currentCalibration_);
   frame->Put(currentCalibration_);
-  assert(currentDetectorStatus_);
+  MUXER_ASSERT(currentDetectorStatus_);
   frame->Put(currentDetectorStatus_);
 
   currentEventQueued_ = false;
@@ -120,17 +153,31 @@ void I3Muxer::SendCalibration()
 {
   log_debug("Entering I3Muxer::SendCalibration()");
   I3Time nextEvent = NextEventTime();
-  currentCalibration_ = context_.Get<I3CalibrationService>().GetCalibration(nextEvent);
+  currentCalibration_ = 
+    context_.Get<I3CalibrationService>(calibrationServiceName_).GetCalibration(nextEvent);
+  if(!currentCalibration_)
+    log_fatal("got null calibration from the calibration service");
   currentCalibrationRange_ 
     = I3TimeRange(currentCalibration_->startTime,
 		  currentCalibration_->endTime);
-  assert(currentCalibration_);
-  assert(currentCalibrationRange_.lower < currentCalibrationRange_.upper);
-  assert(nextEvent >= currentCalibrationRange_.lower);
-  assert(nextEvent <= currentCalibrationRange_.upper);
+  if(currentCalibrationRange_.lower >= currentCalibrationRange_.upper)
+    {
+      log_fatal("Calibration range is not well-ordered.  lower:%s upper:%s",
+		toString(currentCalibrationRange_.lower).c_str(),
+		toString(currentCalibrationRange_.upper).c_str());
+    }
+  if(nextEvent < currentCalibrationRange_.lower ||
+     nextEvent > currentCalibrationRange_.upper)
+    {
+      log_fatal("calibration range doesn't straddle the next event time "
+		"lower:%s  upper:%s  eventTime:%s",
+		toString(currentCalibrationRange_.lower).c_str(),
+		toString(currentCalibrationRange_.upper).c_str(),
+		toString(nextEvent).c_str());
+    }
   I3FramePtr frame(new I3Frame(I3Frame::Calibration));
 
-  assert(currentGeometry_);
+  MUXER_ASSERT(currentGeometry_);
   frame->Put(currentGeometry_);
   frame->Put(currentCalibration_);
 
@@ -142,20 +189,34 @@ void I3Muxer::SendDetectorStatus()
   log_debug("Entering I3Muxer::SendDetectorStatus()");
   I3Time nextEvent = NextEventTime();
   currentDetectorStatus_ = 
-    context_.Get<I3DetectorStatusService>().GetDetectorStatus(nextEvent);
+    context_.Get<I3DetectorStatusService>(statusServiceName_).GetDetectorStatus(nextEvent);
+  if(!currentDetectorStatus_)
+    log_fatal("got null status from the status service");
   currentDetectorStatusRange_ 
     = I3TimeRange(currentDetectorStatus_->startTime,
 		  currentDetectorStatus_->endTime);
-  assert(currentDetectorStatus_);
-  assert(currentDetectorStatusRange_.lower < 
-	 currentDetectorStatusRange_.upper);
-  assert(nextEvent >= currentDetectorStatusRange_.lower);
-  assert(nextEvent <= currentDetectorStatusRange_.upper);
+
+  if(currentDetectorStatusRange_.lower >=
+     currentDetectorStatusRange_.upper)
+    {
+      log_fatal("Status range is not well-ordered.  lower:%s upper:%s",
+		toString(currentDetectorStatusRange_.lower).c_str(),
+		toString(currentDetectorStatusRange_.upper).c_str());
+    }
+  if(nextEvent < currentDetectorStatusRange_.lower ||
+     nextEvent > currentDetectorStatusRange_.upper)
+    {
+      log_fatal("status range doesn't straddle the next event time "
+		"lower:%s  upper:%s  eventTime:%s",
+		toString(currentDetectorStatusRange_.lower).c_str(),
+		toString(currentDetectorStatusRange_.upper).c_str(),
+		toString(nextEvent).c_str());
+    }
   I3FramePtr frame(new I3Frame(I3Frame::DetectorStatus));
 
-  assert(currentGeometry_);
+  MUXER_ASSERT(currentGeometry_);
   frame->Put(currentGeometry_);
-  assert(currentCalibration_);
+  MUXER_ASSERT(currentCalibration_);
   frame->Put(currentCalibration_);
   frame->Put(currentDetectorStatus_);
 
@@ -166,14 +227,27 @@ void I3Muxer::SendGeometry()
 {
   log_debug("Entering I3Muxer::SendGeometry()");
   I3Time nextEvent = NextEventTime();
-  currentGeometry_ = context_.Get<I3GeometryService>().GetGeometry(nextEvent);
+  currentGeometry_ = context_.Get<I3GeometryService>(geometryServiceName_).GetGeometry(nextEvent);
+  if(!currentGeometry_)
+    log_fatal("got null geometry from the geometry service");
   currentGeometryRange_ = 
     I3TimeRange(currentGeometry_->startTime,
 		currentGeometry_->endTime);
-  assert(currentGeometry_);
-  assert(currentGeometryRange_.lower < currentGeometryRange_.upper);
-  assert(nextEvent >= currentGeometryRange_.lower);
-  assert(nextEvent <= currentGeometryRange_.upper);
+  if(currentGeometryRange_.lower >= currentGeometryRange_.upper)
+    {
+      log_fatal("Geometry range is not well-ordered. lower:%s upper:%s",
+		toString(currentGeometryRange_.lower).c_str(),
+		toString(currentGeometryRange_.upper).c_str());
+    }
+  if(nextEvent < currentGeometryRange_.lower ||
+     nextEvent > currentGeometryRange_.upper)
+    {
+      log_fatal("geometry range doesn't straddle the next event time "
+		"lower:%s  upper:%s  eventTime:%s",
+		toString(currentGeometryRange_.lower).c_str(),
+		toString(currentGeometryRange_.upper).c_str(),
+		toString(nextEvent).c_str());
+    }
   I3FramePtr frame(new I3Frame(I3Frame::Geometry));
   frame->Put(currentGeometry_);
   PushFrame(frame,"OutBox");
@@ -237,9 +311,10 @@ I3Muxer::QueueUpEvent()
 {
   if(!currentEventQueued_)
     {
-      assert(context_.Get<I3EventService>().MoreEvents());
+      MUXER_ASSERT(context_.Get<I3EventService>().MoreEvents());
       I3TimePtr eventTimePtr;
-      I3Time eventTime = context_.Get<I3EventService>().PopEvent(currentEvent_);
+      I3Time eventTime = 
+	context_.Get<I3EventService>().PopEvent(currentEvent_);
       eventTimePtr = I3TimePtr(new I3Time(eventTime));
       currentEvent_.Put("DrivingTime",eventTimePtr);
       currentEventQueued_ = true;
@@ -253,4 +328,11 @@ I3Muxer::NextEventTime()
   log_trace("About to look for DrivingTime in frame");
   I3Time returned = currentEvent_.Get<I3Time>("DrivingTime");
   return returned;
+}
+
+string I3Muxer::toString(I3Time& time)
+{
+  ostringstream out;
+  out<<"{"<<time.GetUTCYear()<<","<<time.GetUTCDaqTime()<<"}";
+  return out.str();
 }

@@ -43,6 +43,8 @@ class I3Muxer : public I3Module
   I3Muxer(const I3Context& ctx);
 
   void Process();
+  
+  void Configure();
 
  private:
 
@@ -69,6 +71,7 @@ class I3Muxer : public I3Module
   I3Time NextEventTime();
 
  private:
+  static string toString(I3Time& time);
 
   I3Frame currentEvent_;
   bool currentEventQueued_;
@@ -78,6 +81,11 @@ class I3Muxer : public I3Module
   I3TimeRange currentCalibrationRange_;
   I3DetectorStatusConstPtr currentDetectorStatus_;
   I3TimeRange currentDetectorStatusRange_;
+ 
+  std::string geometryServiceName_;
+  std::string statusServiceName_;
+  std::string calibrationServiceName_;
+  std::string eventServiceName_;
   
   
   // logging
