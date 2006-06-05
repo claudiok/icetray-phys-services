@@ -35,6 +35,7 @@ void I3CutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("Ndir",Ndir);
   ar & make_nvp("Ldir",Ldir);
   ar & make_nvp("Sdir",Sdir);
+  ar & make_nvp("Sall",Sall);
   ar & make_nvp("cog",cog);
 }
   
