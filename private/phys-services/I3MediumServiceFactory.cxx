@@ -59,3 +59,5 @@ void I3MediumServiceFactory::Configure(){
   GetParameter("Properties", mediumPropInFilename_);
   GetParameter("Histograms", mediumHistoOutFilename_);
 }
+
+I3_SERVICE_FACTORY(I3MediumServiceFactory);
