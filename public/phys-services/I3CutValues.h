@@ -25,6 +25,7 @@ class I3CutValues : public I3FrameObject
  public:
   int Nchan;
   int Nhit;
+  int Nstring;
   int Ndir;
   double Ldir;
   double Sdir;
@@ -34,6 +35,7 @@ class I3CutValues : public I3FrameObject
   I3CutValues() :
     Nchan(-1),
     Nhit(-1),
+    Nstring(-1),
     Ndir(-1),
     Ldir(NAN),
     Sdir(NAN),

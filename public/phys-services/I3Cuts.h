@@ -56,6 +56,7 @@ namespace I3Cuts
    * OUTPUT:
    * @param Nchan -- The Nchan cut parameter: total number of hit channels.
    * @param Nhit -- The Nhit cut parameter: total number of hits.
+   * @param Nstring -- The Nstring cut parameter: total number of strings.
    * @param Ndir -- The Ndir cut parameter: number of direct hits.
    * @param Ldir -- The Ldir cut parameter (based on direct hits): "length" 
    *                of the event.  This is the length between the two most 
@@ -76,7 +77,8 @@ namespace I3Cuts
 		const double t1, 
 		const double t2, 
 		int& Nchan, 
-		int& Nhit, 
+ 		int& Nhit,
+		int& Nstring,
 		int& Ndir, 
 		double& Ldir,
 		double& Sdir,
@@ -93,6 +95,7 @@ namespace I3Cuts
 		const double t2, 
 		int& Nchan, 
 		int& Nhit, 
+		int& Nstring,
 		int& Ndir, 
 		double& Ldir,
 		double& Sdir,
@@ -131,6 +134,18 @@ namespace I3Cuts
    * in order to save multiple calls to the function.
    */
   int Nhit(const I3Particle& track, 
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = minusTWindow, 
+	   double t2 = plusTWindow);
+
+  /**
+   * A convenience function that calls CutsCalc() and returns the total 
+   * number of strings in the event.  If you are interested in more than 
+   * one quantity from CutsCalc(), use the CutsCalc() function directly,
+   * in order to save multiple calls to the function.
+   */
+  int Nstring(const I3Particle& track, 
 	   const I3Geometry& geom, 
 	   const I3RecoHitSeriesMap& hitmap, 
 	   double t1 = minusTWindow, 

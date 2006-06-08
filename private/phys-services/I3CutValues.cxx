@@ -9,7 +9,7 @@ void I3CutValues::Calculate(const I3Particle& track,
 			    const double& endTWindow)
 {
   I3Cuts::CutsCalc(track, geometry, hitmap, begTWindow, endTWindow,
-		   Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+		   Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   cog = I3Cuts::COG(geometry, hitmap);
 }
 
@@ -20,7 +20,7 @@ void I3CutValues::Calculate(const I3Particle& track,
 			    const double& endTWindow)
 {
   I3Cuts::CutsCalc(track, geometry, pulsemap, begTWindow, endTWindow,
-		   Nchan, Nhit, Ndir, Ldir, Sdir, Sall);
+		   Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   cog = I3Cuts::COG(geometry, pulsemap);
 }
 
@@ -32,6 +32,7 @@ void I3CutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
   ar & make_nvp("Nchan",Nchan);
   ar & make_nvp("Nhit",Nhit);
+  ar & make_nvp("Nstring",Nstring);
   ar & make_nvp("Ndir",Ndir);
   ar & make_nvp("Ldir",Ldir);
   ar & make_nvp("Sdir",Sdir);
