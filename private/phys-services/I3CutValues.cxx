@@ -32,7 +32,8 @@ void I3CutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
   ar & make_nvp("Nchan",Nchan);
   ar & make_nvp("Nhit",Nhit);
-  ar & make_nvp("Nstring",Nstring);
+  if (version > 0) 
+    ar & make_nvp("Nstring",Nstring);
   ar & make_nvp("Ndir",Ndir);
   ar & make_nvp("Ldir",Ldir);
   ar & make_nvp("Sdir",Sdir);
@@ -40,5 +41,5 @@ void I3CutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("cog",cog);
 }
   
-
+BOOST_CLASS_VERSION(I3CutValues, 1);
 I3_SERIALIZABLE(I3CutValues);
