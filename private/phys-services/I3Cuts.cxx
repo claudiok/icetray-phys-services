@@ -3,6 +3,7 @@
 #include "dataclasses/I3Constants.h"
 #include "phys-services/Utility.h"
 #include "phys-services/I3Calculator.h"
+#include <assert.h>
 
 using namespace I3Constants;
 using namespace I3Calculator;

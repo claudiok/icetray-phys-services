@@ -9,6 +9,7 @@
 #include "phys-services/I3FileOMKey2MBID.h"
 #include <fstream>
 #include <string>
+#include <assert.h>
 
 using namespace std;
 

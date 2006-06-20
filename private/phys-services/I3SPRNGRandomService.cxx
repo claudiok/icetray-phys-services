@@ -13,6 +13,7 @@
 #include "phys-services/gsl-sprng.h" 
 #include <string>
 #include <fstream>
+#include <assert.h>
 
 using namespace std;
 
