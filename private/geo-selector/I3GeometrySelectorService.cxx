@@ -25,6 +25,14 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
       om.position.SetX(iter->second.position.GetX() + shiftX_);
       om.position.SetY(iter->second.position.GetY() + shiftY_);
       om.position.SetZ(iter->second.position.GetZ() + shiftZ_);
+      log_trace("OLD POSITION:(%.2f,%.2f,%.2f)",
+		iter->second.position.GetX(),
+		iter->second.position.GetY(),
+		iter->second.position.GetZ());
+      log_trace("NEW POSITION:(%.2f,%.2f,%.2f)",
+		om.position.GetX(),
+		om.position.GetY(),
+		om.position.GetZ());
       new_geo->omgeo[omkey] = om;
     }
   }

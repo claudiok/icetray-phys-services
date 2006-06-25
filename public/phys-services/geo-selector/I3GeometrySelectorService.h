@@ -25,6 +25,8 @@ using namespace std;
  */
 class I3GeometrySelectorService : public I3GeometryService
 {
+
+  SET_LOGGER("I3GeometrySelectorService");
   /**
    * A list of strings to use.  This vector is constructed from the input parameters
    * StringsToUse and StringsToExclude.

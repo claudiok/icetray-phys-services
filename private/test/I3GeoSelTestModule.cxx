@@ -15,6 +15,7 @@
 #include <I3Test.h>
 #include "phys-services/geo-selector/I3GeoSelTestModule.h"
 #include "phys-services/geo-selector/GeoSelUtils.h"
+#include "phys-services/I3GeometryService.h"
 
 // other headers
 //  global header for all the IceTray stuff
@@ -60,6 +61,7 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
     AddParameter("ShiftZ",
 		 "Distance to shift the entire detector",
 		 shiftZ_);
+
 }
 
 I3GeoSelTestModule::~I3GeoSelTestModule() {
@@ -96,7 +98,6 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
 
   log_debug("Entering Geometry method.");
   
-  // Get the event information out of the Frame
   I3GeometryConstPtr geoPtr = frame->Get<I3GeometryConstPtr>();
   ENSURE(geoPtr,"Couldn't get geometry");
 
@@ -122,7 +123,6 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
       iter != geoPtr->omgeo.end(); ++iter){
     OMKey omkey = iter->first;
     log_trace("OM: %s",omkey.str().c_str());    
-    cout<<"OM: "<<omkey.str().c_str()<<endl;
     ENSURE(geo_sel_utils::exists(omkey.GetString(),goodStrings_));
     ENSURE(!geo_sel_utils::exists(omkey.GetString(),strings_exclude_list));
   }
@@ -137,13 +137,34 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   }
   
   PushFrame(frame,"OutBox");
-  
+
   log_debug("Added selection.");
 }
 
 
 void I3GeoSelTestModule::Physics(I3FramePtr frame) {
-  cout<<*frame<<endl;
+  // Get the event information out of the Frame
+  const I3Time& dt =frame->Get<I3Time>("DrivingTime");
+
+  I3GeometryServicePtr old_geo_service = context_.Get<I3GeometryServicePtr>("I3GeometryService");
+  I3GeometryConstPtr old_geo = old_geo_service->GetGeometry(dt);
+  ENSURE(old_geo,"Couldn't get OLD geometry");
+
+  I3GeometryConstPtr new_geo = frame->Get<I3GeometryConstPtr>();
+  ENSURE(new_geo,"Couldn't get NEW geometry");
+
+  I3OMGeoMap::const_iterator iter;
+  for(iter = new_geo->omgeo.begin();
+      iter != new_geo->omgeo.end(); ++iter){
+    OMKey omkey = iter->first;
+    I3OMGeo new_om = iter->second;
+    I3OMGeo old_om = old_geo->omgeo.find(omkey)->second;
+    ENSURE_DISTANCE(old_om.position.GetX() + shiftX_,new_om.position.GetX(),0.1);
+    ENSURE_DISTANCE(old_om.position.GetY() + shiftY_,new_om.position.GetY(),0.1);
+    ENSURE_DISTANCE(old_om.position.GetZ() + shiftZ_,new_om.position.GetZ(),0.1);
+  }
+
+
 }
 
 
