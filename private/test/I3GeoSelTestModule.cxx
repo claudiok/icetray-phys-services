@@ -142,3 +142,8 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
 }
 
 
+void I3GeoSelTestModule::Physics(I3FramePtr frame) {
+  cout<<*frame<<endl;
+}
+
+

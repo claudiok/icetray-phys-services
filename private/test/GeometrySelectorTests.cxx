@@ -191,7 +191,7 @@ TEST(icetray_test_shift){
     ("IceCubeGeoFile",icecube_geo.c_str())
     ("AmandaGeoFile",amanda_geo.c_str());
   tray.AddService("I3EmptyStreamsFactory","empty_streams")
-    ("NFrames",1)
+    ("NFrames",4)
     ("InstallGeometry",false);
   tray.AddService("I3GeometrySelectorServiceFactory","geo_selector")
     ("StringsToUse",strings_to_use.c_str())

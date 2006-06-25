@@ -50,6 +50,8 @@ public:
    */ 
   void Geometry(I3FramePtr frame);
 
+  void Physics(I3FramePtr frame);
+
 private:
   
   /**
