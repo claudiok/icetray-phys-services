@@ -38,9 +38,19 @@ class I3GeometrySelectorService : public I3GeometryService
   vector<int> goodStations_;
 
   I3GeometryServicePtr geo_service_;
+  double shiftX_;
+  double shiftY_;
+  double shiftZ_;
  public:
-  I3GeometrySelectorService(I3GeometryServicePtr g) 
-     {geo_service_ = g; }
+  I3GeometrySelectorService(I3GeometryServicePtr g, 
+			    double dx = 0.,
+			    double dy = 0.,
+			    double dz = 0.){
+    geo_service_ = g;
+    shiftX_ = dx; 
+    shiftY_ = dy; 
+    shiftZ_ = dz; 
+  }
 
   void SetGoodStrings(vector<int>& v){goodStrings_ = v; };
   void SetGoodStations(vector<int>& v){goodStations_ = v; };

@@ -80,6 +80,10 @@ private:
    */
   string stationsToExclude_;
 
+  double shiftX_;
+  double shiftY_;
+  double shiftZ_;
+
   /**
    *This is the list of strings to use
 v   */

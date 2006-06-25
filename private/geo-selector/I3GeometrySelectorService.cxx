@@ -20,16 +20,29 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
   for(iter = old_geo->omgeo.begin();
       iter != old_geo->omgeo.end(); ++iter){
     OMKey omkey = iter->first;
-    if(geo_sel_utils::exists(omkey.GetString(),goodStrings_))
-      new_geo->omgeo[omkey] = iter->second;
+    if(geo_sel_utils::exists(omkey.GetString(),goodStrings_)){
+      I3OMGeo om = iter->second;
+      om.position.SetX(iter->second.position.GetX() + shiftX_);
+      om.position.SetY(iter->second.position.GetY() + shiftY_);
+      om.position.SetZ(iter->second.position.GetZ() + shiftZ_);
+      new_geo->omgeo[omkey] = om;
+    }
   }
 
   I3StationGeoMap::const_iterator siter;
   for(siter = old_geo->stationgeo.begin();
       siter != old_geo->stationgeo.end(); ++siter){
     int station = siter->first;
-    if(geo_sel_utils::exists(station,goodStrings_))
-      new_geo->stationgeo[station] = siter->second;
+    if(geo_sel_utils::exists(station,goodStrings_)){
+      I3StationGeo s = siter->second;
+      vector<I3TankGeo>::iterator i = s.begin();
+      for(; i != s.end(); i++){
+	i->position.SetX(iter->second.position.GetX() + shiftX_);
+	i->position.SetY(iter->second.position.GetY() + shiftY_);
+	i->position.SetZ(iter->second.position.GetZ() + shiftZ_);
+      }
+      new_geo->stationgeo[station] = s;
+    }
   }
 
   log_trace("***before*** old_geo->omgeo().size(): %zu",old_geo->omgeo.size());

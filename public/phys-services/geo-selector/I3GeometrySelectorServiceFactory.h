@@ -77,6 +77,22 @@ private:
   string stationsToExclude_;
 
   /**
+   * Distance in X to shift the detector
+   */
+  double shiftX_;
+
+  /**
+   * Distance in Y to shift the detector
+   */
+  double shiftY_;
+
+  /**
+   * Distance in Z to shift the detector
+   */
+  double shiftZ_;
+
+
+  /**
    * A list of strings to use.  This vector is constructed from the input parameters
    * StringsToUse and StringsToExclude.
    */

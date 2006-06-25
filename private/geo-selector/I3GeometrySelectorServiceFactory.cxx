@@ -4,9 +4,21 @@
 
 I3_SERVICE_FACTORY(I3GeometrySelectorServiceFactory);
 
+/**
+ * Minimum distance you can shift the detector
+ */
+const double MIN_SHIFT = 1.;
+
 I3GeometrySelectorServiceFactory::
 I3GeometrySelectorServiceFactory(const I3Context& context) : 
-  I3ServiceFactory(context)
+  I3ServiceFactory(context),
+  stringsToUse_("-19:80"),
+  stringsToExclude_(""),
+  stationsToUse_("-19:80"),
+  stationsToExclude_(""),
+  shiftX_(0.),
+  shiftY_(0.),
+  shiftZ_(0.)
 {
     AddParameter("StringsToUse", 
 		 "The strings that should be included", 
@@ -23,6 +35,15 @@ I3GeometrySelectorServiceFactory(const I3Context& context) :
     AddParameter("GeoSelectorName",
 		 "Name of the new geometry service. The muxer needs this name.",
 		 geoSelectorName_);
+    AddParameter("ShiftX",
+		 "Distance to shift the entire detector",
+		 shiftX_);
+    AddParameter("ShiftY",
+		 "Distance to shift the entire detector",
+		 shiftY_);
+    AddParameter("ShiftZ",
+		 "Distance to shift the entire detector",
+		 shiftZ_);
 }
 
 I3GeometrySelectorServiceFactory::
@@ -38,6 +59,9 @@ void I3GeometrySelectorServiceFactory::Configure()
   GetParameter("StationsToUse",stationsToUse_);
   GetParameter("StationsToExclude",stationsToExclude_);
   GetParameter("GeoSelectorName",geoSelectorName_);
+  GetParameter("ShiftX",shiftX_);
+  GetParameter("ShiftY",shiftY_);
+  GetParameter("ShiftZ",shiftZ_);
 }
 
 bool I3GeometrySelectorServiceFactory::InstallService(I3Context& services)
@@ -45,7 +69,8 @@ bool I3GeometrySelectorServiceFactory::InstallService(I3Context& services)
   if(!geometry_)
     geometry_ = 
       shared_ptr<I3GeometrySelectorService>
-      (new I3GeometrySelectorService(context_.Get<I3GeometryServicePtr>()));
+      (new I3GeometrySelectorService(context_.Get<I3GeometryServicePtr>(),
+       shiftX_, shiftY_, shiftZ_));
 
   if(!geo_sel_utils::good_input(stringsToUse_)) 
     log_fatal("couldn't parse %s",stringsToUse_.c_str());

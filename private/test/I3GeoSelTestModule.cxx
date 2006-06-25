@@ -50,6 +50,16 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
     AddParameter("StationsToExclude", 
 		 "The stations that should be excluded", 
 		 stationsToExclude_);
+
+    AddParameter("ShiftX",
+		 "Distance to shift the entire detector",
+		 shiftX_);
+    AddParameter("ShiftY",
+		 "Distance to shift the entire detector",
+		 shiftY_);
+    AddParameter("ShiftZ",
+		 "Distance to shift the entire detector",
+		 shiftZ_);
 }
 
 I3GeoSelTestModule::~I3GeoSelTestModule() {
@@ -61,6 +71,9 @@ void I3GeoSelTestModule::Configure() {
   GetParameter("StringsToExclude",stringsToExclude_);
   GetParameter("StationsToUse",stationsToUse_);
   GetParameter("StationsToExclude",stationsToExclude_);
+  GetParameter("ShiftX",shiftX_);
+  GetParameter("ShiftY",shiftY_);
+  GetParameter("ShiftZ",shiftZ_);
 
   if(!geo_sel_utils::good_input(stringsToUse_)) 
     log_fatal("couldn't parse %s",stringsToUse_.c_str());
@@ -81,13 +94,11 @@ void I3GeoSelTestModule::Configure() {
 
 void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
 
-  cout<<frame<<endl;
-
   log_debug("Entering Geometry method.");
   
   // Get the event information out of the Frame
   I3GeometryConstPtr geoPtr = frame->Get<I3GeometryConstPtr>();
-  if(!geoPtr) log_fatal("Couldn't get geometry");
+  ENSURE(geoPtr,"Couldn't get geometry");
 
   //loop through the in ice geometry and make sure that
   //1) All the DOMs that exist in the geometry are in goodStrings_
@@ -103,15 +114,17 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   for(vector<int>::iterator iter = goodStations_.begin(); iter != goodStations_.end(); ++iter)
     log_trace("%d ",*iter);
 
-  std::vector<int> exclude_list = geo_sel_utils::parse_string_list(stringsToExclude_);
+  std::vector<int> strings_exclude_list = geo_sel_utils::parse_string_list(stringsToExclude_);
+  std::vector<int> stations_exclude_list = geo_sel_utils::parse_string_list(stationsToExclude_);
 
   I3OMGeoMap::const_iterator iter;
   for(iter = geoPtr->omgeo.begin();
       iter != geoPtr->omgeo.end(); ++iter){
     OMKey omkey = iter->first;
     log_trace("OM: %s",omkey.str().c_str());    
+    cout<<"OM: "<<omkey.str().c_str()<<endl;
     ENSURE(geo_sel_utils::exists(omkey.GetString(),goodStrings_));
-    ENSURE(!geo_sel_utils::exists(omkey.GetString(),exclude_list));
+    ENSURE(!geo_sel_utils::exists(omkey.GetString(),strings_exclude_list));
   }
 
   I3StationGeoMap::const_iterator siter;
@@ -120,7 +133,7 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
     int station = siter->first;
     log_trace("Station: %d",station);    
     ENSURE(geo_sel_utils::exists(station,goodStrings_));
-    ENSURE(!geo_sel_utils::exists(station,exclude_list));
+    ENSURE(!geo_sel_utils::exists(station,stations_exclude_list));
   }
   
   PushFrame(frame,"OutBox");
