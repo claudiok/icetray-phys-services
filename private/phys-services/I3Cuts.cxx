@@ -151,8 +151,14 @@ I3Position COGImpl(const I3Geometry& geometry,
     
     for (unsigned i=0; i < pulsevect.size(); i++) {
       HitType pulse = pulsevect[i];
-    
-      double amp_tmp = GetCharge(pulse);
+      double amp_tmp;
+      if(isnan(GetCharge(pulse)) > 0 ) {
+	amp_tmp=0;
+      }
+      else {
+	amp_tmp = GetCharge(pulse);
+      }
+
       double amp = pow(amp_tmp,ampWeight);
       ampsum+=amp;
     
