@@ -7,6 +7,7 @@
 #include "icetray/modules/TrashCan.h"
 #include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
 #include "phys-services/source/I3Muxer.h"
+#include "dataclasses/I3Units.h"
 
 using geo_sel_utils::make_good_strings;
 using geo_sel_utils::exists;
@@ -165,6 +166,53 @@ TEST(icetray_test){
   tray.AddModule("I3GeoSelTestModule","geo_test") 
     ("StringsToUse",strings_to_use.c_str())
     ("StationsToUse",stations_to_use.c_str());
+  tray.AddModule("TrashCan","trash");
+
+  tray.Execute();
+  tray.Finish();
+}
+
+TEST(icetray_test_shift){
+
+  I3Tray tray;
+
+  std::string strings_to_use("21,29,39,38,30,40,49");
+  std::string stations_to_use("21,29,39,38,30,40,49,50");
+
+  std::string strings_to_exclude("-1:20,22:28,31:37,41:48,50:80");
+  std::string stations_to_exclude("-1:20,22:28,31:37,41:48,51:80");
+
+  string icecube_geo(getenv("I3_WORK"));
+  icecube_geo += "/phys-services/resources/icecube.geo";
+  string amanda_geo(getenv("I3_WORK"));
+  amanda_geo += "/phys-services/resources/amanda.geo";
+
+  tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
+    ("IceCubeGeoFile",icecube_geo.c_str())
+    ("AmandaGeoFile",amanda_geo.c_str());
+  tray.AddService("I3EmptyStreamsFactory","empty_streams")
+    ("NFrames",4)
+    ("InstallGeometry",false);
+  tray.AddService("I3GeometrySelectorServiceFactory","geo_selector")
+    ("StringsToUse",strings_to_use.c_str())
+    ("StationsToUse",stations_to_use.c_str())
+    ("GeoSelectorName","I3GeometrySelectorService")
+    ("ShiftX",100*I3Units::m)
+    ("ShiftY",100*I3Units::m)
+    ("ShiftZ",100*I3Units::m);
+
+  tray.AddModule("I3Muxer","muxer")
+    ("GeometryService","I3GeometrySelectorService");
+  //I3GeoSelTestModule contains ENSURE statements
+  tray.AddModule("I3GeoSelTestModule","geo_test") 
+    ("StringsToUse",strings_to_use.c_str())
+    ("StringsToExclude",strings_to_exclude.c_str())
+    ("StationsToUse",stations_to_use.c_str())
+    ("StationsToExclude",stations_to_exclude.c_str())
+    ("ShiftX",100*I3Units::m)
+    ("ShiftY",100*I3Units::m)
+    ("ShiftZ",100*I3Units::m);
+
   tray.AddModule("TrashCan","trash");
 
   tray.Execute();

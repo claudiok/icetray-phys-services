@@ -50,6 +50,8 @@ public:
    */ 
   void Geometry(I3FramePtr frame);
 
+  void Physics(I3FramePtr frame);
+
 private:
   
   /**
@@ -79,6 +81,10 @@ private:
    *Takes the form of "i,j,n:m" and this will exclude stations i,j,n,n+1,...,m-1,m
    */
   string stationsToExclude_;
+
+  double shiftX_;
+  double shiftY_;
+  double shiftZ_;
 
   /**
    *This is the list of strings to use

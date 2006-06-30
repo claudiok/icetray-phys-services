@@ -15,6 +15,7 @@
 #include <I3Test.h>
 #include "phys-services/geo-selector/I3GeoSelTestModule.h"
 #include "phys-services/geo-selector/GeoSelUtils.h"
+#include "phys-services/I3GeometryService.h"
 
 // other headers
 //  global header for all the IceTray stuff
@@ -34,7 +35,10 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
   stringsToUse_("-19:80"),
   stringsToExclude_(""),
   stationsToUse_("1:80"),
-  stationsToExclude_("")
+  stationsToExclude_(""),
+  shiftX_(0.),
+  shiftY_(0.),
+  shiftZ_(0.)
 {
     AddOutBox("OutBox");
 
@@ -50,6 +54,17 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
     AddParameter("StationsToExclude", 
 		 "The stations that should be excluded", 
 		 stationsToExclude_);
+
+    AddParameter("ShiftX",
+		 "Distance to shift the entire detector",
+		 shiftX_);
+    AddParameter("ShiftY",
+		 "Distance to shift the entire detector",
+		 shiftY_);
+    AddParameter("ShiftZ",
+		 "Distance to shift the entire detector",
+		 shiftZ_);
+
 }
 
 I3GeoSelTestModule::~I3GeoSelTestModule() {
@@ -61,6 +76,9 @@ void I3GeoSelTestModule::Configure() {
   GetParameter("StringsToExclude",stringsToExclude_);
   GetParameter("StationsToUse",stationsToUse_);
   GetParameter("StationsToExclude",stationsToExclude_);
+  GetParameter("ShiftX",shiftX_);
+  GetParameter("ShiftY",shiftY_);
+  GetParameter("ShiftZ",shiftZ_);
 
   if(!geo_sel_utils::good_input(stringsToUse_)) 
     log_fatal("couldn't parse %s",stringsToUse_.c_str());
@@ -81,13 +99,10 @@ void I3GeoSelTestModule::Configure() {
 
 void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
 
-  cout<<frame<<endl;
-
   log_debug("Entering Geometry method.");
   
-  // Get the event information out of the Frame
   I3GeometryConstPtr geoPtr = frame->Get<I3GeometryConstPtr>();
-  if(!geoPtr) log_fatal("Couldn't get geometry");
+  ENSURE(geoPtr,"Couldn't get geometry");
 
   //loop through the in ice geometry and make sure that
   //1) All the DOMs that exist in the geometry are in goodStrings_
@@ -103,7 +118,8 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   for(vector<int>::iterator iter = goodStations_.begin(); iter != goodStations_.end(); ++iter)
     log_trace("%d ",*iter);
 
-  std::vector<int> exclude_list = geo_sel_utils::parse_string_list(stringsToExclude_);
+  std::vector<int> strings_exclude_list = geo_sel_utils::parse_string_list(stringsToExclude_);
+  std::vector<int> stations_exclude_list = geo_sel_utils::parse_string_list(stationsToExclude_);
 
   I3OMGeoMap::const_iterator iter;
   for(iter = geoPtr->omgeo.begin();
@@ -111,7 +127,7 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
     OMKey omkey = iter->first;
     log_trace("OM: %s",omkey.str().c_str());    
     ENSURE(geo_sel_utils::exists(omkey.GetString(),goodStrings_));
-    ENSURE(!geo_sel_utils::exists(omkey.GetString(),exclude_list));
+    ENSURE(!geo_sel_utils::exists(omkey.GetString(),strings_exclude_list));
   }
 
   I3StationGeoMap::const_iterator siter;
@@ -120,12 +136,38 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
     int station = siter->first;
     log_trace("Station: %d",station);    
     ENSURE(geo_sel_utils::exists(station,goodStrings_));
-    ENSURE(!geo_sel_utils::exists(station,exclude_list));
+    ENSURE(!geo_sel_utils::exists(station,stations_exclude_list));
   }
   
   PushFrame(frame,"OutBox");
-  
+
   log_debug("Added selection.");
+}
+
+
+void I3GeoSelTestModule::Physics(I3FramePtr frame) {
+  // Get the event information out of the Frame
+  const I3Time& dt =frame->Get<I3Time>("DrivingTime");
+
+  I3GeometryServicePtr old_geo_service = context_.Get<I3GeometryServicePtr>("I3GeometryService");
+  I3GeometryConstPtr old_geo = old_geo_service->GetGeometry(dt);
+  ENSURE(old_geo,"Couldn't get OLD geometry");
+
+  I3GeometryConstPtr new_geo = frame->Get<I3GeometryConstPtr>();
+  ENSURE(new_geo,"Couldn't get NEW geometry");
+
+  I3OMGeoMap::const_iterator iter;
+  for(iter = new_geo->omgeo.begin();
+      iter != new_geo->omgeo.end(); ++iter){
+    OMKey omkey = iter->first;
+    I3OMGeo new_om = iter->second;
+    I3OMGeo old_om = old_geo->omgeo.find(omkey)->second;
+    ENSURE_DISTANCE(old_om.position.GetX() + shiftX_,new_om.position.GetX(),0.1);
+    ENSURE_DISTANCE(old_om.position.GetY() + shiftY_,new_om.position.GetY(),0.1);
+    ENSURE_DISTANCE(old_om.position.GetZ() + shiftZ_,new_om.position.GetZ(),0.1);
+  }
+
+
 }
 
 
