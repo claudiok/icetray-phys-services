@@ -74,64 +74,61 @@ void I3Calculator::CherenkovCalc(const I3Particle& track,        // input
 
     //--Is point of closest approach (A) on track?
     //--Is Cherenkov origin point (C) on track?
-    if (track.GetShape()==I3Particle::StartingTrack) 
-      if (track.GetShape()==I3Particle::StoppingTrack) {
-	//-contained track...............................
-	if (TA<0) {
-	  // if A is before STARTING position
-	  appos = track.GetStartPos();
-	  apdist = position.CalcDistance(appos);
-	} else if (TA>track.GetLength()) {
-	  // if A is beyond STOPPING position
-	  appos = track.GetStopPos();
-	  apdist = position.CalcDistance(appos);
-	}
-	if (TC<0) {
-	  // if C is before STARTING position
-	  chpos.NullPosition();
-	  chtime = NAN;
-	  chdist = NAN;
-	  chapangle = NAN;
-	} else if (TC>track.GetLength()) {
-	  // if C is beyond STOPPING position
-	  chpos.NullPosition();                                               
-	  chtime = NAN;
-	  chdist = NAN;
-	  chapangle = NAN;
-	}
-      } else {
-	//-starting track................................
-	if (TA<0) {
-	  // if A is before STARTING position
-	  appos = track.GetStartPos();
-	  apdist = position.CalcDistance(appos);
-	}
-	if (TC<0) {
-	  // if C is before STARTING position
-	  chpos.NullPosition();
-	  chtime = NAN;
-	  chdist = NAN;
-	  chapangle = NAN;
-	}
+    if (track.GetShape()==I3Particle::ContainedTrack){
+      //-contained track...............................
+      if (TA<0) {
+        // if A is before STARTING position
+        appos = track.GetStartPos();
+        apdist = position.CalcDistance(appos);
+      } else if (TA>track.GetLength()) {
+        // if A is beyond STOPPING position
+        appos = track.GetStopPos();
+        apdist = position.CalcDistance(appos);
       }
-    else
-      if (track.GetShape()==I3Particle::StoppingTrack) {
-	//-stopping track................................
-	if (TA>0) {
-	  // if A is beyond STOPPING position
-	  appos = track.GetStopPos();
-	  apdist = position.CalcDistance(appos);
-	}
-	if (TC>0) {
-	  // if C is beyond STOPPING position
-	  chpos.NullPosition();
-	  chtime = NAN;
-	  chdist = NAN;
-	  chapangle = NAN;
-	}
-      } else {
-	//-infitine track................................
+      if (TC<0) {
+        // if C is before STARTING position
+        chpos.NullPosition();
+        chtime = NAN;
+        chdist = NAN;
+        chapangle = NAN;
+      } else if (TC>track.GetLength()) {
+        // if C is beyond STOPPING position
+        chpos.NullPosition();                                               
+        chtime = NAN;
+        chdist = NAN;
+        chapangle = NAN;
       }
+    } else if (track.GetShape()==I3Particle::StartingTrack) {
+      //-starting track................................
+      if (TA<0) {
+        // if A is before STARTING position
+        appos = track.GetStartPos();
+        apdist = position.CalcDistance(appos);
+      }
+      if (TC<0) {
+        // if C is before STARTING position
+        chpos.NullPosition();
+        chtime = NAN;
+        chdist = NAN;
+        chapangle = NAN;
+      }
+    } else if (track.GetShape()==I3Particle::StoppingTrack) {
+      //-stopping track................................
+      if (TA>0) {
+        // if A is beyond STOPPING position
+        appos = track.GetStopPos();
+        apdist = position.CalcDistance(appos);
+      }
+      if (TC>0) {
+        // if C is beyond STOPPING position
+        chpos.NullPosition();
+        chtime = NAN;
+        chdist = NAN;
+        chapangle = NAN;
+      }
+    } else {
+      //-infitine track................................
+    }
 
   } else {
     //--Don't calculate if track does not have direction
