@@ -41,7 +41,7 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
       
       double Tres = TimeResidual(track, ompos, hit->GetTime());
-      log_debug("residual: %f",Tres);
+      log_trace("residual: %f",Tres);
 
       // calculate projections of hits onto track...
       Nhit++; // keep track of total hits
@@ -50,7 +50,7 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
       pos.RotateZ(-track.GetDir().CalcPhi());
       pos.RotateY(-track.GetDir().CalcTheta());
       double dist = pos.GetZ();
-      log_debug("dist: %f",dist);
+      log_trace("dist: %f",dist);
       lengthAll.push_back(dist);        // set up for SmoothnessAll calculation
 
       // this is a direct hit...
@@ -75,14 +75,14 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
   {
     sort(lengthAll.begin(),lengthAll.end());
     for (unsigned int i=0; i<lengthAll.size(); i++) 
-      log_debug("lengthAll[%i]=%f",i,lengthAll[i]);
+      log_trace("lengthAll[%i]=%f",i,lengthAll[i]);
     int N = lengthAll.size()-1;
     Sall = 0;
     for (unsigned int j=1; j<lengthAll.size(); j++) {
       double lj = lengthAll[j]-lengthAll[0];
       double lN = lengthAll[N]-lengthAll[0];
       double S = (double)j/(double)N - lj/lN;
-      log_debug("j: %i  N: %i  S: %f",j,N,S);
+      log_trace("j: %i  N: %i  S: %f",j,N,S);
       if (fabs(S)>fabs(Sall)) Sall = S;
     }
     // calculation is meaningless for less than 3 hits
@@ -93,14 +93,14 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
   {
     sort(lengthDir.begin(),lengthDir.end());
     for (unsigned int i=0; i<lengthDir.size(); i++) 
-      log_debug("lengthDir[%i]=%f",i,lengthDir[i]);
+      log_trace("lengthDir[%i]=%f",i,lengthDir[i]);
     int N = lengthDir.size()-1;
     Sdir = 0;
     for (unsigned int j=1; j<lengthDir.size(); j++) {
       double lj = lengthDir[j]-lengthDir[0];
       double lN = lengthDir[N]-lengthDir[0];
       double S = (double)j/(double)N - lj/lN;
-      log_debug("j: %i  N: %i  S: %f",j,N,S);
+      log_trace("j: %i  N: %i  S: %f",j,N,S);
       if (fabs(S)>fabs(Sdir)) Sdir = S;
     }
     // calculation is meaningless for less than 3 direct hits
