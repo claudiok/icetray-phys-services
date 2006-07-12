@@ -6,7 +6,7 @@
  * @file I3Calculator.h
  * @version $Revision: 1.16 $
  * @date $Date$
- * @author pretz
+ * @author pretz, dule, ehrlich
  */
 #ifndef I3CALCULATOR_H
 #define I3CALCULATOR_H
