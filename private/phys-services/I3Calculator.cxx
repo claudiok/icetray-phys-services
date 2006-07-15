@@ -155,6 +155,15 @@ double I3Calculator::ClosestApproachDistance(const I3Particle& track, const I3Po
 
 
 //--------------------------------------------------------------
+double I3Calculator::DistanceAlongTrack(const I3Particle& track, const I3Position& ompos) {
+  I3Position pos(ompos);
+  pos.ShiftCoordSystem(track.GetPos());
+  pos.RotateZ(-track.GetDir().CalcPhi());
+  pos.RotateY(-track.GetDir().CalcTheta());
+  return pos.GetZ();
+}
+
+//--------------------------------------------------------------
 I3Position I3Calculator::CherenkovPosition(const I3Particle& track, const I3Position& position)
 {
   if (track.IsTrack()) {
