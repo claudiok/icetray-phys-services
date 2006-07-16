@@ -142,6 +142,14 @@ namespace I3Calculator
   double ClosestApproachDistance(const I3Particle& track,
 				 const I3Position& position);
 
+  /**
+   * Small useful function which computes the distance along a track
+   * from its vertex to the place where an OM position is perpendicular.
+   * (Used to be inside CutsCalc, but heck, it's a useful function for
+   * other stuff too!)
+   */
+  double DistanceAlongTrack(const I3Particle& track, const I3Position& ompos);
+
  /**
    * A convenience function that calls CherenkovCalc() and returns the 
    * position on the input track, which is the point of origin of Cherenkov 
