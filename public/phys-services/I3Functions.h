@@ -7,6 +7,7 @@
 #define I3FUNCTIONS_H
 
 #include <set>
+#include <vector>
 #include <string>
 using namespace std;
 
@@ -16,8 +17,13 @@ namespace I3Functions
   /**
    * Function to parse a long string and divide it into its string constituents
    */
-  set<string> ParseString(string bigString); 
+  set<string> ParseString(const string &bigString); 
 
+  /**
+   * Function to parse a long string of file name patterns, divide it into its string constituents, 
+   * and search for matching file names
+   */
+  vector<string> ParseFilename(const string &bigFilename);
 }
 
 #endif
