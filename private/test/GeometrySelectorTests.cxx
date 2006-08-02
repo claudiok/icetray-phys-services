@@ -143,7 +143,7 @@ TEST(icetray_test){
   I3Tray tray;
 
   std::string strings_to_use("21,29,39,38,30,40,49");
-  std::string stations_to_use("21,29,39,38,30,40,49,50");
+  std::string stations_to_use("21,29,30,38,39,40,47,48,49,50,57,58,59,66,67,74");
 
   string icecube_geo(getenv("I3_WORK"));
   icecube_geo += "/phys-services/resources/icecube.geo";
@@ -177,10 +177,10 @@ TEST(icetray_test_shift){
   I3Tray tray;
 
   std::string strings_to_use("21,29,39,38,30,40,49");
-  std::string stations_to_use("21,29,39,38,30,40,49,50");
+  std::string stations_to_use("21,29,30,38,39,40,47,48,49,50,57,58,59,66,67,74");
 
   std::string strings_to_exclude("-1:20,22:28,31:37,41:48,50:80");
-  std::string stations_to_exclude("-1:20,22:28,31:37,41:48,51:80");
+  std::string stations_to_exclude("-1:20,22:28,31:37,41:46,51:56,60:65,68:73,75:80");
 
   string icecube_geo(getenv("I3_WORK"));
   icecube_geo += "/phys-services/resources/icecube.geo";

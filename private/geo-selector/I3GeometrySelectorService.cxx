@@ -41,7 +41,7 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
   for(siter = old_geo->stationgeo.begin();
       siter != old_geo->stationgeo.end(); ++siter){
     int station = siter->first;
-    if(geo_sel_utils::exists(station,goodStrings_)){
+    if(geo_sel_utils::exists(station,goodStations_)){
       I3StationGeo s = siter->second;
       vector<I3TankGeo>::iterator i = s.begin();
       for(; i != s.end(); i++){
