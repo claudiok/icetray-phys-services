@@ -21,10 +21,10 @@ TEST_GROUP(I3Functions)
 TEST(ParseFilename)
 {
   string searchpattern(getenv("I3_TOOLS"));
-  searchpattern.append("/Standard/*.sql");
+  searchpattern.append("/test-data/amanda/*.f2k");  //4
   searchpattern.append(";");
   searchpattern.append(getenv("I3_TOOLS"));
-  searchpattern.append("/boost_1_33_1/include/boost-1_33_1/boost/funct*.*");
+  searchpattern.append("/test-data/ama-*.*"); // 4
 
   vector<string> v = I3Functions::ParseFilename(searchpattern);
   for(vector<string>::iterator iter=v.begin(); iter!=v.end(); iter++)
@@ -32,5 +32,5 @@ TEST(ParseFilename)
     cout<<*iter<<endl;
   }
 
-  ENSURE(v.size()==7,"Didn't find the expected number of files");
+  ENSURE(v.size()==8,"Didn't find the expected number of files");
 }
