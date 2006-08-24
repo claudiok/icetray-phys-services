@@ -17,6 +17,8 @@
 #include "dataclasses/I3Constants.h"
 #include "dataclasses/geometry/I3OMGeo.h"
 
+#define KATH_MESSING_AROUND 1
+
 using namespace I3Units;
 
 /**
@@ -97,6 +99,17 @@ namespace I3Calculator
    *
    * @sa I3Constants for refractive index (phase, group)
    */
+#if KATH_MESSING_AROUND
+  void CherenkovCalc(const I3Particle& track,
+		     const I3Position& position,
+		     I3Position& chpos,
+		     double& chtime,
+		     double& chdist,
+		     double& changle,
+		     const double IndexRefG=I3Constants::n_ice_group,
+		     const double IndexRefP=I3Constants::n_ice_phase,
+		     const I3OMGeo::Orientation orient=I3OMGeo::Down);
+#else
   void CherenkovCalc(const I3Particle& track,
 		     const I3Position& position,
 		     I3Position& appos,
@@ -108,6 +121,7 @@ namespace I3Calculator
 		     const double IndexRefG=I3Constants::n_ice_group,
 		     const double IndexRefP=I3Constants::n_ice_phase,
 		     const I3OMGeo::Orientation orient=I3OMGeo::Down);
+#endif
 
   /**
    * Check if the input position ('position') lies on the input track 
@@ -122,6 +136,22 @@ namespace I3Calculator
 		 const I3Position& position,
 		 const double Precision=0.1*I3Units::meter);
 
+  /**
+   * ------NEW!----------
+   * Function which does the legwork for computing things related to the
+   * distance of closest approach of a track to a point.  
+   * Used by CherenkovCalc, and also by the convenience functions
+   * ClosestApproachPosition and ClosestApproachDistance.
+   * Originally inside CherenkovCalc, but useful enough to bring outside.
+   * Returns two sets of closest-approach results: one "purely geometrical"
+   * and one which takes into account stopping/starting points of track.
+   */
+  void ClosestApproachCalc(const I3Particle& track,
+			   const I3Position& position,
+			   I3Position& appos_inf,
+			   double& apdist_inf,
+			   I3Position& appos_stopstart,
+			   double& apdist_stopstart);
   /**
    * A convenience function that calls CherenkovCalc() and returns the 
    * position of closest approach from (an I3Position) between the input 

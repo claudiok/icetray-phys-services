@@ -228,6 +228,14 @@ TEST(garbage)
       double chdist;
       double chapangle;
 
+#if KATH_MESSING_AROUND
+      CherenkovCalc(particle,
+		    position,
+		    chpos,
+		    chtime,
+		    chdist,
+		    chapangle);
+#else
       CherenkovCalc(particle,
 		    position,
 		    appos,
@@ -236,6 +244,7 @@ TEST(garbage)
 		    chtime,
 		    chdist,
 		    chapangle);
+#endif
       ENSURE(0,"That should have thrown");
     }
   catch(const exception& e)
