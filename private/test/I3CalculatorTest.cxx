@@ -221,8 +221,6 @@ TEST(garbage)
     {
       I3Particle particle;
       I3Position position;
-      I3Position appos;
-      double apdist;
       I3Position chpos;
       double chtime;
       double chdist;
@@ -236,6 +234,8 @@ TEST(garbage)
 		    chdist,
 		    chapangle);
 #else
+      I3Position appos;
+      double apdist;
       CherenkovCalc(particle,
 		    position,
 		    appos,

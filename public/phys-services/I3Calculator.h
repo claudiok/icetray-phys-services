@@ -159,7 +159,7 @@ namespace I3Calculator
    * from CherenkovCalc(), use the CherenkovCalc() function directly, in
    * order to save multiple calls to the function.
    */
-  I3Position ClosestApproachPosition(const I3Particle& track,
+  I3Position ClosestApproachPosition(const I3Particle& particle,
 				     const I3Position& position);
 
   /**
@@ -169,7 +169,7 @@ namespace I3Calculator
    * from CherenkovCalc(), use the CherenkovCalc() function directly, in
    * order to save multiple calls to the function.
    */
-  double ClosestApproachDistance(const I3Particle& track,
+  double ClosestApproachDistance(const I3Particle& particle,
 				 const I3Position& position);
 
   /**
@@ -189,7 +189,7 @@ namespace I3Calculator
    * use the CherenkovCalc() function directly, in order to save multiple 
    * calls to the function.
    */
-  I3Position CherenkovPosition(const I3Particle& track,
+  I3Position CherenkovPosition(const I3Particle& particle,
 			       const I3Position& position);
 
  /**
@@ -224,9 +224,9 @@ namespace I3Calculator
    * quantity from CherenkovCalc(), use the CherenkovCalc() function 
    * directly, in order to save multiple calls to the function.
    */
-  double CherenkovApproachAngle(const I3Particle& track,
-			    const I3Position& position,
-			    const I3OMGeo::Orientation orient=I3OMGeo::Down);
+  double CherenkovApproachAngle(const I3Particle& particle,
+			      const I3Position& position,
+			      const I3OMGeo::Orientation orient=I3OMGeo::Down);
 
   /**
    * A convenience function that calls CherenkovTime() and calculates the time 
@@ -241,16 +241,23 @@ namespace I3Calculator
 		      const double IndexRefP=I3Constants::n_ice_phase);
 
   /**
-   * Returns the spatial angle between two input tracks.
+   * Returns the spatial angle between two input particles.
    */
-  double Angle(const I3Particle& track1,
-	       const I3Particle& track2);
+  double Angle(const I3Particle& p1,
+	       const I3Particle& p2);
 
   /**
-   * Returns the distance between two input cascades.
+   * Returns the distance between two input particles.
    */
-  double Distance(const I3Particle& casc1, 
-		  const I3Particle& casc2);
+  double Distance(const I3Particle& p1, 
+		  const I3Particle& p2);
+
+  /**
+   * Returns the 4-distance between two input particles
+   *  (using both distance and time)
+   */
+  double FourDistance(const I3Particle& p1, 
+		      const I3Particle& p2);
 
   /**
    * Transform the input position into the coordinate system of the input 
