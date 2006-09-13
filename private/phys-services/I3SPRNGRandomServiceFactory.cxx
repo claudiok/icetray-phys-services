@@ -13,6 +13,7 @@
 #include "phys-services/I3SPRNGRandomServiceFactory.h"
 I3_SERVICE_FACTORY(I3SPRNGRandomServiceFactory);
 
+// Other header files
 
 #include "phys-services/I3SPRNGRandomService.h"
 
@@ -27,10 +28,20 @@ I3SPRNGRandomServiceFactory::I3SPRNGRandomServiceFactory(const I3Context& contex
   outstatefile_()
 {
   AddParameter("Seed","Seed for random number generator",seed_);
+
   AddParameter("NStreams","Number of streams used in cluster",nstreams_);
+
   AddParameter("StreamNum","Thread number for this generator",streamnum_);
+
   AddParameter("inStateFile","If set, load saved state from file",instatefile_);
+
   AddParameter("outStateFile","If set, save state to file",outstatefile_);
+
+  installServiceAs_ = I3DefaultName<I3RandomService>::value();
+  AddParameter("InstallServiceAs",
+               "Install the random service at the following location"
+               "(Default value is the value according to I3_DEFAULT_NAME)",
+               installServiceAs_);
 }
 
 // Destructors
@@ -50,8 +61,7 @@ I3SPRNGRandomServiceFactory::InstallService(I3Context& services)
 						streamnum_, instatefile_, outstatefile_));
   }
 
-  return services.Put(random_);
-
+  return services.Put<I3RandomService>(installServiceAs_, random_);
 }
 
 void I3SPRNGRandomServiceFactory::Configure()
@@ -61,5 +71,6 @@ void I3SPRNGRandomServiceFactory::Configure()
   GetParameter("StreamNum",streamnum_);
   GetParameter("inStateFile",instatefile_);
   GetParameter("outStateFile",outstatefile_);
+  GetParameter("InstallServiceAs",installServiceAs_);
 }
 /* eof */

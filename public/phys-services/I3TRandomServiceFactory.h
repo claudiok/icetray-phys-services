@@ -12,24 +12,22 @@
 
 // Header files
 
+#include <string>
 
-// forward declarations
+// Forward declarations
 
 class I3Context;
 
-// superclasses
+// Superclasses
 
 #include "icetray/I3ServiceFactory.h"
 #include "phys-services/I3RandomService.h"
 
-// namespace declarations
-
-using namespace std;
-
 /**
  * @brief This class installs a I3TRandomService.
  *
- * I3TRandomService supports one parameter: <VAR>Seed</VAR>.
+ * I3TRandomService supports two parameters: <VAR>Seed</VAR>,
+ * <VAR>InstallServiceAs</VAR>.
  * @version $Id$
  * @author pretz
  */
@@ -72,6 +70,7 @@ class I3TRandomServiceFactory
 
 	int seed_;
 	I3RandomServicePtr random_;
+	std::string installServiceAs_;
 
    SET_LOGGER("I3TRandomServiceFactory");
 };

@@ -14,24 +14,26 @@
  * (c) IceCube Collaboration
  */
 
-// forward declarations
+// Header files
+
+#include <string>
+
+// Forward declarations
 
 class I3Context;
 
-// superclasses
+// Superclasses
 
 #include "icetray/I3ServiceFactory.h"
 #include "phys-services/I3RandomService.h"
 
-// namespace declarations
-
-using namespace std;
-
 /**
  * @brief This class installs a I3SPRNGRandomService.
  *
- * I3SPRNGRandomService supports three parameter:
- * <VAR>Seed</VAR>, <VAR>NStreams</VAR>, <VAR>StreamNum</VAR>.
+ * I3SPRNGRandomService supports six parameter:
+ * <VAR>Seed</VAR>, <VAR>NStreams</VAR>, <VAR>StreamNum</VAR>,
+ * <VAR>inStateFile</VAR>, <VAR>outStateFile</VAR>,
+ * <VAR>InstallServiceAs</VAR>.
  */
 class I3SPRNGRandomServiceFactory
 : public I3ServiceFactory
@@ -72,6 +74,7 @@ class I3SPRNGRandomServiceFactory
   int seed_, nstreams_, streamnum_;
   string instatefile_,outstatefile_;
   I3RandomServicePtr random_;
+  std::string installServiceAs_;
 
   SET_LOGGER("I3SPRNGRandomServiceFactory");
   
