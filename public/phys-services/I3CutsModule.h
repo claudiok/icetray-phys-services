@@ -47,10 +47,14 @@ private:
 
   /**
    * Parameter: name of the pulse series map to use in the calculation of 
-   * the COG
+   * the cut parameters.
    */
-
   string pulsesName_;
+
+  /**
+   * Parameter: time range for calculating direct hits.
+   */
+  vector<double> timeRange_;
 
   /**
    * Named stream for my logging messages.  Allows my messages to be

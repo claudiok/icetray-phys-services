@@ -11,6 +11,7 @@
 #include "phys-services/I3CutValues.h"
 
 using namespace std;
+using namespace I3Units;
 
 I3_MODULE(I3CutsModule);
 
@@ -31,6 +32,12 @@ I3CutsModule::I3CutsModule(const I3Context& ctx) : I3Module(ctx)
   AddParameter("PulsesName", "Name of the pulse series to be used for cut calc"
 	       ,pulsesName_);
 
+  timeRange_.resize(2);
+  timeRange_[0] = -15*ns;
+  timeRange_[1] = +25*ns;
+  AddParameter("DirectHitsTimeRange","Time range for calculating direct hits"
+	       ,timeRange_);
+
 }
 
 
@@ -40,6 +47,7 @@ void I3CutsModule::Configure()
   GetParameter("ParticleNames",particleName_);   
   GetParameter("HitsName",hitsName_);
   GetParameter("PulsesName",pulsesName_);
+  GetParameter("DirectHitsTimeRange",timeRange_);
 
   if (hitsName_.empty() && pulsesName_.empty()) 
     log_fatal("Either 'HitsName' or 'PulsesName' parameter HAS to be set!");
@@ -60,6 +68,8 @@ void I3CutsModule::Physics(I3FramePtr frame)
   I3RecoPulseSeriesMapConstPtr pulsemap = 
     frame->Get<I3RecoPulseSeriesMapConstPtr>(pulsesName_);
 
+  if (!hitmap && !pulsemap) log_fatal("The chosen reaodut is not present.");
+
   //---Get all particle names......
   set<string> particleNames = I3Functions::ParseString(particleName_);
   I3Frame::const_iterator iter;
@@ -71,7 +81,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
 
     if (!particle) continue;
     log_debug("Found I3Particle: '%s'",name.c_str());
-    //log_trace("%s",ToString(particle).c_str());
+    log_trace("%s",ToString(particle).c_str());
 
     //---Check whether user pre-set entries......
     if ( particleName_!="" && particleNames.find(name)==particleNames.end() ) {
@@ -84,9 +94,9 @@ void I3CutsModule::Physics(I3FramePtr frame)
 
     I3CutValuesPtr cuts(new I3CutValues());
     if (hitmap)
-      cuts->Calculate(*particle, geometry, *hitmap);
+      cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
     else if (pulsemap)
-      cuts->Calculate(*particle, geometry, *pulsemap);
+     cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
 
     frame->Put(name+"Cuts", cuts);
     log_debug("%s",ToString(cuts).c_str());
