@@ -226,25 +226,13 @@ TEST(garbage)
       double chdist;
       double chapangle;
 
-#if KATH_MESSING_AROUND
       CherenkovCalc(particle,
 		    position,
 		    chpos,
 		    chtime,
 		    chdist,
 		    chapangle);
-#else
-      I3Position appos;
-      double apdist;
-      CherenkovCalc(particle,
-		    position,
-		    appos,
-		    apdist,
-		    chpos,
-		    chtime,
-		    chdist,
-		    chapangle);
-#endif
+
       ENSURE(0,"That should have thrown");
     }
   catch(const exception& e)

@@ -17,7 +17,6 @@
 #include "dataclasses/I3Constants.h"
 #include "dataclasses/geometry/I3OMGeo.h"
 
-#define KATH_MESSING_AROUND 1
 
 using namespace I3Units;
 
@@ -99,7 +98,6 @@ namespace I3Calculator
    *
    * @sa I3Constants for refractive index (phase, group)
    */
-#if KATH_MESSING_AROUND
   void CherenkovCalc(const I3Particle& track,
 		     const I3Position& position,
 		     I3Position& chpos,
@@ -109,19 +107,6 @@ namespace I3Calculator
 		     const double IndexRefG=I3Constants::n_ice_group,
 		     const double IndexRefP=I3Constants::n_ice_phase,
 		     const I3OMGeo::Orientation orient=I3OMGeo::Down);
-#else
-  void CherenkovCalc(const I3Particle& track,
-		     const I3Position& position,
-		     I3Position& appos,
-		     double& apdist,
-		     I3Position& chpos,
-		     double& chtime,
-		     double& chdist,
-		     double& changle,
-		     const double IndexRefG=I3Constants::n_ice_group,
-		     const double IndexRefP=I3Constants::n_ice_phase,
-		     const I3OMGeo::Orientation orient=I3OMGeo::Down);
-#endif
 
   /**
    * Check if the input position ('position') lies on the input track 
