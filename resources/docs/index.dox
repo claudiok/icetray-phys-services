@@ -27,12 +27,6 @@ really icetray 'services' per se, but they can still be used by other code.
 
 <hr>
 
-Following are docs about the I3PhysicsModule class which is included in 
-phys-services.  It contains several 'helper' and 'convenience' functions
-that the base I3Module class does not.
-@li @ref physics-module
-
-<hr>
 
 These are docs related to a set of base module classes for starting off an
 icetray session.  The so-called 'Source Modules' inherit from these classes so
