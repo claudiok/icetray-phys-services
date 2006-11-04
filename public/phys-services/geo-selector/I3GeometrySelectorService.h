@@ -43,24 +43,28 @@ class I3GeometrySelectorService : public I3GeometryService
   double shiftX_;
   double shiftY_;
   double shiftZ_;
+  bool shiftToCenter_;
+
  public:
   I3GeometrySelectorService(I3GeometryServicePtr g, 
 			    double dx = 0.,
 			    double dy = 0.,
-			    double dz = 0.){
+			    double dz = 0.):
+    shiftToCenter_(false)
+    {
     geo_service_ = g;
     shiftX_ = dx; 
     shiftY_ = dy; 
     shiftZ_ = dz; 
   }
 
+  void ShiftToCenter(bool s){shiftToCenter_ = s; };
   void SetGoodStrings(vector<int>& v){goodStrings_ = v; };
   void SetGoodStations(vector<int>& v){goodStations_ = v; };
 
   virtual ~I3GeometrySelectorService(){}
 
   I3GeometryConstPtr GetGeometry(I3Time time);
- private:
 };
 
 I3_POINTER_TYPEDEFS(I3GeometrySelectorService);

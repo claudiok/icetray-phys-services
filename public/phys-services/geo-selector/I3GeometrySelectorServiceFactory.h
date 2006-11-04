@@ -91,6 +91,10 @@ private:
    */
   double shiftZ_;
 
+  /**
+   * Shift to the center of the detector in X-Y
+   */
+  bool shiftToCenter_;
 
   /**
    * A list of strings to use.  This vector is constructed from the input parameters

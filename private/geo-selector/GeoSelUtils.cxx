@@ -127,6 +127,37 @@ namespace geo_sel_utils{
     }
     return final_string_list;
   }
-  
+
+  std::pair<double,double> detector_center(I3GeometryConstPtr geo, 
+					   const vector<int>& goodStrings){
+
+    vector<double> x;
+    vector<double> y;
+    I3OMGeoMap::const_iterator  i;
+    vector<int>::const_iterator str_iter = goodStrings.begin();
+    for(i=geo->omgeo.begin(); i!=geo->omgeo.end(); i++){
+      if(*str_iter == i->first.GetString()){
+	x.push_back(i->second.position.GetX());
+	y.push_back(i->second.position.GetY());
+	str_iter++;
+      }
+    }
+
+    vector<double>::iterator c_iter;
+
+    double x_avg(0.);
+    for(c_iter=x.begin(); c_iter!=x.end(); c_iter++)
+      x_avg += *c_iter;
+    x_avg /= static_cast<double>(x.size());
+
+    double y_avg(0.);
+    for(c_iter=y.begin(); c_iter!=y.end(); c_iter++)
+      y_avg += *c_iter;
+    y_avg /= static_cast<double>(y.size());
+
+    std::pair<double,double> r(x_avg,y_avg);
+    return r;
+  }
+
 }//end namespace geo_sel_utilities
 

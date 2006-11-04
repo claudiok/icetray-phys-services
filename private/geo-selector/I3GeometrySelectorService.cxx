@@ -15,6 +15,15 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
   new_geo->startTime = old_geo->startTime;
   new_geo->endTime = old_geo->endTime;
 
+  double shiftX(shiftX_);
+  double shiftY(shiftY_);
+  if(shiftToCenter_){
+    std::pair<double,double> center = 
+      geo_sel_utils::detector_center(old_geo,goodStrings_);
+    shiftX = center.first;
+    shiftY = center.second;
+  }
+
   //erasing is too problematic
   I3OMGeoMap::const_iterator iter;
   for(iter = old_geo->omgeo.begin();
@@ -22,8 +31,8 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
     OMKey omkey = iter->first;
     if(geo_sel_utils::exists(omkey.GetString(),goodStrings_)){
       I3OMGeo om = iter->second;
-      om.position.SetX(iter->second.position.GetX() + shiftX_);
-      om.position.SetY(iter->second.position.GetY() + shiftY_);
+      om.position.SetX(iter->second.position.GetX() + shiftX);
+      om.position.SetY(iter->second.position.GetY() + shiftY);
       om.position.SetZ(iter->second.position.GetZ() + shiftZ_);
       log_trace("OLD POSITION:(%.2f,%.2f,%.2f)",
 		iter->second.position.GetX(),
@@ -45,8 +54,8 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
       I3StationGeo s = siter->second;
       vector<I3TankGeo>::iterator i = s.begin();
       for(; i != s.end(); i++){
-	i->position.SetX(iter->second.position.GetX() + shiftX_);
-	i->position.SetY(iter->second.position.GetY() + shiftY_);
+	i->position.SetX(iter->second.position.GetX() + shiftX);
+	i->position.SetY(iter->second.position.GetY() + shiftY);
 	i->position.SetZ(iter->second.position.GetZ() + shiftZ_);
       }
       new_geo->stationgeo[station] = s;

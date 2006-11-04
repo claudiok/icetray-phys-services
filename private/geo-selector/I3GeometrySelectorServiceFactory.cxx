@@ -18,7 +18,8 @@ I3GeometrySelectorServiceFactory(const I3Context& context) :
   stationsToExclude_(""),
   shiftX_(0.),
   shiftY_(0.),
-  shiftZ_(0.)
+  shiftZ_(0.),
+  shiftToCenter_(false)
 {
     AddParameter("StringsToUse", 
 		 "The strings that should be included", 
@@ -44,6 +45,9 @@ I3GeometrySelectorServiceFactory(const I3Context& context) :
     AddParameter("ShiftZ",
 		 "Distance to shift the entire detector",
 		 shiftZ_);
+    AddParameter("ShiftToCenter",
+		 "Shift Detector to the center in X-Y",
+		 shiftToCenter_);
 }
 
 I3GeometrySelectorServiceFactory::
@@ -62,6 +66,7 @@ void I3GeometrySelectorServiceFactory::Configure()
   GetParameter("ShiftX",shiftX_);
   GetParameter("ShiftY",shiftY_);
   GetParameter("ShiftZ",shiftZ_);
+  GetParameter("ShiftToCenter",shiftToCenter_);
 }
 
 bool I3GeometrySelectorServiceFactory::InstallService(I3Context& services)
@@ -86,6 +91,7 @@ bool I3GeometrySelectorServiceFactory::InstallService(I3Context& services)
 
   dynamic_pointer_cast<I3GeometrySelectorService>(geometry_)->SetGoodStrings(goodStrings_);
   dynamic_pointer_cast<I3GeometrySelectorService>(geometry_)->SetGoodStations(goodStations_);
+  dynamic_pointer_cast<I3GeometrySelectorService>(geometry_)->ShiftToCenter(shiftToCenter_);
 
   return services.Put<I3GeometryService>(geoSelectorName_,geometry_);
 }

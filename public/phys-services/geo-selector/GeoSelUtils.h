@@ -18,6 +18,7 @@
 
 #include <vector>
 #include <string>
+#include "dataclasses/geometry/I3Geometry.h"
 
 namespace geo_sel_utils{
 
@@ -54,6 +55,14 @@ namespace geo_sel_utils{
    *signed integers, and the two delimiters used ',' and ':' 
    */
   bool good_input(const std::string& );
+
+  /**
+   * Calculates the center of the detector in X-Y.
+   * Returns a std::pair<double,double> where first
+   * is x and second is y.
+   */
+  std::pair<double,double> detector_center(I3GeometryConstPtr , 
+					   const vector<int>& );
 }
 
 #endif
