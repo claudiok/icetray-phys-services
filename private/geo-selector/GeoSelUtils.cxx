@@ -159,5 +159,24 @@ namespace geo_sel_utils{
     return r;
   }
 
+  template<class T>
+  shared_ptr<I3Map<OMKey,T> >
+  map_cleaner(shared_ptr<const I3Map<OMKey,T> > m, vector<int> s){
+    vector<int>::iterator j;
+    shared_ptr<I3Map<OMKey,T> > new_map; 
+    typename I3Map<OMKey,T>::iterator i = m.begin();
+    for(; i!=m.end();i++){
+      bool good(false);
+      for(j=s.begin(); j!=s.end(); j++){
+	if(i->first.GetString() == *j){
+	  good=true;
+	  break;
+	}
+      }
+      if(good) (*new_map)[i->first] = i->second;
+    }
+    return new_map;
+  }
+
 }//end namespace geo_sel_utilities
 

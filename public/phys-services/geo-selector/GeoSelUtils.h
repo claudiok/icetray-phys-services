@@ -20,6 +20,8 @@
 #include <string>
 #include "dataclasses/geometry/I3Geometry.h"
 
+#include <dataclasses/I3Map.h>
+
 namespace geo_sel_utils{
 
   /**
@@ -55,6 +57,10 @@ namespace geo_sel_utils{
    *signed integers, and the two delimiters used ',' and ':' 
    */
   bool good_input(const std::string& );
+
+  template<class T>
+  shared_ptr<I3Map<OMKey,T> >
+    map_cleaner(shared_ptr<const I3Map<OMKey,T> >, vector<int>);
 
   /**
    * Calculates the center of the detector in X-Y.
