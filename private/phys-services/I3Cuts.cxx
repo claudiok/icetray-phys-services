@@ -30,7 +30,7 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
     OMKey omkey = hits_i->first;
     I3OMGeoMap::const_iterator geom = geometry.omgeo.find(omkey);
     if (geom==geometry.omgeo.end()) {
-      log_debug("Didn't find the current OMKey in Geometry");
+      log_trace("Didn't find the current OMKey in Geometry");
       continue;
     }
 
@@ -131,7 +131,6 @@ I3Position COGImpl(const I3Geometry& geometry,
 		   const I3Map<OMKey, vector<HitType> >& hitmap)
 {
   double ampWeight=1;
-  const I3OMGeoMap& om_geo=geometry.omgeo;
   double cog[3];
   cog[0]=0.0;
   cog[1]=0.0;
@@ -166,11 +165,14 @@ I3Position COGImpl(const I3Geometry& geometry,
       double amp = pow(amp_tmp,ampWeight);
       ampsum+=amp;
     
-      const OMKey om = iter->first;
-      I3OMGeoMap::const_iterator iter2 = om_geo.find(om);
-      assert(iter2 != om_geo.end());
-      const I3Position& ompos = (iter2->second).position;
-    
+      const OMKey omkey = iter->first;
+      I3OMGeoMap::const_iterator geom = geometry.omgeo.find(omkey);
+      if (geom==geometry.omgeo.end()) {
+	log_trace("Didn't find the current OMKey in Geometry");
+	continue;
+      }
+      const I3Position& ompos = geom->second.position;
+
       // calculate the center of gravity             
       cog[0] += amp*ompos.GetX();
       cog[1] += amp*ompos.GetY();
