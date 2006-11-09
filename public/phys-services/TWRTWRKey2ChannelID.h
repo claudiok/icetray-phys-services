@@ -18,10 +18,10 @@
 
 #include <utility>
 
-#include <dataclasses/I3Time.h>
 #include <icetray/I3DefaultName.h>
 #include <icetray/I3FrameObject.h>
 #include <icetray/I3Logging.h>
+#include <dataclasses/I3Time.h>
 
 // definitions
 

@@ -14,9 +14,6 @@
 
 #include <phys-services/TWRTWRKey2ChannelID.h>
 
-// definitions
-
-
 // namespace declarations
 
 
