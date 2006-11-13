@@ -32,11 +32,13 @@
  * 
  * \note
  * In contrast to the static OM key/motherboard ID and OM key/channel ID conversion tables,
- * the channel ID/TWR key conversion table does change in time. Therefore two versions of
+ * the channel ID/TWR key conversion table may change in time. Therefore two versions of
  * each access method are provided. A time dependent and a time independent one.
  * Time independent access methods will always access the current conversion table in memory,
- * which can be updated calling Update(const I3Time& time) and for which one can check
- * the validity period (GetValidityPeriod()).
+ * which can be selected calling Select(const I3Time& time) and for which one can check
+ * the validity period (GetValidityPeriod()). Time dependent access methods will not access
+ * or select the current conversion table - they will individually access a conversion
+ * table that is addressed by the time given.
  */
 class TWRTWRKey2ChannelID
 {
@@ -75,7 +77,7 @@ class TWRTWRKey2ChannelID
    * @return True, if it exists in the table.
    */
   virtual bool TWRKeyExists(unsigned int twrID, unsigned int channel,
-                            const I3Time& tm) = 0;
+                            const I3Time& tm) const = 0;
   /** Checks whether a specified TWR ID + channel no. exists in the conversion table.
    * 
    * @param key The TWR ID + channel no..
@@ -88,7 +90,7 @@ class TWRTWRKey2ChannelID
    * @param tm Time the check should be issued for.
    * @return True, if it exists in the table.
    */
-  virtual bool TWRKeyExists(TWRKey key, const I3Time& tm) = 0;
+  virtual bool TWRKeyExists(TWRKey key, const I3Time& tm) const = 0;
   /** Returns the channel ID associated with a specified TWR ID + channel no..
    * 
    * @param twrID The TWR ID.
@@ -104,7 +106,7 @@ class TWRTWRKey2ChannelID
    * @return The channel ID.
    */
   virtual unsigned int GetChannelID(unsigned int twrID, unsigned int channel,
-                                    const I3Time& tm) = 0;
+                                    const I3Time& tm) const = 0;
   /** Returns the channel ID associated with a specified TWR ID + channel no..
    * 
    * @param key The TWR ID + channel no..
@@ -117,7 +119,7 @@ class TWRTWRKey2ChannelID
    * @param tm Time the channel ID should be issued for.
    * @return The channel ID.
    */
-  virtual unsigned int GetChannelID(TWRKey key, const I3Time& tm) = 0;
+  virtual unsigned int GetChannelID(TWRKey key, const I3Time& tm) const = 0;
   /** Checks whether a specified channel ID exists in the conversion table.
    * 
    * @param channelID The channel ID.
@@ -130,7 +132,7 @@ class TWRTWRKey2ChannelID
    * @param tm Time the check should be issued for.
    * @return True, if it exists in the table.
    */
-  virtual bool ChannelIDExists(unsigned int channelID, const I3Time& tm) = 0;  
+  virtual bool ChannelIDExists(unsigned int channelID, const I3Time& tm) const = 0;  
   /** Returns the TWR ID + channel no. associated with a specified channel ID.
    * 
    * @param channelID The channel ID.
@@ -143,17 +145,17 @@ class TWRTWRKey2ChannelID
    * @param tm Time the TWR ID + channel no. should be issued for.
    * @return The TWR ID + channel no..
    */
-  virtual TWRKey GetTWRKey(unsigned int channelID, const I3Time& tm) = 0;
-  /** Returns the validity period of the conversion table.
+  virtual TWRKey GetTWRKey(unsigned int channelID, const I3Time& tm) const = 0;
+  /** Returns the validity period of the current conversion table.
    * 
    * @return Start and end time ([start, end[) of the validity period.
    */
   virtual const std::pair<I3Time, I3Time>& GetValidityPeriod() const = 0;
-  /** Update the conversion table.
+  /** Select the current conversion table.
    * 
    * @param tm Time the conversion table should be issued for.
    */
-  virtual void Update(const I3Time& tm) = 0;
+  virtual void Select(const I3Time& tm) = 0;
 
   private:
   // private copy constructors and assignment
