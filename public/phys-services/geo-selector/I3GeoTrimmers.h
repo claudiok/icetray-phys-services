@@ -16,8 +16,6 @@
 #include "dataclasses/OMKey.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 
-#define I3_GEOTRIMMERS_HAS_BEEN_MOVED_OFFLINE
-
 namespace I3GeoTrimmers
 {
 
