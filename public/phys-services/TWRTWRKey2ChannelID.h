@@ -55,7 +55,8 @@ class TWRTWRKey2ChannelID
   /** The TWR key is a pair of a TWR ID and a channel no..
    */
   typedef std::pair<TWRID, unsigned int> TWRKey;
- 
+
+
   /** Default constructor.
    */
   TWRTWRKey2ChannelID();
