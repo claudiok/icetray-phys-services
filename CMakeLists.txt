@@ -1,7 +1,6 @@
 PROJECT(phys-services)
 
-LIB (phys-services
-  private/phys-services/*.cxx
+LIB (private/phys-services/*.cxx
   private/phys-source/*.cxx
   private/geo-selector/*.cxx
   private/empty-stream/*.cxx
