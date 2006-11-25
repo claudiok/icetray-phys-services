@@ -14,6 +14,6 @@ ROOTCINT(phys-services/I3Calculator.h
   phys-services/I3Cuts.h
   phys-services/I3CutValues.h)
 
-FILE(GLOB phys-services_test_source private/test/*.cxx)
-ADD_TEST(phys-services-test ${phys-services_test_source})
+TEST_EXECUTABLE(test private/test/*.cxx)
+
 
