@@ -17,5 +17,3 @@ ROOTCINT(phys-services/I3Calculator.h
 FILE(GLOB phys-services_test_source private/test/*.cxx)
 ADD_TEST(phys-services-test ${phys-services_test_source})
 
-
-TEST_SCRIPTS(resources/scripts/*.py)
