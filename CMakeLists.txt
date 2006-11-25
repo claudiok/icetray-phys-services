@@ -3,7 +3,7 @@ PROJECT(phys-services)
 LIB (private/phys-services/*.cxx
   private/phys-source/*.cxx
   private/geo-selector/*.cxx
-  private/empty-stream/*.cxx
+  private/empty-streams/*.cxx
   )
 
 USE_TOOLS(sprng gsl log4cplus boost root)
