@@ -84,7 +84,7 @@ bool I3Calculator::IsOnTrack(const I3Particle& track, const I3Position& position
     I3Position appos,appos2;
     double apdist,apdist2;
     ClosestApproachCalc(track,position,appos2,apdist2,appos,apdist);
-    if (apdist<=Precision) return true;
+    if (!isnan(apdist) && apdist<=Precision) return true;
     else return false;
   }
   else return false;
@@ -147,7 +147,12 @@ void I3Calculator::ClosestApproachCalc(const I3Particle& particle,
   else
   {
     //--Don't calculate if particle does not have direction
-    log_fatal("ClosestApproachCalc() - particle has no direction. Not calculating.");
+    log_warn("ClosestApproachCalc() - particle has no direction. "
+	     "Not calculating.");
+    appos_inf.NullPosition();
+    apdist_inf = NAN;
+    appos_stopstart.NullPosition();
+    apdist_stopstart = NAN;
   }
   return;
 }
