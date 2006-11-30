@@ -85,7 +85,7 @@ namespace I3Calculator
    * @param chdist -- Distance between the point of origin 
    * of Cherenkov light and the input OM position.
    * 
-   * @param chapangle -- Angle between the path of Cherenkov 
+   * @param changle -- Angle between the path of Cherenkov 
    * light originating from the input track ('track') and the z-axis of the 
    * input OM position ('position').
    * 
