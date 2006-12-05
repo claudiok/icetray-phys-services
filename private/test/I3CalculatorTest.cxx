@@ -249,10 +249,10 @@ TEST(JAMS_time_residual)
   I3Particle track;
   track.SetTime(0);
   track.SetPos(0,0,0);
-  track.SetDir(0,0,-1);
+  track.SetDir(0,1,-1);
   track.SetShape(I3Particle::InfiniteTrack);
   double TG_CER = tan(acos(1./I3Constants::n_ice));
-  I3Position pos(1,1,1);
+  I3Position pos(0,1,-10);
   double time(10);
 
   //--Calculate dt,rho from phys-services, SIMPLEST WAY
@@ -261,22 +261,21 @@ TEST(JAMS_time_residual)
 
   //--Calculate dt,rho using phys-services, but break up calculation
   double rho_ = ClosestApproachDistance(track, pos);
-  double d1 = track.GetPos().
-    CalcDistance(ClosestApproachPosition(track, pos));
-  double dt_ = time - track.GetTime() - (-d1)/I3Constants::c
+  double l = DistanceAlongTrack(track,ClosestApproachPosition(track, pos));
+  double dt_ = time - track.GetTime() - (l)/I3Constants::c
     - rho_*TG_CER/I3Constants::c;
 
   //--Calculate dt,rho Peter's way, but using phys-services
   I3Position p1 = InTrackSystem(track, pos);
   double rho1 = p1.GetRho();
-  double Z = pos.GetZ() - track.GetZ();
-  double dt1 = time - track.GetTime() - ( -Z + rho1*TG_CER ) / I3Constants::c;
+  double Z = p1.GetZ() - track.GetZ();
+  double dt1 = time - track.GetTime() - ( Z + rho1*TG_CER ) / I3Constants::c;
 
   //--Calculate dt,rho Peter's way from code, using TRAFO
   double dir[3];
   dir[0] = track.GetDir().GetX();
-  dir[0] = track.GetDir().GetY();
-  dir[0] = track.GetDir().GetZ();
+  dir[1] = track.GetDir().GetY();
+  dir[2] = track.GetDir().GetZ();
   double trafo[3][3];
   TRAFO(dir, trafo);
   double Tom   = time - track.GetTime();
@@ -287,22 +286,105 @@ TEST(JAMS_time_residual)
   double YY    = Xom * trafo[0][1] + Yom * trafo[1][1] + Zom * trafo[2][1];
   double ZZ    = Xom * trafo[0][2] + Yom * trafo[1][2] + Zom * trafo[2][2];
   double rho2   = sqrt(XX*XX + YY*YY);
-  double dt2    = Tom - (ZZ + rho*TG_CER)/I3Constants::c;
+  double dt2    = Tom - (ZZ + rho2*TG_CER)/I3Constants::c;
 
   //--Compare the different ways of calculation
-  double RHO = 1.4142;
-  double DT = 9.00832;
-  double PREC = 0.01;
+  double RHO = 4.5*sqrt(2);
+  double DT = -35.4181;
+  double PERC = 0.001;
 
-  ENSURE_DISTANCE(rho,  RHO, PREC);
-  ENSURE_DISTANCE(rho_, RHO, PREC);
-  ENSURE_DISTANCE(rho1, RHO, PREC);
-  ENSURE_DISTANCE(rho2, RHO, PREC);
+  ENSURE_DISTANCE(rho,  RHO, abs(RHO*PERC));
+  ENSURE_DISTANCE(rho_, RHO, abs(RHO*PERC));
+  ENSURE_DISTANCE(rho1, RHO, abs(RHO*PERC));
+  ENSURE_DISTANCE(rho2, RHO, abs(RHO*PERC));
 
-  ENSURE_DISTANCE(dt,  DT, PREC);
-  ENSURE_DISTANCE(dt_, DT, PREC);
-  ENSURE_DISTANCE(dt1, DT, PREC);
-  ENSURE_DISTANCE(dt2, DT, PREC);
+  ENSURE_DISTANCE(dt,  DT, abs(DT*PERC));
+  ENSURE_DISTANCE(dt_, DT, abs(DT*PERC));
+  ENSURE_DISTANCE(dt1, DT, abs(DT*PERC));
+  ENSURE_DISTANCE(dt2, DT, abs(DT*PERC));
+}
+
+
+TEST(JAMS_time_residual_many)
+{
+  double TG_CER = tan(acos(1./I3Constants::n_ice));
+  I3Particle track;
+  track.SetShape(I3Particle::InfiniteTrack);
+  track.SetTime(0);
+  track.SetPos(0,0,0);
+
+  for (int i=1; i<10; i++) {
+    double zen = 180*deg/10 * (double)i;
+    double azi = 360*deg/10 * (double)i;
+    track.SetDir(zen, azi);
+    double time(10);
+
+    // vary x,y,z of the OM from -120 to +120...
+    for (int j1=-3; j1<3; j1++,j1++) {
+      for (int j2=-3; j2<3; j2++,j2++) {
+	for (int j3=-3; j3<3; j3++,j3++) {
+	  I3Position pos(40.*(double)j1, 40.*(double)j2, 40.*(double)j3);
+
+    //--Calculate dt,rho from phys-services, SIMPLEST WAY
+    double rho = ClosestApproachDistance(track, pos);
+    double dt = TimeResidual(track, pos, time, n_ice, n_ice);
+
+    //--Calculate dt,rho using phys-services, but break up calculation
+    double rho_ = ClosestApproachDistance(track, pos);
+    double l = DistanceAlongTrack(track,ClosestApproachPosition(track, pos));
+    double dt_ = time - track.GetTime() - (l)/I3Constants::c
+      - rho_*TG_CER/I3Constants::c;
+
+    //--Calculate dt,rho Peter's way, but using phys-services
+    I3Position p1 = InTrackSystem(track, pos);
+    double rho1 = p1.GetRho();
+    double Z = p1.GetZ() - track.GetZ();
+    double dt1 = time - track.GetTime() - ( Z + rho1*TG_CER ) / I3Constants::c;
+
+    //--Calculate dt,rho Peter's way from code, using TRAFO
+    double dir[3];
+    dir[0] = track.GetDir().GetX();
+    dir[1] = track.GetDir().GetY();
+    dir[2] = track.GetDir().GetZ();
+    double trafo[3][3];
+    TRAFO(dir, trafo);
+    double Tom   = time - track.GetTime();
+    double Xom   = pos.GetX() - track.GetX();
+    double Yom   = pos.GetY() - track.GetY();
+    double Zom   = pos.GetZ() - track.GetZ();
+    double XX    = Xom * trafo[0][0] + Yom * trafo[1][0] + Zom * trafo[2][0];
+    double YY    = Xom * trafo[0][1] + Yom * trafo[1][1] + Zom * trafo[2][1];
+    double ZZ    = Xom * trafo[0][2] + Yom * trafo[1][2] + Zom * trafo[2][2];
+    double rho2   = sqrt(XX*XX + YY*YY);
+    double dt2    = Tom - (ZZ + rho2*TG_CER)/I3Constants::c;
+
+      cout<<track.GetDir().GetX()<<" "<<track.GetDir().GetY()<<" "
+      <<track.GetDir().GetZ()<<" "<<endl;//###
+      cout<<time<<" "<<l/I3Constants::c<<" "<<rho_*TG_CER/I3Constants::c<<endl;
+      cout<<time<<" "<<Z/I3Constants::c<<" "<<rho1*TG_CER/I3Constants::c<<endl;
+      cout<<Tom<<" "<<ZZ/I3Constants::c<<" "<<rho2*TG_CER/I3Constants::c<<endl;
+      cout<<track.GetDir().CalcTheta()/I3Units::deg<<endl;
+      cout<<track.GetDir().CalcPhi()/I3Units::deg<<endl;
+      cout<<"...  "<<dt<<"   "<<rho<<"   "<<dt-rho<<endl;
+      cout<<"---  "<<dt_<<"   "<<rho_<<"   "<<dt_-rho_<<endl;
+      cout<<"===  "<<dt1<<"   "<<rho1<<"   "<<dt1-rho1<<endl;
+      cout<<"###  "<<dt2<<"   "<<rho2<<"   "<<dt2-rho2<<endl;
+
+      //--Compare the different ways of calculation
+      double PREC = 0.0001;
+      ENSURE_DISTANCE(rho,  rho, abs(rho*PREC));
+      ENSURE_DISTANCE(rho_, rho, abs(rho*PREC));
+      ENSURE_DISTANCE(rho1, rho, abs(rho*PREC));
+      ENSURE_DISTANCE(rho2, rho, abs(rho*PREC));
+      
+      ENSURE_DISTANCE(dt,  dt, abs(dt*PREC));
+      ENSURE_DISTANCE(dt_, dt, abs(dt*PREC));
+      ENSURE_DISTANCE(dt1, dt, abs(dt*PREC));
+      ENSURE_DISTANCE(dt2, dt, abs(dt*PREC));
+	}
+      }
+    }
+  }
 }
 
 
