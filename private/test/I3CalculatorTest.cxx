@@ -279,19 +279,17 @@ TEST(JAMS_time_residual)
   dir[0] = track.GetDir().GetZ();
   double trafo[3][3];
   TRAFO(dir, trafo);
-  
   double Tom   = time - track.GetTime();
   double Xom   = pos.GetX() - track.GetX();
   double Yom   = pos.GetY() - track.GetY();
   double Zom   = pos.GetZ() - track.GetZ();
-  
   double XX    = Xom * trafo[0][0] + Yom * trafo[1][0] + Zom * trafo[2][0];
   double YY    = Xom * trafo[0][1] + Yom * trafo[1][1] + Zom * trafo[2][1];
   double ZZ    = Xom * trafo[0][2] + Yom * trafo[1][2] + Zom * trafo[2][2];
-  
   double rho2   = sqrt(XX*XX + YY*YY);
   double dt2    = Tom - (ZZ + rho*TG_CER)/I3Constants::c;
 
+  //--Compare the different ways of calculation
   double RHO = 1.4142;
   double DT = 9.00832;
   double PREC = 0.01;
