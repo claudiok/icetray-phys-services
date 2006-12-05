@@ -76,6 +76,9 @@ static I3Position r(0,0,0);
 static I3Position a1;
 
 
+void TRAFO(double *Xdir, double trafo[3][3]);
+
+
 TEST_GROUP(I3Calculator)
 
 TEST(ShiftAlongTrack)
@@ -239,4 +242,123 @@ TEST(garbage)
     {
       // that should have thrown 'cause the particle shape wasn't set
     }
+}
+
+TEST(JAMS_time_residual)
+{
+  I3Particle track;
+  track.SetTime(0);
+  track.SetPos(0,0,0);
+  track.SetDir(0,0,-1);
+  track.SetShape(I3Particle::InfiniteTrack);
+  double TG_CER = tan(acos(1./I3Constants::n_ice));
+  I3Position pos(1,1,1);
+  double time(10);
+
+  //--Calculate dt,rho from phys-services, SIMPLEST WAY
+  double rho = ClosestApproachDistance(track, pos);
+  double dt = TimeResidual(track, pos, time);
+
+  //--Calculate dt,rho using phys-services, but break up calculation
+  double rho_ = ClosestApproachDistance(track, pos);
+  double d1 = track.GetPos().
+    CalcDistance(ClosestApproachPosition(track, pos));
+  double dt_ = time - track.GetTime() - (-d1)/I3Constants::c
+    - rho_*TG_CER/I3Constants::c;
+
+  //--Calculate dt,rho Peter's way, but using phys-services
+  I3Position p1 = InTrackSystem(track, pos);
+  double rho1 = p1.GetRho();
+  double Z = pos.GetZ() - track.GetZ();
+  double dt1 = time - track.GetTime() - ( -Z + rho1*TG_CER ) / I3Constants::c;
+
+  //--Calculate dt,rho Peter's way from code, using TRAFO
+  double dir[3];
+  dir[0] = track.GetDir().GetX();
+  dir[0] = track.GetDir().GetY();
+  dir[0] = track.GetDir().GetZ();
+  double trafo[3][3];
+  TRAFO(dir, trafo);
+  
+  double Tom   = time - track.GetTime();
+  double Xom   = pos.GetX() - track.GetX();
+  double Yom   = pos.GetY() - track.GetY();
+  double Zom   = pos.GetZ() - track.GetZ();
+  
+  double XX    = Xom * trafo[0][0] + Yom * trafo[1][0] + Zom * trafo[2][0];
+  double YY    = Xom * trafo[0][1] + Yom * trafo[1][1] + Zom * trafo[2][1];
+  double ZZ    = Xom * trafo[0][2] + Yom * trafo[1][2] + Zom * trafo[2][2];
+  
+  double rho2   = sqrt(XX*XX + YY*YY);
+  double dt2    = Tom - (ZZ + rho*TG_CER)/I3Constants::c;
+
+  double RHO = 1.4142;
+  double DT = 9.00832;
+  double PREC = 0.01;
+
+  ENSURE_DISTANCE(rho,  RHO, PREC);
+  ENSURE_DISTANCE(rho_, RHO, PREC);
+  ENSURE_DISTANCE(rho1, RHO, PREC);
+  ENSURE_DISTANCE(rho2, RHO, PREC);
+
+  ENSURE_DISTANCE(dt,  DT, PREC);
+  ENSURE_DISTANCE(dt_, DT, PREC);
+  ENSURE_DISTANCE(dt1, DT, PREC);
+  ENSURE_DISTANCE(dt2, DT, PREC);
+}
+
+
+// from Peter Steffen's JAMS code (in amajams)
+//-----------------------------------------
+void TRAFO ( double Xdir[3] , double trafo[3][3] ) {
+  double DXx,DXy,DXz, DYx,DYy,DYz, DZx,DZy,DZz, Norm;
+
+/*                                            |  Z-axis = track dir.   |*/
+  DZx    = Xdir[0];
+  DZy    = Xdir[1];
+  DZz    = Xdir[2];
+
+  if(DZx*DZx + DZy*DZy < 1.e-10) {
+    DXx    = 1.;
+    DXy    = 0.;
+    DXz    = 0.;
+    DYx    = 0.;
+    DYy    = 1.;
+    DYz    = 0.;
+    DZx    = 0.;
+    DZy    = 0.;
+    DZz    = 1.;
+  }
+
+  else{
+/*                                            |  X: transvers Z-axis   |*/
+    DXx    =  DZy;
+    DXy    = -DZx;
+    DXz    =  .0;
+    Norm   = sqrt(DXx*DXx + DXy*DXy);
+    DXx    =  DXx / Norm;
+    DXy    =  DXy / Norm;
+
+/*                                            |  Y-axis                |*/
+    DYx    =  DZy*DXz - DZz*DXy;
+    DYy    =  DZz*DXx - DZx*DXz;
+    DYz    =  DZx*DXy - DZy*DXx;
+    Norm   = sqrt(DYx*DYx + DYy*DYy + DYz*DYz);
+    DYx    =  DYx / Norm;
+    DYy    =  DYy / Norm;
+    DYz    =  DYz / Norm;
+
+  }
+
+  trafo[0][0] = DXx;
+  trafo[1][0] = DXy;
+  trafo[2][0] = DXz;
+  trafo[0][1] = DYx;
+  trafo[1][1] = DYy;
+  trafo[2][1] = DYz;
+  trafo[0][2] = DZx;
+  trafo[1][2] = DZy;
+  trafo[2][2] = DZz;
+
+  return;
 }
