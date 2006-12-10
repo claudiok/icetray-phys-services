@@ -46,31 +46,31 @@ class I3ChannelID2OMKey
    * 
    * @param channelID Channel ID.
    */
-  bool  ChannelIDExists(int channelID) const;
+  virtual bool ChannelIDExists(int channelID) const;
   /** 
    * Checks whether the specified OM key exists in the table.
    * 
    * @param key OM key.
    */
-  bool  OMKeyExists(OMKey key) const;
+  virtual bool OMKeyExists(OMKey key) const;
   /** 
    * Returns the OM key associated with the specified channel ID.
    * 
    * @param channelID Channel ID.
    */
-  OMKey GetOMKey(int channelID) const;
+  virtual OMKey GetOMKey(int channelID) const;
   /** 
    * Returns the channel ID associated with the specified OM key.
    * 
    * @param key OM key.
    */
-  int GetChannelID(OMKey key) const;
+  virtual int GetChannelID(OMKey key) const;
 
  protected:
-  void InsertIntoOMKey2ChannelIDMapping(OMKey key, int channelID);
-  void InsertIntoChannelID2OMKeyMapping(int key, OMKey omKey);
-  void ResetOMKey2ChannelIDMapping();
-  void ResetChannelID2OMKeyMapping();
+  virtual void InsertIntoOMKey2ChannelIDMapping(OMKey key, int channelID);
+  virtual void InsertIntoChannelID2OMKeyMapping(int key, OMKey omKey);
+  virtual void ResetOMKey2ChannelIDMapping();
+  virtual void ResetChannelID2OMKeyMapping();
 
  private:
   std::map<OMKey,int> omkey2channelid_;
@@ -79,7 +79,7 @@ class I3ChannelID2OMKey
 
   // private copy constructors and assignment
   I3ChannelID2OMKey(const I3ChannelID2OMKey& rhs); 
-  I3ChannelID2OMKey operator=(const I3ChannelID2OMKey& rhs); 
+  I3ChannelID2OMKey& operator=(const I3ChannelID2OMKey& rhs); 
 
 
   // logging
