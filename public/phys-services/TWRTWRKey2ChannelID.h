@@ -45,9 +45,6 @@ class TWRTWRKey2ChannelID
  public:
   /** Identifies the data of a given TWR within the TWR binary output files.
    * 
-   * This was just a running index in the past and will be the TWR ID in future (2007 et sqq.).
-   * The running index was determined by the configuration sequence.
-   * In contrast, the TWR ID is part of the configuration.
    * As yet, the TWR ID is composed by the crate no. (multiplied by 0x10)
    * and (plus) the TWR no..
    */
