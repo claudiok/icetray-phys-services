@@ -15,6 +15,9 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
   new_geo->startTime = old_geo->startTime;
   new_geo->endTime = old_geo->endTime;
 
+  log_trace("number of good strings =  %zu",goodStrings_.size());
+  log_trace("number of good stations =  %zu",goodStations_.size());
+
   double shiftX(shiftX_);
   double shiftY(shiftY_);
   if(shiftToCenter_){
@@ -29,7 +32,10 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
   for(iter = old_geo->omgeo.begin();
       iter != old_geo->omgeo.end(); ++iter){
     OMKey omkey = iter->first;
-    if(geo_sel_utils::exists(omkey.GetString(),goodStrings_)){
+    if((geo_sel_utils::exists(omkey.GetString(),goodStrings_) &&
+	(omkey.GetOM() <= 60)) ||
+       (geo_sel_utils::exists(omkey.GetString(),goodStations_) &&
+	(omkey.GetOM() > 60))){
       I3OMGeo om = iter->second;
       om.position.SetX(iter->second.position.GetX() + shiftX);
       om.position.SetY(iter->second.position.GetY() + shiftY);
