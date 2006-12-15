@@ -289,7 +289,7 @@ TEST(JAMS_time_residual)
   double dt2    = Tom - (ZZ + rho2*TG_CER)/I3Constants::c;
 
   //--Compare the different ways of calculation
-  double RHO = 4.5*sqrt(2);
+  double RHO = 4.5*sqrt(2.);
   double DT = -35.4181;
   double PERC = 0.001;
 
