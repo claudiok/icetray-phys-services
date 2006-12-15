@@ -23,6 +23,7 @@
 /* headers for the dataclasses stuff */
 #include "dataclasses/geometry/I3Geometry.h"
 #include "dataclasses/OMKey.h"
+#include "dataclasses/I3Units.h"
 #include <iostream>
 #include <sstream>
 
@@ -38,7 +39,8 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
   stationsToExclude_(""),
   shiftX_(0.),
   shiftY_(0.),
-  shiftZ_(0.)
+  shiftZ_(0.),
+  detectorCentered_(false)
 {
     AddOutBox("OutBox");
 
@@ -54,7 +56,6 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
     AddParameter("StationsToExclude", 
 		 "The stations that should be excluded", 
 		 stationsToExclude_);
-
     AddParameter("ShiftX",
 		 "Distance to shift the entire detector",
 		 shiftX_);
@@ -64,6 +65,9 @@ I3GeoSelTestModule::I3GeoSelTestModule(const I3Context& ctx) :
     AddParameter("ShiftZ",
 		 "Distance to shift the entire detector",
 		 shiftZ_);
+    AddParameter("DetectorCentered",
+		 "Is the detector centered?",
+		 detectorCentered_);
 
 }
 
@@ -79,6 +83,7 @@ void I3GeoSelTestModule::Configure() {
   GetParameter("ShiftX",shiftX_);
   GetParameter("ShiftY",shiftY_);
   GetParameter("ShiftZ",shiftZ_);
+  GetParameter("DetectorCentered",detectorCentered_);
 
   if(!geo_sel_utils::good_input(stringsToUse_)) 
     log_fatal("couldn't parse %s",stringsToUse_.c_str());
@@ -165,11 +170,24 @@ void I3GeoSelTestModule::Physics(I3FramePtr frame) {
     OMKey omkey = iter->first;
     I3OMGeo new_om = iter->second;
     I3OMGeo old_om = old_geo->omgeo.find(omkey)->second;
-    ENSURE_DISTANCE(old_om.position.GetX() + shiftX_,new_om.position.GetX(),0.1);
-    ENSURE_DISTANCE(old_om.position.GetY() + shiftY_,new_om.position.GetY(),0.1);
+    if(!detectorCentered_){
+      ENSURE_DISTANCE(old_om.position.GetX() + shiftX_,new_om.position.GetX(),0.1);
+      ENSURE_DISTANCE(old_om.position.GetY() + shiftY_,new_om.position.GetY(),0.1);
+    }else{
+      std::pair<double,double> center = 
+	geo_sel_utils::detector_center(old_geo,goodStrings_);
+      ENSURE_DISTANCE(old_om.position.GetX() - center.first, new_om.position.GetX(),0.1);
+      ENSURE_DISTANCE(old_om.position.GetY() - center.second, new_om.position.GetY(),0.1);
+    }
     ENSURE_DISTANCE(old_om.position.GetZ() + shiftZ_,new_om.position.GetZ(),0.1);
   }
 
+  if(detectorCentered_){
+    std::pair<double,double> center = 
+      geo_sel_utils::detector_center(new_geo,goodStrings_);
+    ENSURE_DISTANCE(center.first, 0., 0.00000000001*I3Units::m);
+    ENSURE_DISTANCE(center.second, 0., 0.00000000001*I3Units::m);
+  }
 
 }
 

@@ -295,9 +295,7 @@ TEST(icetray_test_center_shift){
     ("StringsToExclude",strings_to_exclude.c_str())
     ("StationsToUse",stations_to_use.c_str())
     ("StationsToExclude",stations_to_exclude.c_str())
-    ("ShiftX",409.*I3Units::m)
-    ("ShiftY",-91.1*I3Units::m)
-    ("ShiftZ",0.*I3Units::m);
+    ("DetectorCentered",true);
 
   tray.AddModule("TrashCan","trash");
 

@@ -86,9 +86,10 @@ private:
   double shiftY_;
   double shiftZ_;
 
+  bool detectorCentered_;
   /**
    *This is the list of strings to use
-v   */
+   */
   vector<int> goodStrings_;
   vector<int> goodStations_;
 

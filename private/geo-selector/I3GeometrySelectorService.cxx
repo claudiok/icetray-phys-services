@@ -23,8 +23,8 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
   if(shiftToCenter_){
     std::pair<double,double> center = 
       geo_sel_utils::detector_center(old_geo,goodStrings_);
-    shiftX = center.first;
-    shiftY = center.second;
+    shiftX = -center.first;
+    shiftY = -center.second;
   }
 
   //erasing is too problematic

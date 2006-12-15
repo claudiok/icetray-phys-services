@@ -19,7 +19,8 @@ I3GeometrySelectorServiceFactory(const I3Context& context) :
   shiftX_(0.),
   shiftY_(0.),
   shiftZ_(0.),
-  shiftToCenter_(false)
+  shiftToCenter_(false),
+  geoSelectorName_("I3GeometrySelectorServiceFactory")
 {
     AddParameter("StringsToUse", 
 		 "The strings that should be included", 
