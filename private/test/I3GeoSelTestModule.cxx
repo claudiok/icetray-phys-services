@@ -126,8 +126,11 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
       iter != geoPtr->omgeo.end(); ++iter){
     OMKey omkey = iter->first;
     log_trace("OM: %s",omkey.str().c_str());    
-    ENSURE(geo_sel_utils::exists(omkey.GetString(),goodStrings_));
-    ENSURE(!geo_sel_utils::exists(omkey.GetString(),strings_exclude_list));
+    bool good_om((geo_sel_utils::exists(omkey.GetString(),goodStrings_) && omkey.GetOM() <= 60) ||
+		 (geo_sel_utils::exists(omkey.GetString(),goodStations_) && omkey.GetOM() > 60));
+    ENSURE(good_om);
+    bool bad_om(geo_sel_utils::exists(omkey.GetString(),strings_exclude_list) && omkey.GetOM() <= 60);
+    ENSURE(!bad_om);
   }
 
   I3StationGeoMap::const_iterator siter;
