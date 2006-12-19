@@ -45,14 +45,14 @@ class I3CutValues : public I3FrameObject
   void Calculate(const I3Particle& track, 
 		 const I3Geometry& geometry, 
 		 const I3RecoHitSeriesMap& hitmap,
-		 const double& begTWindow = -15.*I3Units::ns,
-		 const double& endTWindow = +25.*I3Units::ns);
+		 const double& begTWindow = I3Constants::dt_window_l,
+		 const double& endTWindow = I3Constants::dt_window_h);
 
   void Calculate(const I3Particle& track, 
 		 const I3Geometry& geometry, 
 		 const I3RecoPulseSeriesMap& pulsemap,
-		 const double& begTWindow = -15.*I3Units::ns,
-		 const double& endTWindow = +25.*I3Units::ns);
+		 const double& begTWindow = I3Constants::dt_window_l,
+		 const double& endTWindow = I3Constants::dt_window_h);
 
   virtual ~I3CutValues();
 

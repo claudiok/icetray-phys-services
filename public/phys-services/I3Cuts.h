@@ -20,18 +20,6 @@
 namespace I3Cuts
 {
   /**
-   * The default value for the lower edge of the residual time window for
-   * direct hits.
-   */
-  static const double minusTWindow = -15*I3Units::ns;
-
-  /**
-   * The default value for the upper edge of the residual time window for
-   * direct hits.
-   */
-  static const double plusTWindow  = +25*I3Units::ns;
-
-  /**
    * Main function that does the actual calculation of all of the cut 
    * parameters.  First, it loops over all hits 
    * (or pulses), makes "projections" of the hits onto the input track, and 
@@ -124,8 +112,8 @@ namespace I3Cuts
   int Nchan(const I3Particle& track, 
 	   const I3Geometry& geom, 
 	   const I3RecoHitSeriesMap& hitmap, 
-	   double t1 = minusTWindow, 
-	   double t2 = plusTWindow);
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the total 
@@ -136,8 +124,8 @@ namespace I3Cuts
   int Nhit(const I3Particle& track, 
 	   const I3Geometry& geom, 
 	   const I3RecoHitSeriesMap& hitmap, 
-	   double t1 = minusTWindow, 
-	   double t2 = plusTWindow);
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the total 
@@ -148,8 +136,8 @@ namespace I3Cuts
   int Nstring(const I3Particle& track, 
 	   const I3Geometry& geom, 
 	   const I3RecoHitSeriesMap& hitmap, 
-	   double t1 = minusTWindow, 
-	   double t2 = plusTWindow);
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the number 
@@ -160,8 +148,8 @@ namespace I3Cuts
   int Ndir(const I3Particle& track, 
 	   const I3Geometry& geom, 
 	   const I3RecoHitSeriesMap& hitmap, 
-	   double t1 = minusTWindow, 
-	   double t2 = plusTWindow);
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the 
@@ -172,8 +160,8 @@ namespace I3Cuts
   double Ldir(const I3Particle& track, 
 	      const I3Geometry& geom, 
 	      const I3RecoHitSeriesMap& hitmap, 
-	      double t1 = minusTWindow, 
-	      double t2 = plusTWindow);
+	      double t1 = I3Constants::dt_window_l, 
+	      double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the 
@@ -184,8 +172,8 @@ namespace I3Cuts
   double SmoothDir(const I3Particle& track, 
 		   const I3Geometry& geom, 
 		   const I3RecoHitSeriesMap& hitmap, 
-		   double t1 = minusTWindow, 
-		   double t2 = plusTWindow);
+		   double t1 = I3Constants::dt_window_l, 
+		   double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the 
@@ -196,8 +184,8 @@ namespace I3Cuts
   double SmoothAll(const I3Particle& track, 
 		   const I3Geometry& geom, 
 		   const I3RecoHitSeriesMap& hitmap, 
-		   double t1 = minusTWindow, 
-		   double t2 = plusTWindow);
+		   double t1 = I3Constants::dt_window_l, 
+		   double t2 = I3Constants::dt_window_h);
 
   /**
    * Computes the size of the "cylinder of closest approach", 

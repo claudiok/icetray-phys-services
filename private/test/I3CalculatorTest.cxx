@@ -220,28 +220,72 @@ TEST(Distance)
 
 TEST(garbage)
 {
-  try
-    {
+  // try
+  //{
       I3Particle particle;
       I3Position position;
+
       I3Position chpos;
       double chtime;
       double chdist;
-      double chapangle;
+      double changle;
+      CherenkovCalc(particle, position, chpos, chtime, chdist, changle);
 
-      CherenkovCalc(particle,
-		    position,
-		    chpos,
-		    chtime,
-		    chdist,
-		    chapangle);
+      ENSURE(isnan(chpos.GetX()));
+      ENSURE(isnan(chtime));
+      ENSURE(isnan(chdist));
+      ENSURE(isnan(changle));
 
-      ENSURE(0,"That should have thrown");
-    }
-  catch(const exception& e)
-    {
+      I3Position appos;
+      double apdist;
+      I3Position appos2;
+      double apdist2;
+      ClosestApproachCalc(particle, position, appos, apdist, appos2, apdist2);
+
+      ENSURE(isnan(appos.GetX()));
+      ENSURE(isnan(apdist));
+      ENSURE(isnan(appos2.GetX()));
+      ENSURE(isnan(apdist2));
+
+      particle.SetPos(0,0,0);
+      particle.SetDir(0,0,1);
+      position.SetPos(2,2,2);
+      CherenkovCalc(particle, position, chpos, chtime, chdist, changle);
+
+      ENSURE(isnan(chpos.GetX()));
+      ENSURE(isnan(chtime));
+      ENSURE(isnan(chdist));
+      ENSURE(isnan(changle));
+
+      ClosestApproachCalc(particle, position, appos, apdist, appos2, apdist2);
+
+      ENSURE(!isnan(appos.GetX()));
+      ENSURE(!isnan(apdist));
+      ENSURE(!isnan(appos2.GetX()));
+      ENSURE(!isnan(apdist2));
+
+      particle.SetShape(I3Particle::InfiniteTrack);
+      CherenkovCalc(particle, position, chpos, chtime, chdist, changle);
+
+      ENSURE(!isnan(chpos.GetX()));
+      ENSURE(!isnan(chtime));
+      ENSURE(!isnan(chdist));
+      ENSURE(!isnan(changle));
+
+      particle.SetDir(NAN,NAN);
+      ClosestApproachCalc(particle, position, appos, apdist, appos2, apdist2);
+
+      ENSURE(isnan(appos.GetX()));
+      ENSURE(isnan(apdist));
+      ENSURE(isnan(appos2.GetX()));
+      ENSURE(isnan(apdist2));
+
+      //ENSURE(0,"That should have thrown");
+      //}
+      //catch(const exception& e)
+      //{
       // that should have thrown 'cause the particle shape wasn't set
-    }
+      //}
 }
 
 TEST(JAMS_time_residual)

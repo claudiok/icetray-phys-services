@@ -29,7 +29,7 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
   I3Position appos;     // output 
   double apdist;        // output
   //--Only calculate if particle has a direction
-  if(particle.HasDirection()) 
+  if(particle.IsTrack()) 
   {
     double changle = acos(1/IndexRefP); // calculate Cherenkov angle
 
@@ -72,7 +72,11 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
   else
   {
     //--Don't calculate if track does not have direction
-    log_fatal("CherenkovCalc() - particle has no direction. Not calculating.");
+    log_debug("CherenkovCalc() - particle is not a track. Not calculating.");
+    chpos.NullPosition();
+    chtime = NAN;
+    chdist = NAN;
+    chapangle = NAN;
   }
   return;
 }
@@ -87,7 +91,10 @@ bool I3Calculator::IsOnTrack(const I3Particle& track, const I3Position& position
     if (!isnan(apdist) && apdist<=Precision) return true;
     else return false;
   }
-  else return false;
+  else {
+    log_debug("IsOnTrack() - particle is not a track.");
+    return false;
+  }
 }
 
 
@@ -147,7 +154,7 @@ void I3Calculator::ClosestApproachCalc(const I3Particle& particle,
   else
   {
     //--Don't calculate if particle does not have direction
-    log_warn("ClosestApproachCalc() - particle has no direction. "
+    log_debug("ClosestApproachCalc() - particle has no direction. "
 	     "Not calculating.");
     appos_inf.NullPosition();
     apdist_inf = NAN;
@@ -160,35 +167,41 @@ void I3Calculator::ClosestApproachCalc(const I3Particle& particle,
 //--------------------------------------------------------------
 I3Position I3Calculator::ClosestApproachPosition(const I3Particle& particle, const I3Position& position)
 {
-  if (particle.IsTrack()) {
-    I3Position appos,appos2;
-    double apdist,apdist2;
-    ClosestApproachCalc(particle,position,appos2,apdist2,appos,apdist);
-    return appos;
+  if (particle.HasPosition()) {
+    if (particle.IsTrack()) {
+      I3Position appos,appos2;
+      double apdist,apdist2;
+      ClosestApproachCalc(particle,position,appos2,apdist2,appos,apdist);
+      return appos;
+    }
+    else if (particle.IsCascade()) {
+      return particle.GetPos();
+    }
   }
-  else if (particle.IsCascade()) {
-    return particle.GetPos();
-  }
-  else {
-    I3Position nullpos;
-    return nullpos;
-  }
+  log_debug("ClosestApproachPosition() - particle has no position, "
+	    "or is neither a track nor cascade.");
+  I3Position nullpos;
+  return nullpos;
 }
 
 
 //--------------------------------------------------------------
 double I3Calculator::ClosestApproachDistance(const I3Particle& particle, const I3Position& position)
 {
-  if (particle.IsTrack()) {
-    I3Position appos,appos2;
-    double apdist,apdist2;
-    ClosestApproachCalc(particle,position,appos2,apdist2,appos,apdist);
-    return apdist;
+  if (particle.HasDirection()) {
+    if (particle.IsTrack()) {
+      I3Position appos,appos2;
+      double apdist,apdist2;
+      ClosestApproachCalc(particle,position,appos2,apdist2,appos,apdist);
+      return apdist;
+    }
+    else if (particle.IsCascade()) {
+      return position.CalcDistance(particle.GetPos());
+    }
   }
-  else if (particle.IsCascade()) {
-    return position.CalcDistance(particle.GetPos());
-  }
-  else return NAN;
+  log_debug("ClosestApproachDistance() - particle has no position, "
+            "or is neither a track nor cascade.");
+  return NAN;
 }
 
 
@@ -201,7 +214,10 @@ double I3Calculator::DistanceAlongTrack(const I3Particle& track, const I3Positio
     pos.RotateY(-track.GetDir().CalcTheta());
     return pos.GetZ();
   }
-  else return NAN;
+  else {
+    log_debug("DistanceAlongTrack() - particle is not a track.");
+    return NAN;
+  }
 }
 
 //--------------------------------------------------------------
@@ -217,6 +233,7 @@ I3Position I3Calculator::CherenkovPosition(const I3Particle& particle, const I3P
     return particle.GetPos();
   }
   else {
+    log_debug("CherenkovPosition() - particle is not a track.");
     I3Position nullpos;
     return nullpos;
   }
@@ -237,7 +254,10 @@ double I3Calculator::CherenkovTime(const I3Particle& particle, const I3Position&
     double speed = c/IndexRefG;
     return position.CalcDistance(particle.GetPos()) / speed;
   }
-  else return NAN;
+  else {
+    log_debug("CherenkovTime() - particle is neither a track nor a cascade.");
+    return NAN;
+  }
 }
 
 
@@ -254,7 +274,10 @@ double I3Calculator::CherenkovDistance(const I3Particle& particle, const I3Posit
   else if (particle.IsCascade()) {
     return position.CalcDistance(particle.GetPos());
   }
-  else return NAN;
+  else {
+    log_debug("CherenkovDistance() - particle is neither track nor cascade.");
+    return NAN;
+  }
 }
 
 
@@ -268,7 +291,10 @@ double I3Calculator::CherenkovApproachAngle(const I3Particle& track, const I3Pos
 		  I3Constants::n_ice_group,n_ice_phase,orient);
     return chapangle;
   }
-  else return NAN;
+  else {
+    log_debug("CherenkovApproachAngle() - particle is not a track'");
+    return NAN;
+  }
 }
 
 //--------------------------------------------------------------
@@ -282,18 +308,30 @@ double I3Calculator::TimeResidual(const I3Particle& particle, const I3Position& 
 //--------------------------------------------------------------
 double I3Calculator::Angle(const I3Particle& p1, const I3Particle& p2)
 {
-  I3Direction dir1(p1.GetDir());
-  I3Direction dir2(p2.GetDir());
-  dir1.RotateZ(-dir2.CalcPhi());
-  dir1.RotateY(-dir2.CalcTheta());
-  double theta = dir1.CalcTheta();
-  return theta;
+  if (p1.HasDirection() && p2.HasDirection()) {
+    I3Direction dir1(p1.GetDir());
+    I3Direction dir2(p2.GetDir());
+    dir1.RotateZ(-dir2.CalcPhi());
+    dir1.RotateY(-dir2.CalcTheta());
+    double theta = dir1.CalcTheta();
+    return theta;
+  }
+  else {
+    log_debug("Angle() - one of particles has no direction.");
+    return NAN;
+  }
 }
 
 //--------------------------------------------------------------
 double I3Calculator::Distance(const I3Particle& p1, const I3Particle& p2)
 {
-  return p1.GetPos().CalcDistance(p2.GetPos());
+  if (p1.HasPosition() && p2.HasPosition()) {
+    return p1.GetPos().CalcDistance(p2.GetPos());
+  }
+  else {
+    log_debug("Distance() - one of particles has no position.");
+    return NAN;    
+  }
 }
 
 //--------------------------------------------------------------
@@ -301,10 +339,17 @@ double I3Calculator::FourDistance(const I3Particle& p1, const I3Particle& p2)
 {
   // 4-distance here is defined as:
   //   sqrt( (ct1-ct2)^2 - (x1-x2)^2 + (y1-y2)^2 + (z1-z2)^2 )
-  return sqrt(abs(pow(I3Constants::c*(p1.GetTime()-p2.GetTime()),2) - 
-		  pow(p1.GetX()-p2.GetX(),2) -
-		  pow(p1.GetY()-p2.GetY(),2) -
-		  pow(p1.GetZ()-p2.GetZ(),2)));
+  if (p1.HasPosition() && p2.HasPosition() && 
+      !isnan(p1.GetTime()) && !isnan(p2.GetTime())) {
+    return sqrt(abs(pow(I3Constants::c*(p1.GetTime()-p2.GetTime()),2) - 
+		    pow(p1.GetX()-p2.GetX(),2) -
+		    pow(p1.GetY()-p2.GetY(),2) -
+		    pow(p1.GetZ()-p2.GetZ(),2)));
+  }
+  else {
+    log_debug("FourDistance() - particles' direction or time not present.");
+    return NAN;
+  }
 }
 
 //--------------------------------------------------------------
@@ -336,6 +381,7 @@ I3Position I3Calculator::InTrackSystem(const I3Particle& track, const I3Position
     return InTrackSystem(track.GetDir(), pos);
   }
   else {
+    log_debug("InTrackSystem() - particle is not a track.");
     I3Position nullpos;
     return nullpos;
   }
@@ -349,6 +395,7 @@ I3Direction I3Calculator::InTrackSystem(const I3Particle& track, const I3Directi
     return InTrackSystem(track.GetDir(), dir);
   }
   else {
+    log_debug("InTrackSystem() - particle is not a track.");    
     I3Direction nulldir;
     return nulldir;
   }
@@ -384,6 +431,7 @@ I3Position I3Calculator::InNominalSystem(const I3Particle& track, const I3Positi
     return InNominalSystem(track.GetDir(), pos);
   }
   else {
+    log_debug("InNominalSystem() - particle is not a track.");
     I3Position nullpos;
     return nullpos;
   }
@@ -397,6 +445,7 @@ I3Direction I3Calculator::InNominalSystem(const I3Particle& track, const I3Direc
     return InNominalSystem(track.GetDir(), dir);
   }
   else {
+    log_debug("InNominalSystem() - particle is not a track.");
     I3Direction nulldir;
     return nulldir;
   }
