@@ -33,8 +33,8 @@ I3CutsModule::I3CutsModule(const I3Context& ctx) : I3Module(ctx)
 	       ,pulsesName_);
 
   timeRange_.resize(2);
-  timeRange_[0] = -15*ns;
-  timeRange_[1] = +25*ns;
+  timeRange_[0] = I3Constants::dt_window_l;
+  timeRange_[1] = I3Constants::dt_window_h;
   AddParameter("DirectHitsTimeRange","Time range for calculating direct hits"
 	       ,timeRange_);
 
