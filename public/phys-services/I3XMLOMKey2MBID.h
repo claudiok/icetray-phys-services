@@ -27,7 +27,7 @@
 
 
 /**
- * @brief 
+ * @brief An implementation of I3OMKey2MBID that reads the conversions from a XML file
  */
 class I3XMLOMKey2MBID : public I3OMKey2MBID
 {
