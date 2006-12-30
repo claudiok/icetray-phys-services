@@ -67,6 +67,7 @@ TEST(b_operations)
   
   initI3XMLOMKey2MBIDTest(omkey2mbid, "test_basic_operations_mainboard_ids.xml");
   
+  catched = false;
   try{ key = omkey2mbid->GetOMKey(3); }
   catch(exception& ex){ catched = true; }
   ENSURE(!catched);
