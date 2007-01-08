@@ -1,4 +1,4 @@
-#include "dataclasses/BoostHeaders.h"
+#include "icetray/serialization.h"
 #include "dataclasses/Utility.h"
 #include "phys-services/Utility.h"
 #include "icetray/I3TrayHeaders.h"

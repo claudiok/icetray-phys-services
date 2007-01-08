@@ -1,4 +1,4 @@
-#include "dataclasses/BoostHeaders.h"
+#include "icetray/serialization.h"
 #include "phys-services/I3Cuts.h"
 #include "phys-services/I3CutValues.h"
 
