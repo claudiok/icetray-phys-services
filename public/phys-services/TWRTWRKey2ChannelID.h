@@ -16,6 +16,8 @@
 
 // header files
 
+#include <algorithm>
+#include <map>
 #include <utility>
 
 #include <icetray/I3DefaultName.h>
@@ -48,11 +50,16 @@ class TWRTWRKey2ChannelID
    * As yet, the TWR ID is composed by the crate no. (multiplied by 0x10)
    * and (plus) the TWR no..
    */
-  typedef unsigned int TWRID;
+  typedef unsigned int twr_id_t;
   /** The TWR key is a pair of a TWR ID and a channel no..
    */
-  typedef std::pair<TWRID, unsigned int> TWRKey;
-
+  typedef std::pair<twr_id_t, unsigned int> TWRKey;
+  /** Some trivial type definitions that may be used by implementations of this interface.
+   */
+  typedef std::pair<I3Time, I3Time> validity_period_t;
+  typedef std::map<unsigned int, TWRKey> twr_vs_channel_t;
+  typedef std::map<TWRKey, unsigned int> channel_vs_twr_t;
+  
 
   /** Default constructor.
    */
@@ -155,7 +162,28 @@ class TWRTWRKey2ChannelID
    */
   virtual void Select(const I3Time& tm) = 0;
 
-  private:
+ private:
+  /** A functor to compare validity periods of time dependent conversion tables.
+   */
+  struct IsMoreCurrent
+    : public std::binary_function<validity_period_t, validity_period_t, bool>
+  {
+    /** operator().
+     * 
+     * @param x Validity period.
+     * @param y Validity period.
+     * @return True, if x has the more current starting time
+     * or if x and y have the same starting time, but x has an earlier end time.
+     */
+    bool operator()(const validity_period_t& x,
+                    const validity_period_t& y) const
+    {
+      return((y.first < x.first)
+             || ((!(x.first < y.first) && x.second < y.second)));
+    }   
+  };
+
+  
   // private copy constructors and assignment
   TWRTWRKey2ChannelID(const TWRTWRKey2ChannelID&);
   TWRTWRKey2ChannelID& operator=(const TWRTWRKey2ChannelID&);

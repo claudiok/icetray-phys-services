@@ -34,7 +34,7 @@ class I3XMLOMKey2MBID : public I3OMKey2MBID
  public:
   /** Constructor.
    * 
-   * @param infile 
+   * @param infile Name of the XML file.
    */
   explicit I3XMLOMKey2MBID(const std::string& infile);
   /** Destructor.
