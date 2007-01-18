@@ -10,9 +10,9 @@ USE_TOOLS(sprng gsl log4cplus boost root)
 
 USE_PROJECTS(icetray dataclasses)
 
-ROOTCINT(phys-services/I3Calculator.h
-  phys-services/I3Cuts.h
-  phys-services/I3CutValues.h)
+ROOTCINT(public/phys-services/I3Calculator.h
+  public/phys-services/I3Cuts.h
+  public/phys-services/I3CutValues.h)
 
 TEST_EXECUTABLE(test private/test/*.cxx)
 
