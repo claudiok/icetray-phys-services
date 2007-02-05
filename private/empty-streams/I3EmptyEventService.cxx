@@ -6,7 +6,10 @@ I3EmptyEventService::I3EmptyEventService(int nframes) : nframes_(nframes),
 							currentCount_(0)
 {
   if(nframes_ < 0)
-    log_fatal("Can't have fewer than 0 frames.");
+    {
+      log_info("Configured for infinite events");
+      nframes_ = -1;
+    }
 }
 
 I3EmptyEventService::~I3EmptyEventService()
