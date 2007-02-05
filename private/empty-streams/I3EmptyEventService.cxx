@@ -15,6 +15,9 @@ I3EmptyEventService::~I3EmptyEventService()
 
 bool I3EmptyEventService::MoreEvents()
 {
+  if(nframes_ == -1)
+    return true;
+   
   if(currentCount_ >= nframes_)
     return false;
   return true;
