@@ -162,7 +162,7 @@ class TWRTWRKey2ChannelID
    */
   virtual void Select(const I3Time& tm) = 0;
 
- private:
+ protected:
   /** A functor to compare validity periods of time dependent conversion tables.
    */
   struct IsMoreCurrent
@@ -183,7 +183,7 @@ class TWRTWRKey2ChannelID
     }   
   };
 
-  
+ private:  
   // private copy constructors and assignment
   TWRTWRKey2ChannelID(const TWRTWRKey2ChannelID&);
   TWRTWRKey2ChannelID& operator=(const TWRTWRKey2ChannelID&);
