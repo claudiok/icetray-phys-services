@@ -15,7 +15,6 @@ load("libicetray")
 load("libdataclasses")
 load("libphys-services")
 load("libdataio")
-load("libreco-toolbox")
 
 tray = I3Tray()
 

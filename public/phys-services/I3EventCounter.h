@@ -3,6 +3,7 @@
 
 #include "icetray/I3TrayHeaders.h"
 #include "icetray/I3Module.h"
+#include <fstream>
 
 class I3EventCounter : public I3Module
 {
@@ -11,6 +12,9 @@ class I3EventCounter : public I3Module
   ~I3EventCounter() {};
   void Configure();
   void Physics(I3FramePtr frame);
+  void DetectorStatus(I3FramePtr frame);
+  void Geometry(I3FramePtr frame);
+  void Calibration(I3FramePtr frame);
   void Finish();
 
  private:
@@ -21,19 +25,25 @@ class I3EventCounter : public I3Module
   /**
    * Parameter: name of output histogram file
    */
-  int counterStep_;
+  unsigned int physCount_, statusCount_, geometryCount_, calibCount_;
+  unsigned int counterStep_;
+
+  /**
+   * Parameter: how many physics events to process
+   */
+  unsigned int nevents_;
 
   /**
    * Parameter: whether to dump current frame to screen
    */
   bool dump_;
 
-  /**
-   * Parameter: how many physics events to process
-   */
-  int nevents_;
+  std::string path_,fmt_;
+  ostream *out;
+  char buffer[200];
 
-  int count_;
+
+
 
   SET_LOGGER("I3EventCounter");
 };
