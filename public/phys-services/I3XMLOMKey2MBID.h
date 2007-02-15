@@ -19,8 +19,8 @@
 #include <map>
 #include <string>
 
-#include <icetray/I3FrameObject.h>
 #include <icetray/I3Logging.h>
+#include <icetray/I3PointerTypedefs.h>
 #include <phys-services/I3OMKey2MBID.h>
 
 // definitions
@@ -40,8 +40,10 @@ class I3XMLOMKey2MBID : public I3OMKey2MBID
   /** Destructor.
    */
   virtual ~I3XMLOMKey2MBID();
-  OMKey GetOMKey(long long int mbid);
-  long long int GetMBID(OMKey key);
+  bool OMKeyExists(long long int mbid) const;
+  OMKey GetOMKey(long long int mbid) const;
+  bool MBIDExists(OMKey key) const;
+  long long int GetMBID(OMKey key) const;
 
  private:
   std::map<OMKey,long long int> omkey2mbid_;
@@ -61,7 +63,14 @@ I3_POINTER_TYPEDEFS(I3XMLOMKey2MBID);
 
 
 inline
-OMKey I3XMLOMKey2MBID::GetOMKey(long long int mbid) 
+bool I3XMLOMKey2MBID::OMKeyExists(long long int mbid) const
+{
+  return(mbid2omkey_.count(mbid));
+}
+
+
+inline
+OMKey I3XMLOMKey2MBID::GetOMKey(long long int mbid) const
 {
   std::map<long long int,OMKey>::const_iterator iter = mbid2omkey_.find(mbid);
   if(iter == mbid2omkey_.end())
@@ -72,7 +81,14 @@ OMKey I3XMLOMKey2MBID::GetOMKey(long long int mbid)
 
 
 inline
-long long int I3XMLOMKey2MBID::GetMBID(OMKey key) 
+bool I3XMLOMKey2MBID::MBIDExists(OMKey key) const
+{
+  return(omkey2mbid_.count(key));
+}
+
+
+inline
+long long int I3XMLOMKey2MBID::GetMBID(OMKey key) const
 {
   std::map<OMKey,long long int>::const_iterator iter = omkey2mbid_.find(key);
   if(iter == omkey2mbid_.end())

@@ -9,42 +9,65 @@
  * @author pretz
  */
 
-#ifndef I3OMKEY2MBID_H
-#define I3OMKEY2MBID_H
+#ifndef I3OMKEY2MBID_H_INCLUDED
+#define I3OMKEY2MBID_H_INCLUDED
 
-#include <icetray/IcetrayFwd.h>
 #include <icetray/I3DefaultName.h>
+#include <icetray/I3Logging.h>
+#include <icetray/I3PointerTypedefs.h>
+#include <dataclasses/OMKey.h>
 
-#include "dataclasses/OMKey.h"
-
-#include <map>
-
-using namespace std;
 
 /**
  * @brief This is an icetray service which provides conversions
  * between OMKey and DOM mainboard id.
- *
  */
 class I3OMKey2MBID
 {
  public:
-  virtual ~I3OMKey2MBID(){}
-
+  /**
+   * Default constructor.
+   */
+  I3OMKey2MBID();
+  /**
+   * Destructor.
+   */
+  virtual ~I3OMKey2MBID();
+  /**
+   * Checks whether an OMKey exists for the given mbid.
+   */
+  virtual bool OMKeyExists(long long int mbid) const = 0;
   /**
    * @brief Gets the OMKey for the given mbid.
    */
-  virtual OMKey GetOMKey(long long int mbid) = 0;
-
+  virtual OMKey GetOMKey(long long int mbid) const = 0;
   /**
-   * @brief Gets the mbid for the given OMKey
+   * Checks whether a mbid exists for the given OMKey.
    */
-  virtual long long int GetMBID(OMKey key) = 0;
+  virtual bool MBIDExists(OMKey key) const = 0;
+  /**
+   * @brief Gets the mbid for the given OMKey.
+   */
+  virtual long long int GetMBID(OMKey key) const = 0;
 
+ private:
+  // private copy constructors and assignment
+  I3OMKey2MBID(const I3OMKey2MBID& rhs); 
+  I3OMKey2MBID& operator=(const I3OMKey2MBID& rhs); 
+
+
+  // logging
   SET_LOGGER("I3OMKey2MBID");
 };
 
+/**
+ * pointer type to insulate users from memory management
+ */
 I3_POINTER_TYPEDEFS(I3OMKey2MBID);
+
+/**
+ * define a default name to address service in a context
+ */
 I3_DEFAULT_NAME(I3OMKey2MBID);
 
-#endif
+#endif /*I3OMKEY2MBID_H_INCLUDED*/

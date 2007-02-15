@@ -9,35 +9,86 @@
  * @author pretz
  */
 
-#ifndef I3FILEOMKEY2MBID_H
-#define I3FILEOMKEY2MBID_H
+#ifndef I3FILEOMKEY2MBID_H_INCLUDED
+#define I3FILEOMKEY2MBID_H_INCLUDED
 
-#include "I3OMKey2MBID.h"
+#include <map>
+#include <string>
+
+#include <icetray/I3Logging.h>
+#include <icetray/I3PointerTypedefs.h>
+#include <phys-services/I3OMKey2MBID.h>
 
 /**
- * @brief an implementation of I3OMKey2MBID that
- * reads the conversions from a file
+ * @brief An implementation of I3OMKey2MBID that reads the conversions from a file.
  */
 class I3FileOMKey2MBID : public I3OMKey2MBID
 {
-  map<OMKey,long long int> omkey2mbid_;
-  map<long long int,OMKey> mbid2omkey_;
+ private:
+  std::map<OMKey,long long int> omkey2mbid_;
+  std::map<long long int,OMKey> mbid2omkey_;
   
  public:
-  /**
-   * constructor takes the name of the input file.
+  /** Constructor takes the name of the input file.
    */
-  I3FileOMKey2MBID(const string& infile);
-
-  OMKey GetOMKey(long long int mbid);
-  long long int GetMBID(OMKey key);
+  explicit I3FileOMKey2MBID(const std::string& infile);
+  /** Destructor.
+   */
+  virtual ~I3FileOMKey2MBID();
+  bool OMKeyExists(long long int mbid) const;
+  OMKey GetOMKey(long long int mbid) const;
+  bool MBIDExists(OMKey key) const;
+  long long int GetMBID(OMKey key) const;
 
  private:
-  OMKey OMKeyize(const string& key);
+  OMKey OMKeyize(const std::string& key);
 
-  void Fatal(const string& message);
 
+  // private copy constructors and assignment
+  I3FileOMKey2MBID(const I3FileOMKey2MBID&);
+  I3FileOMKey2MBID& operator=(const I3FileOMKey2MBID&);
+
+
+  // logging
   SET_LOGGER("I3FileOMKey2MBID");
 };
 
-#endif
+I3_POINTER_TYPEDEFS(I3FileOMKey2MBID);
+
+
+inline
+bool I3FileOMKey2MBID::OMKeyExists(long long int mbid) const
+{
+  return(mbid2omkey_.count(mbid));
+}
+
+
+inline
+OMKey I3FileOMKey2MBID::GetOMKey(long long int mbid) const
+{
+  std::map<long long int,OMKey>::const_iterator iter = mbid2omkey_.find(mbid);
+  if(iter == mbid2omkey_.end())
+    log_fatal("unknown mainboard ID - %lld", mbid);
+
+  return(iter->second);
+}
+
+
+inline
+bool I3FileOMKey2MBID::MBIDExists(OMKey key) const
+{
+  return(omkey2mbid_.count(key));
+}
+
+
+inline
+long long int I3FileOMKey2MBID::GetMBID(OMKey key)  const
+{
+  std::map<OMKey,long long int>::const_iterator iter = omkey2mbid_.find(key);
+  if(iter == omkey2mbid_.end())
+    log_fatal("unknown OM key - (%d, %u)", key.GetString(), key.GetOM());
+
+  return(iter->second);
+}
+
+#endif /*I3FILEOMKEY2MBID_H_INCLUDED*/

@@ -6,12 +6,14 @@
  * (c) IceCube Collaboration
  */
 
-#include "phys-services/I3FileOMKey2MBID.h"
+#include <phys-services/I3FileOMKey2MBID.h>
+
 #include <fstream>
-#include <string>
 #include <cassert>
 
+
 using namespace std;
+
 
 I3FileOMKey2MBID::I3FileOMKey2MBID(const string& infile)
 {
@@ -20,7 +22,7 @@ I3FileOMKey2MBID::I3FileOMKey2MBID(const string& infile)
     {
       log_fatal("Cannot find the DOMId to mainboard mapping file (%s)",
 		infile.c_str());
-      Fatal("cannot find the DOMid to mainboard mapping file");
+      log_fatal("cannot find the DOMid to mainboard mapping file");
     }
   string omkey;
   string domid;
@@ -47,20 +49,11 @@ I3FileOMKey2MBID::I3FileOMKey2MBID(const string& infile)
       }
 }
 
-OMKey I3FileOMKey2MBID::GetOMKey(long long int mbid) 
+
+I3FileOMKey2MBID::~I3FileOMKey2MBID()
 {
-  if(mbid2omkey_.count(mbid)<=0)
-    Fatal("Unknown mbid");
-  return mbid2omkey_[mbid];
-  
 }
 
-long long int I3FileOMKey2MBID::GetMBID(OMKey key) 
-{
-  if(omkey2mbid_.count(key) <= 0)
-    Fatal("Unknown omkey");
-  return omkey2mbid_[key];
-}
 
 /**
  * @todo This is an ugly mess.
@@ -87,7 +80,7 @@ OMKey I3FileOMKey2MBID::OMKeyize(const string& key)
 	  }
 	else
 	  {
-	    Fatal("bad om key");
+	    log_fatal("bad om key");
 	  }
       else if(key[2] == 'B')
 	if(key[3] == '1')
@@ -100,7 +93,7 @@ OMKey I3FileOMKey2MBID::OMKeyize(const string& key)
 	  }
 	else
 	  {
-	    Fatal("bad om key");
+	    log_fatal("bad om key");
 	  }
     }
   else
@@ -116,9 +109,4 @@ OMKey I3FileOMKey2MBID::OMKeyize(const string& key)
   //   cout<<"DOM#:"<<om_num;
   //   cout<<"   Should correspond to "<<key<<endl;
   return OMKey(om_string,om_num);
-}
-
-void I3FileOMKey2MBID::Fatal(const string& message) 
-{
-  log_fatal(message.c_str());
 }
