@@ -42,6 +42,8 @@ namespace geo_sel_utils{
     return false;
   }
 
+  template bool exists(const int&, const vector<int>&);
+
   template <class T> typename vector<T>::const_iterator 
   exists_at(const T& value, const vector<T>& v){
     for(typename vector<T>::const_iterator iter = v.begin(); iter != v.end(); ++iter){
