@@ -101,11 +101,11 @@ void I3EventCounter :: Physics(I3FramePtr frame)
 
   I3EventHeaderConstPtr eh = frame->Get<I3EventHeaderConstPtr>("I3EventHeader");
   if (eh) {  // Frame might not have an event header
-	  int evnum = eh->GetEventID();
-	  int runnum = eh->GetRunID();
 	  if (physCount_%counterStep_ == 0) {
 		log_info("(%s) Processing %s event (EventID=%i, RunID=%i)",
-				 GetName().c_str(),myordinal(physCount_),evnum,runnum);
+				 GetName().c_str(),myordinal(physCount_),
+			 eh->GetEventID(),
+			 eh->GetRunID());
 	  }
   }
 
