@@ -20,6 +20,8 @@
 #include <phys-services/I3SummaryService.h>
 #include <iostream>
 #include <fstream>
+#include <sys/time.h>
+#include <sys/resource.h>
 
 /**
  * @brief This class provides an XML implementation of the I3SummaryService. 
@@ -87,6 +89,10 @@ class I3XMLSummaryService: public I3SummaryService {
 
   I3Map<string,double> valuemap_;
   string filename_;
+
+  time_t start_real_,stop_real_;
+  struct rusage stop_, start_;
+  bool fail_;
 
   // copy and assignment private
   I3XMLSummaryService(const I3XMLSummaryService&);

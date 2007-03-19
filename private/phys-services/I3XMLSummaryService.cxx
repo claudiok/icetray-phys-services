@@ -66,6 +66,8 @@ I3XMLSummaryService::I3XMLSummaryService(string filename)
 I3XMLSummaryService::I3XMLSummaryService():
 		filename_("i3summary.xml")
 {
+    	start_real_ = time(NULL);
+    	fail_ = (getrusage(RUSAGE_SELF, &start_) == -1);
 }
 
 void
@@ -130,6 +132,19 @@ I3XMLSummaryService::ReadXML(string infile)
 
 I3XMLSummaryService::~I3XMLSummaryService()
 {
+    // Compute CPU and real time
+    if (getrusage(RUSAGE_SELF, &stop_) != -1 && !fail_) { 
+		double user = (stop_.ru_utime.tv_sec - start_.ru_utime.tv_sec); 
+		user += double(stop_.ru_utime.tv_usec - start_.ru_utime.tv_usec) / 10E+06; 
+		valuemap_["user_time"] = user;
+		
+		double sys = (stop_.ru_stime.tv_sec - start_.ru_stime.tv_sec); 
+		sys += double(stop_.ru_stime.tv_usec - start_.ru_stime.tv_usec) / 10E+06; 
+		valuemap_["sys_time"] = user;
+	}
+   	stop_real_ = time(NULL);
+	valuemap_["real_time"] = difftime(stop_real_, start_real_);
+
 	// print the xml
 	WriteXML(filename_);
 }
