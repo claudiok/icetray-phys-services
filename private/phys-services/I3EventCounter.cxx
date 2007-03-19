@@ -16,7 +16,11 @@ I3EventCounter :: I3EventCounter(const I3Context& ctx) :
 		calibCount_(0),
 		counterStep_(100),
 		nevents_(0),
-		dump_(false)
+		dump_(false),
+		physicsCounterName_("Events"),
+		geoCounterName_(""),
+		calibCounterName_(""),
+		statusCounterName_("")
 {
   AddOutBox("OutBox");
 
@@ -26,7 +30,7 @@ I3EventCounter :: I3EventCounter(const I3Context& ctx) :
   fmt_ ="physics frames: %d\n"; 
   fmt_+="geometry frames: %d\n"; 
   fmt_+="calibration frames: %d\n";
-  fmt_+=" detector status frames: %d\n";
+  fmt_+="detector status frames: %d\n";
   AddParameter("formatstr","Format string for frame counts.  ", fmt_);
 
   AddParameter("CounterStep",
@@ -40,6 +44,19 @@ I3EventCounter :: I3EventCounter(const I3Context& ctx) :
   AddParameter("NEvents",
                "Number of events to process",
                nevents_);
+
+  AddParameter("PhysicsCounterName",
+               "String label for physics frame counter",
+               physicsCounterName_);
+  AddParameter("GeometryCounterName",
+               "String label for geometry frame counter",
+               geoCounterName_);
+  AddParameter("CalibrationCounterName",
+               "String label for calibration frame counter",
+               calibCounterName_);
+  AddParameter("DetectorStatusCounterName",
+               "String label for detector status frame counter",
+               statusCounterName_);
 }
 
 
@@ -64,6 +81,15 @@ void I3EventCounter :: Configure()
   GetParameter("NEvents", nevents_);
   log_info("(%s) NEvents: %i",
            GetName().c_str(), nevents_);
+
+  GetParameter("PhysicsCounterName",
+               physicsCounterName_);
+  GetParameter("GeometryCounterName",
+               geoCounterName_);
+  GetParameter("CalibrationCounterName",
+               calibCounterName_);
+  GetParameter("DetectorStatusCounterName",
+               statusCounterName_);
 
   if (path_ == "stdout") {
 	  out = &std::cout;
@@ -154,6 +180,20 @@ void I3EventCounter :: Finish()
   // format string with values
   sprintf(buffer,fmt_.c_str(),physCount_,geometryCount_,calibCount_,statusCount_);
 
-  // out put string to stream
-  (*out) << buffer << endl;
+  if (!summary_) summary_= context_.Get<I3SummaryServicePtr>();
+
+  // Write values to summary service
+  if (summary_) {
+	  if (!physicsCounterName_.empty()) (*summary_)[physicsCounterName_] += physCount_;
+	  if (!geoCounterName_.empty()) (*summary_)[geoCounterName_] += geometryCount_;
+	  if (!calibCounterName_.empty()) (*summary_)[calibCounterName_] += calibCount_;
+	  if (!statusCounterName_.empty()) (*summary_)[statusCounterName_] += statusCount_;
+  } 
+  else { // No summary service found
+	  log_warn("No I3SummaryService found.");
+	  // out put string to stream
+	  (*out) << buffer << endl;
+  }
+
+
 }

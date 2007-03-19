@@ -3,6 +3,7 @@
 
 #include "icetray/I3TrayHeaders.h"
 #include "icetray/I3Module.h"
+#include "phys-services/I3SummaryService.h"
 #include <fstream>
 
 class I3EventCounter : public I3Module
@@ -32,7 +33,10 @@ class I3EventCounter : public I3Module
    * Parameter: how many physics events to process
    */
   unsigned int nevents_;
+  double systime_;
+  double usertime_;
 
+  I3SummaryServicePtr summary_;
   /**
    * Parameter: whether to dump current frame to screen
    */
@@ -42,7 +46,10 @@ class I3EventCounter : public I3Module
   ostream *out;
   char buffer[200];
 
-
+ string physicsCounterName_;
+ string geoCounterName_;
+ string calibCounterName_;
+ string statusCounterName_;
 
 
   SET_LOGGER("I3EventCounter");
