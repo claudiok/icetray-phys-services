@@ -136,14 +136,14 @@ I3XMLSummaryService::~I3XMLSummaryService()
     if (getrusage(RUSAGE_SELF, &stop_) != -1 && !fail_) { 
 		double user = (stop_.ru_utime.tv_sec - start_.ru_utime.tv_sec); 
 		user += double(stop_.ru_utime.tv_usec - start_.ru_utime.tv_usec) / 10E+06; 
-		valuemap_["user_time"] = user;
+		valuemap_["user_time"] += user;
 		
 		double sys = (stop_.ru_stime.tv_sec - start_.ru_stime.tv_sec); 
 		sys += double(stop_.ru_stime.tv_usec - start_.ru_stime.tv_usec) / 10E+06; 
-		valuemap_["sys_time"] = sys;
+		valuemap_["sys_time"] += sys;
 	}
    	stop_real_ = time(NULL);
-	valuemap_["real_time"] = difftime(stop_real_, start_real_);
+	valuemap_["real_time"] += difftime(stop_real_, start_real_);
 
 	// print the xml
 	WriteXML(filename_);
