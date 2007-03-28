@@ -9,6 +9,8 @@ using namespace std;
 class I3RecoHit;
 class I3MCHit;
 class I3RecoPulse;
+class I3DOMLaunch;
+class I3Waveform;
 
 string ToString(shared_ptr<const I3FrameObject> obj);
 string ToString(I3FrameObject* obj);
@@ -25,10 +27,16 @@ void ENSURE_DISTANCE(double left, double right, double precision,
 void ENSURE(bool expression, string message = "Test FAILED");
 
 // Functions to get charge from either RecoPulse or RecoHit.
-double GetCharge(const I3RecoHit& hit);
+double GetCharge(const I3RecoHit&);
+double GetCharge(const I3MCHit&);
+double GetCharge(const I3RecoPulse&);
+double GetCharge(const I3DOMLaunch&);
+double GetCharge(const I3Waveform&);
 
-double GetCharge(const I3MCHit& mchit);
-
-double GetCharge(const I3RecoPulse& pulse);
+double GetTime(const I3RecoHit&);
+double GetTime(const I3MCHit&);
+double GetTime(const I3RecoPulse&);
+double GetTime(const I3DOMLaunch&);
+double GetTime(const I3Waveform&);
 
 #endif

@@ -1,10 +1,13 @@
 #include "icetray/serialization.h"
 #include "dataclasses/Utility.h"
+#include "dataclasses/I3Units.h"
 #include "phys-services/Utility.h"
 #include "icetray/I3TrayHeaders.h"
 #include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/physics/I3MCHit.h"
 #include "dataclasses/physics/I3RecoPulse.h"
+#include "dataclasses/physics/I3DOMLaunch.h"
+#include "dataclasses/physics/I3Waveform.h"
 
 string ToString(shared_ptr<const I3FrameObject> obj)
 {
@@ -101,4 +104,45 @@ double GetCharge(const I3RecoPulse& pulse)
 {
   //return (pulse.GetCharge() >= 2.0) ? pulse.GetCharge() : 1; 
   return pulse.GetCharge(); 
+}
+
+double GetCharge(const I3DOMLaunch& launch)
+{ 
+  return NAN; 
+}
+
+double GetCharge(const I3Waveform& wf)
+{
+  double charge = 0.;
+  vector<double>::const_iterator iter;
+  for (iter=wf.GetWaveform().begin(); iter!=wf.GetWaveform().end(); iter++) {
+    charge += *iter;
+  }
+  return charge/I3Units::mV; 
+}
+
+// Functions to get time from either RecoPulse or RecoHit or MCHit.
+double GetTime(const I3RecoHit& hit)
+{ 
+  return hit.GetTime(); 
+}
+
+double GetTime(const I3MCHit& mchit)
+{ 
+  return mchit.GetTime(); 
+}
+
+double GetTime(const I3RecoPulse& pulse)
+{
+  return pulse.GetTime(); 
+}
+
+double GetTime(const I3DOMLaunch& launch)
+{ 
+  return launch.GetStartTime(); 
+}
+
+double GetTime(const I3Waveform& wf)
+{ 
+  return wf.GetStartTime(); 
 }
