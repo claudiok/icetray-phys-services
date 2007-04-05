@@ -2,6 +2,8 @@
 #include "dataclasses/I3Units.h"
 #include "dataclasses/geometry/I3OMGeo.h"
 #include "icetray/I3TrayHeaders.h"
+#include <dataclasses/I3Time.h>
+#include <dataclasses/geometry/I3Geometry.h>
 
 void I3TextFileGeometryService::Fatal(const string& message)
 {

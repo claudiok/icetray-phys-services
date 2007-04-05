@@ -15,7 +15,7 @@
 #include <string>
 #include <fstream>
 #include <boost/shared_ptr.hpp>
-#include <phys-services/I3GeometryService.h>
+#include <interfaces/I3GeometryService.h>
 #include "icetray/I3Context.h"
 
 using namespace std;

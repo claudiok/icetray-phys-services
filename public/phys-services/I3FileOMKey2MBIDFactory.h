@@ -3,8 +3,8 @@
 
 class I3Context;
 
-#include "icetray/I3ServiceFactory.h"
-#include "I3OMKey2MBID.h"
+#include <icetray/I3ServiceFactory.h>
+#include <interfaces/I3OMKey2MBID.h>
 
 using namespace std;
 

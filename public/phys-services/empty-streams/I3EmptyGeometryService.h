@@ -1,7 +1,7 @@
 #ifndef I3EMPTYGEOMETRYSERVICE_H
 #define I3EMPTYGEOMETRYSERVICE_H
 
-#include "phys-services/I3GeometryService.h"
+#include "interfaces/I3GeometryService.h"
 
 class I3EmptyGeometryService : public I3GeometryService
 {

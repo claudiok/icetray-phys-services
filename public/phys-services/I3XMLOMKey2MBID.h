@@ -21,7 +21,8 @@
 
 #include <icetray/I3Logging.h>
 #include <icetray/I3PointerTypedefs.h>
-#include <phys-services/I3OMKey2MBID.h>
+#include <icetray/OMKey.h>
+#include <interfaces/I3OMKey2MBID.h>
 
 // definitions
 

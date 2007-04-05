@@ -8,7 +8,7 @@ LIB (private/phys-services/*.cxx
 
 USE_TOOLS(sprng gsl log4cplus boost root)
 
-USE_PROJECTS(icetray dataclasses)
+USE_PROJECTS(icetray dataclasses interfaces)
 
 ROOTCINT(public/phys-services/I3Calculator.h
   public/phys-services/I3Cuts.h

@@ -10,6 +10,10 @@
  */
 
 #include <icetray/I3Context.h>
+#include <dataclasses/calibration/I3Calibration.h>
+#include <dataclasses/status/I3DetectorStatus.h>
+#include <dataclasses/geometry/I3Geometry.h>
+
 #include "phys-services/source/I3Muxer.h"
 #include <map>
 #include <sstream>

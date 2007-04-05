@@ -21,7 +21,7 @@
 #include <icetray/I3DefaultName.h>
 #include <icetray/I3FrameObject.h>
 #include <icetray/I3Logging.h>
-#include <dataclasses/OMKey.h>
+#include <icetray/OMKey.h>
 
 // definitions
 

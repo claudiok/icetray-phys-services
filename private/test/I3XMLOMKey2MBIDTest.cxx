@@ -13,7 +13,7 @@
 #include <exception>
 #include <string>
 
-#include <phys-services/I3OMKey2MBID.h>
+#include <interfaces/I3OMKey2MBID.h>
 #include <phys-services/I3XMLOMKey2MBID.h>
 
 

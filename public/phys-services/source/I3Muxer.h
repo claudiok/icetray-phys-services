@@ -12,11 +12,11 @@
 #ifndef I3MUXER_H
 #define I3MUXER_H
 
-#include <phys-services/I3EventService.h>
-#include <phys-services/I3CalibrationService.h>
-#include <phys-services/I3GeometryService.h>
-#include <phys-services/I3DetectorStatusService.h>
-#include <phys-services/I3MetaService.h>
+#include <interfaces/I3EventService.h>
+#include <interfaces/I3CalibrationService.h>
+#include <interfaces/I3GeometryService.h>
+#include <interfaces/I3DetectorStatusService.h>
+#include <interfaces/I3MetaService.h>
 
 #include <icetray/I3Frame.h>
 #include <icetray/I3Logging.h>

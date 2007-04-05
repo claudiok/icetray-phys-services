@@ -92,7 +92,6 @@ TEST(FromRecoPulses)
   ENSURE(result->find(OMKey(2,61)) == result->end(), "2-61 Exists but shouldn't");
   ENSURE(result->find(OMKey(2,62)) == result->end(), "2-62 Exists but shouldn't");
   ENSURE(result->find(OMKey(1,3)) == result->end(), "1-3 Exists but shouldn't");
-
 }
 
 TEST(FromRecoPulsesWithNeighbors)
@@ -111,7 +110,6 @@ TEST(FromRecoPulsesWithNeighbors)
   ENSURE(result->find(OMKey(2,61)) == result->end(), "2-61 Exists but shouldn't");
   ENSURE(result->find(OMKey(2,62)) != result->end(), "2-62 Doesn't exist but should");
   ENSURE(result->find(OMKey(2,63)) != result->end(), "2-63 Doesn't exist but should");
-
 }
 
 TEST(NoBadOMs)

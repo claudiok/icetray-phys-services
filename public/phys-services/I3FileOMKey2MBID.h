@@ -17,7 +17,7 @@
 
 #include <icetray/I3Logging.h>
 #include <icetray/I3PointerTypedefs.h>
-#include <phys-services/I3OMKey2MBID.h>
+#include <interfaces/I3OMKey2MBID.h>
 
 /**
  * @brief An implementation of I3OMKey2MBID that reads the conversions from a file.

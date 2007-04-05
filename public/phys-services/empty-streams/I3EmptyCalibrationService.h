@@ -1,7 +1,7 @@
 #ifndef I3EMPTYCALIBRATIONSERVICE_H
 #define I3EMPTYCALIBRATIONSERVICE_H
 
-#include "phys-services/I3CalibrationService.h"
+#include "interfaces/I3CalibrationService.h"
 
 class I3EmptyCalibrationService : public I3CalibrationService
 {

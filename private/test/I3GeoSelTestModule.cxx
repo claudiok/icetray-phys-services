@@ -15,7 +15,7 @@
 #include <I3Test.h>
 #include "phys-services/geo-selector/I3GeoSelTestModule.h"
 #include "phys-services/geo-selector/GeoSelUtils.h"
-#include "phys-services/I3GeometryService.h"
+#include "interfaces/I3GeometryService.h"
 
 // other headers
 //  global header for all the IceTray stuff

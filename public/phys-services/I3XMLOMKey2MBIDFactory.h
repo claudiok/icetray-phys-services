@@ -21,7 +21,7 @@ class I3Context;
 
 #include <icetray/I3Logging.h>
 #include <icetray/I3ServiceFactory.h>
-#include <phys-services/I3OMKey2MBID.h>
+#include <interfaces/I3OMKey2MBID.h>
 
 // definitions
 
