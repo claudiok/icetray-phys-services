@@ -15,6 +15,14 @@
 #include "dataclasses/I3Vector.h"
 #include "dataclasses/OMKey.h"
 #include "dataclasses/physics/I3RecoPulse.h"
+#include "dataclasses/physics/I3DOMLaunch.h"
+#include "dataclasses/physics/I3Waveform.h"
+#include "dataclasses/physics/I3AMANDAAnalogReadout.h"
+
+// this #define helps to decide in flat-ntuple (and other user code) whether
+// the geotrimmers can only be used for recopulses or just for practically all
+// domdata-types.
+#define NEW_GEOTRIMMERS 1
 
 namespace I3GeoTrimmers
 {
@@ -32,14 +40,16 @@ namespace I3GeoTrimmers
 /// Currently use OMs which appear as keys in pulseseries_; maybe it should
 /// be made possible to use DOMLaunchSeries or AMANDAAnalogReadout
 /// maps instead...
-I3OMGeoMapPtr GeoFromPulseSeries(I3OMGeoMap input_geo, I3RecoPulseSeriesMap psm) {
 
+template <class omdatamap>
+I3OMGeoMapPtr GeoFromEventData(const I3OMGeoMap &input_geo,
+                               const omdatamap &datamap ){
   // The output
   I3OMGeoMapPtr output_geoptr=I3OMGeoMapPtr(new I3OMGeoMap);
 
   // The loop
-  I3RecoPulseSeriesMap::const_iterator ipulse;
-  for (ipulse=psm.begin(); ipulse!=psm.end(); ipulse++) {
+  typename omdatamap::const_iterator ipulse;
+  for (ipulse=datamap.begin(); ipulse!=datamap.end(); ipulse++) {
     I3OMGeoMap::const_iterator i_omgeo=input_geo.find(ipulse->first);
     if (i_omgeo==input_geo.end())
       log_warn("OM %d/%d found in pulse series, but not in geometry!",
@@ -49,6 +59,23 @@ I3OMGeoMapPtr GeoFromPulseSeries(I3OMGeoMap input_geo, I3RecoPulseSeriesMap psm)
       AddMeToTheMap(ipulse->first,i_omgeo->second,output_geoptr);
   }
   return output_geoptr;
+}
+
+I3OMGeoMapPtr GeoFromPulseSeries(const I3OMGeoMap &input_geo,
+                                 const I3RecoPulseSeriesMap &psm) {
+    return GeoFromEventData(input_geo,psm);
+}
+I3OMGeoMapPtr GeoFromDOMLaunchSeries(const I3OMGeoMap &input_geo,
+                                     const I3DOMLaunchSeriesMap &dlsm) {
+    return GeoFromEventData(input_geo,dlsm);
+}
+I3OMGeoMapPtr GeoFromWFSeries(const I3OMGeoMap &input_geo,
+                              const I3WaveformSeriesMap &wfsm) {
+    return GeoFromEventData(input_geo,wfsm);
+}
+I3OMGeoMapPtr GeoFromAMANDAAnalogReadout(const I3OMGeoMap &input_geo,
+                              const I3AMANDAAnalogReadoutMap &aarm) {
+    return GeoFromEventData(input_geo,aarm);
 }
 
 /// Create a reduced geometry containing only the hit OMs.
