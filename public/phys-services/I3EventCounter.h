@@ -46,6 +46,7 @@ class I3EventCounter : public I3Module
   ostream *out;
   char buffer[200];
 
+ string eventHeaderName_;
  string physicsCounterName_;
  string geoCounterName_;
  string calibCounterName_;
