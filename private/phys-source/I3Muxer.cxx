@@ -315,10 +315,10 @@ I3Muxer::QueueUpEvent()
 {
   if(!currentEventQueued_)
     {
-      MUXER_ASSERT(context_.Get<I3EventService>().MoreEvents());
+      MUXER_ASSERT(context_.Get<I3EventService>(eventServiceName_).MoreEvents());
       I3TimePtr eventTimePtr;
       I3Time eventTime = 
-	context_.Get<I3EventService>().PopEvent(currentEvent_);
+	context_.Get<I3EventService>(eventServiceName_).PopEvent(currentEvent_);
       eventTimePtr = I3TimePtr(new I3Time(eventTime));
       currentEvent_.Put("DrivingTime",eventTimePtr);
       currentEventQueued_ = true;
