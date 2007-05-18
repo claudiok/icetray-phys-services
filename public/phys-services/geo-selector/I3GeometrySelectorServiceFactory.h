@@ -113,6 +113,11 @@ private:
    */
   std::string geoSelectorName_;
 
+  /**
+   *Name of the previous geometry service.
+   */
+  std::string geoServiceName_;
+
   SET_LOGGER("I3GeometrySelectorServiceFactory");
   
 };  // end of class I3GeometrySelectorServiceFactory

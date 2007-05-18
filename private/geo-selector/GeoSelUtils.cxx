@@ -15,11 +15,6 @@
 #include "phys-services/geo-selector/GeoSelUtils.h"
 #include "icetray/I3Logging.h"
 
-//There's something in here that shouldn't be
-//I shouldn't have to include this to get 
-//this to compile
-//#include "TString.h"
-
 #include <string>
 #include <iostream>
 #include <sstream>
