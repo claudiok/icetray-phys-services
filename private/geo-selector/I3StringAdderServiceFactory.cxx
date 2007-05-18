@@ -1,5 +1,6 @@
 #include "phys-services/geo-selector/I3StringAdderServiceFactory.h"
 #include "phys-services/geo-selector/I3StringAdderService.h"
+#include "dataclasses/geometry/I3OMGeo.h"
 #include "icetray/I3Units.h"
 
 I3_SERVICE_FACTORY(I3StringAdderServiceFactory);
