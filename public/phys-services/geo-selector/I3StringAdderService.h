@@ -15,7 +15,7 @@
 #include <string>
 #include <fstream>
 #include <boost/shared_ptr.hpp>
-#include <interfaces/I3GeometryService.h>
+#include <phys-services/I3GeometryService.h>
 #include "icetray/I3Context.h"
 
 struct I3OMGeo;
