@@ -17,6 +17,7 @@ I3EventCounter :: I3EventCounter(const I3Context& ctx) :
 		counterStep_(100),
 		nevents_(0),
 		dump_(false),
+		eventHeaderName_("I3EventHeader"),
 		physicsCounterName_("Events"),
 		geoCounterName_(""),
 		calibCounterName_(""),
@@ -45,6 +46,9 @@ I3EventCounter :: I3EventCounter(const I3Context& ctx) :
                "Number of events to process",
                nevents_);
 
+  AddParameter("eventHeaderName_",
+               "Name of event header in the frame",
+               eventHeaderName_);
   AddParameter("PhysicsCounterName",
                "String label for physics frame counter",
                physicsCounterName_);
@@ -82,6 +86,8 @@ void I3EventCounter :: Configure()
   log_info("(%s) NEvents: %i",
            GetName().c_str(), nevents_);
 
+  GetParameter("eventHeaderName_",
+               eventHeaderName_);
   GetParameter("PhysicsCounterName",
                physicsCounterName_);
   GetParameter("GeometryCounterName",
@@ -125,7 +131,7 @@ void I3EventCounter :: Physics(I3FramePtr frame)
 {
   physCount_++;
 
-  I3EventHeaderConstPtr eh = frame->Get<I3EventHeaderConstPtr>("I3EventHeader");
+  I3EventHeaderConstPtr eh = frame->Get<I3EventHeaderConstPtr>(eventHeaderName_);
   if (eh) {  // Frame might not have an event header
 	  if (physCount_%counterStep_ == 0) {
 		log_info("(%s) Processing %s event (EventID=%i, RunID=%i)",
