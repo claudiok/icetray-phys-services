@@ -2,8 +2,8 @@
 #include <dataclasses/I3Time.h>
 #include <icetray/I3Frame.h>
 
-I3EmptyEventService::I3EmptyEventService(int nframes) : nframes_(nframes),
-							currentCount_(0)
+I3EmptyEventService::I3EmptyEventService(int nframes, I3Time eventTime) : 
+  nframes_(nframes),currentCount_(0),eventTime_(eventTime)
 {
   if(nframes_ < 0)
     {
@@ -29,5 +29,5 @@ bool I3EmptyEventService::MoreEvents()
 I3Time I3EmptyEventService::PopEvent(I3Frame& frame)
 {
   currentCount_ +=1;
-  return I3Time(2006,0);
+  return eventTime_;
 }

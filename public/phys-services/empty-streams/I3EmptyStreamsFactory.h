@@ -32,6 +32,8 @@ class I3EmptyStreamsFactory : public I3ServiceFactory
   bool installCalibrations_;
   bool installStatus_;
   bool installGeometries_;
+  int32_t eventTimeYr_;
+  int64_t eventTimeNs_;
 };
 
 #endif
