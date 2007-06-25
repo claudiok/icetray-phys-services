@@ -13,7 +13,7 @@ string ToString(shared_ptr<const I3FrameObject> obj)
 {
   ostringstream outstring;
   boost::archive::xml_oarchive ar(outstring);
-  ar << make_nvp(I3::name_of(typeid(*obj)), obj);
+  ar << make_nvp(I3::name_of(typeid(*obj)).c_str(), obj);
   return outstring.str();
 }
 
@@ -22,7 +22,7 @@ string ToString(I3FrameObject* obj)
   ostringstream outstring;
   boost::archive::xml_oarchive ar(outstring);
   shared_ptr<I3FrameObject> ptr = shared_ptr<I3FrameObject>(new I3FrameObject(*obj));
-  ar << make_nvp(I3::name_of(typeid(*obj)), ptr);
+  ar << make_nvp(I3::name_of(typeid(*obj)).c_str(), ptr);
   return outstring.str();
 }
 
