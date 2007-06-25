@@ -1,1 +1,0 @@
-DOXYFILE_EXAMPLE_PATH := resources/
