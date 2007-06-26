@@ -4,6 +4,7 @@
 #include "phys-services/empty-streams/I3EmptyGeometryService.h"
 #include "phys-services/empty-streams/I3EmptyDetectorStatusService.h"
 #include "phys-services/empty-streams/I3EmptyCalibrationService.h"
+#include "dataclasses/I3Time.h"
 
 I3_SERVICE_FACTORY(I3EmptyStreamsFactory);
 
@@ -13,7 +14,10 @@ I3EmptyStreamsFactory::I3EmptyStreamsFactory(const I3Context& context) :
   installEvents_(true),
   installCalibrations_(true),
   installStatus_(true),
-  installGeometries_(true)
+  installGeometries_(true),
+  eventTimeYr_(2006),
+  eventTimeNs_(0),
+  eventRunNumber_(0)
 {
   log_trace("constructing I3EmptyStreamsFactory");
   AddParameter("NFrames","Number of event frames to spit out",nframes_);
@@ -29,6 +33,15 @@ I3EmptyStreamsFactory::I3EmptyStreamsFactory(const I3Context& context) :
   AddParameter("InstallStatus",
 	       "Whether or not to install the DetectorStatus Service",
 	       installStatus_);
+  AddParameter("EventTimeYear",
+	       "Specify the time (year) to use for events installed",
+	       eventTimeYr_);
+  AddParameter("EventTimeNnanosec",
+	       "Specify the time (N ns) to use for events installed",
+	       eventTimeNs_);
+  AddParameter("EventRunNumber",
+	       "Specify the run number to use for events installed",
+	       eventRunNumber_);
 }
 
 void I3EmptyStreamsFactory::Configure()
@@ -45,10 +58,22 @@ void I3EmptyStreamsFactory::Configure()
 	       installGeometries_);
   GetParameter("InstallStatus",
 	       installStatus_);
+  GetParameter("EventTimeYear",
+	       eventTimeYr_);
+  GetParameter("EventTimeNNanosec",
+	       eventTimeNs_);
+  GetParameter("EventRunNumber",
+	       eventRunNumber_);
+
 
   if(installEvents_)
-    events_ = 
-      shared_ptr<I3EventService>(new I3EmptyEventService(nframes_));
+    {
+      I3Time eventTime_(eventTimeYr_,eventTimeNs_);
+      events_ = 
+	shared_ptr<I3EventService>(new I3EmptyEventService(nframes_,
+							   eventTime_,
+							   eventRunNumber_));
+    }
   if(installCalibrations_)
     calibrations_ = 
       shared_ptr<I3CalibrationService>(new I3EmptyCalibrationService());
