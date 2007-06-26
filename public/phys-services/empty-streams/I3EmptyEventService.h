@@ -7,7 +7,7 @@
 class I3EmptyEventService : public I3EventService
 {
  public:
-  I3EmptyEventService(int nFrames, I3Time theTime);
+  I3EmptyEventService(int nFrames, I3Time theTime, unsigned theRun);
 
   virtual ~I3EmptyEventService();
 
@@ -19,6 +19,7 @@ class I3EmptyEventService : public I3EventService
   int nframes_;
   int currentCount_;
   I3Time eventTime_;
+  unsigned runNumber_;
 };
 
 #endif

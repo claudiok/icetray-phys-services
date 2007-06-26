@@ -16,7 +16,8 @@ I3EmptyStreamsFactory::I3EmptyStreamsFactory(const I3Context& context) :
   installStatus_(true),
   installGeometries_(true),
   eventTimeYr_(2006),
-  eventTimeNs_(0)
+  eventTimeNs_(0),
+  eventRunNumber_(0)
 {
   log_trace("constructing I3EmptyStreamsFactory");
   AddParameter("NFrames","Number of event frames to spit out",nframes_);
@@ -38,6 +39,9 @@ I3EmptyStreamsFactory::I3EmptyStreamsFactory(const I3Context& context) :
   AddParameter("EventTimeNnanosec",
 	       "Specify the time (N ns) to use for events installed",
 	       eventTimeNs_);
+  AddParameter("EventRunNumber",
+	       "Specify the run number to use for events installed",
+	       eventRunNumber_);
 }
 
 void I3EmptyStreamsFactory::Configure()
@@ -58,12 +62,17 @@ void I3EmptyStreamsFactory::Configure()
 	       eventTimeYr_);
   GetParameter("EventTimeNNanosec",
 	       eventTimeNs_);
+  GetParameter("EventRunNumber",
+	       eventRunNumber_);
+
 
   if(installEvents_)
     {
       I3Time eventTime_(eventTimeYr_,eventTimeNs_);
       events_ = 
-	shared_ptr<I3EventService>(new I3EmptyEventService(nframes_,eventTime_));
+	shared_ptr<I3EventService>(new I3EmptyEventService(nframes_,
+							   eventTime_,
+							   eventRunNumber_));
     }
   if(installCalibrations_)
     calibrations_ = 
