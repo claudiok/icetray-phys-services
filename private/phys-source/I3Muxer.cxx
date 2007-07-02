@@ -134,11 +134,11 @@ void I3Muxer::SendEvent()
   I3FramePtr frame(new I3Frame(I3Frame::Physics));
 
   MUXER_ASSERT(currentEventQueued_);
-  for(I3Frame::const_iterator iter = currentEvent_.begin (); 
-      iter != currentEvent_.end() ; 
+  for(I3Frame::typename_iterator iter = currentEvent_.typename_begin (); 
+      iter != currentEvent_.typename_end() ; 
       iter++)
     {
-      frame->Put(iter->first, iter->second);
+      frame->take(currentEvent_, iter->first);
     }
   MUXER_ASSERT(currentGeometry_);
   frame->Put(currentGeometry_);
