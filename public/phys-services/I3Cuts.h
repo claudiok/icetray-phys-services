@@ -7,6 +7,7 @@
 #include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/geometry/I3Geometry.h"
 
+#define CONTAINMENT_FUNCTIONS_AVAILABLE
 
 /**
  * @brief The I3Cuts namespace is a collection of functions that calculate 
@@ -207,6 +208,53 @@ namespace I3Cuts
 		      double H0, 
 		      double R0, 
 		      double center);
+
+  /**
+   * A helper function for doing 2-D geometry: the intersection of two lines.
+   * One line is defined by coordinates (x1,y1) and (x2, y2),
+   * The second line is defined by coordinates (x3, y3) and (x4, y4).
+   */
+  void IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
+			      double x3, double y3, double x4, double y4,
+			      double *xi, double *yi);
+
+  /**
+   * A helper function for doing 2-D geometry: the center of mass of a 2-D 
+   * arbitrary shape (n-gon or polygon).
+   * This function takes as inputs: vectors representing the x and y coordinates
+   * of points which define the corners of the shape.
+   * (Could, for instance, find the CM of the IceTop-16 array.)
+   */
+  void CMPolygon(vector<double> x, 
+		 vector<double> y, 
+		 double *xresult,
+		 double *yresult);
+
+  /**
+   * Computes the size of the "containment volume of closest approach", 
+   * Analogous to "CylinderSize", above, but for a general shape
+   * (not necessarily a cylinder... could be the IC-9 prism for instance)
+   *
+   * Must be a prism shape... defined by (x,y) coordinates, and 
+   * limits of z in the vertical dimension
+   */
+  double ContainmentVolumeSize(const I3Particle& track, 
+			       vector<double> x, 
+			       vector<double> y, 
+			       double zhigh, 
+			       double zlow);
+
+  /**
+   * Computes the size of the "containment area of closest approach", 
+   * Similar to "ContainmentVolumeSize", above, but the 2-dimensional
+   * (rather than 3-dimensional) problem for a general shaped
+   * area rather than a volume.  
+   * (Could, for instance, be the IceTop-16 array.)
+   */
+  double ContainmentAreaSize(const I3Particle& track, 
+			     vector<double> x, 
+			     vector<double> y, 
+			     double z);
 
 
 }

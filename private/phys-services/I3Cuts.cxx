@@ -410,12 +410,260 @@ double I3Cuts::CylinderSize(const I3Particle& track,
   }
 
   // Which is smaller?
+  
   if ((bestcorner<bestcyl)||isnan(bestcyl)) {
     return bestcorner;
   } else {
     return bestcyl;
   }
+  
+  return bestcyl;
+
+}  // end cylindersize function
+
+
+//------------------------------------
+// Generalized version of "CylinderSize" for a general in-ice
+// array shape
+double I3Cuts::ContainmentVolumeSize(const I3Particle& track, 
+				     vector<double> x, 
+				     vector<double> y, 
+				     double zhigh, 
+				     double zlow) {
+  // INSERT OLGA'S ALGORITHM HERE!
+  return 13.4;
+}
+
+
+//------------------------------------
+// 2-dimensional version of containment size, for a general icetop
+// array shape
+double I3Cuts::ContainmentAreaSize(const I3Particle& track, 
+				   vector<double> x, 
+				   vector<double> y, 
+				   double z) {
+
+  double deg = 57.2957795;
+
+  // INSERT OLGA'S ALGORITHM HERE!
+  // First, compute the center of mass
+  // HOW???
+  //double xcm = 398.91;
+  //double ycm = 132.47;
+  double xcm, ycm;
+  CMPolygon(x, y, &xcm, &ycm);
+
+  // Find the (x,y) of the point at some depth
+  double dist;
+  if (track.GetZenith()==I3Constants::pi/2)  // exactly horizontal track! 
+    dist = NAN;  ///WHAT TO DO??
+  else 
+    dist = (track.GetZ()-z)/cos(track.GetZenith());
+  I3Position p = track.ShiftAlongTrack(dist);
+  double xprime = p.GetX();
+  double yprime = p.GetY();
+  //double xprime = track.GetX();
+  //double yprime = track.GetY();
+
+  // Compute the angle of point P:
+  I3Direction d(xprime-xcm,yprime-ycm,0);
+  double pang = d.CalcPhi();
+  //  double pang = angle(xcm,xprime,ycm,yprime);
+  int n_more = -1;
+  double more = 9999;
+  int n_less = -1;
+  double less = -9999;
+
+  // Now, compute angles for each corner point,
+  // and figure out which two bracket the point
+  if (x.size() != y.size()) log_fatal("X and Y are not the same size");
+  vector<double> ang;
+  ang.resize(x.size());
+  for (unsigned int i=0; i<x.size(); i++) {
+    I3Direction dd(x[i]-xcm,y[i]-ycm,0);
+    ang[i] = dd.CalcPhi();
+    //ang[i] = angle(xcm, x[i], ycm, y[i]);
+
+    // Compute the difference
+    double angdiff = pang-ang[i];
+    if (angdiff<-I3Constants::pi) angdiff += 2*I3Constants::pi;
+    if (angdiff>I3Constants::pi) angdiff -= 2*I3Constants::pi;
+    log_debug ("This (%f, %f) ang = %f, anglediff = %f", 
+	    x[i], y[i], ang[i]*deg, angdiff*deg);
+    if (angdiff==0) { // we found an exact match!
+      less = 0; n_less = i;
+      more = 0; n_more = i;
+    }
+    if (angdiff<0 && angdiff>less) { // we found a new less
+      less = angdiff;
+      n_less = i;
+    }
+    if (angdiff>0 && angdiff<more) { // we found a new more
+      more = angdiff;
+      n_more = i;
+    }
+
+  }
+  
+  double xi, yi;
+  if (less==0 && more==0) {
+    log_debug("An exact match was found... %i", n_more);
+    xi = x[n_more];
+    yi = y[n_more];
+
+  } else {
+    log_debug("PAngle = %f, closest above = %f (%i), closest below = %f (%i)",
+	   pang*deg,
+	   more*deg, n_more,
+	   less*deg, n_less);
+    
+    // Use Olga's notation
+    double x1 = x[n_less]; double y1 = y[n_less];
+    double x2 = x[n_more]; double y2 = y[n_more];
+
+    // Compute intersection point
+    IntersectionOfTwoLines(x1,y1,x2,y2,xcm,ycm,xprime,yprime,&xi,&yi);
+
+    log_debug("point 1: (%f, %f)", x1, y1);
+    log_debug("point 2: (%f, %f)", x2, y2);
+    log_debug("CM     : (%f, %f)", xcm, ycm);
+    log_debug("the point: (%f, %f)", xprime, yprime);
+    log_debug("intersection: (%f, %f)", xi, yi);
+  }
+
+  // Compute ratio of distances
+  double dprime = sqrt((xprime-xcm)*(xprime-xcm) + (yprime-ycm)*(yprime-ycm));
+  double di = sqrt((xi-xcm)*(xi-xcm) + (yi-ycm)*(yi-ycm));
+  log_debug("dprime = %f, di = %f", dprime, di);
+
+  return dprime/di;
 
 }
+
+////// HELPER FUNCTIONS FOR GEOMETRIC STUFF ///////
+
+//------------------------------------
+// Intersection point of two lines
+void I3Cuts::IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
+				    double x3, double y3, double x4, double y4,
+				    double *xi, double *yi) {
+  // Olga's formula for the intersection point of two lines
+    *xi = 
+      (((y2-y1)/(x2-x1)*x1 - (y3-y4)/(x3-x4)*x4) + y4 - y1) / 
+      ((y2-y1)/(x2-x1) - (y3-y4)/(x3-x4));
+    *yi = 
+      (y2-y1)/(x2-x1)*(*xi-x1) + y1;
+}
+
+//------------------------------------
+// Center of mass of an arbitrary polygon or n-gon
+void I3Cuts::CMPolygon(vector<double> xinput, 
+		       vector<double> yinput, 
+		       double *xresult,
+		       double *yresult) {
+  // Chop the n-gon into (n-2) triangles.
+  // Find the center and area of each triangle.
+  // Find the weighted average of the center points
+
+  if (xinput.size() != yinput.size()) log_fatal("X and Y are not the same size");
+  int n = xinput.size();
+  int i;  // a looping variable
+
+  // Everything's great if the points are in order (either 
+  // CW or CCW)... but what if they are not?
+  // Here is a VERY awkward but workable way of sorting the points by angle.
+  // First, take a quick average to get a guess at the CM
+  double xquick = 0;
+  double yquick = 0;
+  for (i=0; i<n; i++) {
+    xquick += xinput[i];
+    yquick += yinput[i];
+  }
+  xquick /= n;
+  yquick /= n;
+  // Make a hash table of angles... it's automatically sorted by angle
+  map<double,int> anglehash;
+  for (i=0; i<n; i++) {
+    I3Direction dd(xinput[i]-xquick,yinput[i]-yquick,0);
+    anglehash[dd.CalcPhi()] = i;
+  }
+  // Create new SORTED border points.
+  // (May be the same as the original points, that's ok too)
+  vector<double> x;
+  vector<double> y;
+  map<double,int>::iterator imap;
+  for (imap = anglehash.begin(); imap != anglehash.end(); imap++) {
+    x.push_back(xinput[imap->second]);
+    y.push_back(yinput[imap->second]);
+  }
+
+  double running_numerator_x = 0;
+  double running_numerator_y = 0;
+  double running_denominator = 0;
+
+  for (i=0; i<n-2; i++) {
+    // Define the triangle
+    double x1 = x[0];
+    double y1 = y[0];
+    double x2 = x[1+i];
+    double y2 = y[1+i];
+    double x3 = x[2+i];
+    double y3 = y[2+i];
+    // Find the midpoint.  It's the intersection point of any two
+    // lines from a corner to a bisector on the other side.
+    double x_mid12 = (x1+x2)/2;
+    double y_mid12 = (y1+y2)/2;
+    double x_mid13 = (x1+x3)/2;
+    double y_mid13 = (y1+y3)/2;
+    // Find the center, which is the intersection of two bisectors
+    double xtriangle, ytriangle;
+    IntersectionOfTwoLines(x3,y3,x_mid12,y_mid12,
+			   x2,y2,x_mid13,y_mid13,
+			   &xtriangle, &ytriangle);
+    // Find the area of the triangle
+    I3Direction d12(x2-x1,y2-y1,0);
+    I3Direction d13(x3-x1,y3-y1,0);
+    double area = 
+      0.5*sqrt((y2-y1)*(y2-y1)+(x2-x1)*(x2-x1))
+         *sqrt((y3-y1)*(y3-y1)+(x3-x1)*(x3-x1))
+      *sin(d12.CalcPhi()-d13.CalcPhi());
+    // Weighted average...
+    running_numerator_x += area*xtriangle;
+    running_numerator_y += area*ytriangle;
+    running_denominator += area;
+	
+    log_debug("Triangle %d: (%f %f), (%f %f), (%f %f)",
+	   i, x1,y1,x2,y2,x3,y3);
+    log_debug("Midpoints (%f %f) and (%f %f)",
+	   x_mid12, y_mid12, x_mid13, y_mid13);
+    log_debug("Intersection point: (%f %f), Area %f",
+	   xtriangle, ytriangle, area);
+  }
+  *xresult = running_numerator_x/running_denominator;
+  *yresult = running_numerator_y/running_denominator;
+
+  log_debug("Results: x = %f (%f), y = %f (%f)",
+	 *xresult, xquick, *yresult, yquick);
+
+  // Sanity-check... make sure the border points are still in order
+  // now that we've got the "real" CM.
+  // If they appear out-of-order here, it means we've got some kind of 
+  // weird shape on our hands, and I'm not sure what to do.
+  double lastangle = -99999;
+  for (i=0; i<n; i++) {
+    I3Direction dd(x[i]-*xresult,y[i]-*yresult,0);
+    double ang = dd.CalcPhi();
+    log_trace("Ang: %f", ang);
+    if (ang < lastangle) 
+      log_fatal("Help!  They are out of order at the end!  Irregular shape!");
+    lastangle = ang;
+  }
+
+
+}
+
+
+
+
 
 

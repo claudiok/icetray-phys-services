@@ -149,3 +149,173 @@ TEST(AllCuts_TiltedTrack)
   ENSURE_DISTANCE(smoothdir,0.119454,0.0001,
 		 "Wrong smoothnessDir calculated.");
 }
+
+TEST(CylinderSize)
+{
+  // AMANDA numbers
+  double H0 = 175;
+  double R0 = 100;
+  double center = 45;
+  //const I3Position detectorcenter(0,0,center);
+
+  double cylsiz;
+  I3Particle t(I3Particle::InfiniteTrack);
+
+  // Check the "cylindersize" parameter
+  // -----------------------------------
+  // Corner-clipper:
+  t.SetPos(100,100,2000);
+  t.SetDir(0.005,0);
+  cylsiz = CylinderSize(t, H0, R0, center);
+  ENSURE_DISTANCE(cylsiz, 1.339, 0.0001, "CylinderSize corner-clipper not working");
+  
+  // Edge-grazer:
+  t.SetPos(50,1000,1000);
+  t.SetDir(45*deg,90*deg);
+  cylsiz = CylinderSize(t, H0, R0, center);
+  ENSURE_DISTANCE(cylsiz, 0.50, 0.0001, "CylinderSize edge-grazer not working");
+
+}
+
+TEST(CMPolygon)
+{
+  vector<double> x;
+  vector<double> y;
+  double xcm, ycm;
+
+  // Simple case: rectangle
+  x.push_back(0);
+  x.push_back(4);
+  x.push_back(4);
+  x.push_back(0);
+  y.push_back(0);
+  y.push_back(0);
+  y.push_back(2);
+  y.push_back(2);
+  CMPolygon(x,y,&xcm,&ycm);
+  ENSURE_EQUAL(xcm,2,"Rectangle CM is wrong (x)");
+  ENSURE_EQUAL(ycm,1,"Rectangle CM is wrong (y)");
+
+  // Another simple case:
+  // Circle, centered on a point other than zero
+  double R = 200;
+  double centerx = 36;
+  double centery = 12;
+  vector<double> xcir;
+  vector<double> ycir;
+  int npoints = 100;
+  for (int i=0; i<npoints; i++) {
+    double th = 360*deg/npoints*i;
+    xcir.push_back(centerx + R*sin(th));
+    ycir.push_back(centery + R*cos(th));
+  }
+  CMPolygon(xcir,ycir,&xcm,&ycm);
+  ENSURE_DISTANCE(xcm,36,0.001, "Circle CM is wrong (x)");
+  ENSURE_DISTANCE(ycm,12,0.001, "Circle CM is wrong (y)");
+  
+  // The IT-16 Rhombus
+  x.clear();
+  y.clear();
+  x.push_back(437.33);
+  x.push_back(171.48);
+  x.push_back(365.71);
+  x.push_back(600.45);
+  y.push_back(-209.85);
+  y.push_back(119.39);
+  y.push_back(428.2);
+  y.push_back(144.06);
+  CMPolygon(x,y,&xcm,&ycm);
+  ENSURE_DISTANCE(xcm,392.0216,0.0001, "IT-16 Rhombus CM is wrong (x)");
+  ENSURE_DISTANCE(ycm,116.4436,0.0001, "IT-16 Rhombus CM is wrong (y)");
+ 
+  // The IT-16 Rhombus with its points out of order
+  // Should be the same answer as above!
+  x.clear();
+  y.clear();
+  x.push_back(437.33);
+  x.push_back(365.71);
+  x.push_back(171.48);
+  x.push_back(600.45);
+  y.push_back(-209.85);
+  y.push_back(428.2);
+  y.push_back(119.39);
+  y.push_back(144.06);
+  CMPolygon(x,y,&xcm,&ycm);
+  ENSURE_DISTANCE(xcm,392.0216,0.0001, "IT-16 out-of-order Rhombus CM is wrong (x)");
+  ENSURE_DISTANCE(ycm,116.4436,0.0001, "IT-16 out-of-order Rhombus CM is wrong (y)");
+ 
+
+}
+
+
+TEST(Containment_Rectangle)
+{
+
+  // Olga's first test-case... a rectangle like this:
+  //   (0,2)             (4,2)
+  //     x   x   x   x   x
+  //     x   x   x   x   x
+  //     x   x   x   x   x
+  //   (0,0)             (4,2)
+  // One-dimensional case
+  vector<double> x;  // = (0,4,4,0);
+  x.push_back(0);
+  x.push_back(4);
+  x.push_back(4);
+  x.push_back(0);
+  vector<double> y;  // = (0,0,2,2);
+  y.push_back(0);
+  y.push_back(0);
+  y.push_back(2);
+  y.push_back(2);
+  double z=0;
+  I3Particle seed;
+  seed.SetShape(I3Particle::InfiniteTrack);
+  seed.SetFitStatus(I3Particle::OK);
+  double c;
+
+  // The "point" is at (1.0,1.5)
+  // Actually, just a little bit off so it doesn't land exactly...
+  seed.SetPos(1.01, 1.5, 0);
+  seed.SetDir(0, 0);
+  c = ContainmentAreaSize(seed, x, y, z);
+  ENSURE_DISTANCE(c, 0.5, 0.0001, "Square C didn't work");
+
+  // The "point" is at (1.0,1.5)
+  // This time make it land exactly (this is a special case)
+  seed.SetPos(1.0, 1.5, 0);
+  seed.SetDir(0, 0);
+  c = ContainmentAreaSize(seed, x, y, z);
+  ENSURE_DISTANCE(c, 0.5, 0.0001, "Square C didn't work");
+
+}
+
+
+TEST(Containment_IceTopRhombus)
+{
+
+  // This time, input the four "corners" of the rhombus of IceTop-16
+  vector<double> x;  // = (0,4,4,0);
+  x.push_back(437.33);
+  x.push_back(171.48);
+  x.push_back(365.71);
+  x.push_back(600.45);
+  vector<double> y;  // = (0,0,2,2);
+  y.push_back(-209.85);
+  y.push_back(119.39);
+  y.push_back(428.2);
+  y.push_back(144.06);
+  double z=0;
+  I3Particle seed;
+  seed.SetShape(I3Particle::InfiniteTrack);
+  seed.SetFitStatus(I3Particle::OK);
+  double c;
+
+  // The "point"
+  seed.SetPos(300, 200, 0);
+  seed.SetDir(0, 0);
+  c = ContainmentAreaSize(seed, x, y, z);
+  //ENSURE_DISTANCE(c, 0.64, 0.005, "Rhombus C didn't work");
+  ENSURE_DISTANCE(c, 0.6501, 0.0001, "Rhombus C didn't work");
+
+}
