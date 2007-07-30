@@ -25,6 +25,7 @@ tray.AddService("I3ReaderServiceFactory","read")(
 tray.AddModule("I3Muxer","muxer")
 
 tray.AddModule("I3EventCounter","counter")(
+    ("EventHeaderName","I3EventHeader"),
     ("CounterStep",100))
 
 tray.AddModule("TrashCan","last")
