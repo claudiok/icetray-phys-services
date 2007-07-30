@@ -46,7 +46,7 @@ I3EventCounter :: I3EventCounter(const I3Context& ctx) :
                "Number of events to process",
                nevents_);
 
-  AddParameter("eventHeaderName_",
+  AddParameter("EventHeaderName",
                "Name of event header in the frame",
                eventHeaderName_);
   AddParameter("PhysicsCounterName",
@@ -86,7 +86,7 @@ void I3EventCounter :: Configure()
   log_info("(%s) NEvents: %i",
            GetName().c_str(), nevents_);
 
-  GetParameter("eventHeaderName_",
+  GetParameter("EventHeaderName",
                eventHeaderName_);
   GetParameter("PhysicsCounterName",
                physicsCounterName_);
