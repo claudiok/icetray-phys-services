@@ -60,9 +60,9 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
       I3StationGeo s = siter->second;
       vector<I3TankGeo>::iterator i = s.begin();
       for(; i != s.end(); i++){
-	i->position.SetX(iter->second.position.GetX() + shiftX);
-	i->position.SetY(iter->second.position.GetY() + shiftY);
-	i->position.SetZ(iter->second.position.GetZ() + shiftZ_);
+	i->position.SetX(i->position.GetX() + shiftX);
+	i->position.SetY(i->position.GetY() + shiftY);
+	i->position.SetZ(i->position.GetZ() + shiftZ_);
       }
       new_geo->stationgeo[station] = s;
     }
