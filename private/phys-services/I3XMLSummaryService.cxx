@@ -141,6 +141,19 @@ I3XMLSummaryService::~I3XMLSummaryService()
 		double sys = (stop_.ru_stime.tv_sec - start_.ru_stime.tv_sec); 
 		sys += double(stop_.ru_stime.tv_usec - start_.ru_stime.tv_usec) / 10E+06; 
 		valuemap_["sys_time"] += sys;
+
+        // integral shared text memory size 
+        valuemap_["shared memory"]+=stop_.ru_ixrss;
+
+        // ru_idrss integral unshared data size 
+        // ru_isrss integral unshared stack size 
+        valuemap_["unshared memory"]+=stop_.ru_idrss+stop_.ru_isrss;
+
+        // swaps
+        valuemap_["memory swaps"] += stop_.ru_nswap;
+
+        // context switches
+        valuemap_["context switches"] += stop_.ru_nvcsw + stop_.ru_nivcsw;
 	}
    	stop_real_ = time(NULL);
 	valuemap_["real_time"] += difftime(stop_real_, start_real_);
