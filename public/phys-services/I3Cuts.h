@@ -219,6 +219,15 @@ namespace I3Cuts
 			      double *xi, double *yi);
 
   /**
+   * A helper function for doing 3-D geometry: the intersection of a line
+   * and a plane.  The line is defined by a track I3Particle, and the plane
+   * is defined by three I3Positions.
+   */
+  I3Position IntersectionOfLineAndPlane(const I3Particle& t,
+					I3Position A, I3Position B, I3Position C);
+
+
+  /**
    * A helper function for doing 2-D geometry: the center of mass of a 2-D 
    * arbitrary shape (n-gon or polygon).
    * This function takes as inputs: vectors representing the x and y coordinates

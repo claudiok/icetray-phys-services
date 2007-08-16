@@ -417,8 +417,6 @@ double I3Cuts::CylinderSize(const I3Particle& track,
     return bestcyl;
   }
   
-  return bestcyl;
-
 }  // end cylindersize function
 
 
@@ -431,7 +429,97 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 				     double zhigh, 
 				     double zlow) {
   // INSERT OLGA'S ALGORITHM HERE!
-  return 13.4;
+  // PART 1: SIDE-CLIPPERS
+  // slice the volume at many depths and find the minimum C
+  int nslices = 1000;
+  double stepsize = (zhigh-zlow)/nslices;
+  double bestcyl = 99999999;
+  double bestz = 99999999;
+  for (double z=zlow; z<=zhigh; z+=stepsize) {
+    // do something
+    double c = ContainmentAreaSize(track, x, y, z);
+    if (c<bestcyl) { 
+      bestcyl = c;
+      bestz = z;
+    }
+  }
+  if (bestz<zhigh && bestz>zlow)
+    return bestcyl;
+  else {
+    log_warn("Side-clipper is out of range...");
+    return NAN;
+  }
+
+  // PART 2: CORNER-CLIPPERS
+  // We're going to loop through each "wall" of the structure, extending
+  // out from the center.
+  
+  // First, compute the center of mass
+  double xcm, ycm, zcm;
+  CMPolygon(x, y, &xcm, &ycm);
+  zcm = (zhigh+zlow)/2;
+  I3Position CM(xcm,ycm,zcm);
+
+  // Now, compute intersection points for each "wall",
+  // and figure out which one has the tracking going
+  // "through the goalposts"
+  if (x.size() != y.size()) log_fatal("X and Y are not the same size");
+  //  vector<double> ang;
+  //ang.resize(x.size());
+  //int n_gotit = -1;
+  for (unsigned int i=0; i<x.size()-1; i++) {
+    I3Position B(x[i],y[i],zhigh);
+    I3Position C(x[i+1],y[i+1],zhigh);
+    I3Position P = IntersectionOfLineAndPlane(track,CM,B,C);
+    // Reset coordinate system to CM
+    B.ShiftCoordSystem(CM);
+    C.ShiftCoordSystem(CM);
+    P.ShiftCoordSystem(CM);
+    // Is it between the goalposts?
+    // We'll use I3Calculator::Angle for this one
+    I3Particle lineB(I3Particle::InfiniteTrack,I3Particle::unknown);
+    lineB.SetPos(0,0,0);
+    lineB.SetDir(B.GetX(), B.GetY(), B.GetZ());
+    I3Particle lineC(I3Particle::InfiniteTrack,I3Particle::unknown);
+    lineC.SetPos(0,0,0);
+    lineC.SetDir(C.GetX(), C.GetY(), C.GetZ());
+    I3Particle lineP(I3Particle::InfiniteTrack,I3Particle::unknown);
+    lineC.SetPos(0,0,0);
+    lineC.SetDir(P.GetX(), P.GetY(), P.GetZ());
+    double theta_wall = I3Calculator::Angle(lineB,lineC);
+    double theta_P = I3Calculator::Angle(lineB,lineP);
+    // Compute the difference
+    double angdiff = theta_wall-theta_P;
+    //if (angdiff<-I3Constants::pi) angdiff += 2*I3Constants::pi;
+    //if (angdiff>I3Constants::pi) angdiff -= 2*I3Constants::pi;
+    log_debug ("This (%f, %f) ang_wall = %f, ang_P = %f, anglediff = %f", 
+	    x[i], y[i], theta_wall*deg, theta_P*deg, angdiff*deg);
+    if (angdiff>=0) { // we found an exact match!
+      log_debug("Found it! %d\n", i);
+
+      // We got the right wall, now compute C = dprime/di:
+      // First, dprime is easy
+      double dprime = P.CalcDistance(lineB.GetPos());
+
+      // Now for di, which is harder... it's the point along lineP
+      // such that the total distance to B and C is minimized
+      double rmin = 9999999;
+      double di = -1;
+      for (double dd=0; dd<dprime*100; dd+=0.05) {
+	I3Position pp = lineP.ShiftAlongTrack(dd);
+	double r = pp.CalcDistance(B) + pp.CalcDistance(C);
+	if (r<rmin) {
+	  rmin = r;
+	  di = dd;
+	}
+      }
+      
+      // Hooray!  We did it!
+      return dprime/di;
+      
+    } // end if we found the right wall
+  } //end loop over the walls
+
 }
 
 
@@ -447,17 +535,15 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 
   // INSERT OLGA'S ALGORITHM HERE!
   // First, compute the center of mass
-  // HOW???
-  //double xcm = 398.91;
-  //double ycm = 132.47;
   double xcm, ycm;
   CMPolygon(x, y, &xcm, &ycm);
 
   // Find the (x,y) of the point at some depth
   double dist;
-  if (track.GetZenith()==I3Constants::pi/2)  // exactly horizontal track! 
+  if (track.GetZenith()==I3Constants::pi/2) { // exactly horizontal track! 
+    log_error("ContainmentAreaSize can't handle perfectly horizontal tracks");
     dist = NAN;  ///WHAT TO DO??
-  else 
+  } else 
     dist = (track.GetZ()-z)/cos(track.GetZenith());
   I3Position p = track.ShiftAlongTrack(dist);
   double xprime = p.GetX();
@@ -543,7 +629,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 ////// HELPER FUNCTIONS FOR GEOMETRIC STUFF ///////
 
 //------------------------------------
-// Intersection point of two lines
+// Intersection point of two lines (in 2-d)
 void I3Cuts::IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
 				    double x3, double y3, double x4, double y4,
 				    double *xi, double *yi) {
@@ -553,6 +639,55 @@ void I3Cuts::IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
       ((y2-y1)/(x2-x1) - (y3-y4)/(x3-x4));
     *yi = 
       (y2-y1)/(x2-x1)*(*xi-x1) + y1;
+}
+
+
+//------------------------------------
+// Intersection point of a line and a plane (in 3-d)
+I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
+					      I3Position A, I3Position B, I3Position C) {
+  // First find the vector of the normal out of the plane.  This is (B-A)x(C-A)
+  // Get the components to be cross-producted
+  double bx = B.GetX()-A.GetX();
+  double by = B.GetY()-A.GetY();
+  double bz = B.GetZ()-A.GetZ();
+  double cx = C.GetX()-A.GetX();
+  double cy = C.GetY()-A.GetY();
+  double cz = C.GetZ()-A.GetZ();
+  // The components of the normal vector
+  double nx = by*cz - bz*cy;
+  double ny = - bx*cz + bz*cx;
+  double nz = bx*cy - by*cx;
+
+  // More of Olga's variables which are needed
+  // The track direction components
+  I3Direction tdir = t.GetDir();
+  double a = tdir.GetX();
+  double b = tdir.GetY();
+  double c = tdir.GetZ();
+  // The track vertex components
+  I3Position tpos = t.GetPos();
+  double x1 = tpos.GetX();
+  double y1 = tpos.GetY();
+  double z1 = tpos.GetZ();
+  // The "origin" of the three points defining the plane
+  double ax = A.GetX();
+  double ay = A.GetY();
+  double az = A.GetZ();
+
+  // Olga's formula for the intersection point of a line with a plane:
+  double y = 
+    ( nx*(y1*a/b - x1 + ax) + ay*ny + nz*(y1*c/b - z1 + az) ) /
+    ( (nx*a + nz*c)/b + ny );
+  double x = 
+    (y-y1)*a/b + x1;
+  double z =
+    (y-y1)*c/b + z1;
+  
+  // Output the solution as an I3Position
+  I3Position result(x,y,z);
+  return result;
+
 }
 
 //------------------------------------

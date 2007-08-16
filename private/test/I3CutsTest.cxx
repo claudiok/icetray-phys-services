@@ -177,6 +177,64 @@ TEST(CylinderSize)
 
 }
 
+TEST(Containment_CylinderSizeAgain)
+{
+  // AMANDA numbers
+  double H0 = 175;
+  double R = 100;
+  double center = 45;
+  //const I3Position detectorcenter(0,0,center);
+
+  // Circle, centered on a point other than zero
+  double centerx = 0;
+  double centery = 0;
+  vector<double> xcir;
+  vector<double> ycir;
+  int npoints = 200;
+  for (int i=0; i<npoints; i++) {
+    double th = 360*deg/npoints*i;
+    xcir.push_back(centerx + R*sin(th));
+    ycir.push_back(centery + R*cos(th));
+  }
+
+  double cylsiz;
+  I3Particle t(I3Particle::InfiniteTrack);
+
+  // Check the "cylindersize" parameter
+  // -----------------------------------
+  // Corner-clipper:
+  t.SetPos(100,100,2000);
+  t.SetDir(0.005,0);
+  cylsiz = ContainmentVolumeSize(t, xcir, ycir, center+H0, center-H0);
+  ENSURE_DISTANCE(cylsiz, 1.339, 0.0001, "CylinderSize corner-clipper not working");
+  
+  // Edge-grazer:
+  t.SetPos(50,1000,1000);
+  t.SetDir(45*deg,90*deg);
+  cylsiz = ContainmentVolumeSize(t, xcir, ycir, center+H0, center-H0);
+  ENSURE_DISTANCE(cylsiz, 0.50, 0.0001, "CylinderSize edge-grazer not working");
+
+}
+
+
+TEST(LPIntersection)
+{
+  // Intersection of line and plane?
+  // Olga's test cube
+  I3Position A(0,0,0);
+  I3Position B(1,1,1);
+  I3Position C(1,-1,1);
+  // Olga's test track
+  I3Particle t(I3Particle::InfiniteTrack, I3Particle::unknown);
+  t.SetPos(0,0,2);
+  t.SetThetaPhi(30*I3Constants::pi/180, 45*I3Constants::pi/180);
+  I3Position answer = IntersectionOfLineAndPlane(t,A,B,C);
+  ENSURE_DISTANCE(answer.GetX(), -1.766, 0.001, "IntersectionX not right");
+  ENSURE_DISTANCE(answer.GetY(), -1.766, 0.001, "IntersectionX not right");
+  ENSURE_DISTANCE(answer.GetZ(), 0.266, 0.001, "IntersectionX not right");
+
+}
+
 TEST(CMPolygon)
 {
   vector<double> x;
