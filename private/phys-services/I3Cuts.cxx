@@ -5,6 +5,12 @@
 #include "phys-services/I3Calculator.h"
 #include <cassert>
 
+#define CROSS_AND_DOT_PRODUCTS 1
+
+#if CROSS_AND_DOT_PRODUCTS
+#include <TVector3.h>
+#endif
+
 using namespace I3Constants;
 using namespace I3Calculator;
 
@@ -428,6 +434,11 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 				     vector<double> y, 
 				     double zhigh, 
 				     double zlow) {
+  // Todo:
+  // Add the "low" walls
+  // Make sure the border points are in order
+  // I'm not sure the side-clipper algorithm is valid...
+
   // INSERT OLGA'S ALGORITHM HERE!
   // PART 1: SIDE-CLIPPERS
   // slice the volume at many depths and find the minimum C
@@ -435,25 +446,29 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   double stepsize = (zhigh-zlow)/nslices;
   double bestcyl = 99999999;
   double bestz = 99999999;
-  for (double z=zlow; z<=zhigh; z+=stepsize) {
+  // Be sure to cover both ends adequately...
+  for (double z=zlow-stepsize; z<=zhigh+stepsize; z+=stepsize) {
     // do something
     double c = ContainmentAreaSize(track, x, y, z);
+    log_info("Depth %f: c= %f", z, c);
     if (c<bestcyl) { 
       bestcyl = c;
       bestz = z;
     }
   }
-  if (bestz<zhigh && bestz>zlow)
-    return bestcyl;
-  else {
+  // Is it within the allowable range?  
+  if (bestz>zhigh || bestz<zlow) {
     log_warn("Side-clipper is out of range...");
-    return NAN;
+    bestcyl = NAN;
   }
 
   // PART 2: CORNER-CLIPPERS
   // We're going to loop through each "wall" of the structure, extending
   // out from the center.
-  
+  //printf("We're computing a corner-clipper!");
+  double bestcorner = 9999999;
+    
+
   // First, compute the center of mass
   double xcm, ycm, zcm;
   CMPolygon(x, y, &xcm, &ycm);
@@ -476,7 +491,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     C.ShiftCoordSystem(CM);
     P.ShiftCoordSystem(CM);
     // Is it between the goalposts?
-    // We'll use I3Calculator::Angle for this one
+    // NOT WORKING YET... NEED TO GET DIRECTIONALITY INTO IT...
     I3Particle lineB(I3Particle::InfiniteTrack,I3Particle::unknown);
     lineB.SetPos(0,0,0);
     lineB.SetDir(B.GetX(), B.GetY(), B.GetZ());
@@ -484,41 +499,47 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     lineC.SetPos(0,0,0);
     lineC.SetDir(C.GetX(), C.GetY(), C.GetZ());
     I3Particle lineP(I3Particle::InfiniteTrack,I3Particle::unknown);
-    lineC.SetPos(0,0,0);
-    lineC.SetDir(P.GetX(), P.GetY(), P.GetZ());
+    lineP.SetPos(0,0,0);
+    lineP.SetDir(P.GetX(), P.GetY(), P.GetZ());
     double theta_wall = I3Calculator::Angle(lineB,lineC);
     double theta_P = I3Calculator::Angle(lineB,lineP);
+
     // Compute the difference
     double angdiff = theta_wall-theta_P;
     //if (angdiff<-I3Constants::pi) angdiff += 2*I3Constants::pi;
     //if (angdiff>I3Constants::pi) angdiff -= 2*I3Constants::pi;
-    log_debug ("This (%f, %f) ang_wall = %f, ang_P = %f, anglediff = %f", 
+    log_info("This (%f, %f) ang_wall = %f, ang_P = %f, anglediff = %f", 
 	    x[i], y[i], theta_wall*deg, theta_P*deg, angdiff*deg);
     if (angdiff>=0) { // we found an exact match!
-      log_debug("Found it! %d\n", i);
+      log_info("Found it! %d", i);
 
       // We got the right wall, now compute C = dprime/di:
       // First, dprime is easy
       double dprime = P.CalcDistance(lineB.GetPos());
 
       // Now for di, which is harder... it's the point along lineP
-      // such that the total distance to B and C is minimized
-      double rmin = 9999999;
-      double di = -1;
-      for (double dd=0; dd<dprime*100; dd+=0.05) {
-	I3Position pp = lineP.ShiftAlongTrack(dd);
-	double r = pp.CalcDistance(B) + pp.CalcDistance(C);
-	if (r<rmin) {
-	  rmin = r;
-	  di = dd;
-	}
-      }
+      // such that the z is zhigh (that intersects the flat plane)
+      // This is probably too slow and clumsy, and could be made faster.
+      I3Position flatCM(CM.GetX(),CM.GetY(),zhigh);
+      I3Position pi = IntersectionOfLineAndPlane(lineP,flatCM,B,C);
+      double di = pi.CalcDistance(lineB.GetPos());
       
       // Hooray!  We did it!
-      return dprime/di;
-      
+      bestcorner = dprime/di;
+      log_info("Answer: %f/%f = %f", dprime, di, bestcorner);
+
     } // end if we found the right wall
   } //end loop over the walls
+
+  // Which is smaller?
+  
+  if ((bestcorner<bestcyl)||isnan(bestcyl)) {
+    log_info("I found a corner-clipper");
+    return bestcorner;
+  } else {
+    log_info("I found a side-clipper");
+    return bestcyl;
+  }
 
 }
 
@@ -574,17 +595,22 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
     double angdiff = pang-ang[i];
     if (angdiff<-I3Constants::pi) angdiff += 2*I3Constants::pi;
     if (angdiff>I3Constants::pi) angdiff -= 2*I3Constants::pi;
-    log_debug ("This (%f, %f) ang = %f, anglediff = %f", 
+
+    // Is this the one?
+    log_debug ("This (%f, %f) ang = %f, anglediff = %e", 
 	    x[i], y[i], ang[i]*deg, angdiff*deg);
-    if (angdiff==0) { // we found an exact match!
+    double verysmall = 1e-12;  // <<----- Careful!! Machine dependent?
+                               // I had to stick this in because sometimes
+                               // "-0" or -5.088887e-14 was sneaking in.
+    if (angdiff<verysmall && angdiff>-verysmall) { // we found an exact match!
       less = 0; n_less = i;
       more = 0; n_more = i;
     }
-    if (angdiff<0 && angdiff>less) { // we found a new less
+    else if (angdiff<0 && angdiff>less) { // we found a new less
       less = angdiff;
       n_less = i;
     }
-    if (angdiff>0 && angdiff<more) { // we found a new more
+    else if (angdiff>0 && angdiff<more) { // we found a new more
       more = angdiff;
       n_more = i;
     }
@@ -598,7 +624,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
     yi = y[n_more];
 
   } else {
-    log_debug("PAngle = %f, closest above = %f (%i), closest below = %f (%i)",
+    log_trace("PAngle = %f, closest above = %f (%i), closest below = %f (%i)",
 	   pang*deg,
 	   more*deg, n_more,
 	   less*deg, n_less);
@@ -633,15 +659,37 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 void I3Cuts::IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
 				    double x3, double y3, double x4, double y4,
 				    double *xi, double *yi) {
+#if 0
   // Olga's formula for the intersection point of two lines
-    *xi = 
-      (((y2-y1)/(x2-x1)*x1 - (y3-y4)/(x3-x4)*x4) + y4 - y1) / 
-      ((y2-y1)/(x2-x1) - (y3-y4)/(x3-x4));
-    *yi = 
-      (y2-y1)/(x2-x1)*(*xi-x1) + y1;
+  *xi = 
+    (((y2-y1)/(x2-x1)*x1 - (y3-y4)/(x3-x4)*x4) + y4 - y1) / 
+    ((y2-y1)/(x2-x1) - (y3-y4)/(x3-x4));
+  *yi = 
+    (y2-y1)/(x2-x1)*(*xi-x1) + y1;
+#else
+  // An alternative method I found on the web, less prone to divide-by-zeros
+  // From: http://www.pdas.com/lineint.htm
+  //  ...based on: http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
+  double a1 = y2-y1;
+  double b1 = x1-x2;
+  double c1 = x2*y1 - x1*y2;  //{ a1*x + b1*y + c1 = 0 is line 1 }
+
+  double a2 = y4-y3;
+  double b2 = x3-x4;
+  double c2 = x4*y3 - x3*y4;  //{ a2*x + b2*y + c2 = 0 is line 2 }
+
+  double denom = a1*b2 - a2*b1;
+  if (denom == 0) 
+    log_fatal("Denomonator zero!");
+
+  *xi =(b1*c2 - b2*c1)/denom;
+  *yi =(a2*c1 - a1*c2)/denom;
+#endif
+
 }
 
-
+#if CROSS_AND_DOT_PRODUCTS==0
+// Olga's way
 //------------------------------------
 // Intersection point of a line and a plane (in 3-d)
 I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
@@ -675,20 +723,115 @@ I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
   double ay = A.GetY();
   double az = A.GetZ();
 
+  log_trace("(Ax, Ay, Az) = (%f, %f, %f)", ax, ay, az);
+  log_trace("(nx, ny, nz) = (%f, %f, %f)", nx, ny, nz);
+  log_trace("(x1, y1, z1) = (%f, %f, %f)", x1, y1, z1);
+  log_trace("(a, b, c) = (%f, %f, %f)", a, b, c);
+
   // Olga's formula for the intersection point of a line with a plane:
-  double y = 
-    ( nx*(y1*a/b - x1 + ax) + ay*ny + nz*(y1*c/b - z1 + az) ) /
-    ( (nx*a + nz*c)/b + ny );
+  //double y = 
+  //  ( nx*(y1*a/b - x1 + ax) + ay*ny + nz*(y1*c/b - z1 + az) ) /
+  //  ( (nx*a + nz*c)/b + ny );
+  //double x = 
+  //  (y-y1)*a/b + x1;
+  //double z =
+  //  (y-y1)*c/b + z1;
+
+  // Version without divide by b (multiply whole thing by b)
+  // For the others... rotate the coordinates
   double x = 
-    (y-y1)*a/b + x1;
+  //(y-y1)*a/b + x1;
+    ( nz*(x1*c - z1*a + az*a) + ax*nx*a + ny*(x1*b - y1*a + ay*a) ) /
+    ( (nz*c + ny*b) + nx*a );
+  double y = 
+    ( nx*(y1*a - x1*b + ax*b) + ay*ny*b + nz*(y1*c - z1*b + az*b) ) /
+    ( (nx*a + nz*c) + ny*b );
   double z =
-    (y-y1)*c/b + z1;
+    // (y-y1)*c/b + z1;
+    ( ny*(z1*b - y1*c + ay*c) + az*nz*c + nx*(z1*a - x1*c + ax*c) ) /
+    ( (ny*b + nx*a) + nz*c );
   
   // Output the solution as an I3Position
+  log_debug("L-P intersection: (x, y, z ) = (%f, %f, %f)", x, y, z);
   I3Position result(x,y,z);
   return result;
 
 }
+
+#else
+//------------------------------------
+// Intersection point of a line and a plane (in 3-d)
+// THE DOT- AND CROSS-PRODUCT VERSION
+I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
+					      I3Position A, I3Position B, I3Position C) {
+  TVector3 vA(A.GetX(), A.GetY(), A.GetZ());
+  TVector3 vB(B.GetX(), B.GetY(), B.GetZ());
+  TVector3 vC(C.GetX(), C.GetY(), C.GetZ());
+  TVector3 vBminusA = vB-vA;
+  TVector3 vn =  vBminusA.Cross(vC-vA);
+  //printf("\n");
+  //vn.Print();
+
+  // The track direction components
+  I3Direction tdir = t.GetDir();
+  TVector3 vd(tdir.GetX(), tdir.GetY(), tdir.GetZ());
+  // The track vertex components
+  I3Position tpos = t.GetPos();
+  TVector3 vx(tpos.GetX(), tpos.GetY(), tpos.GetZ());
+
+  //vx.Print();
+  //vd.Print();
+
+  TVector3 answer = (vn.Cross(vx.Cross(vd)) + vd*(vn.Dot(vA)))*(1/vn.Dot(vd));
+  //answer.Print();
+
+  // Output the solution as an I3Position
+  I3Position result(answer.X(),answer.Y(),answer.Z());
+  return result;
+
+}
+#endif
+
+
+/*
+//------------------------------------
+// Put the border points in order around the center
+void I3Cuts::PutPointsInOrder(vector<double> xinput, 
+			      vector<double> yinput, 
+			      double xcenter, double ycenter,
+			      bool justcheck) {
+  if (xinput.size() != yinput.size()) log_fatal("X and Y are not the same size");
+  int n = xinput.size();
+  
+  // Make a hash table of angles... it's automatically sorted by angle
+  map<double,int> anglehash;
+  double lastangle = -99999;
+  for (i=0; i<n; i++) {
+    I3Direction dd(xinput[i]-xcenter,yinput[i]-ycenter,0);
+    double ang = dd.CalcPhi();
+    log_trace("Ang: %f", ang);
+    if (ang < lastangle && justcheck) 
+      log_fatal("Help!  They are out of order at the end!  Irregular shape!");
+    anglehash[ang] = i;
+    lastangle = ang;
+  }
+  
+  if (!justcheck) {
+    // Create new SORTED border points.
+    // (May be the same as the original points, that's ok too)
+    vector<double> x;
+    vector<double> y;
+    map<double,int>::iterator imap;
+    for (imap = anglehash.begin(); imap != anglehash.end(); imap++) {
+      x.push_back(xinput[imap->second]);
+      y.push_back(yinput[imap->second]);
+    }
+    // Copy 'em over
+    // IS THIS REALLY A GOOD IDEA...?
+  }
+}
+*/
+
 
 //------------------------------------
 // Center of mass of an arbitrary polygon or n-gon
@@ -767,17 +910,17 @@ void I3Cuts::CMPolygon(vector<double> xinput,
     running_numerator_y += area*ytriangle;
     running_denominator += area;
 	
-    log_debug("Triangle %d: (%f %f), (%f %f), (%f %f)",
+    log_trace("Triangle %d: (%f %f), (%f %f), (%f %f)",
 	   i, x1,y1,x2,y2,x3,y3);
-    log_debug("Midpoints (%f %f) and (%f %f)",
+    log_trace("Midpoints (%f %f) and (%f %f)",
 	   x_mid12, y_mid12, x_mid13, y_mid13);
-    log_debug("Intersection point: (%f %f), Area %f",
+    log_trace("Intersection point: (%f %f), Area %f",
 	   xtriangle, ytriangle, area);
   }
   *xresult = running_numerator_x/running_denominator;
   *yresult = running_numerator_y/running_denominator;
 
-  log_debug("Results: x = %f (%f), y = %f (%f)",
+  log_trace("Results: x = %f (%f), y = %f (%f)",
 	 *xresult, xquick, *yresult, yquick);
 
   // Sanity-check... make sure the border points are still in order

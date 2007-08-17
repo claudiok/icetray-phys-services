@@ -158,46 +158,19 @@ TEST(CylinderSize)
   double center = 45;
   //const I3Position detectorcenter(0,0,center);
 
-  double cylsiz;
-  I3Particle t(I3Particle::InfiniteTrack);
-
-  // Check the "cylindersize" parameter
-  // -----------------------------------
-  // Corner-clipper:
-  t.SetPos(100,100,2000);
-  t.SetDir(0.005,0);
-  cylsiz = CylinderSize(t, H0, R0, center);
-  ENSURE_DISTANCE(cylsiz, 1.339, 0.0001, "CylinderSize corner-clipper not working");
-  
-  // Edge-grazer:
-  t.SetPos(50,1000,1000);
-  t.SetDir(45*deg,90*deg);
-  cylsiz = CylinderSize(t, H0, R0, center);
-  ENSURE_DISTANCE(cylsiz, 0.50, 0.0001, "CylinderSize edge-grazer not working");
-
-}
-
-TEST(Containment_CylinderSizeAgain)
-{
-  // AMANDA numbers
-  double H0 = 175;
-  double R = 100;
-  double center = 45;
-  //const I3Position detectorcenter(0,0,center);
-
   // Circle, centered on a point other than zero
   double centerx = 0;
   double centery = 0;
   vector<double> xcir;
   vector<double> ycir;
-  int npoints = 200;
+  int npoints = 500;
   for (int i=0; i<npoints; i++) {
     double th = 360*deg/npoints*i;
-    xcir.push_back(centerx + R*sin(th));
-    ycir.push_back(centery + R*cos(th));
+    xcir.push_back(centerx + R0*sin(th));
+    ycir.push_back(centery + R0*cos(th));
   }
 
-  double cylsiz;
+  double cylsiz, cylsiz2;
   I3Particle t(I3Particle::InfiniteTrack);
 
   // Check the "cylindersize" parameter
@@ -205,20 +178,61 @@ TEST(Containment_CylinderSizeAgain)
   // Corner-clipper:
   t.SetPos(100,100,2000);
   t.SetDir(0.005,0);
-  cylsiz = ContainmentVolumeSize(t, xcir, ycir, center+H0, center-H0);
-  ENSURE_DISTANCE(cylsiz, 1.339, 0.0001, "CylinderSize corner-clipper not working");
-  
+  cylsiz = CylinderSize(t, H0, R0, center);
+  ENSURE_DISTANCE(cylsiz, 1.339, 0.001, "CylinderSize corner-clipper not working");
+
+  // Check it against the "Volume" method
+  cylsiz2 = ContainmentVolumeSize(t, xcir, ycir, center+H0, center-H0);
+  ENSURE_DISTANCE(cylsiz2, cylsiz, 0.001, "CylinderSize corner-clipper not working");
+
   // Edge-grazer:
   t.SetPos(50,1000,1000);
   t.SetDir(45*deg,90*deg);
-  cylsiz = ContainmentVolumeSize(t, xcir, ycir, center+H0, center-H0);
-  ENSURE_DISTANCE(cylsiz, 0.50, 0.0001, "CylinderSize edge-grazer not working");
+  cylsiz = CylinderSize(t, H0, R0, center);
+  ENSURE_DISTANCE(cylsiz, 0.500, 0.001, "CylinderSize edge-grazer not working");
+
+  // Check it against the "Volume" method
+  cylsiz2 = ContainmentVolumeSize(t, xcir, ycir, center+H0, center-H0);
+  ENSURE_DISTANCE(cylsiz2, cylsiz, 0.001, "CylinderSize edge-grazer not working");
+
+}
+
+TEST(Containment_Volume)
+{
+  // Olga's simple cube and track
+  vector<double> x;
+  vector<double> y;
+  x.push_back(1);
+  x.push_back(1);
+  x.push_back(-1);
+  x.push_back(-1);
+  y.push_back(1);
+  y.push_back(-1);
+  y.push_back(-1);
+  y.push_back(1);
+
+  double c;
+  I3Particle t(I3Particle::InfiniteTrack);
+
+  // A corner-clipper track
+  t.SetPos(0,0,2);
+  t.SetThetaPhi((180-30)*I3Constants::pi/180, 45*I3Constants::pi/180);
+  c = ContainmentVolumeSize(t, x, y, 1, -1);
+  ENSURE_DISTANCE(c, 0.579796, 0.00001, "ContainmentVolume corner-clipper cube");
+
+  // A side-clipper track
+  t.SetPos(0,2,1);
+  t.SetThetaPhi((180-80)*I3Constants::pi/180, -45*I3Constants::pi/180);
+  c = ContainmentVolumeSize(t, x, y, 1, -1);
+  ENSURE_DISTANCE(c, 1.002550, 0.00001, "ContainmentVolume side-clipper cube");
+  
 
 }
 
 
 TEST(LPIntersection)
 {
+ 
   // Intersection of line and plane?
   // Olga's test cube
   I3Position A(0,0,0);
@@ -227,12 +241,12 @@ TEST(LPIntersection)
   // Olga's test track
   I3Particle t(I3Particle::InfiniteTrack, I3Particle::unknown);
   t.SetPos(0,0,2);
-  t.SetThetaPhi(30*I3Constants::pi/180, 45*I3Constants::pi/180);
+  t.SetThetaPhi((180-30)*I3Constants::pi/180, 45*I3Constants::pi/180);
   I3Position answer = IntersectionOfLineAndPlane(t,A,B,C);
-  ENSURE_DISTANCE(answer.GetX(), -1.766, 0.001, "IntersectionX not right");
-  ENSURE_DISTANCE(answer.GetY(), -1.766, 0.001, "IntersectionX not right");
-  ENSURE_DISTANCE(answer.GetZ(), 0.266, 0.001, "IntersectionX not right");
-
+  ENSURE_DISTANCE(answer.GetX(), 0.579796, 0.00001, "IntersectionX not right");
+  ENSURE_DISTANCE(answer.GetY(), 0.579796, 0.00001, "IntersectionY not right");
+  ENSURE_DISTANCE(answer.GetZ(), 0.579796, 0.00001, "IntersectionZ not right");
+  
 }
 
 TEST(CMPolygon)
@@ -306,6 +320,34 @@ TEST(CMPolygon)
 }
 
 
+TEST(Containment_Square)
+{
+
+  // Top square from Olga's test cube
+  vector<double> x;  
+  x.push_back(1);
+  x.push_back(1);
+  x.push_back(-1);
+  x.push_back(-1);
+  vector<double> y;  
+  y.push_back(1);
+  y.push_back(-1);
+  y.push_back(-1);
+  y.push_back(1);
+  double z=0.9520;  // this is a problematic z for some reason
+
+  // Olga's test track
+  I3Particle t(I3Particle::InfiniteTrack, I3Particle::unknown);
+  t.SetPos(0,0,2);
+  t.SetThetaPhi((180-30)*I3Constants::pi/180, 45*I3Constants::pi/180);
+  double c;
+
+  c = ContainmentAreaSize(t, x, y, z);
+  ENSURE_DISTANCE(c, 0.42784, 0.0001, "Square C didn't work");
+
+}
+
+
 TEST(Containment_Rectangle)
 {
 
@@ -337,14 +379,14 @@ TEST(Containment_Rectangle)
   seed.SetPos(1.01, 1.5, 0);
   seed.SetDir(0, 0);
   c = ContainmentAreaSize(seed, x, y, z);
-  ENSURE_DISTANCE(c, 0.5, 0.0001, "Square C didn't work");
+  ENSURE_DISTANCE(c, 0.5, 0.0001, "Rectangle C didn't work");
 
   // The "point" is at (1.0,1.5)
   // This time make it land exactly (this is a special case)
   seed.SetPos(1.0, 1.5, 0);
   seed.SetDir(0, 0);
   c = ContainmentAreaSize(seed, x, y, z);
-  ENSURE_DISTANCE(c, 0.5, 0.0001, "Square C didn't work");
+  ENSURE_DISTANCE(c, 0.5, 0.0001, "Rectangle C didn't work");
 
 }
 
