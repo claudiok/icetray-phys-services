@@ -434,11 +434,14 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 				     vector<double> y, 
 				     double zhigh, 
 				     double zlow) {
+  double deg = 57.2957795;
+
   // Todo:
   // Add the "low" walls
   // Make sure the border points are in order
   // I'm not sure the side-clipper algorithm is valid...
 
+  /*
   // INSERT OLGA'S ALGORITHM HERE!
   // PART 1: SIDE-CLIPPERS
   // slice the volume at many depths and find the minimum C
@@ -461,11 +464,10 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     log_warn("Side-clipper is out of range...");
     bestcyl = NAN;
   }
+  */
 
-  // PART 2: CORNER-CLIPPERS
   // We're going to loop through each "wall" of the structure, extending
   // out from the center.
-  //printf("We're computing a corner-clipper!");
   double bestcorner = 9999999;
     
 
@@ -475,72 +477,125 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   zcm = (zhigh+zlow)/2;
   I3Position CM(xcm,ycm,zcm);
 
+  if (x.size() != y.size()) log_fatal("X and Y are not the same size");
+  int n = x.size();
+
+  // Set up pairs of points which make "walls"
+  vector<I3Position> pairs1;
+  vector<I3Position> pairs2;
+  for (int i=0; i<n-1; i++) {
+    // The high pair
+    I3Position B(x[i],y[i],zhigh);
+    I3Position C(x[i+1],y[i+1],zhigh);
+    pairs1.push_back(B);
+    pairs2.push_back(C);
+    // The low pair
+    B.SetPosition(x[i],y[i],zlow);
+    C.SetPosition(x[i+1],y[i+1],zlow);
+    pairs1.push_back(B);
+    pairs2.push_back(C);
+    // The vertical pair
+    B.SetPosition(x[i],y[i],zhigh);
+    C.SetPosition(x[i],y[i],zlow);
+    pairs1.push_back(B);
+    pairs2.push_back(C);
+  }
+  // The last vertical pair which was left out
+  I3Position B(x[n-1],y[n-1],zhigh);
+  I3Position C(x[n-1],y[n-1],zlow);
+  pairs1.push_back(B);
+  pairs2.push_back(C);
+  
+      
+
   // Now, compute intersection points for each "wall",
   // and figure out which one has the tracking going
   // "through the goalposts"
-  if (x.size() != y.size()) log_fatal("X and Y are not the same size");
-  //  vector<double> ang;
-  //ang.resize(x.size());
-  //int n_gotit = -1;
-  for (unsigned int i=0; i<x.size()-1; i++) {
-    I3Position B(x[i],y[i],zhigh);
-    I3Position C(x[i+1],y[i+1],zhigh);
+  for (unsigned int i=0; i<pairs1.size(); i++) {
+    
+    I3Position B(pairs1[i]);
+    I3Position C(pairs2[i]);
     I3Position P = IntersectionOfLineAndPlane(track,CM,B,C);
     // Reset coordinate system to CM
     B.ShiftCoordSystem(CM);
     C.ShiftCoordSystem(CM);
     P.ShiftCoordSystem(CM);
     // Is it between the goalposts?
-    // NOT WORKING YET... NEED TO GET DIRECTIONALITY INTO IT...
-    I3Particle lineB(I3Particle::InfiniteTrack,I3Particle::unknown);
-    lineB.SetPos(0,0,0);
-    lineB.SetDir(B.GetX(), B.GetY(), B.GetZ());
-    I3Particle lineC(I3Particle::InfiniteTrack,I3Particle::unknown);
-    lineC.SetPos(0,0,0);
-    lineC.SetDir(C.GetX(), C.GetY(), C.GetZ());
-    I3Particle lineP(I3Particle::InfiniteTrack,I3Particle::unknown);
-    lineP.SetPos(0,0,0);
-    lineP.SetDir(P.GetX(), P.GetY(), P.GetZ());
-    double theta_wall = I3Calculator::Angle(lineB,lineC);
-    double theta_P = I3Calculator::Angle(lineB,lineP);
+    TVector3 vB(B.GetX(), B.GetY(), B.GetZ());
+    TVector3 vC(C.GetX(), C.GetY(), C.GetZ());
+    TVector3 vP(P.GetX(), P.GetY(), P.GetZ());
+    TVector3 vn = vB.Cross(vC);
+    log_trace("Pre-rotation: (%f, %f, %f) (%f, %f, %f) (%f, %f, %f)\n",
+             vB.X(), vB.Y(), vB.Z(),
+             vC.X(), vC.Y(), vC.Z(),
+             vP.X(), vP.Y(), vP.Z()
+             );
+    // First rotate so that n-hat lines up with the x-axis
+    double nphi = vn.Phi();
+    vB.RotateZ(-nphi);
+    vC.RotateZ(-nphi);
+    vP.RotateZ(-nphi);
+    // Now rotate so that n-hat goes straight up the z-axis
+    double ntheta = vn.Theta();
+    vB.RotateY(-ntheta);
+    vC.RotateY(-ntheta);
+    vP.RotateY(-ntheta);
+    // Now put B on the x-axis
+    double bphi = vB.Phi();
+    vB.RotateZ(-bphi);
+    vC.RotateZ(-bphi);
+    vP.RotateZ(-bphi);
+    log_trace("Rotated: (%f, %f, %f) (%f, %f, %f) (%f, %f, %f)\n",
+	     vB.X(), vB.Y(), vB.Z(),
+	     vC.X(), vC.Y(), vC.Z(),
+	     vP.X(), vP.Y(), vP.Z()
+	     );
 
+    double theta_wall = vC.DeltaPhi(vB);
+    double theta_P = vP.DeltaPhi(vB);
+    if (theta_wall<0) theta_wall += 2*I3Constants::pi;
+    if (theta_P<0) theta_P += 2*I3Constants::pi;
+    
     // Compute the difference
-    double angdiff = theta_wall-theta_P;
-    //if (angdiff<-I3Constants::pi) angdiff += 2*I3Constants::pi;
-    //if (angdiff>I3Constants::pi) angdiff -= 2*I3Constants::pi;
-    log_info("This (%f, %f) ang_wall = %f, ang_P = %f, anglediff = %f", 
-	    x[i], y[i], theta_wall*deg, theta_P*deg, angdiff*deg);
-    if (angdiff>=0) { // we found an exact match!
-      log_info("Found it! %d", i);
+    log_trace(" %d          ang_wall = %f, ang_P = %f", 
+	     i, theta_wall*deg, theta_P*deg);
+    if (theta_wall>theta_P) { // we found an exact match!
+      log_trace("Found it! %d", i);
 
       // We got the right wall, now compute C = dprime/di:
       // First, dprime is easy
-      double dprime = P.CalcDistance(lineB.GetPos());
+      I3Position origin(0,0,0);
+      double dprime = P.CalcDistance(origin);
 
       // Now for di, which is harder... it's the point along lineP
-      // such that the z is zhigh (that intersects the flat plane)
-      // This is probably too slow and clumsy, and could be made faster.
-      I3Position flatCM(CM.GetX(),CM.GetY(),zhigh);
-      I3Position pi = IntersectionOfLineAndPlane(lineP,flatCM,B,C);
-      double di = pi.CalcDistance(lineB.GetPos());
-      
-      // Hooray!  We did it!
-      bestcorner = dprime/di;
-      log_info("Answer: %f/%f = %f", dprime, di, bestcorner);
+      // which intersects the line from B to C.
+      double dix, diy;
+      IntersectionOfTwoLines(0,0,vP.X(),vP.Y(),
+			     vB.X(),vB.Y(),vC.X(),vC.Y(),
+			     &dix, &diy);
+      double di = sqrt(dix*dix + diy*diy);
 
+      // Hooray!  We did it!  Is it the best one?
+      if (dprime/di < bestcorner)
+	bestcorner = dprime/di;
+      log_trace("New Answer: %f/%f = %f", dprime, di, bestcorner);
+    
     } // end if we found the right wall
+    
   } //end loop over the walls
+
+  return bestcorner;
 
   // Which is smaller?
   
-  if ((bestcorner<bestcyl)||isnan(bestcyl)) {
+  /*  if ((bestcorner<bestcyl)||isnan(bestcyl)) {
     log_info("I found a corner-clipper");
     return bestcorner;
   } else {
     log_info("I found a side-clipper");
     return bestcyl;
   }
-
+  */
 }
 
 
@@ -793,6 +848,8 @@ I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
 #endif
 
 
+
+
 /*
 //------------------------------------
 // Put the border points in order around the center
@@ -920,7 +977,7 @@ void I3Cuts::CMPolygon(vector<double> xinput,
   *xresult = running_numerator_x/running_denominator;
   *yresult = running_numerator_y/running_denominator;
 
-  log_trace("Results: x = %f (%f), y = %f (%f)",
+  log_debug("CM Results: x = %f (%f), y = %f (%f)",
 	 *xresult, xquick, *yresult, yquick);
 
   // Sanity-check... make sure the border points are still in order

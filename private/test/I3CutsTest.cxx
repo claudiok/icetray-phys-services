@@ -158,7 +158,7 @@ TEST(CylinderSize)
   double center = 45;
   //const I3Position detectorcenter(0,0,center);
 
-  // Circle, centered on a point other than zero
+  // Circle, centered on zero
   double centerx = 0;
   double centery = 0;
   vector<double> xcir;
@@ -222,9 +222,9 @@ TEST(Containment_Volume)
 
   // A side-clipper track
   t.SetPos(0,2,1);
-  t.SetThetaPhi((180-80)*I3Constants::pi/180, -45*I3Constants::pi/180);
+  t.SetThetaPhi((180-80)*I3Constants::pi/180, -50*I3Constants::pi/180);
   c = ContainmentVolumeSize(t, x, y, 1, -1);
-  ENSURE_DISTANCE(c, 1.002550, 0.00001, "ContainmentVolume side-clipper cube");
+  ENSURE_DISTANCE(c, 0.912511, 0.00001, "ContainmentVolume side-clipper cube");
   
 
 }
