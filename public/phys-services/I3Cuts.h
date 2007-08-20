@@ -239,6 +239,15 @@ namespace I3Cuts
 		 double *xresult,
 		 double *yresult);
 
+  /** 
+   * A helper function which re-orders the "boundary" points of a polygon,
+   * so that they are in order (either cw or ccw around a central point
+   */
+  void PutPointsInOrder(vector<double> *xinput, 
+			vector<double> *yinput, 
+			double xcenter, double ycenter,
+			bool justcheck);
+
   /**
    * Computes the size of the "containment volume of closest approach", 
    * Analogous to "CylinderSize", above, but for a general shape

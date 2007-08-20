@@ -5,11 +5,7 @@
 #include "phys-services/I3Calculator.h"
 #include <cassert>
 
-#define CROSS_AND_DOT_PRODUCTS 1
-
-#if CROSS_AND_DOT_PRODUCTS
 #include <TVector3.h>
-#endif
 
 using namespace I3Constants;
 using namespace I3Calculator;
@@ -425,6 +421,11 @@ double I3Cuts::CylinderSize(const I3Particle& track,
   
 }  // end cylindersize function
 
+#define SMALLNUMBER 1e-12
+// <<----- Careful!! Machine dependent?
+// I had to stick this in because sometimes
+// "-0" or -5.088887e-14 was sneaking in and
+// messing things up.
 
 //------------------------------------
 // Generalized version of "CylinderSize" for a general in-ice
@@ -435,41 +436,10 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 				     double zhigh, 
 				     double zlow) {
   double deg = 57.2957795;
+  double bestanswer = NAN;
 
   // Todo:
-  // Add the "low" walls
   // Make sure the border points are in order
-  // I'm not sure the side-clipper algorithm is valid...
-
-  /*
-  // INSERT OLGA'S ALGORITHM HERE!
-  // PART 1: SIDE-CLIPPERS
-  // slice the volume at many depths and find the minimum C
-  int nslices = 1000;
-  double stepsize = (zhigh-zlow)/nslices;
-  double bestcyl = 99999999;
-  double bestz = 99999999;
-  // Be sure to cover both ends adequately...
-  for (double z=zlow-stepsize; z<=zhigh+stepsize; z+=stepsize) {
-    // do something
-    double c = ContainmentAreaSize(track, x, y, z);
-    log_info("Depth %f: c= %f", z, c);
-    if (c<bestcyl) { 
-      bestcyl = c;
-      bestz = z;
-    }
-  }
-  // Is it within the allowable range?  
-  if (bestz>zhigh || bestz<zlow) {
-    log_warn("Side-clipper is out of range...");
-    bestcyl = NAN;
-  }
-  */
-
-  // We're going to loop through each "wall" of the structure, extending
-  // out from the center.
-  double bestcorner = 9999999;
-    
 
   // First, compute the center of mass
   double xcm, ycm, zcm;
@@ -477,8 +447,13 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   zcm = (zhigh+zlow)/2;
   I3Position CM(xcm,ycm,zcm);
 
+  PutPointsInOrder(&x,&y,xcm,ycm,0);
+
   if (x.size() != y.size()) log_fatal("X and Y are not the same size");
   int n = x.size();
+
+  // We're going to loop through each "wall" of the structure, extending
+  // out from the center.
 
   // Set up pairs of points which make "walls"
   vector<I3Position> pairs1;
@@ -553,21 +528,24 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 
     double theta_wall = vC.DeltaPhi(vB);
     double theta_P = vP.DeltaPhi(vB);
+    // Fix "-0" precision problem
+    if (abs(theta_wall)<SMALLNUMBER) theta_wall=0;
+    if (abs(theta_P)<SMALLNUMBER) theta_P=0;
+    // Make them all positive angles
     if (theta_wall<0) theta_wall += 2*I3Constants::pi;
     if (theta_P<0) theta_P += 2*I3Constants::pi;
     
     // Compute the difference
     log_trace(" %d          ang_wall = %f, ang_P = %f", 
 	     i, theta_wall*deg, theta_P*deg);
-    if (theta_wall>theta_P) { // we found an exact match!
+    if (theta_wall>=theta_P) { // we found an exact match!
       log_trace("Found it! %d", i);
 
       // We got the right wall, now compute C = dprime/di:
-      // First, dprime is easy
+      // "dprime" is the distance from the origin to the intersection point
       I3Position origin(0,0,0);
       double dprime = P.CalcDistance(origin);
-
-      // Now for di, which is harder... it's the point along lineP
+      // "di" is the point along lineP
       // which intersects the line from B to C.
       double dix, diy;
       IntersectionOfTwoLines(0,0,vP.X(),vP.Y(),
@@ -576,26 +554,16 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       double di = sqrt(dix*dix + diy*diy);
 
       // Hooray!  We did it!  Is it the best one?
-      if (dprime/di < bestcorner)
-	bestcorner = dprime/di;
-      log_trace("New Answer: %f/%f = %f", dprime, di, bestcorner);
+      if (isnan(bestanswer) || dprime/di < bestanswer)
+	bestanswer = dprime/di;
+      log_debug("New Answer: %f/%f = %f", dprime, di, bestanswer);
     
     } // end if we found the right wall
     
   } //end loop over the walls
 
-  return bestcorner;
+  return bestanswer;
 
-  // Which is smaller?
-  
-  /*  if ((bestcorner<bestcyl)||isnan(bestcyl)) {
-    log_info("I found a corner-clipper");
-    return bestcorner;
-  } else {
-    log_info("I found a side-clipper");
-    return bestcyl;
-  }
-  */
 }
 
 
@@ -654,10 +622,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
     // Is this the one?
     log_debug ("This (%f, %f) ang = %f, anglediff = %e", 
 	    x[i], y[i], ang[i]*deg, angdiff*deg);
-    double verysmall = 1e-12;  // <<----- Careful!! Machine dependent?
-                               // I had to stick this in because sometimes
-                               // "-0" or -5.088887e-14 was sneaking in.
-    if (angdiff<verysmall && angdiff>-verysmall) { // we found an exact match!
+    if (abs(angdiff)<SMALLNUMBER) { // we found an exact match!
       less = 0; n_less = i;
       more = 0; n_more = i;
     }
@@ -743,7 +708,7 @@ void I3Cuts::IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
 
 }
 
-#if CROSS_AND_DOT_PRODUCTS==0
+#if 0
 // Olga's way
 //------------------------------------
 // Intersection point of a line and a plane (in 3-d)
@@ -850,24 +815,25 @@ I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
 
 
 
-/*
+
 //------------------------------------
 // Put the border points in order around the center
-void I3Cuts::PutPointsInOrder(vector<double> xinput, 
-			      vector<double> yinput, 
+void I3Cuts::PutPointsInOrder(vector<double> *xinput, 
+			      vector<double> *yinput, 
 			      double xcenter, double ycenter,
 			      bool justcheck) {
-  if (xinput.size() != yinput.size()) log_fatal("X and Y are not the same size");
-  int n = xinput.size();
+  if (xinput->size() != yinput->size()) log_fatal("X and Y are not the same size");
+  int n = xinput->size();
+  int i;   // a looping variable
   
   // Make a hash table of angles... it's automatically sorted by angle
   map<double,int> anglehash;
   double lastangle = -99999;
   for (i=0; i<n; i++) {
-    I3Direction dd(xinput[i]-xcenter,yinput[i]-ycenter,0);
+    I3Direction dd((*xinput)[i]-xcenter,(*yinput)[i]-ycenter,0);
     double ang = dd.CalcPhi();
-    log_trace("Ang: %f", ang);
-    if (ang < lastangle && justcheck) 
+    log_debug("Ang: %f", ang);
+    if ((ang < lastangle) && justcheck) 
       log_fatal("Help!  They are out of order at the end!  Irregular shape!");
     anglehash[ang] = i;
     lastangle = ang;
@@ -880,28 +846,33 @@ void I3Cuts::PutPointsInOrder(vector<double> xinput,
     vector<double> y;
     map<double,int>::iterator imap;
     for (imap = anglehash.begin(); imap != anglehash.end(); imap++) {
-      x.push_back(xinput[imap->second]);
-      y.push_back(yinput[imap->second]);
+      x.push_back((*xinput)[imap->second]);
+      y.push_back((*yinput)[imap->second]);
     }
     // Copy 'em over
-    // IS THIS REALLY A GOOD IDEA...?
+    for (i=0; i<n; i++) {
+      log_trace("copying... %f %f", x[i], y[i]);
+      (*xinput)[i] = x[i];
+      (*yinput)[i] = y[i];
+    }
+  
   }
 }
-*/
+
 
 
 //------------------------------------
 // Center of mass of an arbitrary polygon or n-gon
-void I3Cuts::CMPolygon(vector<double> xinput, 
-		       vector<double> yinput, 
+void I3Cuts::CMPolygon(vector<double> x, 
+		       vector<double> y, 
 		       double *xresult,
 		       double *yresult) {
   // Chop the n-gon into (n-2) triangles.
   // Find the center and area of each triangle.
   // Find the weighted average of the center points
 
-  if (xinput.size() != yinput.size()) log_fatal("X and Y are not the same size");
-  int n = xinput.size();
+  if (x.size() != y.size()) log_fatal("X and Y are not the same size");
+  int n = x.size();
   int i;  // a looping variable
 
   // Everything's great if the points are in order (either 
@@ -911,26 +882,12 @@ void I3Cuts::CMPolygon(vector<double> xinput,
   double xquick = 0;
   double yquick = 0;
   for (i=0; i<n; i++) {
-    xquick += xinput[i];
-    yquick += yinput[i];
+    xquick += x[i];
+    yquick += y[i];
   }
   xquick /= n;
   yquick /= n;
-  // Make a hash table of angles... it's automatically sorted by angle
-  map<double,int> anglehash;
-  for (i=0; i<n; i++) {
-    I3Direction dd(xinput[i]-xquick,yinput[i]-yquick,0);
-    anglehash[dd.CalcPhi()] = i;
-  }
-  // Create new SORTED border points.
-  // (May be the same as the original points, that's ok too)
-  vector<double> x;
-  vector<double> y;
-  map<double,int>::iterator imap;
-  for (imap = anglehash.begin(); imap != anglehash.end(); imap++) {
-    x.push_back(xinput[imap->second]);
-    y.push_back(yinput[imap->second]);
-  }
+  PutPointsInOrder(&x,&y,xquick,yquick,0);
 
   double running_numerator_x = 0;
   double running_numerator_y = 0;
@@ -967,7 +924,7 @@ void I3Cuts::CMPolygon(vector<double> xinput,
     running_numerator_y += area*ytriangle;
     running_denominator += area;
 	
-    log_trace("Triangle %d: (%f %f), (%f %f), (%f %f)",
+    log_debug("Triangle %d: (%f %f), (%f %f), (%f %f)",
 	   i, x1,y1,x2,y2,x3,y3);
     log_trace("Midpoints (%f %f) and (%f %f)",
 	   x_mid12, y_mid12, x_mid13, y_mid13);
@@ -984,16 +941,7 @@ void I3Cuts::CMPolygon(vector<double> xinput,
   // now that we've got the "real" CM.
   // If they appear out-of-order here, it means we've got some kind of 
   // weird shape on our hands, and I'm not sure what to do.
-  double lastangle = -99999;
-  for (i=0; i<n; i++) {
-    I3Direction dd(x[i]-*xresult,y[i]-*yresult,0);
-    double ang = dd.CalcPhi();
-    log_trace("Ang: %f", ang);
-    if (ang < lastangle) 
-      log_fatal("Help!  They are out of order at the end!  Irregular shape!");
-    lastangle = ang;
-  }
-
+  PutPointsInOrder(&x,&y,*xresult,*yresult,1);
 
 }
 

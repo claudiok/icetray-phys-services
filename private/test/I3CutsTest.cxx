@@ -226,6 +226,30 @@ TEST(Containment_Volume)
   c = ContainmentVolumeSize(t, x, y, 1, -1);
   ENSURE_DISTANCE(c, 0.912511, 0.00001, "ContainmentVolume side-clipper cube");
   
+  // The same thing again, but this time with the border points
+  // out of order.
+  x.clear();
+  y.clear();
+  x.push_back(1);
+  x.push_back(-1);
+  x.push_back(1);
+  x.push_back(-1);
+  y.push_back(1);
+  y.push_back(-1);
+  y.push_back(-1);
+  y.push_back(1);
+  
+  // A corner-clipper track
+  t.SetPos(0,0,2);
+  t.SetThetaPhi((180-30)*I3Constants::pi/180, 45*I3Constants::pi/180);
+  c = ContainmentVolumeSize(t, x, y, 1, -1);
+  ENSURE_DISTANCE(c, 0.579796, 0.00001, "Out of order ContainmentVolume corner-clipper cube");
+
+  // A side-clipper track
+  t.SetPos(0,2,1);
+  t.SetThetaPhi((180-80)*I3Constants::pi/180, -50*I3Constants::pi/180);
+  c = ContainmentVolumeSize(t, x, y, 1, -1);
+  ENSURE_DISTANCE(c, 0.912511, 0.00001, "Out of order ContainmentVolume side-clipper cube");
 
 }
 
