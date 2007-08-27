@@ -28,10 +28,10 @@ I3EventCounter :: I3EventCounter(const I3Context& ctx) :
   path_="stdout";
   AddParameter("filename","The file we'll write to or ('stdout' | 'stderr').  ", path_);
 
-  fmt_ ="\nphysics frames: %d"; 
-  fmt_+="\ngeometry frames: %d"; 
-  fmt_+="\ncalibration frames: %d";
-  fmt_+="\ndetector status frames: %d";
+  fmt_ ="physics frames: %d\n"; 
+  fmt_+="geometry frames: %d\n"; 
+  fmt_+="calibration frames: %d\n";
+  fmt_+="detector status frames: %d\n";
   AddParameter("formatstr","Format string for frame counts.  ", fmt_);
 
   AddParameter("CounterStep",
@@ -71,7 +71,7 @@ void I3EventCounter :: Configure()
            GetName().c_str(), path_.c_str());
 
   GetParameter("formatstr", fmt_);
-  log_info("(%s) How counter output should be formatted  : %s",
+  log_info("(%s) : %s",
            GetName().c_str(), fmt_.c_str());
 
   GetParameter("CounterStep", counterStep_);
