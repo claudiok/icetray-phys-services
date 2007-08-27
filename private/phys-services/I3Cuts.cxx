@@ -435,7 +435,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 				     vector<double> y, 
 				     double zhigh, 
 				     double zlow) {
-  double deg = 57.2957795;
+  double deg = 180/M_PI;
   double bestanswer = NAN;
 
   // Todo:
@@ -573,9 +573,9 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 double I3Cuts::ContainmentAreaSize(const I3Particle& track, 
 				   vector<double> x, 
 				   vector<double> y, 
-				   double z) {
-
-  double deg = 57.2957795;
+				   double z) 
+{
+  double deg = 180/M_PI;
 
   // INSERT OLGA'S ALGORITHM HERE!
   // First, compute the center of mass
