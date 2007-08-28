@@ -108,25 +108,26 @@ void I3EventCounter :: Configure()
   }
 }
 
-static const char* myordinal(int i){
+namespace {
+  const char* myordinal(int i){
     static char ordinal[256];
     if ( ( (i%10) > 3 ) || ((i%10)==0) || (((i/10)%10)==1) ){
-        sprintf(ordinal,"%dth",i);
+      sprintf(ordinal,"%dth",i);
     } else {
-        switch(i%10){
-            case 1:
-                sprintf(ordinal,"%dst",i); break;
-            case 2:
-                sprintf(ordinal,"%dnd",i); break;
-            case 3:
-                sprintf(ordinal,"%drd",i); break;
-            default:
-                log_fatal("programming error i=%d",i);
-        }
+      switch(i%10){
+      case 1:
+	sprintf(ordinal,"%dst",i); break;
+      case 2:
+	sprintf(ordinal,"%dnd",i); break;
+      case 3:
+	sprintf(ordinal,"%drd",i); break;
+      default:
+	log_fatal("programming error i=%d",i);
+      }
     }
     return ordinal;
+  }
 }
-
 void I3EventCounter :: Physics(I3FramePtr frame)
 {
   physCount_++;
@@ -134,10 +135,10 @@ void I3EventCounter :: Physics(I3FramePtr frame)
   I3EventHeaderConstPtr eh = frame->Get<I3EventHeaderConstPtr>(eventHeaderName_);
   if (eh) {  // Frame might not have an event header
 	  if (physCount_%counterStep_ == 0) {
-		log_info("(%s) Processing %s event (EventID=%i, RunID=%i)",
-				 GetName().c_str(),myordinal(physCount_),
-			 eh->GetEventID(),
-			 eh->GetRunID());
+	    log_info("(%s) Processing %s event (EventID=%i, RunID=%i)",
+		     GetName().c_str(),myordinal(physCount_),
+		     eh->GetEventID(),
+		     eh->GetRunID());
 	  }
   }
 
