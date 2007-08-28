@@ -289,8 +289,8 @@ TEST(CMPolygon)
   y.push_back(2);
   y.push_back(2);
   CMPolygon(x,y,&xcm,&ycm);
-  ENSURE_EQUAL(xcm,2,"Rectangle CM is wrong (x)");
-  ENSURE_EQUAL(ycm,1,"Rectangle CM is wrong (y)");
+  ENSURE_EQUAL(xcm, 2.0, "Rectangle CM is wrong (x)");
+  ENSURE_EQUAL(ycm, 1.0, "Rectangle CM is wrong (y)");
 
   // Another simple case:
   // Circle, centered on a point other than zero
