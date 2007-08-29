@@ -39,22 +39,21 @@ TEST_GROUP(I3XMLOMKey2MBIDTest);
 TEST(a_ctor)
 {
   I3OMKey2MBIDPtr omkey2mbid;
-  bool catched;
+
+  try{ 
+    I3XMLOMKey2MBID tmp(""); 
+    FAIL("didn't throw!");
+  } catch(...) { }
   
-  catched = false;
-  try{ I3XMLOMKey2MBID tmp(""); }
-  catch(exception& ex){ catched = true; }
-  ENSURE(catched);
+  try { 
+    I3XMLOMKey2MBID tmp("UnKNowNFiLE"); 
+    FAIL("didnt' throw");
+  } catch(...) { }
   
-  catched = false;
-  try{ I3XMLOMKey2MBID tmp("UnKNowNFiLE"); }
-  catch(exception& ex){ catched = true; }
-  ENSURE(catched);
-  
-  catched = false;
-  try{ initI3XMLOMKey2MBIDTest(omkey2mbid, "test_duplicated_OMKey_mainboard_ids.xml"); }
-  catch(exception& ex){ catched = true; }
-  ENSURE(catched);
+  try{ 
+    initI3XMLOMKey2MBIDTest(omkey2mbid, "test_duplicated_OMKey_mainboard_ids.xml"); 
+    FAIL("Didn't throw");
+  } catch(...) { }
 }
 
 
@@ -63,32 +62,25 @@ TEST(b_operations)
   I3OMKey2MBIDPtr omkey2mbid;
   OMKey key;
   long long int mbid;
-  bool catched;
   
   initI3XMLOMKey2MBIDTest(omkey2mbid, "test_basic_operations_mainboard_ids.xml");
   
-  catched = false;
-  try{ key = omkey2mbid->GetOMKey(3); }
-  catch(exception& ex){ catched = true; }
-  ENSURE(!catched);
+  key = omkey2mbid->GetOMKey(3); 
   ENSURE_EQUAL(key.GetString(), 1);
   ENSURE_EQUAL(static_cast<int>(key.GetOM()), 3);
 
-  catched = false;
-  try{ key = omkey2mbid->GetOMKey(33); }
-  catch(exception& ex){ catched = true; }
-  ENSURE(catched);
+  try { 
+    key = omkey2mbid->GetOMKey(33); 
+    FAIL("didn't throw");
+  } catch(...) { }
   
   key = OMKey(1, 3);
-  catched = false;
-  try{ mbid = omkey2mbid->GetMBID(key); }
-  catch(exception& ex){ catched = true; }
-  ENSURE(!catched);
+  mbid = omkey2mbid->GetMBID(key);
   ENSURE_EQUAL(mbid, 3);
 
   key = OMKey(1, 33);
-  catched = false;
-  try{ mbid = omkey2mbid->GetMBID(key); }
-  catch(exception& ex){ catched = true; }
-  ENSURE(catched);
+  try { 
+    mbid = omkey2mbid->GetMBID(key); 
+    FAIL("didn't throw!");
+  } catch(...) { }
 }
