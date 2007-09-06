@@ -296,7 +296,7 @@ TEST(I3MediumServiceWithoutProperties){
   ENSURE_DISTANCE(ptr->BulkIceEffScattLength() * ptr->BulkIceInvEffScattLength(), 1., PERCENTAGE);
 }
 TEST(I3MediumService380nmWithProperties){
-  std::string works(getenv("I3_WORK"));
+  std::string works(getenv("I3_SRC"));
   I3MediumPropertiesFile properties(works + ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
@@ -390,7 +390,7 @@ TEST(I3MediumService380nmWithProperties){
   ENSURE_DISTANCE(ptr->EffScattLength(400, 380.) * ptr->InvEffScattLength(400, 380.), 1., PERCENTAGE);
 }
 TEST(I3MediumService460nmWithProperties){
-  std::string works(getenv("I3_WORK"));
+  std::string works(getenv("I3_SRC"));
   I3MediumPropertiesFile properties(works + ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
@@ -478,7 +478,7 @@ TEST(I3MediumService460nmWithProperties){
   ENSURE_DISTANCE(ptr->EffScattLength(400, 460.) * ptr->InvEffScattLength(400, 460.), 1., PERCENTAGE);
 }
 TEST(I3MediumService540nmWithProperties){
-  std::string works(getenv("I3_WORK"));
+  std::string works(getenv("I3_SRC"));
   I3MediumPropertiesFile properties(works + ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
@@ -566,7 +566,7 @@ TEST(I3MediumService540nmWithProperties){
   ENSURE_DISTANCE(ptr->EffScattLength(400, 540.) * ptr->InvEffScattLength(400, 540.), 1., PERCENTAGE);
 }
 TEST(I3MediumServiceWithProperties){
-  std::string works(getenv("I3_WORK"));
+  std::string works(getenv("I3_SRC"));
   I3MediumPropertiesFile properties(works + ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 

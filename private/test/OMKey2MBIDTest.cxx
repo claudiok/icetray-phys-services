@@ -14,8 +14,8 @@ TEST_GROUP(OMKey2MBIDTest);
 TEST(0df7b060acad)
 {
   I3OMKey2MBIDPtr service;
-  ENSURE(getenv("I3_WORK"));
-  string infile(getenv("I3_WORK"));
+  ENSURE(getenv("I3_SRC"));
+  string infile(getenv("I3_SRC"));
   infile.append("/phys-services/resources/doms.txt");
   service = I3OMKey2MBIDPtr(new I3FileOMKey2MBID(infile));
   
@@ -32,8 +32,8 @@ TEST(0df7b060acad)
 TEST(8b9f35308e27)
 {
   I3OMKey2MBIDPtr service;
-  ENSURE(getenv("I3_WORK"));
-  string infile(getenv("I3_WORK"));
+  ENSURE(getenv("I3_SRC"));
+  string infile(getenv("I3_SRC"));
   infile.append("/phys-services/resources/doms.txt");
   service = I3OMKey2MBIDPtr(new I3FileOMKey2MBID(infile));
   
@@ -49,8 +49,8 @@ TEST(8b9f35308e27)
 TEST(d52b66ab6861)
 {
   I3OMKey2MBIDPtr service;
-  ENSURE(getenv("I3_WORK"));
-  string infile(getenv("I3_WORK"));
+  ENSURE(getenv("I3_SRC"));
+  string infile(getenv("I3_SRC"));
   infile.append("/phys-services/resources/doms.txt");
   service = I3OMKey2MBIDPtr(new I3FileOMKey2MBID(infile));
   
@@ -67,8 +67,8 @@ TEST(d52b66ab6861)
 TEST(543c1369639d)
 {
   I3OMKey2MBIDPtr service;
-  ENSURE(getenv("I3_WORK"));
-  string infile(getenv("I3_WORK"));
+  ENSURE(getenv("I3_SRC"));
+  string infile(getenv("I3_SRC"));
   infile.append("/phys-services/resources/doms.txt");
   service = I3OMKey2MBIDPtr(new I3FileOMKey2MBID(infile));
 

@@ -23,8 +23,8 @@ using namespace std;
 void initI3XMLOMKey2MBIDTest(I3OMKey2MBIDPtr& omkey2mbid,
                              const string& omkey2mbidFile)
 {
-  ENSURE(getenv("I3_WORK"));
-  string infile(getenv("I3_WORK"));
+  ENSURE(getenv("I3_SRC"));
+  string infile(getenv("I3_SRC"));
   ENSURE(!infile.empty());
   infile.append("/phys-services/resources/");
   infile.append(omkey2mbidFile);

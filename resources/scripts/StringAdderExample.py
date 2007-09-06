@@ -8,8 +8,8 @@ load("libdataclasses")
 load("libphys-services")
 load("libdataio")
 
-amageofile = expandvars("$I3_WORK/phys-services/resources/amanda.geo")
-icecubegeofile = expandvars("$I3_WORK/phys-services/resources/icecube.geo")
+amageofile = expandvars("$I3_SRC/phys-services/resources/amanda.geo")
+icecubegeofile = expandvars("$I3_SRC/phys-services/resources/icecube.geo")
 
 tray = I3Tray()
 

@@ -71,10 +71,10 @@ I3_MODULE(file_geo_source_print);
 
 TEST(file_geo_source)
 {
-  ENSURE(getenv("I3_WORK"));
-  string amandaFile(getenv("I3_WORK"));
+  ENSURE(getenv("I3_SRC"));
+  string amandaFile(getenv("I3_SRC"));
   amandaFile.append("/phys-services/resources/amanda.geo");
-  string icecubeFile(getenv("I3_WORK"));
+  string icecubeFile(getenv("I3_SRC"));
   icecubeFile.append("/phys-services/resources/icecube.geo");
 
   RootI3Tray tray;

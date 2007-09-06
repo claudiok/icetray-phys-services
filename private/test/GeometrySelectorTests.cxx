@@ -145,9 +145,9 @@ TEST(icetray_test){
   std::string strings_to_use("21,29,39,38,30,40,49");
   std::string stations_to_use("21,29,30,38,39,40,47,48,49,50,57,58,59,66,67,74");
 
-  string icecube_geo(getenv("I3_WORK"));
+  string icecube_geo(getenv("I3_SRC"));
   icecube_geo += "/phys-services/resources/icecube.geo";
-  string amanda_geo(getenv("I3_WORK"));
+  string amanda_geo(getenv("I3_SRC"));
   amanda_geo += "/phys-services/resources/amanda.geo";
 
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
@@ -182,9 +182,9 @@ TEST(icetray_test_shift){
   std::string strings_to_exclude("-1:20,22:28,31:37,41:48,50:80");
   std::string stations_to_exclude("-1:20,22:28,31:37,41:46,51:56,60:65,68:73,75:80");
 
-  string icecube_geo(getenv("I3_WORK"));
+  string icecube_geo(getenv("I3_SRC"));
   icecube_geo += "/phys-services/resources/icecube.geo";
-  string amanda_geo(getenv("I3_WORK"));
+  string amanda_geo(getenv("I3_SRC"));
   amanda_geo += "/phys-services/resources/amanda.geo";
 
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
@@ -270,9 +270,9 @@ TEST(icetray_test_center_shift){
   std::string strings_to_exclude("-1:20,22:28,31:37,41:48,50:80");
   std::string stations_to_exclude("-1:20,22:28,31:37,41:46,51:56,60:65,68:73,75:80");
 
-  string icecube_geo(getenv("I3_WORK"));
+  string icecube_geo(getenv("I3_SRC"));
   icecube_geo += "/phys-services/resources/icecube.geo";
-  string amanda_geo(getenv("I3_WORK"));
+  string amanda_geo(getenv("I3_SRC"));
   amanda_geo += "/phys-services/resources/amanda.geo";
 
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
