@@ -438,8 +438,11 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   double deg = 180/M_PI;
   double bestanswer = NAN;
 
-  // Todo:
-  // Make sure the border points are in order
+  // Error-checking...
+  if (x.size()==0) {
+    log_warn("ContainmentVolume of zero strings: will be NAN");
+    return NAN;
+  }
 
   // First, compute the center of mass
   double xcm, ycm, zcm;
@@ -576,6 +579,12 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 				   double z) 
 {
   double deg = 180/M_PI;
+
+  // Error-checking...
+  if (x.size()==0) {
+    log_warn("ContainmentArea of zero strings: will be NAN");
+    return NAN;
+  }
 
   // INSERT OLGA'S ALGORITHM HERE!
   // First, compute the center of mass
