@@ -165,7 +165,7 @@ TEST(CylinderSize)
   vector<double> ycir;
   int npoints = 500;
   for (int i=0; i<npoints; i++) {
-    double th = 360*deg/npoints*i;
+    double th = 360*deg/(npoints+1)*i;
     xcir.push_back(centerx + R0*sin(th));
     ycir.push_back(centery + R0*cos(th));
   }
