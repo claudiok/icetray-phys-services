@@ -16,7 +16,7 @@ using namespace I3Units;
 I3_MODULE(I3CutsModule);
 
 //--------------------------------------------------------------
-I3CutsModule::I3CutsModule(const I3Context& ctx) : I3Module(ctx)
+I3CutsModule::I3CutsModule(const I3Context& ctx) : I3ConditionalModule(ctx)
 {
   AddOutBox("OutBox");
   
