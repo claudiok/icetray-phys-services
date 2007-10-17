@@ -157,8 +157,9 @@ I3Position COGImpl(const I3Geometry& geometry,
     for (unsigned i=0; i < pulsevect.size(); i++) {
       HitType pulse = pulsevect[i];
       double amp_tmp;
-      if(isnan(GetCharge(pulse)) > 0 ) {
-	amp_tmp=0;
+      if(isnan(GetCharge(pulse)) > 0 || isinf(GetCharge(pulse))> 0) {
+	log_warn("Got a nan or inf pulse charge.  Setting it to 0 instead.  Something could be screwy with a DOM calibration!!");
+  	amp_tmp=0;
       }
       else {
 	amp_tmp = GetCharge(pulse);
