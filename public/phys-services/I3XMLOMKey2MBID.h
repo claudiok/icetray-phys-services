@@ -33,6 +33,17 @@
 class I3XMLOMKey2MBID : public I3OMKey2MBID
 {
  public:
+  /** Dump conversion table into XML file.
+   * 
+   * \note
+   * This XML file can be used as input for I3XMLOMKey2MBID.
+   * @param outfile The filename.
+   * @param conversionTable The conversion table.
+   */
+  static void Dump(const std::string& outfile,
+                   const std::map<long long int, OMKey>& conversionTable);
+
+
   /** Constructor.
    * 
    * @param infile Name of the XML file.

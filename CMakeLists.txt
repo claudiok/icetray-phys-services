@@ -18,7 +18,9 @@ i3_add_library(phys-services
   public/phys-services/I3CutValues.h
   )
 
-
+i3_executable(CreateXMLOMKey2MBIDConversionTable
+  private/CreateXMLOMKey2MBIDConversionTable/*.cxx
+  USE_PROJECTS phys-services)
 
 i3_test_executable(test private/test/*.cxx
   USE_PROJECTS phys-services)

@@ -16,6 +16,7 @@
 
 #include <utility>
 #include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/device/file.hpp>
@@ -31,6 +32,27 @@
 using namespace std;
 
 // implementation
+
+void I3XMLOMKey2MBID::Dump(const string& outfile,
+                           const map<long long int, OMKey>& conversionTable)
+{
+  if(outfile.empty()) log_fatal("undefined file name");
+  
+  boost::iostreams::filtering_ostream ofs;
+  log_info("opening file \"%s\"", outfile.c_str());
+  ofs.push(boost::iostreams::file_sink(outfile));
+  if(!ofs.good()) log_fatal("cannot open file \"%s\"", outfile.c_str());
+
+  if(outfile.rfind(".gz") == (outfile.length() - 3))
+  {
+    ofs.push(boost::iostreams::gzip_compressor());
+    log_info("file \"%s\" ends in .gz - using gzip compressor", outfile.c_str());
+  }
+  boost::archive::xml_oarchive oa(ofs);
+  
+  oa << boost::serialization::make_nvp("MBID_OMKey", conversionTable);
+}
+
 
 I3XMLOMKey2MBID::I3XMLOMKey2MBID(const string& infile)
   : I3OMKey2MBID()

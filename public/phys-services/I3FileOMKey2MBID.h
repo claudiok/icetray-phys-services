@@ -39,6 +39,13 @@ class I3FileOMKey2MBID : public I3OMKey2MBID
   OMKey GetOMKey(long long int mbid) const;
   bool MBIDExists(OMKey key) const;
   long long int GetMBID(OMKey key) const;
+  /** Dump conversion table into XML file.
+   * 
+   * \note
+   * This XML file can be used as input for I3XMLOMKey2MBID.
+   * @param outfile The filename.
+   */
+  virtual void DumpAsXML(const std::string& outfile) const;
 
  private:
   OMKey OMKeyize(const std::string& key);

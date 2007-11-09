@@ -11,6 +11,8 @@
 #include <fstream>
 #include <cassert>
 
+#include <phys-services/I3XMLOMKey2MBID.h>
+
 
 using namespace std;
 
@@ -109,4 +111,10 @@ OMKey I3FileOMKey2MBID::OMKeyize(const string& key)
   //   cout<<"DOM#:"<<om_num;
   //   cout<<"   Should correspond to "<<key<<endl;
   return OMKey(om_string,om_num);
+}
+
+
+void I3FileOMKey2MBID::DumpAsXML(const std::string& outfile) const
+{
+  I3XMLOMKey2MBID::Dump(outfile, mbid2omkey_);
 }
