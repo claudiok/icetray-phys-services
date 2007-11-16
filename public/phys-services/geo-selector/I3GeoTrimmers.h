@@ -189,8 +189,32 @@ I3GeometryPtr GeoIceTopOnly(I3Geometry input_geo) {
   return output_geoptr;
 }
 
+// get geomap of all DOMs in a minimum ball around a subgeoemetry
+I3OMGeoMapPtr GetMinBallGeometry( const I3OMGeoMap &input_geo,
+                                  const I3OMGeoMap &subgeo,
+                                  double margin = 0. );
 
+template <class omdatamap>
+I3OMGeoMapPtr GetMinBallGeometryFromData( const I3OMGeoMap &input_geo,
+                                          const omdatamap &datamap,
+                                          double margin = 0. ){
 
+  // get geomap of hit DOMs
+  I3OMGeoMap geohit;
+  typename omdatamap::const_iterator ipulse;
+  for ( ipulse = datamap.begin(); ipulse != datamap.end(); ipulse++ ){
+    I3OMGeoMap::const_iterator igeo = input_geo.find(ipulse->first);
+    if ( igeo == input_geo.end() ){
+      log_warn( "OM %d/%d found in pulse series, but not in geometry!",
+      ipulse->first.GetString(), ipulse->first.GetOM());
+    } else {
+      geohit.insert( make_pair(igeo->first,igeo->second));
+    }
+  }
+
+  // get geomap of all DOMs in a minimum ball around the hits
+  return GetMinBallGeometry( input_geo, geohit, margin );
+}
 
 
 } //end of namespace
