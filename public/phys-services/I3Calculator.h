@@ -12,10 +12,12 @@
 #define I3CALCULATOR_H
 
 #include <cmath>
+#include <utility>
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/I3Units.h"
 #include "dataclasses/I3Constants.h"
 #include "dataclasses/geometry/I3OMGeo.h"
+#include "dataclasses/I3Direction.h"
 
 
 using namespace I3Units;
@@ -299,6 +301,29 @@ namespace I3Calculator
    */
   I3Direction InNominalSystem(const I3Particle& track, 
 			      const I3Direction& dir);
+
+  /**
+   * Utility function, produces two directions perpendicular to the
+   * input direction. Should maybe be included in the I3Calculator:: 
+   * namespace in phys-services.
+   */
+  std::pair<I3Direction,I3Direction>
+  GetTransverseDirections(const I3Direction &dir);
+
+  /**
+   * Utility function, produces one directions opposite to the
+   * input direction. Should maybe be included in the I3Calculator:: 
+   * namespace in phys-services.
+   */
+  I3Direction GetReverseDirection(const I3Direction &dir);
+
+  /**
+   * Utility function, rotates a direction around an axis.
+   * Should maybe be included in the I3Calculator:: namespace
+   * in phys-services.
+   */
+  void Rotate(const I3Direction &axis, I3Direction &dir, double angle );
+
 
 };
 

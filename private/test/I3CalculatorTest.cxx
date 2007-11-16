@@ -12,13 +12,20 @@
 
 #include <I3Test.h>
 
+#include "icetray/I3Units.h"
 #include "phys-services/I3Calculator.h"
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/I3Position.h"
 #include "dataclasses/I3Direction.h"
-#include "TFile.h"
-#include "TTree.h"
+#include <TFile.h>
+#include <TTree.h>
+#include <TVector3.h>
+
 #include <string>
+#include <cmath>
+#include <iostream>
+#include <sstream>
+
 using std::string;
 using std::cout;
 using std::endl;
@@ -485,4 +492,112 @@ void TRAFO ( double Xdir[3] , double trafo[3][3] ) {
   trafo[2][2] = DZz;
 
   return;
+}
+
+
+TEST(TransverseDirections)
+{
+    double deg2rad = M_PI/180.0;
+    double tolerance = 0.0001;
+    for ( int izen = 0; izen <=180; izen += 30 ){
+        for ( int iazi = 0; iazi <=360; iazi += 30 ){
+            std::ostringstream anglespec;
+            anglespec << " at "
+                      << "zenith=" << izen << "deg and "
+                      << "azimuth=" << iazi << "deg ";
+            std::string where = anglespec.str();
+            std::string problem;
+            I3Direction dir(izen*deg2rad, iazi*deg2rad);
+            std::pair<I3Direction,I3Direction>
+                perp( I3Calculator::GetTransverseDirections(dir) );
+            TVector3 v1( dir.GetX(), dir.GetY(), dir.GetZ() );
+            TVector3 v2( perp.first.GetX(), perp.first.GetY(), perp.first.GetZ() );
+            TVector3 v3( perp.second.GetX(), perp.second.GetY(), perp.second.GetZ() );
+            std::cout << "v1=(" << v1.X() << "," << v1.Y() << "," << v1.Z() << ")" << std::endl;
+            std::cout << "v2=(" << v2.X() << "," << v2.Y() << "," << v2.Z() << ")" << std::endl;
+            std::cout << "v3=(" << v3.X() << "," << v3.Y() << "," << v3.Z() << ")" << std::endl;
+
+            problem = "perpendicular failure";
+            ENSURE_DISTANCE( v1.Dot(v2), 0.0, tolerance, problem+where );
+            ENSURE_DISTANCE( v2.Dot(v3), 0.0, tolerance, problem+where );
+            ENSURE_DISTANCE( v3.Dot(v1), 0.0, tolerance, problem+where );
+
+            problem = "magnitude failure";
+            ENSURE_DISTANCE( v1.Mag2(), 1.0, tolerance, problem+where );
+            ENSURE_DISTANCE( v2.Mag2(), 1.0, tolerance, problem+where );
+            ENSURE_DISTANCE( v3.Mag2(), 1.0, tolerance, problem+where );
+
+            TVector3 v123( v1.Cross(v2) - v3 );
+            TVector3 v231( v2.Cross(v3) - v1 );
+            TVector3 v312( v3.Cross(v1) - v2 );
+            problem = "cross product failure";
+            ENSURE_DISTANCE( v123.Mag2(), 0.0, tolerance, problem+where );
+            ENSURE_DISTANCE( v231.Mag2(), 0.0, tolerance, problem+where );
+            ENSURE_DISTANCE( v312.Mag2(), 0.0, tolerance, problem+where );
+        }
+    }
+}
+
+TEST(TrivialRotation)
+{
+    double zenith = 0.25 * M_PI * I3Units::radian;
+    double azimuth = 0.75 * M_PI * I3Units::radian;
+    double angle = 0.5 * M_PI * I3Units::radian;
+    double tolerance = 0.001 * I3Units::radian;
+    I3Direction axis(zenith,azimuth);
+    I3Direction  dir(zenith,azimuth);
+    I3Calculator::Rotate(axis,dir,angle);
+    ENSURE_DISTANCE( dir.GetZenith(), zenith, tolerance,
+                     "zenith changed when rotating around itself" );
+    ENSURE_DISTANCE( dir.GetAzimuth(), azimuth, tolerance,
+                     "azimuth changed when rotating around itself" );
+    std::pair<I3Direction,I3Direction> perp( I3Calculator::GetTransverseDirections(axis) );
+    I3Calculator::Rotate(axis,perp.first,90*I3Units::degree);
+    TVector3 diff( perp.first.GetX() - perp.second.GetX(),
+                   perp.first.GetY() - perp.second.GetY(),
+                   perp.first.GetZ() - perp.second.GetZ() );
+    ENSURE_DISTANCE( diff.Mag2(), 0.0, tolerance,
+                     "90 degrees on right handed triad did not work" );
+}
+
+TEST(Rotation30)
+{
+    const double xyz1[3] = { 0, cos(30*I3Units::degree), sin(30*I3Units::degree) };
+    const double xyz2[3] = { 0, -sin(30*I3Units::degree), cos(30*I3Units::degree) };
+    const std::string names[3] = {"x","y","z"};
+    const std::string msg0 = "30 degrees around ";
+    const std::string msg1 = "-axis did not work (";
+    const std::string msg2 = "-coordinate wrong)";
+    const double tolerance = 0.001;
+
+    for ( int i=0; i<3; ++i ){
+        double dircos0[3] = {0,0,0};
+        double dircos1[3] = {0,0,0};
+        double dircos2[3] = {0,0,0};
+        dircos0[(i+0)%3] = 1;
+        dircos1[(i+1)%3] = 1;
+        dircos2[(i+2)%3] = 1;
+        I3Direction axis(     dircos0[0], dircos0[1], dircos0[2] );
+        I3Direction testdir1( dircos1[0], dircos1[1], dircos1[2] );
+        I3Direction testdir2( dircos2[0], dircos2[1], dircos2[2] );
+        I3Calculator::Rotate(axis,testdir1,30*I3Units::degree);
+        I3Calculator::Rotate(axis,testdir2,30*I3Units::degree);
+        std::string a=names[i];
+        ENSURE_DISTANCE( testdir1.GetX(), xyz1[(3-i)%3], tolerance,
+                         msg0+names[i]+msg1+"x"+msg2 );
+        ENSURE_DISTANCE( testdir1.GetY(), xyz1[(4-i)%3], tolerance,
+                         msg0+names[i]+msg1+"y"+msg2 );
+        ENSURE_DISTANCE( testdir1.GetZ(), xyz1[(5-i)%3], tolerance,
+                         msg0+names[i]+msg1+"z"+msg2 );
+        ENSURE_DISTANCE( testdir2.GetX(), xyz2[(3-i)%3], tolerance,
+                         msg0+names[i]+msg1+"x"+msg2 );
+        ENSURE_DISTANCE( testdir2.GetY(), xyz2[(4-i)%3], tolerance,
+                         msg0+names[i]+msg1+"y"+msg2 );
+        ENSURE_DISTANCE( testdir2.GetZ(), xyz2[(5-i)%3], tolerance,
+                         msg0+names[i]+msg1+"z"+msg2 );
+        std::cout << "rotation around " << names[i] << " OK" << std::endl;
+    }
+
+    // need some more tests
+
 }

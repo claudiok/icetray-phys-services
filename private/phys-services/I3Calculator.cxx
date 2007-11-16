@@ -451,3 +451,71 @@ I3Direction I3Calculator::InNominalSystem(const I3Particle& track, const I3Direc
   }
 }
 
+//--------------------------------------------------------------
+std::pair<I3Direction,I3Direction>
+I3Calculator::GetTransverseDirections(const I3Direction &dir){
+  double dircos[3] = {dir.GetX(), dir.GetY(), dir.GetZ() };
+  int imin=0;
+  if ( fabs(dircos[1]) < fabs(dircos[0]) ) imin = 1;
+  if ( fabs(dircos[2]) < fabs(dircos[imin]) ) imin = 2;
+  log_trace("imin=%d",imin);
+  double px = dircos[imin];
+  double py = dircos[(imin+1)%3];
+  double pz = dircos[(imin+2)%3];
+#ifndef NDEBUG
+  double d[3] = {px,py,pz};
+#endif
+  log_trace("px=%f py=%f pz=%f", px, py, pz );
+  double nyz = 1.0/sqrt(py*py+pz*pz);
+  double q1[3] = {       0.,    pz*nyz,   -py*nyz };
+  double q2[3] = { -1.0/nyz, px*py*nyz, px*pz*nyz };
+  log_trace("q1x=%f q1y=%f q1z=%f", q1[0], q1[1], q1[2] );
+  log_trace("q2x=%f q2y=%f q2z=%f", q2[0], q2[1], q2[2] );
+  std::pair<I3Direction,I3Direction> q1q2;
+  q1q2.first.SetDir( q1[(3-imin)%3],
+                     q1[(4-imin)%3],
+                     q1[(5-imin)%3] );
+  q1q2.second.SetDir( q2[(3-imin)%3],
+                      q2[(4-imin)%3],
+                      q2[(5-imin)%3] );
+
+  log_trace( "dircos[0]=%f dircos[1]=%f dircos[2]=%f",
+             dircos[0], dircos[1], dircos[2] );
+  log_trace( "dorcos[0]=%f dorcos[1]=%f dorcos[2]=%f",
+             d[(3-imin)%3], d[(4-imin)%3], d[(5-imin)%3] );
+
+  return q1q2;
+}
+
+//--------------------------------------------------------------
+I3Direction I3Calculator::GetReverseDirection(const I3Direction &dir){
+  return I3Direction( -dir.GetX(), -dir.GetY(), -dir.GetZ() );
+}
+
+//--------------------------------------------------------------
+void I3Calculator::Rotate(const I3Direction &axis, I3Direction &dir, double angle ){
+
+  // paranoia: user should not give references to the same object
+  // (it's fine if axis and dir have the same value,
+  //  but they should not be the same object)
+  assert(&axis != &dir);
+
+  double sa = sin(angle);
+  double ca = cos(angle);
+  if ( (sa == 0.0) &&  (ca == 1.0) ){
+    return;
+  }
+  double dx = axis.GetX();
+  double dy = axis.GetY();
+  double dz = axis.GetZ();
+  double X = dir.GetX();
+  double Y = dir.GetY();
+  double Z = dir.GetZ();
+
+  // code copied from TRotation.cxx ;-)
+  double newX = (ca+(1-ca)*dx*dx      )*X + (   (1-ca)*dx*dy-sa*dz)*Y + (   (1-ca)*dx*dz+sa*dy)*Z;
+  double newY = (   (1-ca)*dy*dx+sa*dz)*X + (ca+(1-ca)*dy*dy      )*Y + (   (1-ca)*dy*dz-sa*dx)*Z;
+  double newZ = (   (1-ca)*dz*dx-sa*dy)*X + (   (1-ca)*dz*dy+sa*dx)*Y + (ca+(1-ca)*dz*dz      )*Z;
+  dir.SetDir(newX,newY,newZ);
+
+}
