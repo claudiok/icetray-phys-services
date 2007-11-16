@@ -1,5 +1,6 @@
 #include <I3Test.h>
 
+#include "icetray/OMKey.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "phys-services/geo-selector/I3GeoTrimmers.h"
@@ -207,4 +208,203 @@ TEST(Combo2)
   ENSURE(r2->find(OMKey(2,62)) == r2->end(), "2-62 Exists but shouldn't");
   ENSURE(r2->find(OMKey(2,63)) != r2->end(), "2-63 Doesn't exist but should");
 
+}
+
+TEST(MinimumBall2point)
+{
+    // build a fake geometry with one string
+    int stringnr = 1;
+    I3OMGeoMap geomap;
+    for ( int omnr = 1; omnr<101; ++omnr ){
+        OMKey omkey(stringnr,omnr);
+        I3OMGeo omgeo;
+        omgeo.position.SetPos(0.,0.,1.0*omnr);
+        geomap.insert(make_pair(OMKey(stringnr,omnr),omgeo));
+    }
+
+    // event data: two hits and some inbetween
+    I3RecoPulse pulse;
+    I3RecoPulseSeries pulseseries(1,pulse);;
+    I3RecoPulseSeriesMap pulsemap;
+    int omlo=30;
+    int omhi=70;
+    OMKey omkey1(stringnr,omlo);
+    OMKey omkey2(stringnr,omhi);
+    pulsemap.insert( make_pair( omkey1, pulseseries) );
+    pulsemap.insert( make_pair( omkey2, pulseseries) );
+    for ( int omnr = omlo+2; omnr<omhi; omnr += 3 ){
+        OMKey omkey(stringnr,omnr);
+        pulsemap.insert(make_pair(omkey,pulseseries));
+    }
+
+    // select OMs between hits (inclusive)
+    I3OMGeoMapPtr ballmapptr =
+        I3GeoTrimmers::GetMinBallGeometryFromData( geomap, pulsemap, 0.1 );
+
+    // should be easy
+    unsigned int Nexpected = omhi-omlo+1;
+    ENSURE( ballmapptr->size() == Nexpected, "wrong number of selected DOMs" );
+
+    // check all DOMs
+    for ( int omnr = 1; omnr<101; ++omnr ){
+        OMKey omkey(stringnr,omnr);
+        bool outside = ( ballmapptr->find(omkey) == ballmapptr->end());
+        bool inside = !outside;
+        if ( (omnr < omlo) || (omnr > omhi) ){
+            ENSURE( outside, "wrong DOM selected" );
+        } else {
+            ENSURE( inside, "missed a good DOM" );
+        }
+    }
+}
+
+TEST(MinimumBall3point)
+{
+    // build a fake rectangular geometry with 81 strings
+    I3OMGeoMap geomap;
+
+    const int nx=9;
+    const int ny=9;
+    const int nz=60;
+    const int nom=nx*ny*nz;
+    for ( int ix = 0; ix <nx; ++ix ){
+        for ( int iy = 0; iy <ny; ++iy ){
+            for ( int iz = 0; iz<nz; ++iz ){
+                int stringnr = 1 + ny*ix + iy;
+                int omnr = iz + 1;
+                OMKey omkey(stringnr,omnr);
+                I3OMGeo omgeo;
+                omgeo.position.SetPos(ix,iy,iz);
+                geomap.insert(make_pair(OMKey(stringnr,omnr),omgeo));
+            }
+        }
+    }
+    log_info("created geomap with(%d*%d*%d=%d DOMs",nx,ny,nz,nom);
+
+    // event data: three outer hits A, B and C, aranged like a rectangular
+    // triangle. The center of the minimum bounding circle
+    // lies on the hypothenuse AC. We loop over various values of the
+    // z-coordinate of the tip of the triangle, starting with a small
+    // enclosed ball and increasing to covering more than half of the
+    // "detector".
+
+    // coordinates
+    int ixA = 3; int iyA = 0; int izA = 22;
+    int ixB = 6; int iyB = 3; int izB = 22;
+    int ixC = 6; int iyC = 3;
+    
+    
+    for ( int izC = 28; izC <= 50; izC += 2 ){
+
+        // OM keys (string, omnr)
+        OMKey omkeyA( 1 + ny*ixA + iyA, izA+1 );
+        OMKey omkeyB( 1 + ny*ixB + iyB, izB+1 );
+        OMKey omkeyC( 1 + ny*ixC + iyC, izC+1 );
+
+        // center point M of the enclosing ball
+        double xM = ixA + 0.5*(ixC-ixA);
+        double yM = iyA + 0.5*(iyC-iyA);
+        double zM = izA + 0.5*(izC-izA);
+
+        // maybe add a small number to guard against rounding issues
+        // (or choose example such that everything is integer)
+        double rA2 = (ixA-xM)*(ixA-xM) +
+                     (iyA-yM)*(iyA-yM) +
+                     (izA-zM)*(izA-zM);
+        double rB2 = (ixB-xM)*(ixB-xM) +
+                     (iyB-yM)*(iyB-yM) +
+                     (izC-zM)*(izC-zM);
+        double radius2 = (ixC-xM)*(ixC-xM) +
+                         (iyC-yM)*(iyC-yM) +
+                         (izC-zM)*(izC-zM);
+        ENSURE_DISTANCE( rA2,radius2,0.0001,"rA2!=rC2");
+        ENSURE_DISTANCE( rB2,radius2,0.0001,"rB2!=rC2");
+        ENSURE_DISTANCE( rA2,rB2,    0.0001,"rA2!=rB2");
+
+        double margin = 0.1;
+        double radius = sqrt(radius2);
+        double rm = radius + margin;
+        double rm2 = rm*rm;
+        log_info( "M(%.1f,%.1f,%.1f), r=%.2f, r2=%.2f, rm=%.2f, rm2=%.2f",
+                  xM, yM, zM, radius, radius2, rm, rm2);
+        radius = rm;
+        radius2 = rm2;
+
+        // add the three hits to the pulsemap
+        I3RecoPulse pulse;
+        I3RecoPulseSeries pulseseries(1,pulse);;
+        I3RecoPulseSeriesMap pulsemap;
+        pulsemap.insert( make_pair( omkeyA, pulseseries) );
+        pulsemap.insert( make_pair( omkeyB, pulseseries) );
+        pulsemap.insert( make_pair( omkeyC, pulseseries) );
+
+        // manually count included DOMs and add "random" hits to the pulsemap
+        unsigned int nsel = 0;
+        for ( int ix = 0; ix <nx; ++ix ){
+            for ( int iy = 0; iy <ny; ++iy ){
+                for ( int iz = 0; iz<nz; ++iz ){
+                    double dx = ix-xM;
+                    double dy = iy-yM;
+                    double dz = iz-zM;
+                    double r2 = dx*dx + dy*dy + dz*dz;
+                    if ( r2 > radius2 ) continue;
+                    nsel++;
+                    // continue;
+                    // For a pseudorandom subset, add hits.
+                    // Points ABC should be the outer points,
+                    // so keep other hits within a smaller radius.
+                    if ( r2 > 0.9 * radius2 ) continue;
+                    int dom = ix + ny*ix + iz*nx*ny;
+                    if ( ( (dom%5) == 1 ) || ( (dom%7) == 3 ) ){
+                        int stringnr = 1 + ny*ix + iy;
+                        int omnr = iz + 1;
+                        OMKey omkey(stringnr,omnr);
+                        pulsemap.insert(make_pair(omkey,pulseseries));
+                    }
+                }
+            }
+        }
+        log_info("nsel=%u",nsel);
+
+        // find ball and select OMs between hits (inclusive)
+        I3OMGeoMapPtr ballmapptr =
+            I3GeoTrimmers::GetMinBallGeometryFromData(
+                    geomap, pulsemap, margin );
+
+        // check total number of selected DOMs
+        char msg[256]; // sorry
+        size_t nball = ballmapptr->size();
+        log_info( "got %zu selected DOMs, expected %u", nball, nsel );
+        sprintf(msg,"got %zu selected DOMs, expected %u", nball, nsel );
+        ENSURE( nball == nsel, msg );
+
+        // check all DOMs individually
+        for ( int ix = 0; ix<nx; ++ix ){
+            for ( int iy = 0; iy<ny; ++iy ){
+                for ( int iz = 0; iz<nz; ++iz ){
+                    double dx = ix-xM;
+                    double dy = iy-yM;
+                    double dz = iz-zM;
+                    double r2 = dx*dx + dy*dy + dz*dz;
+                    bool should_be_inside = (r2<=radius2);
+                    int stringnr = 1 + ny*ix + iy;
+                    int omnr = iz + 1;
+                    OMKey omkey(stringnr,omnr);
+                    bool outside = ( ballmapptr->find(omkey) == ballmapptr->end());
+                    bool inside = !outside;
+                    if ( should_be_inside ){
+                        sprintf(msg, "ball with radius %.3f, DOM at %.3f was "
+                                     "rejected but should be included",
+                                     sqrt(radius2),sqrt(r2) );
+                        ENSURE( inside, msg );
+                    } else {
+                        sprintf(msg, "ball with radius %.3f, DOM at %.3f was "
+                                     "kept but should be excluded",
+                                     sqrt(radius2),sqrt(r2) );
+                        ENSURE( outside, msg );
+                    }
+                }
+            }
+        }
+    }
 }
