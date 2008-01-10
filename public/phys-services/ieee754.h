@@ -9,7 +9,7 @@
 
 // if we're not on an apple and we're not leopard or later, 
 // we should not be using this header.
-#if !defined(__APPLE_CC__) || (__APPLE_CC__ < 5465)
+#if !defined(__APPLE_CC__)
 #error This header should not be included on non-apple/leopard machines
 #endif
 
