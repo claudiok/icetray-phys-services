@@ -20,7 +20,7 @@
 /* TDS: unfortunately the darwins don't have ieee754.h, so I pulled
     one over from linux. */
 
-#if defined(__APPLE_CC__) && (__APPLE_CC__ >= 5465) // if darwin and leopard-or-newer
+#if defined(__APPLE_CC__)
 #include <phys-services/ieee754.h>
 #else
 #include <ieee754.h>
