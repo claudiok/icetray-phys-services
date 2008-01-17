@@ -7,7 +7,7 @@
 #ifndef I3CUTPARAMSMODULE_H
 #define I3CUTPARAMSMODULE_H
 
-#include <interfaces/I3ConditionalModule.h>
+#include <icetray/I3ConditionalModule.h>
 #include "icetray/I3Tray.h"
 #include "phys-services/I3Functions.h"
 #include "dataclasses/physics/I3Particle.h"
