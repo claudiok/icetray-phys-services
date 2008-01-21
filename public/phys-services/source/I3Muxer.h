@@ -40,6 +40,9 @@
 class I3Muxer : public I3Module
 {
  public:
+  static const char* DRIVING_TIME;
+
+
   I3Muxer(const I3Context& ctx);
 
   void Process();
