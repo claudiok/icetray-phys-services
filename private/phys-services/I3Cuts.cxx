@@ -126,6 +126,87 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
   return;
 }
 
+//--------------------------------------------------------------
+template<class HitType>
+void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry, 
+		  const I3Map<OMKey, vector<HitType> >& hitmap,
+		  const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
+		  int& Ndir, int& Nearly, int& Nlate)
+{
+  int StringNumber[120] = {0};
+  Nhit    = 0;
+  N_1hit  = 0;
+  Ndir    = 0;
+  Nearly  = 0;
+  Nlate   = 0;
+  Nstring = 0;
+  typename I3Map<OMKey, vector<HitType> >::const_iterator hits_i;
+  for (hits_i=hitmap.begin(); hits_i!=hitmap.end(); hits_i++) {
+    const vector<HitType>& hits = hits_i->second;
+    OMKey omkey = hits_i->first;
+
+    if(hits.size()==1){
+      log_trace("found a DOM with a single hit...");
+      N_1hit++;
+    }
+
+    I3OMGeoMap::const_iterator geom = geometry.omgeo.find(omkey);
+    if (geom==geometry.omgeo.end()) {
+      log_trace("Didn't find the current OMKey in Geometry");
+      continue;
+    }
+
+    StringNumber[(int) 19+omkey.GetString()] = 1; // "19+" includes AMANDA strings
+    const I3Position& ompos = geom->second.position;
+
+    typename vector<HitType>::const_iterator hit;
+    for (hit=hits.begin(); hit!=hits.end(); hit++) {
+      
+      //TimeResidual function checks if the input particle is a cascade or track and then
+      //handles the residual calculation appropriately
+      double Tres = TimeResidual(vertex, ompos, hit->GetTime());
+      log_trace("cascade time: %f",vertex.GetTime());
+      log_trace("    hit time: %f",hit->GetTime());
+      log_trace("    residual: %f",Tres);
+
+      Nhit++; // keep track of total hits
+
+      // this is an early hit...
+      if (Tres<t1) {
+	Nearly+=1;                     // add early hits
+      }
+
+      // this is a direct hit...
+      if (Tres>t1 && Tres<t2) {
+	Ndir+=1;                     // add direct hits
+      }
+
+      // this is a late hit...
+      if (Tres>t2) {
+	Nlate+=1;                     // add late hits
+      }
+
+    } // end loop over hitseries
+
+  } // end loop over hitseriesmap
+
+  //calculate Nstring
+  for (int i = 0; i < 120; i++) {
+    if (StringNumber[i])
+      ++Nstring;
+  }
+
+  Nchan = hitmap.size();
+  log_debug("-----> Nchan: %i",Nchan);
+  log_debug("-----> Nhit: %i",Nhit);
+  log_debug("-----> N_1hit: %i",N_1hit);
+  log_debug("-----> Nstring: %i",Nstring);
+  log_debug("-----> Ndir: %i",Ndir);
+  log_debug("-----> Nearly: %i",Nearly);
+  log_debug("-----> Nlate: %i", Nlate);
+  return;
+}
+
 
 //--------------------------------------------------------------
 template<class HitType>
@@ -229,6 +310,27 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
     (track, geometry, pulsemap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
 }
 
+//--------------------------------------------------------------
+void I3Cuts::CascadeCutsCalc(const I3Particle& vertex, const I3Geometry& geometry, 
+		      const I3RecoHitSeriesMap& hitmap,
+		      const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
+		      int& Ndir, int& Nearly, int& Nlate)
+{
+  CascadeCutsCalcImpl<I3RecoHit>
+    (vertex, geometry, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
+}
+
+
+//--------------------------------------------------------------
+void I3Cuts::CascadeCutsCalc(const I3Particle& vertex, const I3Geometry& geometry, 
+		      const I3RecoPulseSeriesMap& pulsemap,
+		      const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
+		      int& Ndir, int& Nearly, int& Nlate)
+{
+  CascadeCutsCalcImpl<I3RecoPulse>
+    (vertex, geometry, pulsemap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
+}
+
 
 //--------------------------------------------------------------
 int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom, 
@@ -257,6 +359,17 @@ int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom,
 }
 
 //--------------------------------------------------------------
+int I3Cuts::N_1hit(const I3Particle& vertex, const I3Geometry& geom, 
+		 const I3RecoHitSeriesMap& hitmap,
+		 double t1, double t2)
+{
+  int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
+  CascadeCutsCalcImpl<I3RecoHit>
+    (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
+  return N_1hit;
+}
+
+//--------------------------------------------------------------
 int I3Cuts::Nstring(const I3Particle& track, const I3Geometry& geom, 
 		 const I3RecoHitSeriesMap& hitmap,
 		 double t1, double t2)
@@ -278,6 +391,39 @@ int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom,
   CutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Ndir;
+}
+
+//--------------------------------------------------------------
+int I3Cuts::CascadeNdir(const I3Particle& vertex, const I3Geometry& geom, 
+		 const I3RecoHitSeriesMap& hitmap,
+		 double t1, double t2)
+{
+  int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
+  CascadeCutsCalcImpl<I3RecoHit>
+    (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
+  return Ndir;
+}
+
+//--------------------------------------------------------------
+int I3Cuts::Nearly(const I3Particle& vertex, const I3Geometry& geom, 
+		 const I3RecoHitSeriesMap& hitmap,
+		 double t1, double t2)
+{
+  int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
+  CascadeCutsCalcImpl<I3RecoHit>
+    (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
+  return Nearly;
+}
+
+//--------------------------------------------------------------
+int I3Cuts::Nlate(const I3Particle& vertex, const I3Geometry& geom, 
+		 const I3RecoHitSeriesMap& hitmap,
+		 double t1, double t2)
+{
+  int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
+  CascadeCutsCalcImpl<I3RecoHit>
+    (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
+  return Nlate;
 }
 
 

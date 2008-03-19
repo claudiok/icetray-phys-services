@@ -14,6 +14,7 @@
 // classes
 
 #pragma link C++ namespace I3CutValues+;
+#pragma link C++ namespace I3CascadeCutValues+;
 
 // namespaces
 

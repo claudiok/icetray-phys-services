@@ -16,6 +16,7 @@ i3_add_library(phys-services
   ROOTCINT public/phys-services/I3Calculator.h
   public/phys-services/I3Cuts.h
   public/phys-services/I3CutValues.h
+  public/phys-services/I3CascadeCutValues.h
   )
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable

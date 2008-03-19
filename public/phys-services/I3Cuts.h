@@ -91,6 +91,61 @@ namespace I3Cuts
 		double& Sall);
 
   /**
+   * Main function that does the actual calculation of all of the cut 
+   * parameters.  First, it loops over all hits 
+   * 
+   * INPUT:
+   * @param vertex --  Vertex used in calculation.
+   * @param geometry -- Geometry object from the event.
+   * @param hitmap -- Map of I3RecoHitSeries used in calculation. 
+   * @param t1 -- Lower edge of the time residual window for direct hits.
+   *              Generally, this value is -15ns.
+   * @param t2 -- Upper edge of the time residual window for direct hits.
+   *              Generally, this value is 15ns..150ns.
+   * 
+   * 
+   * OUTPUT:
+   * @param Nchan -- The Nchan cut parameter: total number of hit channels.
+   * @param Nhit -- The Nhit cut parameter: total number of hits.
+   * @param N_1hit -- Number of channels with only 1 hit in them.
+   * @param Nstring -- The Nstring cut parameter: total number of strings.
+   * @param Ndir -- The Ndir cut parameter: number of direct hits.
+   * @param Nearly -- The Nearly cut parameter: number of early hits.
+   * @param Nlate -- The Nlate cut parameter: number of late hits.
+   * 
+   * @todo Think about making the code more efficient...
+   */
+  void CascadeCutsCalc(const I3Particle& vertex, 
+		const I3Geometry& geometry, 
+		const I3RecoHitSeriesMap& hitmap,
+		const double t1, 
+		const double t2, 
+		int& Nchan, 
+ 		int& Nhit,
+ 		int& N_1hit,
+		int& Nstring,
+		int& Ndir, 
+		int& Nearly,
+		int& Nlate);
+
+  /**
+   * INPUT:
+   * @parameter pulsemap -- Map of I3RecoPulseSeries to be used.
+   */
+  void CascadeCutsCalc(const I3Particle& vertex, 
+		const I3Geometry& geometry, 
+		const I3RecoPulseSeriesMap& pulsemap,
+		const double t1, 
+		const double t2, 
+		int& Nchan, 
+		int& Nhit, 
+		int& N_1hit, 
+		int& Nstring,
+		int& Ndir, 
+		int& Nearly,
+		int& Nlate);
+
+  /**
    * A function which calculates the center of gravity of the hits. 
    * It takes a I3RecoPulseSeries map and the geometry,
    * and returns an I3Position of the COG.
@@ -130,6 +185,18 @@ namespace I3Cuts
 
   /**
    * A convenience function that calls CutsCalc() and returns the total 
+   * number of hits in the event.  If you are interested in more than 
+   * one quantity from CutsCalc(), use the CutsCalc() function directly,
+   * in order to save multiple calls to the function.
+   */
+  int N_1hit(const I3Particle& vertex, 
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
+
+  /**
+   * A convenience function that calls CutsCalc() and returns the total 
    * number of strings in the event.  If you are interested in more than 
    * one quantity from CutsCalc(), use the CutsCalc() function directly,
    * in order to save multiple calls to the function.
@@ -147,6 +214,42 @@ namespace I3Cuts
    * in order to save multiple calls to the function.
    */
   int Ndir(const I3Particle& track, 
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
+
+  /**
+   * A convenience function that calls CutsCalc() and returns the number 
+   * of direct hits from a given track.  If you are interested in more than 
+   * one quantity from CutsCalc(), use the CutsCalc() function directly,
+   * in order to save multiple calls to the function.
+   */
+  int CascadeNdir(const I3Particle& vertex, 
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
+
+  /**
+   * A convenience function that calls CutsCalc() and returns the number 
+   * of direct hits from a given track.  If you are interested in more than 
+   * one quantity from CutsCalc(), use the CutsCalc() function directly,
+   * in order to save multiple calls to the function.
+   */
+  int Nearly(const I3Particle& vertex, 
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
+
+  /**
+   * A convenience function that calls CutsCalc() and returns the number 
+   * of direct hits from a given track.  If you are interested in more than 
+   * one quantity from CutsCalc(), use the CutsCalc() function directly,
+   * in order to save multiple calls to the function.
+   */
+  int Nlate(const I3Particle& vertex, 
 	   const I3Geometry& geom, 
 	   const I3RecoHitSeriesMap& hitmap, 
 	   double t1 = I3Constants::dt_window_l, 
