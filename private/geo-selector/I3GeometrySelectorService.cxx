@@ -59,7 +59,7 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
     if(geo_sel_utils::exists(station,goodStations_)){
       I3StationGeo s = siter->second;
 
-      log_trace ("Copying station %zu, with %zu tanks",
+      log_trace ("Copying station %i, with %zu tanks",
 		 station, s.size ());
 	
       vector<I3TankGeo>::iterator i = s.begin();
