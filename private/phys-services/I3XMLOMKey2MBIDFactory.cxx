@@ -30,8 +30,7 @@ I3XMLOMKey2MBIDFactory::I3XMLOMKey2MBIDFactory(const I3Context& context)
 {   
   AddParameter("Infile", "The name of the file to get the mainboard ID list from", infile_);
   AddParameter("InstallServiceAs",
-               "Install the service at the following location "
-               "(Default value is the value according to I3_DEFAULT_NAME)",
+               "Install the service at the following location",
                installServiceAs_);
 }
 

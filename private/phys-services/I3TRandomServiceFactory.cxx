@@ -29,8 +29,7 @@ I3TRandomServiceFactory::I3TRandomServiceFactory(const I3Context& context)
 
 	installServiceAs_ = I3DefaultName<I3RandomService>::value();
 	AddParameter("InstallServiceAs",
-				"Install the random service at the following location"
-				"(Default value is the value according to I3_DEFAULT_NAME)",
+				"Install the random service at the following location",
 				installServiceAs_);
 }
 
