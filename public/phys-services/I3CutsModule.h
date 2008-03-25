@@ -52,6 +52,12 @@ private:
   string pulsesName_;
 
   /**
+   * Parameter: Optional tag for the name of the object inserted by this module 
+   * into the frame.
+   */
+  string nameTag_;
+
+  /**
    * Parameter: time range for calculating direct hits.
    */
   vector<double> timeRange_;

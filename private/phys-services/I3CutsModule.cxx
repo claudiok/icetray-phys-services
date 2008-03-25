@@ -33,6 +33,10 @@ I3CutsModule::I3CutsModule(const I3Context& ctx) : I3ConditionalModule(ctx)
   AddParameter("PulsesName", "Name of the pulse series to be used for cut calc"
 	       ,pulsesName_);
 
+  nameTag_ = "";
+  AddParameter("NameTag", "Tag to add to name of output object"
+	       ,nameTag_);
+
   timeRange_.resize(2);
   timeRange_[0] = I3Constants::dt_window_l;
   timeRange_[1] = I3Constants::dt_window_h;
@@ -48,6 +52,7 @@ void I3CutsModule::Configure()
   GetParameter("ParticleNames",particleName_);   
   GetParameter("HitsName",hitsName_);
   GetParameter("PulsesName",pulsesName_);
+  GetParameter("NameTag",nameTag_);
   GetParameter("DirectHitsTimeRange",timeRange_);
 
   if (hitsName_.empty() && pulsesName_.empty()) 
@@ -101,7 +106,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	else if (pulsemap)
 	  cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
 	
-	frame->Put(name+"Cuts", cuts);
+	frame->Put(name+"Cuts"+nameTag_, cuts);
 	log_debug("%s",ToString(cuts).c_str());
 	
       } else if(particle->IsCascade()){
@@ -114,7 +119,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	else if (pulsemap)
 	  cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
 
-	frame->Put(name+"Cuts", cuts);
+	frame->Put(name+"Cuts"+nameTag_, cuts);
 	log_debug("%s",ToString(cuts).c_str());
 
       } else {
