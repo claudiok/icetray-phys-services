@@ -443,3 +443,40 @@ TEST(Containment_IceTopRhombus)
   ENSURE_DISTANCE(c, 0.6501, 0.0001, "Rhombus C didn't work");
 
 }
+
+TEST(Exactly_Vertical_Track)
+{
+  // Olga's simple cube: -1 to 1 on all sides
+  vector<double> x;
+  vector<double> y;
+  x.push_back(1);
+  x.push_back(1);
+  x.push_back(-1);
+  x.push_back(-1);
+  y.push_back(1);
+  y.push_back(-1);
+  y.push_back(-1);
+  y.push_back(1);
+
+  double c;
+  I3Particle t(I3Particle::InfiniteTrack);
+
+  // Make sure that this "empty" track returns zero 
+  t.SetPos(0,0,0);
+  t.SetThetaPhi(0, 0);
+  c = ContainmentVolumeSize(t, x, y, 1, -1);
+  ENSURE_DISTANCE(c, 0.0, 0.00001, "ContainmentVolume zero track");
+
+  // An exactly vertical track, outside 
+  t.SetPos(0,2,0);
+  t.SetThetaPhi(0, 0);
+  c = ContainmentVolumeSize(t, x, y, 1, -1);
+  ENSURE_DISTANCE(c, 2.0, 0.00001, "ContainmentVolume vertical track");
+
+  // An exactly horizontal track, outside
+  t.SetPos(0,0,2);
+  t.SetThetaPhi(I3Constants::pi/2, 0);
+  c = ContainmentVolumeSize(t, x, y, 1, -1);
+  ENSURE_DISTANCE(c, 2.0, 0.00001, "ContainmentVolume horizontal track");
+  
+}
