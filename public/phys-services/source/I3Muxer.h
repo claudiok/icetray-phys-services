@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: I3Muxer.h 31169 2007-04-05 15:20:42Z troy $
  *
  * @file I3Muxer.h
  * @version $Revision:$
- * @date $Date$
+ * @date $Date: 2007-04-05 10:20:42 -0500 (Thu, 05 Apr 2007) $
  * @author pretz
  */
 
@@ -40,9 +40,6 @@
 class I3Muxer : public I3Module
 {
  public:
-  static const char* DRIVING_TIME;
-
-
   I3Muxer(const I3Context& ctx);
 
   void Process();

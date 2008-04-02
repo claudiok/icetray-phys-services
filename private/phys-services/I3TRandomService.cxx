@@ -1,9 +1,9 @@
 /*
  * class: I3TRandomService
  *
- * Version: $Id$
+ * Version: $Id: I3TRandomService.cxx 11796 2005-10-24 16:57:39Z juancarlos $
  *
- * Date: $Date$
+ * Date: $Date: 2005-10-24 11:57:39 -0500 (Mon, 24 Oct 2005) $
  *
  * (c) IceCube Collaboration
  */

@@ -436,8 +436,8 @@ int I3MediumService::GetNumberOfLayer(string ltype){
   int ndust = 0;
   int nclear = 0;
   for(int i = 0; i < N_LAYER; ++i){
-    if(strcmp(DUSTY_LAYER_TYPE[i], "dusty") == 0) ndust++;
-    if(strcmp(DUSTY_LAYER_TYPE[i], "clear") == 0) nclear++;
+    if(DUSTY_LAYER_TYPE[i] == "dusty") ndust++;
+    if(DUSTY_LAYER_TYPE[i] == "clear") nclear++;
   }
   transform(ltype.begin(), ltype.end(), ltype.begin(), (int(*)(int))tolower);
   if(ltype.find("all", 0) != string::npos) return nclear + ndust;

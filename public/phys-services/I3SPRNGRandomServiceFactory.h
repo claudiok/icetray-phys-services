@@ -8,7 +8,7 @@
  * @brief This class installs a I3SPRNGRandomService. 
  * Based on I3GSLRandomService by pretz
  *
- * @version $Id$
+ * @version $Id: I3SPRNGRandomServiceFactory.h 23629 2006-09-13 22:27:34Z tschmidt $
  * @author juancarlos
  *
  * (c) IceCube Collaboration

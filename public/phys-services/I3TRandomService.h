@@ -7,7 +7,7 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: I3TRandomService.h 17599 2006-03-21 17:36:03Z olivas $
  *
  * @brief An implementation of the I3RandomService interface.  
  * 
@@ -15,7 +15,7 @@
  * a private TRandom to implement the methods of I3RandomService.
  *
  * @version $Revision: 1.6 $
- * @date $Date$
+ * @date $Date: 2006-03-21 11:36:03 -0600 (Tue, 21 Mar 2006) $
  * @author pretz
  */
 class I3TRandomService : public I3RandomService{

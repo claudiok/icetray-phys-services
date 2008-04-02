@@ -10,14 +10,14 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: I3GSLRandomService.h 17599 2006-03-21 17:36:03Z olivas $
  *
  * @brief An implementation of the I3RandomService interface.  
  * 
  * Uses the gsl library for the random numbers
  *
  * @version $Revision: 1.5 $
- * @date $Date$
+ * @date $Date: 2006-03-21 11:36:03 -0600 (Tue, 21 Mar 2006) $
  * @author pretz
  *
  * @todo 

@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: I3Calculator.h 38734 2007-11-16 02:07:14Z boersma $
  *
  * @file I3Calculator.h
  * @version $Revision: 1.16 $
- * @date $Date$
+ * @date $Date: 2007-11-15 20:07:14 -0600 (Thu, 15 Nov 2007) $
  * @author pretz, dule, ehrlich
  */
 #ifndef I3CALCULATOR_H

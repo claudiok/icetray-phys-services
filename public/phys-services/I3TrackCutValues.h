@@ -5,8 +5,8 @@
     @author dule
 */
 
-#ifndef I3CUTVALUES_H
-#define I3CUTVALUES_H
+#ifndef I3TRACKCUTVALUES_H
+#define I3TRACKCUTVALUES_H
 
 #include "icetray/I3FrameObject.h"
 #include "dataclasses/Utility.h"
@@ -20,7 +20,7 @@
 /**
  * @brief A class to store the basic hit information from the event
  */
-class I3CutValues : public I3FrameObject
+class I3TrackCutValues : public I3FrameObject
 {
  public:
   int Nchan;
@@ -32,7 +32,7 @@ class I3CutValues : public I3FrameObject
   double Sall;
   I3Position cog;
 
-  I3CutValues() :
+  I3TrackCutValues() :
     Nchan(-1),
     Nhit(-1),
     Nstring(-1),
@@ -54,7 +54,7 @@ class I3CutValues : public I3FrameObject
 		 const double& begTWindow = I3Constants::dt_window_l,
 		 const double& endTWindow = I3Constants::dt_window_h);
 
-  virtual ~I3CutValues();
+  virtual ~I3TrackCutValues();
 
  private:
 
@@ -63,6 +63,6 @@ class I3CutValues : public I3FrameObject
 
 };
 
-I3_POINTER_TYPEDEFS(I3CutValues);
+I3_POINTER_TYPEDEFS(I3TrackCutValues);
 
 #endif

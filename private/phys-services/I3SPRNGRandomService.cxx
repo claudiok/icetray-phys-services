@@ -1,7 +1,7 @@
 /*
  * class: I3SPRNGRandomService
  *
- * Version $Id$
+ * Version $Id: I3SPRNGRandomService.cxx 21041 2006-06-23 08:37:53Z rfranke $
  *
  * Date: 2 Apr 2005
  *

@@ -7,17 +7,17 @@
 #include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "phys-services/Utility.h"
-#include "phys-services/I3CutsModule.h"
-#include "phys-services/I3TrackCutValues.h"
-#include "phys-services/I3CascadeCutValues.h"
+#include "phys-services/I3CutsModuleStd.h"
+#include "phys-services/I3TrackCutValuesStd.h"
+#include "phys-services/I3CascadeCutValuesStd.h"
 
 using namespace std;
 using namespace I3Units;
 
-I3_MODULE(I3CutsModule);
+I3_MODULE(I3CutsModuleStd);
 
 //--------------------------------------------------------------
-I3CutsModule::I3CutsModule(const I3Context& ctx) : I3ConditionalModule(ctx)
+I3CutsModuleStd::I3CutsModuleStd(const I3Context& ctx) : I3ConditionalModule(ctx)
 {
   AddOutBox("OutBox");
   
@@ -35,25 +35,18 @@ I3CutsModule::I3CutsModule(const I3Context& ctx) : I3ConditionalModule(ctx)
 
   nameTag_ = "";
   AddParameter("NameTag", "Tag to add to name of output object"
-	       ,nameTag_);
-
-  timeRange_.resize(2);
-  timeRange_[0] = I3Constants::dt_window_l;
-  timeRange_[1] = I3Constants::dt_window_h;
-  AddParameter("DirectHitsTimeRange","Time range for calculating direct hits"
-	       ,timeRange_);
+               ,nameTag_);
 
 }
 
 
 //--------------------------------------------------------------
-void I3CutsModule::Configure()
+void I3CutsModuleStd::Configure()
 {
   GetParameter("ParticleNames",particleName_);   
   GetParameter("HitsName",hitsName_);
   GetParameter("PulsesName",pulsesName_);
   GetParameter("NameTag",nameTag_);
-  GetParameter("DirectHitsTimeRange",timeRange_);
 
   if (hitsName_.empty() && pulsesName_.empty()) 
     log_fatal("Either 'HitsName' or 'PulsesName' parameter HAS to be set!");
@@ -63,7 +56,7 @@ void I3CutsModule::Configure()
 
 
 //--------------------------------------------------------------
-void I3CutsModule::Physics(I3FramePtr frame)
+void I3CutsModuleStd::Physics(I3FramePtr frame)
 {
   //---Get geometry......
   const I3Geometry& geometry = frame->Get<I3Geometry>();
@@ -94,12 +87,12 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	if(particle->IsTrack()){
 	  
 	  log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", name.c_str());
-	  I3TrackCutValuesPtr cuts(new I3TrackCutValues());
+	  I3TrackCutValuesStdPtr cuts(new I3TrackCutValuesStd());
 	  
 	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
+	    cuts->Calculate(*particle,geometry,*hitmap);
 	  else if (pulsemap)
-	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
+	    cuts->Calculate(*particle,geometry,*pulsemap);
 	  
 	  frame->Put(name+"Cuts"+nameTag_, cuts);
 	  log_debug("%s",ToString(cuts).c_str());
@@ -107,12 +100,12 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	} else if(particle->IsCascade()){
 	  
 	  log_debug(" ---> I3Particle '%s' is a cascade, so proceeding accordingly...", name.c_str());
-	  I3CascadeCutValuesPtr cuts(new I3CascadeCutValues());
+	  I3CascadeCutValuesStdPtr cuts(new I3CascadeCutValuesStd());
 	  
 	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
+	    cuts->Calculate(*particle,geometry,*hitmap);
 	  else if (pulsemap)
-	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
+	    cuts->Calculate(*particle,geometry,*pulsemap);
 	  
 	  frame->Put(name+"Cuts"+nameTag_, cuts);
 	  log_debug("%s",ToString(cuts).c_str());
@@ -130,28 +123,28 @@ void I3CutsModule::Physics(I3FramePtr frame)
   }
   //otherwise particleName_ is empty, so process all I3Particles in the frame...
   else {
-
+    
     for (I3Frame::typename_iterator iter = frame->typename_begin();
-	 iter != frame->typename_end();
-	 iter++) {
-
+         iter != frame->typename_end();
+         iter++) {
+      
       string name = iter->first;
       string type = iter->second;
       
       if(type=="I3Particle"){
       
-	I3ParticleConstPtr particle = dynamic_pointer_cast<const I3Particle>(frame->Get<I3FrameObjectConstPtr>(name));
+        I3ParticleConstPtr particle = dynamic_pointer_cast<const I3Particle>(frame->Get<I3FrameObjectConstPtr>(name));
 	
 	log_debug(" ---> calculating cuts for I3Particle '%s'...", name.c_str());
 	if(particle->IsTrack()){
 	  
 	  log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", name.c_str());
-	  I3TrackCutValuesPtr cuts(new I3TrackCutValues());
+	  I3TrackCutValuesStdPtr cuts(new I3TrackCutValuesStd());
 	  
 	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
+	    cuts->Calculate(*particle,geometry,*hitmap);
 	  else if (pulsemap)
-	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
+	    cuts->Calculate(*particle,geometry,*pulsemap);
 	  
 	  frame->Put(name+"Cuts"+nameTag_, cuts);
 	  log_debug("%s",ToString(cuts).c_str());
@@ -159,12 +152,12 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	} else if(particle->IsCascade()){
 	  
 	  log_debug(" ---> I3Particle '%s' is a cascade, so proceeding accordingly...", name.c_str());
-	  I3CascadeCutValuesPtr cuts(new I3CascadeCutValues());
+	  I3CascadeCutValuesStdPtr cuts(new I3CascadeCutValuesStd());
 	  
 	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
+	    cuts->Calculate(*particle,geometry,*hitmap);
 	  else if (pulsemap)
-	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
+	    cuts->Calculate(*particle,geometry,*pulsemap);
 	  
 	  frame->Put(name+"Cuts"+nameTag_, cuts);
 	  log_debug("%s",ToString(cuts).c_str());
@@ -182,4 +175,12 @@ void I3CutsModule::Physics(I3FramePtr frame)
   }
 
   PushFrame(frame,"OutBox");
-}
+
+} 
+  
+  
+  
+  
+  
+
+

@@ -3,7 +3,7 @@
 /*
  * class: I3GSLRandomServiceFactory
  *
- * Version $Id$
+ * Version $Id: I3GSLRandomServiceFactory.h 23629 2006-09-13 22:27:34Z tschmidt $
  *
  * Date: 17 Feb 2004
  *
@@ -28,7 +28,7 @@ class I3Context;
  *
  * I3GSLRandomService supports two parameters: <VAR>Seed</VAR>,
  * <VAR>InstallServiceAs</VAR>.
- * @version $Id$
+ * @version $Id: I3GSLRandomServiceFactory.h 23629 2006-09-13 22:27:34Z tschmidt $
  * @author pretz
  */
 class I3GSLRandomServiceFactory

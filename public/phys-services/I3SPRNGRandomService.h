@@ -14,7 +14,7 @@ using namespace std;
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: I3SPRNGRandomService.h 17599 2006-03-21 17:36:03Z olivas $
  *
  * @brief SPRNG Implementation of the I3RandomService interface.  
  * This implementation uses a combination of SPRNG and GSL to generate
@@ -25,7 +25,7 @@ using namespace std;
  * I3GSLRandomService.
  * 
  * @version $Revision: 1.2 $
- * @date $Date$
+ * @date $Date: 2006-03-21 11:36:03 -0600 (Tue, 21 Mar 2006) $
  * @author juancarlos
  *
  * @todo Add ability to save state of rng after run is complete

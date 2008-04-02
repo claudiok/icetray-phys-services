@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id$
+    $Id: I3Calculator.cxx 38734 2007-11-16 02:07:14Z boersma $
 
     @version $Revision: 1.1 $
-    @date $Date$
+    @date $Date: 2007-11-15 20:07:14 -0600 (Thu, 15 Nov 2007) $
     @author
 
     @todo
