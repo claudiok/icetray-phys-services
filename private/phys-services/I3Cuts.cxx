@@ -13,7 +13,7 @@ using namespace I3Calculator;
 
 //--------------------------------------------------------------
 template<class HitType>
-void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
+void TrackCutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
 		  const I3Map<OMKey, vector<HitType> >& hitmap,
 		  const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		  int& Ndir, double& Ldir, double& Sdir, double& Sall)
@@ -290,23 +290,23 @@ I3Position I3Cuts::COG(const I3Geometry& geometry,
 
 
 //--------------------------------------------------------------
-void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
+void I3Cuts::TrackCutsCalc(const I3Particle& track, const I3Geometry& geometry, 
 		      const I3RecoHitSeriesMap& hitmap,
 		      const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
-  CutsCalcImpl<I3RecoHit>
+  TrackCutsCalcImpl<I3RecoHit>
     (track, geometry, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
 }
 
 
 //--------------------------------------------------------------
-void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
+void I3Cuts::TrackCutsCalc(const I3Particle& track, const I3Geometry& geometry, 
 		      const I3RecoPulseSeriesMap& pulsemap,
 		      const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
-  CutsCalcImpl<I3RecoPulse>
+  TrackCutsCalcImpl<I3RecoPulse>
     (track, geometry, pulsemap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
 }
 
@@ -339,7 +339,7 @@ int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  TrackCutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nchan;
 }
@@ -353,7 +353,7 @@ int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  TrackCutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nhit;
 }
@@ -376,7 +376,7 @@ int I3Cuts::Nstring(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  TrackCutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nstring;
 }
@@ -388,7 +388,7 @@ int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  TrackCutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Ndir;
 }
@@ -434,7 +434,7 @@ double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  TrackCutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Ldir;
 }
@@ -447,7 +447,7 @@ double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  TrackCutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Sall;
 }
@@ -460,7 +460,7 @@ double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  TrackCutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Sdir;
 }
@@ -585,9 +585,9 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   double deg = 180/M_PI;
   double bestanswer = NAN;
 
-  // Error-checking... need at least three strings
-  if (x.size()<3) {
-    log_warn("ContainmentVolume of zero/1/2 strings: will be NAN");
+  // Error-checking... need at least three strings 
+  if (x.size()<3) { 
+  log_warn("ContainmentVolume of zero/1/2 strings: will be NAN"); 
     return NAN;
   }
 
@@ -597,8 +597,8 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   zcm = (zhigh+zlow)/2;
   I3Position CM(xcm,ycm,zcm);
 
-  // Error-catching: what if the track goes right through the center of mass?
-  if (I3Calculator::IsOnTrack(track,CM,SMALLNUMBER)) return 0;
+  // Error-catching: what if the track goes right through the center of mass? 
+  if (I3Calculator::IsOnTrack(track,CM,SMALLNUMBER)) return 0; 
 
   PutPointsInOrder(&x,&y,xcm,ycm,0);
 
@@ -633,18 +633,18 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   I3Position C(x[n-1],y[n-1],zlow);
   pairs1.push_back(B);
   pairs2.push_back(C);
-  // The last-to-first pair which was left out (upper and lower)
-  B.SetPosition(x[n-1],y[n-1],zhigh);
-  C.SetPosition(x[0],y[0],zhigh);
-  pairs1.push_back(B);
-  pairs2.push_back(C);
-  B.SetPosition(x[n-1],y[n-1],zlow);
-  C.SetPosition(x[0],y[0],zlow);
-  pairs1.push_back(B);
-  pairs2.push_back(C);
+  
+  // The last-to-first pair which was left out (upper and lower) 
+  B.SetPosition(x[n-1],y[n-1],zhigh); 
+  C.SetPosition(x[0],y[0],zhigh); 
+  pairs1.push_back(B); 
+  pairs2.push_back(C); 
+  B.SetPosition(x[n-1],y[n-1],zlow); 
+  C.SetPosition(x[0],y[0],zlow); 
+  pairs1.push_back(B); 
+  pairs2.push_back(C); 
 
-  log_debug("Number of pairs: %zu", pairs1.size());
-      
+  log_debug("Number of pairs: %zu", pairs1.size()); 
 
   // Now, compute intersection points for each "wall",
   // and figure out which one has the tracking going
@@ -654,13 +654,12 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     I3Position B(pairs1[i]);
     I3Position C(pairs2[i]);
     I3Position P = IntersectionOfLineAndPlane(track,CM,B,C);
-
-    // Error catching: if there is no point "P", then the track 
-    // is exactly parallel to the plane being tested.  
-    // For such a track the "best" size is infinitely far away.
-    // So it's okay to just skip it; the best size will come from
-    // some other plane.  So skip any planes for which this occurs.
-    if (!isnan(P.GetX())&&!isnan(P.GetY())&&!isnan(P.GetZ())) {
+    // Error catching: if there is no point "P", then the track  
+    // is exactly parallel to the plane being tested.   
+    // For such a track the "best" size is infinitely far away. 
+    // So it's okay to just skip it; the best size will come from 
+    // some other plane.  So skip any planes for which this occurs. 
+    if (!isnan(P.GetX())&&!isnan(P.GetY())&&!isnan(P.GetZ())) { 
 
     // Reset coordinate system to CM
     B.ShiftCoordSystem(CM);
@@ -730,10 +729,8 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       log_trace("New Answer: %f/%f = %f", dprime, di, bestanswer);
     
     } // end if we found the right wall
-    
-    } else { log_debug("This track is parallel to the plane!  Ignoring."); }
-    // end the error-catching
-
+  } else { log_debug("This track is parallel to the plane!  Ignoring."); } 
+    // end the error-catching 
   } //end loop over the walls
 
   return bestanswer;
@@ -751,9 +748,9 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 {
   double deg = 180/M_PI;
 
-  // Error-checking... need at least three strings to have an area
-  if (x.size()<3) {
-    log_warn("ContainmentArea of zero/1/2 strings: will be NAN");
+  // Error-checking... need at least three strings to have an area 
+  if (x.size()<3) { 
+    log_warn("ContainmentArea of zero/1/2 strings: will be NAN"); 
     return NAN;
   }
 
@@ -879,14 +876,14 @@ void I3Cuts::IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
   double c2 = x4*y3 - x3*y4;  //{ a2*x + b2*y + c2 = 0 is line 2 }
 
   double denom = a1*b2 - a2*b1;
-  if (denom == 0) { // they don't intersect, they are parallel
-    //log_fatal("Denomonator zero!");
-    *xi = NAN;
-    *yi = NAN;
-  } else {
-    *xi =(b1*c2 - b2*c1)/denom;
-    *yi =(a2*c1 - a1*c2)/denom;
-  }
+  if (denom == 0) { // they don't intersect, they are parallel 
+  //log_fatal("Denomonator zero!"); 
+  *xi = NAN; 
+  *yi = NAN; 
+  } else { 
+  *xi =(b1*c2 - b2*c1)/denom; 
+  *yi =(a2*c1 - a1*c2)/denom; 
+  } 
 #endif
 
 }
@@ -989,7 +986,7 @@ I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
   //answer.Print();
 
   // Output the solution as an I3Position
-  log_trace("L-P intersection: (x, y, z ) = (%f, %f, %f)", answer.X(),answer.Y(),answer.Z());
+  log_trace("L-P intersection: (x, y, z ) = (%f, %f, %f)", answer.X(),answer.Y(),answer.Z()); 
   I3Position result(answer.X(),answer.Y(),answer.Z());
   return result;
 

@@ -1,3 +1,4 @@
+
 // LinkDef.h
 // $Id: LinkDef.h 15229 2006-02-02 20:58:21Z pretz $
 // $Date: 2006-02-02 15:58:21 -0500 (Thu, 02 Feb 2006) $
@@ -13,13 +14,16 @@
 
 // classes
 
-#pragma link C++ namespace I3CutValues+;
+#pragma link C++ namespace I3TrackCutValues+;
 #pragma link C++ namespace I3CascadeCutValues+;
+#pragma link C++ namespace I3TrackCutValuesStd+;
+#pragma link C++ namespace I3CascadeCutValuesStd+;
 
 // namespaces
 
 #pragma link C++ namespace I3Calculator;
 #pragma link C++ namespace I3Cuts;
+#pragma link C++ namespace I3CutsStd;
 
 // functions
 
@@ -37,13 +41,17 @@
 #pragma link C++ function I3Calculator::InTrackSystem; //
 #pragma link C++ function I3Calculator::InNominalSystem; //
 
-#pragma link C++ function I3Cuts::CutsCalc; //
+#pragma link C++ function I3Cuts::TrackCutsCalc; //
 #pragma link C++ function I3Cuts::Ndir; //
 #pragma link C++ function I3Cuts::Ldir; //
 #pragma link C++ function I3Cuts::SmoothAll; //
 #pragma link C++ function I3Cuts::SmoothDir; //
 #pragma link C++ function I3Cuts::CylinderSize; //
 #pragma link C++ function I3Cuts::COG; //
+
+// Include these ??
+//#pragma link C++ function I3CutsStd::CutsCalc; //
+//#pragma link C++ function I3CutsStd::COG; //
 
 #endif
 
