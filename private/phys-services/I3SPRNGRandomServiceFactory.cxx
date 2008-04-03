@@ -1,7 +1,7 @@
 /*
  * class: I3SPRNGRandomServiceFactory
  *
- * Version $Id: I3SPRNGRandomServiceFactory.cxx 23629 2006-09-13 22:27:34Z tschmidt $
+ * Version $Id$
  *
  * Date: 2 Apr 2005
  *
@@ -39,8 +39,7 @@ I3SPRNGRandomServiceFactory::I3SPRNGRandomServiceFactory(const I3Context& contex
 
   installServiceAs_ = I3DefaultName<I3RandomService>::value();
   AddParameter("InstallServiceAs",
-               "Install the random service at the following location"
-               "(Default value is the value according to I3_DEFAULT_NAME)",
+               "Install the random service at the following location",
                installServiceAs_);
 }
 

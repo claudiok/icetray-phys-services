@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3FileOMKey2MBID.h 38592 2007-11-09 22:55:06Z tschmidt $
+ * $Id$
  *
  * @file I3FileOMKey2MBID.h
  * @version $Revision:$
- * @date $Date: 2007-11-09 16:55:06 -0600 (Fri, 09 Nov 2007) $
+ * @date $Date$
  * @author pretz
  */
 

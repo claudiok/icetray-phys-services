@@ -58,11 +58,19 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
     int station = siter->first;
     if(geo_sel_utils::exists(station,goodStations_)){
       I3StationGeo s = siter->second;
+
+      log_trace ("Copying station %i, with %zu tanks",
+		 station, s.size ());
+	
       vector<I3TankGeo>::iterator i = s.begin();
       for(; i != s.end(); i++){
-	i->position.SetX(iter->second.position.GetX() + shiftX);
-	i->position.SetY(iter->second.position.GetY() + shiftY);
-	i->position.SetZ(iter->second.position.GetZ() + shiftZ_);
+	log_trace ("OLD STATION POSISTION x/y/z = %f/%f/%f",
+		   i->position.GetX (),
+		   i->position.GetY (),
+		   i->position.GetZ ());
+	i->position.SetX (i->position.GetX () + shiftX);
+	i->position.SetY (i->position.GetY () + shiftY);
+	i->position.SetZ (i->position.GetZ () + shiftZ_);
       }
       new_geo->stationgeo[station] = s;
     }

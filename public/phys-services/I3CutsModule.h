@@ -66,7 +66,7 @@ private:
    * Named stream for my logging messages.  Allows my messages to be
    * sent to a particular log file, to be set to a special threshold, etc.
    */
-  SET_LOGGER("I3CutsModule");
+  SET_LOGGER("CutsModule");
 
 };
 

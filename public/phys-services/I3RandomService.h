@@ -1,7 +1,7 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3RandomService.h 35911 2007-08-23 05:12:17Z troy $
+ * $Id$
  *
  *
  * This class is just the interface.  The names chosen
@@ -9,7 +9,7 @@
  * trivially fill this interface
  *
  * @version $Revision: 1.10 $
- * @date $Date: 2007-08-23 00:12:17 -0500 (Thu, 23 Aug 2007) $
+ * @date $Date$
  * @author pretz
  *
  * @todo 

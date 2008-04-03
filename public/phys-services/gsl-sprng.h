@@ -6,7 +6,7 @@
  * gsl-sprng.h
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: gsl-sprng.h 11800 2005-10-24 21:17:04Z juancarlos $
+ * $Id$
  *
  * @brief SPRNG Implementation of the I3RandomService interface.  
  * This implementation uses a combination of SPRNG and GSL to generate
@@ -23,7 +23,7 @@
  * that doesn't make use of streams.
  *
  * @version $Revision: 1.1 $
- * @date $Date: 2005-10-24 16:17:04 -0500 (Mon, 24 Oct 2005) $
+ * @date $Date$
  * @author juancarlos
  *
  * @todo 

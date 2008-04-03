@@ -1,7 +1,7 @@
 /*
  * class:  I3FileOMKey2MBID
  *
- * Version: $Id: I3FileOMKey2MBID.cxx 38592 2007-11-09 22:55:06Z tschmidt $
+ * Version: $Id$
  *
  * (c) IceCube Collaboration
  */

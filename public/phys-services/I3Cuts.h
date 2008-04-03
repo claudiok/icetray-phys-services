@@ -60,7 +60,7 @@ namespace I3Cuts
    * 
    * @todo Think about making the code more efficient...
    */
-  void TrackCutsCalc(const I3Particle& track, 
+  void CutsCalc(const I3Particle& track, 
 		const I3Geometry& geometry, 
 		const I3RecoHitSeriesMap& hitmap,
 		const double t1, 
@@ -77,7 +77,7 @@ namespace I3Cuts
    * INPUT:
    * @parameter pulsemap -- Map of I3RecoPulseSeries to be used.
    */
-  void TrackCutsCalc(const I3Particle& track, 
+  void CutsCalc(const I3Particle& track, 
 		const I3Geometry& geometry, 
 		const I3RecoPulseSeriesMap& pulsemap,
 		const double t1, 
@@ -89,7 +89,6 @@ namespace I3Cuts
 		double& Ldir,
 		double& Sdir,
 		double& Sall);
-
 
   /**
    * Main function that does the actual calculation of all of the cut 
@@ -117,35 +116,34 @@ namespace I3Cuts
    * @todo Think about making the code more efficient...
    */
   void CascadeCutsCalc(const I3Particle& vertex, 
-		       const I3Geometry& geometry, 
-		       const I3RecoHitSeriesMap& hitmap,
-		       const double t1, 
-		       const double t2, 
-		       int& Nchan, 
-		       int& Nhit,
-		       int& N_1hit,
-		       int& Nstring,
-		       int& Ndir, 
-		       int& Nearly,
-		       int& Nlate);
+		const I3Geometry& geometry, 
+		const I3RecoHitSeriesMap& hitmap,
+		const double t1, 
+		const double t2, 
+		int& Nchan, 
+ 		int& Nhit,
+ 		int& N_1hit,
+		int& Nstring,
+		int& Ndir, 
+		int& Nearly,
+		int& Nlate);
 
   /**
    * INPUT:
    * @parameter pulsemap -- Map of I3RecoPulseSeries to be used.
    */
   void CascadeCutsCalc(const I3Particle& vertex, 
-		       const I3Geometry& geometry, 
-		       const I3RecoPulseSeriesMap& pulsemap,
-		       const double t1, 
-		       const double t2, 
-		       int& Nchan, 
-		       int& Nhit, 
-		       int& N_1hit, 
-		       int& Nstring,
-		       int& Ndir, 
-		       int& Nearly,
-		       int& Nlate);
-
+		const I3Geometry& geometry, 
+		const I3RecoPulseSeriesMap& pulsemap,
+		const double t1, 
+		const double t2, 
+		int& Nchan, 
+		int& Nhit, 
+		int& N_1hit, 
+		int& Nstring,
+		int& Ndir, 
+		int& Nearly,
+		int& Nlate);
 
   /**
    * A function which calculates the center of gravity of the hits. 
@@ -192,10 +190,10 @@ namespace I3Cuts
    * in order to save multiple calls to the function.
    */
   int N_1hit(const I3Particle& vertex, 
-	     const I3Geometry& geom, 
-	     const I3RecoHitSeriesMap& hitmap, 
-	     double t1 = I3Constants::dt_window_l, 
-	     double t2 = I3Constants::dt_window_h);
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the total 
@@ -228,10 +226,10 @@ namespace I3Cuts
    * in order to save multiple calls to the function.
    */
   int CascadeNdir(const I3Particle& vertex, 
-		  const I3Geometry& geom, 
-		  const I3RecoHitSeriesMap& hitmap, 
-		  double t1 = I3Constants::dt_window_l, 
-		  double t2 = I3Constants::dt_window_h);
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the number 
@@ -240,10 +238,10 @@ namespace I3Cuts
    * in order to save multiple calls to the function.
    */
   int Nearly(const I3Particle& vertex, 
-	     const I3Geometry& geom, 
-	     const I3RecoHitSeriesMap& hitmap, 
-	     double t1 = I3Constants::dt_window_l, 
-	     double t2 = I3Constants::dt_window_h);
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the number 
@@ -252,10 +250,10 @@ namespace I3Cuts
    * in order to save multiple calls to the function.
    */
   int Nlate(const I3Particle& vertex, 
-	    const I3Geometry& geom, 
-	    const I3RecoHitSeriesMap& hitmap, 
-	    double t1 = I3Constants::dt_window_l, 
-	    double t2 = I3Constants::dt_window_h);
+	   const I3Geometry& geom, 
+	   const I3RecoHitSeriesMap& hitmap, 
+	   double t1 = I3Constants::dt_window_l, 
+	   double t2 = I3Constants::dt_window_h);
 
   /**
    * A convenience function that calls CutsCalc() and returns the 
@@ -383,5 +381,4 @@ namespace I3Cuts
 }
 
 #endif
-
 

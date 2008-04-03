@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3RandomServiceTest.cxx 13435 2005-12-09 23:13:05Z juancarlos $
+    $Id$
 
     @version $Revision: 1.3 $
-    @date $Date: 2005-12-09 17:13:05 -0600 (Fri, 09 Dec 2005) $
+    @date $Date$
     @author pretz
 
     @todo

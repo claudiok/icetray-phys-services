@@ -8,7 +8,7 @@
 #include "dataclasses/geometry/I3Geometry.h"
 #include "phys-services/Utility.h"
 #include "phys-services/I3CutsModule.h"
-#include "phys-services/I3TrackCutValues.h"
+#include "phys-services/I3CutValues.h"
 #include "phys-services/I3CascadeCutValues.h"
 
 using namespace std;
@@ -76,106 +76,58 @@ void I3CutsModule::Physics(I3FramePtr frame)
 
   if (!hitmap && !pulsemap) log_fatal("The chosen reaodut is not present.");
 
-  //if the user has specified the I3Particles to process, process them...
-  if(particleName_!=""){
-    //---Get all particle names......
-    set<string> particleNames = I3Functions::ParseString(particleName_);
-    //iterate over the set of strings to see if the frame has an object by that name...
-    for (set<string>::const_iterator sit = particleNames.begin(); sit!=particleNames.end(); ++sit) {
-      string name = *sit;
-      if(frame->Has(name)){
-	
-	I3ParticleConstPtr particle = frame->Get<I3ParticleConstPtr>(name);
-	if (!particle) continue;
-	log_debug("Found I3Particle: '%s'",name.c_str());
-	log_trace("%s",ToString(particle).c_str());
-	
-	log_debug(" ---> calculating cuts for I3Particle '%s'...", name.c_str());
-	if(particle->IsTrack()){
-	  
-	  log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", name.c_str());
-	  I3TrackCutValuesPtr cuts(new I3TrackCutValues());
-	  
-	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
-	  else if (pulsemap)
-	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
-	  
-	  frame->Put(name+"Cuts"+nameTag_, cuts);
-	  log_debug("%s",ToString(cuts).c_str());
-	  
-	} else if(particle->IsCascade()){
-	  
-	  log_debug(" ---> I3Particle '%s' is a cascade, so proceeding accordingly...", name.c_str());
-	  I3CascadeCutValuesPtr cuts(new I3CascadeCutValues());
-	  
-	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
-	  else if (pulsemap)
-	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
-	  
-	  frame->Put(name+"Cuts"+nameTag_, cuts);
-	  log_debug("%s",ToString(cuts).c_str());
-	  
-	} else {
-	  //this is probably just a failed fit; if not, something is really screwy...
-	  if(particle->GetFitStatusString()=="OK"){
-	    log_fatal("This I3Particle is neither a track nor a cascade!!");
-	  } else {
-	    log_debug("Looks like the fit for this I3Particle failed...");
-	  }
-	}
+  //---Get all particle names......
+  set<string> particleNames = I3Functions::ParseString(particleName_);
+  //iterate over the set of strings to see if the frame has an object by that name...
+  for (set<string>::const_iterator sit = particleNames.begin(); sit!=particleNames.end(); ++sit) {
+    string name = *sit;
+    if(frame->Has(name)){
+
+      I3ParticleConstPtr particle = frame->Get<I3ParticleConstPtr>(name);
+      if (!particle) continue;
+      log_debug("Found I3Particle: '%s'",name.c_str());
+      log_trace("%s",ToString(particle).c_str());
+      
+      //---Check whether user pre-set entries......
+      if ( particleName_!="" && particleNames.find(name)==particleNames.end() ) {
+	log_debug("'%s' was not pre-set for processing ==> Skipping...",
+		  name.c_str());
+	continue;
       }
-    }
-  }
-  //otherwise particleName_ is empty, so process all I3Particles in the frame...
-  else {
-
-    for (I3Frame::typename_iterator iter = frame->typename_begin();
-	 iter != frame->typename_end();
-	 iter++) {
-
-      string name = iter->first;
-      string type = iter->second;
       
-      if(type=="I3Particle"){
-      
-	I3ParticleConstPtr particle = dynamic_pointer_cast<const I3Particle>(frame->Get<I3FrameObjectConstPtr>(name));
+      log_debug(" ---> calculating cuts for I3Particle '%s'...", name.c_str());
+      if(particle->IsTrack()){
 	
-	log_debug(" ---> calculating cuts for I3Particle '%s'...", name.c_str());
-	if(particle->IsTrack()){
-	  
-	  log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", name.c_str());
-	  I3TrackCutValuesPtr cuts(new I3TrackCutValues());
-	  
-	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
-	  else if (pulsemap)
-	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
-	  
-	  frame->Put(name+"Cuts"+nameTag_, cuts);
-	  log_debug("%s",ToString(cuts).c_str());
-	  
-	} else if(particle->IsCascade()){
-	  
-	  log_debug(" ---> I3Particle '%s' is a cascade, so proceeding accordingly...", name.c_str());
-	  I3CascadeCutValuesPtr cuts(new I3CascadeCutValues());
-	  
-	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
-	  else if (pulsemap)
-	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
-	  
-	  frame->Put(name+"Cuts"+nameTag_, cuts);
-	  log_debug("%s",ToString(cuts).c_str());
-	  
+	log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", name.c_str());
+	I3CutValuesPtr cuts(new I3CutValues());
+	
+	if (hitmap)
+	  cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
+	else if (pulsemap)
+	  cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
+	
+	frame->Put(name+"Cuts"+nameTag_, cuts);
+	log_debug("%s",ToString(cuts).c_str());
+	
+      } else if(particle->IsCascade()){
+	
+	log_debug(" ---> I3Particle '%s' is a cascade, so proceeding accordingly...", name.c_str());
+	I3CascadeCutValuesPtr cuts(new I3CascadeCutValues());
+	
+	if (hitmap)
+	  cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
+	else if (pulsemap)
+	  cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
+
+	frame->Put(name+"Cuts"+nameTag_, cuts);
+	log_debug("%s",ToString(cuts).c_str());
+
+      } else {
+	//this is probably just a failed fit; if not, something is really screwy...
+	if(particle->GetFitStatusString()=="OK"){
+	  log_fatal("This I3Particle is neither a track nor a cascade!!");
 	} else {
-	  //this is probably just a failed fit; if not, something is really screwy...
-	  if(particle->GetFitStatusString()=="OK"){
-	    log_fatal("This I3Particle is neither a track nor a cascade!!");
-	  } else {
-	    log_debug("Looks like the fit for this I3Particle failed...");
-	  }
+	  log_debug("Looks like the fit for this I3Particle failed...");
 	}
       }
     }
