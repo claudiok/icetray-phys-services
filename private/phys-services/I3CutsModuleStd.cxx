@@ -113,7 +113,7 @@ void I3CutsModuleStd::Physics(I3FramePtr frame)
 	} else {
 	  //this is probably just a failed fit; if not, something is really screwy...
 	  if(particle->GetFitStatusString()=="OK"){
-	    log_fatal("This I3Particle is neither a track nor a cascade!!");
+	    log_debug("This I3Particle is neither a track nor a cascade!!");
 	  } else {
 	    log_debug("Looks like the fit for this I3Particle failed...");
 	  }
@@ -165,7 +165,7 @@ void I3CutsModuleStd::Physics(I3FramePtr frame)
 	} else {
 	  //this is probably just a failed fit; if not, something is really screwy...
 	  if(particle->GetFitStatusString()=="OK"){
-	    log_fatal("This I3Particle is neither a track nor a cascade!!");
+	    log_debug("This I3Particle is neither a track nor a cascade!!");
 	  } else {
 	    log_debug("Looks like the fit for this I3Particle failed...");
 	  }
