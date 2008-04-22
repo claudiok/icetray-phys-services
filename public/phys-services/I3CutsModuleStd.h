@@ -14,7 +14,9 @@
 
 /**
  * @brief A different implementation of I3CutsModule to allow for the calculation
- * of "Direct" quantities (Ndir, Sdir, Ldir) in 5 standard windows.
+ * of "Direct" quantities (Ndir, Sdir, Ldir) in 5 standard windows.  It also only
+ * uses the first hits or pulses in the hit or pulsemap to calculate direct 
+ * quantities but it still calcs everything else using all available hits or pulses.
  * The standard windows are: A [-15,15]ns
  *                           B [-15,25]ns
  *                           C [-15,75]ns
