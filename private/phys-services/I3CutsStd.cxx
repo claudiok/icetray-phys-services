@@ -644,7 +644,7 @@ double I3CutsStd::InIceContainmentSize(I3Geometry geo, I3Particle p)
   vector<double> x;
   vector<double> y;
   vector<int> strings;
-  if ((nstrings == 9)||(nstrings == 28)) {
+  if ((nstrings == 9)||(nstrings == 28)||(nstrings == 16)||(nstrings == 35)) {
     log_debug("I found IC-9 or IC-9/AMANDA");
     // For IC-9, the "corner stations" are 21, 50, 59, 39, and 38 (ccw)
     strings.push_back(21);
@@ -652,7 +652,7 @@ double I3CutsStd::InIceContainmentSize(I3Geometry geo, I3Particle p)
     strings.push_back(59);
     strings.push_back(39);
     strings.push_back(38);
-  } else if ((nstrings == 22)||(nstrings==41)||(nstrings==26)||(nstrings==45)) {
+  } else if ((nstrings == 22)||(nstrings == 41)||(nstrings == 26)||(nstrings == 45)) {
     log_debug("I found IC-22 or IC-22/AMANDA");
     // For IC-22: 21, 50, 74, 73, 78, 65,         46, 38
     strings.push_back(21);
