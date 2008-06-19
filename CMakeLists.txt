@@ -28,3 +28,5 @@ i3_test_executable(test private/test/*.cxx
 
 
 i3_test_scripts(resources/scripts/*.py)
+
+add_subdirectory(private/pybindings) 
