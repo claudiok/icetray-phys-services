@@ -20,20 +20,12 @@
 using namespace boost::python;
 namespace bp = boost::python;
 
-#include <phys-services/I3CutValues.h>
+#include <phys-services/I3Calculator.h>
 
-void register_I3CutValues()
+void register_I3Calculator()
 {
-  class_<I3CutValues, bases<I3FrameObject>, boost::shared_ptr<I3CutValues> >("I3CutValues")
-    .def_readwrite("Nchan", &I3CutValues::Nchan)
-    .def_readwrite("Nhit", &I3CutValues::Nhit)
-    .def_readwrite("NString", &I3CutValues::Nstring)
-    .def_readwrite("Ndir", &I3CutValues::Ndir)
-    .def_readwrite("Ldir", &I3CutValues::Ldir)
-    .def_readwrite("Sdir", &I3CutValues::Sdir)
-    .def_readwrite("Sall", &I3CutValues::Sall)
-    .def_readwrite("cog", &I3CutValues::cog)
-    ;
+  def("ClosestApproachDistance", I3Calculator::ClosestApproachDistance);
+  def("ClosestApproachPosition", I3Calculator::ClosestApproachPosition);
 
-  register_pointer_conversions<I3CutValues>();
+
 }
