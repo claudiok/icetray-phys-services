@@ -266,7 +266,6 @@ TEST(MinimumBall3point)
     const int nx=9;
     const int ny=9;
     const int nz=60;
-    const int nom=nx*ny*nz;
     for ( int ix = 0; ix <nx; ++ix ){
         for ( int iy = 0; iy <ny; ++iy ){
             for ( int iz = 0; iz<nz; ++iz ){
@@ -279,7 +278,7 @@ TEST(MinimumBall3point)
             }
         }
     }
-    log_info("created geomap with(%d*%d*%d=%d DOMs",nx,ny,nz,nom);
+    log_info("created geomap with(%d*%d*%d DOMs",nx,ny,nz);
 
     // event data: three outer hits A, B and C, aranged like a rectangular
     // triangle. The center of the minimum bounding circle
