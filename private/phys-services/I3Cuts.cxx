@@ -582,7 +582,6 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 				     vector<double> y, 
 				     double zhigh, 
 				     double zlow) {
-  double deg = 180/M_PI;
   double bestanswer = NAN;
 
   // Error-checking... need at least three strings 
@@ -707,7 +706,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     
     // Compute the difference
     log_trace(" %d          ang_wall = %f, ang_P = %f", 
-	     i, theta_wall*deg, theta_P*deg);
+	     i, theta_wall, theta_P);
     if (theta_wall>=theta_P) { // we found an exact match!
       log_trace("Found it! %d", i);
 
@@ -746,7 +745,6 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 				   vector<double> y, 
 				   double z) 
 {
-  double deg = 180/M_PI;
 
   // Error-checking... need at least three strings to have an area 
   if (x.size()<3) { 
@@ -798,7 +796,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 
     // Is this the one?
     log_debug ("This (%f, %f) ang = %f, anglediff = %e", 
-	    x[i], y[i], ang[i]*deg, angdiff*deg);
+	    x[i], y[i], ang[i], angdiff);
     if (abs(angdiff)<SMALLNUMBER) { // we found an exact match!
       less = 0; n_less = i;
       more = 0; n_more = i;
@@ -822,9 +820,9 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 
   } else {
     log_trace("PAngle = %f, closest above = %f (%i), closest below = %f (%i)",
-	   pang*deg,
-	   more*deg, n_more,
-	   less*deg, n_less);
+	   pang,
+	   more, n_more,
+	   less, n_less);
     
     // Use Olga's notation
     double x1 = x[n_less]; double y1 = y[n_less];

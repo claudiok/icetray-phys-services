@@ -44,7 +44,6 @@ void TrackCutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
   double maxAll=-999999, maxA=-999999, maxB=-999999;
   double maxC=-999999, maxD=-999999, maxE=-999999;
 
-  double dist;
 
   typename I3Map<OMKey, vector<HitType> >::const_iterator hits_i;
   for (hits_i=hitmap.begin(); hits_i!=hitmap.end(); hits_i++) {
