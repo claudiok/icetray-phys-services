@@ -1,6 +1,5 @@
 #include <I3Test.h>
 #include "icetray/I3Tray.h"
-#include "icetray/modules/TrashCan.h"
 #include "phys-services/test-source/I3TestSourceTestModule.h"
 #include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
 #include "phys-services/source/I3Muxer.h"

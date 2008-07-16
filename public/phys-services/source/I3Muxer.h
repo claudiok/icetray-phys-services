@@ -9,8 +9,8 @@
  * @author pretz
  */
 
-#ifndef I3MUXER_H
-#define I3MUXER_H
+#ifndef PHYS_SERVICES_I3MUXER_H_INCLUDED
+#define PHYS_SERVICES_I3MUXER_H_INCLUDED
 
 #include <interfaces/I3EventService.h>
 #include <interfaces/I3CalibrationService.h>
@@ -20,6 +20,7 @@
 
 #include <icetray/I3Frame.h>
 #include <icetray/I3Logging.h>
+#include <icetray/I3Module.h>
 
 #include <dataclasses/I3Time.h>
 #include <phys-services/I3TimeRange.h>
