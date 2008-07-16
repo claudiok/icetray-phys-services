@@ -11,7 +11,7 @@ i3_add_library(phys-services
 
   USE_PROJECTS icetray dataclasses interfaces
 
-  USE_TOOLS sprng gsl log4cplus boost root
+  USE_TOOLS sprng gsl log4cplus boost root python
 
   ROOTCINT public/phys-services/I3Calculator.h
   public/phys-services/I3Cuts.h
