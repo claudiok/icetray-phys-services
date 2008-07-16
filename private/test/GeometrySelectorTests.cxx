@@ -4,7 +4,6 @@
 #include "phys-services/geo-selector/GeoSelUtils.h"
 #include "icetray/I3Tray.h"
 #include "phys-services/source/I3TextFileGeometryServiceFactory.h"
-#include "icetray/modules/TrashCan.h"
 #include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
 #include "phys-services/source/I3Muxer.h"
 #include "dataclasses/I3Units.h"
