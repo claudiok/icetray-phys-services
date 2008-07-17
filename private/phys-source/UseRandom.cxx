@@ -1,5 +1,3 @@
-#if defined(ICETRAY_VERSION) && ICETRAY_VERSION >= 030000
-
 #include <icetray/I3Frame.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3Module.h>
@@ -8,6 +6,7 @@
 #include <dataclasses/I3Double.h>
 #include <phys-services/I3RandomService.h>
 
+#if defined(ICETRAY_VERSION) && ICETRAY_VERSION >= 030000
 
 class UseRandom : public I3Module
 {
@@ -53,7 +52,7 @@ void UseRandom::Configure()
 void UseRandom::Process()
 {
   log_debug("rndserv is at %p", rs.get());
-  double d = rs->Uniform(1);
+  double d = rs->Gaus(0, 1);
   I3DoublePtr dp(new I3Double(d));
   I3FramePtr frame = PopFrame();
   frame->Put(key, dp);
