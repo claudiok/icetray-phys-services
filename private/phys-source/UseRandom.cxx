@@ -1,3 +1,5 @@
+#if defined(ICETRAY_VERSION) && ICETRAY_VERSION >= 030000
+
 #include <icetray/I3Frame.h>
 #include <icetray/I3Logging.h>
 #include <icetray/I3Module.h>
@@ -58,3 +60,4 @@ void UseRandom::Process()
   PushFrame(frame, "OutBox");
 }
 
+#endif
