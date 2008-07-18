@@ -24,11 +24,26 @@ namespace bp = boost::python;
 #include <phys-services/I3SPRNGRandomService.h>
 #include <phys-services/I3GSLRandomService.h>
 
+namespace {
+
+  struct I3RandomServiceWrapper : I3RandomService, wrapper<I3RandomService>
+  {
+    int Binomial(int ntot, double prob) { return this->get_override("Binomial")(ntot, prob); }
+    double Exp(double tau) { return this->get_override("Exp")(tau); }
+    unsigned int Integer(unsigned int imax) { return this->get_override("Integer")(imax); }
+    int Poisson(double mean) { return this->get_override("Poisson")(mean); }
+    double PoissonD(double mean) { return this->get_override("PoissonD")(mean); }
+    double Uniform(double x1) { return this->get_override("Uniform")(x1); }
+    double Uniform(double x1, double x2) { return this->get_override("Uniform")(x1, x2 ); }
+    double Gaus(double mean, double stddev) { return this->get_override("Gaus")(mean, stddev); }
+  };
+}
+
 template <typename T, typename Init>
 void
-register_randomservice(const char* doc)
+register_randomservice(const char* name, const char* doc)
 {
-  class_<T, boost::shared_ptr<T>, boost::noncopyable>(I3::name_of<T>().c_str(),
+  class_<T, boost::shared_ptr<T>, boost::noncopyable>(name,
 						      doc,
 						      Init())
     .def("Binomial", &T::Binomial)
@@ -47,6 +62,12 @@ register_randomservice(const char* doc)
 
 void register_RandomServices()
 {
-  register_randomservice<I3GSLRandomService, init<unsigned long int> >("gsl random goodness");
-  register_randomservice<I3SPRNGRandomService, init<int, int, int> >("sprng random goodness");
+  register_randomservice<I3GSLRandomService, 
+    init<unsigned long int> >("I3GSLRandomService", "gsl random goodness");
+
+  register_randomservice<I3SPRNGRandomService, 
+    init<int, int, int> >("I3SPRNGRandomService", "sprng random goodness");
+
+  register_randomservice<I3RandomServiceWrapper, 
+    init<> >("I3RandomService", "base class for python impls");
 }
