@@ -40,12 +40,16 @@ namespace {
 }
 
 template <typename T, typename Init>
-void
-register_randomservice(const char* name, const char* doc)
+scope
+register_randomservice(const char* name, const char* doc, const Init& init)
 {
-  class_<T, boost::shared_ptr<T>, boost::noncopyable>(name,
-						      doc,
-						      Init())
+  implicitly_convertible<shared_ptr<T>, shared_ptr<const I3RandomService> >();
+  implicitly_convertible<shared_ptr<T>, shared_ptr<I3RandomService> >();
+  implicitly_convertible<shared_ptr<T>, shared_ptr<const T> >();
+
+  return class_<T, boost::shared_ptr<T>, boost::noncopyable>(name,
+							     doc,
+							     init)
     .def("Binomial", &T::Binomial)
     .def("Exp", &T::Exp)
     .def("Integer", &T::Integer)
@@ -55,19 +59,21 @@ register_randomservice(const char* name, const char* doc)
     .def("Uniform", (double (T::*)(double, double)) &T::Uniform)
     .def("Gaus", &T::Gaus)
     ;
-  implicitly_convertible<shared_ptr<T>, shared_ptr<const I3RandomService> >();
-  implicitly_convertible<shared_ptr<T>, shared_ptr<I3RandomService> >();
-  implicitly_convertible<shared_ptr<T>, shared_ptr<const T> >();
+  
 }
+
+namespace bp = boost::python;
 
 void register_RandomServices()
 {
-  register_randomservice<I3GSLRandomService, 
-    init<unsigned long int> >("I3GSLRandomService", "gsl random goodness");
+  register_randomservice<I3GSLRandomService>("I3GSLRandomService", "gsl random goodness",
+					     init<unsigned long int>(bp::arg("seed")));
 
-  register_randomservice<I3SPRNGRandomService, 
-    init<int, int, int> >("I3SPRNGRandomService", "sprng random goodness");
+  register_randomservice<I3SPRNGRandomService>("I3SPRNGRandomService", "sprng random goodness",
+					       init<int, int, int>((bp::arg("seed"), 
+								    bp::arg("nstreams"),
+								    bp::arg("streamnum"))));
 
-  register_randomservice<I3RandomServiceWrapper, 
-    init<> >("I3RandomService", "base class for python impls");
+  register_randomservice<I3RandomServiceWrapper>("I3RandomService", "base class for python impls",
+						 init<>());
 }
