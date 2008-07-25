@@ -1,6 +1,7 @@
 #include <phys-services/I3VEMCalManipulator.h>
 #include <TSystem.h>
 #include <fstream>
+#include <math.h>
 
 I3VEMCalManipulator::I3VEMCalManipulator(I3CalibrationService& calService):
 calService_(calService)

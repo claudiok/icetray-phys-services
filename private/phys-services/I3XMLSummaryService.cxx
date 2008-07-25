@@ -9,6 +9,10 @@
  *
  * @todo 
  */
+//#include <iostream>
+
+#include <fstream>
+
 #include <phys-services/I3XMLSummaryService.h>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>

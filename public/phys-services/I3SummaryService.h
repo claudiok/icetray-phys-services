@@ -12,10 +12,9 @@
 #ifndef I3SUMMARYSERVICE_H
 #define I3SUMMARYSERVICE_H
 
-#include "Rtypes.h"
-#include "dataclasses/Utility.h"
+#include <icetray/I3Logging.h>
 #include <icetray/I3DefaultName.h>
-#include <icetray/I3FrameObject.h>
+#include <icetray/I3PointerTypedefs.h>
 
 /**
  * @brief This is an interface for services which allow modules to store 
@@ -42,17 +41,17 @@ class I3SummaryService
   /**
    * Access dictionary entry
    */
-  virtual double& operator[] (const string& key)=0;
+  virtual double& operator[] (const std::string& key)=0;
 
   /**
    * Add a value to the value summary map
    */
-  virtual void SetValue(string name,double value)=0;
+  virtual void SetValue(std::string name, double value)=0;
 
   /**
    * Get value from the value summary map
    */
-  virtual double GetValue(string name)=0;
+  virtual double GetValue(std::string name)=0;
 
 
  private:
