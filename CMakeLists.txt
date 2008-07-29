@@ -3,10 +3,6 @@
 #
 i3_project(phys-services)
 
-if(NOT APPLE)
-  set(EXTRA_SRC private/phys-services/I3XMLSummaryService.cxx)
-endif(NOT APPLE)
-
 i3_add_library(phys-services 
   private/empty-streams/I3EmptyCalibrationService.cxx
   private/empty-streams/I3EmptyDetectorStatusService.cxx
@@ -48,6 +44,7 @@ i3_add_library(phys-services
   private/phys-services/I3VEMCalManipulatorFactory.cxx
   private/phys-services/I3XMLOMKey2MBID.cxx
   private/phys-services/I3XMLOMKey2MBIDFactory.cxx
+  private/phys-services/I3XMLSummaryService.cxx
   private/phys-services/I3XMLSummaryServiceFactory.cxx
   private/phys-services/TWRTWRKey2ChannelID.cxx
   private/phys-services/Utility.cxx
@@ -55,7 +52,6 @@ i3_add_library(phys-services
   private/phys-source/I3TextFileGeometryService.cxx
   private/phys-source/I3TextFileGeometryServiceFactory.cxx
   private/phys-source/UseRandom.cxx
-  ${EXTRA_SRC}
   USE_PROJECTS icetray dataclasses interfaces
 
   USE_TOOLS sprng gsl log4cplus boost root python
