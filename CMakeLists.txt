@@ -51,7 +51,6 @@ i3_add_library(phys-services
   private/phys-source/I3Muxer.cxx
   private/phys-source/I3TextFileGeometryService.cxx
   private/phys-source/I3TextFileGeometryServiceFactory.cxx
-  private/phys-source/UseRandom.cxx
   USE_PROJECTS icetray dataclasses interfaces
 
   USE_TOOLS sprng gsl log4cplus boost root python

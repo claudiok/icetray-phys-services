@@ -1,12 +1,12 @@
-#ifndef _GSL_SPRNG
-#define _GSL_SPRNG
+#ifndef PHYS_SERVICES_GSL_SPRNG_H_INCLUDED
+#define PHYS_SERVICES_GSL_SPRNG_H_INCLUDED
 
-#include <sprng.h>
+#include <sprng/sprng.h>
 /**
  * gsl-sprng.h
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id$
+ * $Id: gsl-sprng.h 11800 2005-10-24 21:17:04Z juancarlos $
  *
  * @brief SPRNG Implementation of the I3RandomService interface.  
  * This implementation uses a combination of SPRNG and GSL to generate
@@ -23,7 +23,7 @@
  * that doesn't make use of streams.
  *
  * @version $Revision: 1.1 $
- * @date $Date$
+ * @date $Date: 2005-10-24 17:17:04 -0400 (Mon, 24 Oct 2005) $
  * @author juancarlos
  *
  * @todo 
