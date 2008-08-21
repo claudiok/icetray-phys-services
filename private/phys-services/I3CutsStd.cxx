@@ -644,7 +644,7 @@ double I3CutsStd::InIceContainmentSize(I3Geometry geo, I3Particle p)
   vector<double> x;
   vector<double> y;
   vector<int> strings;
-  if ((nstrings == 9)||(nstrings == 28)||(nstrings == 16)||(nstrings == 35)) {
+  if ((nstrings == 9)||(nstrings == 28)||(nstrings == 16)||(nstrings == 35)||(nstrings == 59)) {
     log_debug("I found IC-9 or IC-9/AMANDA");
     // For IC-9, the "corner stations" are 21, 50, 59, 39, and 38 (ccw)
     strings.push_back(21);
