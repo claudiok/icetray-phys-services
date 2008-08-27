@@ -144,11 +144,11 @@ void I3Muxer::SendEvent()
       frame->take(currentEvent_, iter->first);
     }
   MUXER_ASSERT(currentGeometry_);
-  frame->Put(currentGeometry_);
+  frame->Put("I3Geometry", currentGeometry_,  'G');
   MUXER_ASSERT(currentCalibration_);
-  frame->Put(currentCalibration_);
+  frame->Put("I3Calibration", currentCalibration_,  'C');
   MUXER_ASSERT(currentDetectorStatus_);
-  frame->Put(currentDetectorStatus_);
+  frame->Put("I3DetectorStatus", currentDetectorStatus_,  'D');
 
   currentEventQueued_ = false;
   currentEvent_.clear();
@@ -185,8 +185,8 @@ void I3Muxer::SendCalibration()
   I3FramePtr frame(new I3Frame(I3Frame::Calibration));
 
   MUXER_ASSERT(currentGeometry_);
-  frame->Put(currentGeometry_);
-  frame->Put(currentCalibration_);
+  frame->Put("I3Geometry", currentGeometry_,  'G');
+  frame->Put("I3Calibration", currentCalibration_,  'C');
 
   PushFrame(frame,"OutBox");
 }
@@ -222,10 +222,10 @@ void I3Muxer::SendDetectorStatus()
   I3FramePtr frame(new I3Frame(I3Frame::DetectorStatus));
 
   MUXER_ASSERT(currentGeometry_);
-  frame->Put(currentGeometry_);
+  frame->Put("I3Geometry", currentGeometry_,  'G');
   MUXER_ASSERT(currentCalibration_);
-  frame->Put(currentCalibration_);
-  frame->Put(currentDetectorStatus_);
+  frame->Put("I3Calibration", currentCalibration_,  'C');
+  frame->Put("I3DetectorStatus", currentDetectorStatus_,  'D');
 
   PushFrame(frame,"OutBox");
 }
@@ -256,7 +256,7 @@ void I3Muxer::SendGeometry()
                 toString(nextEvent).c_str());
     }
   I3FramePtr frame(new I3Frame(I3Frame::Geometry));
-  frame->Put(currentGeometry_);
+  frame->Put("I3Geometry", currentGeometry_,  'G');
   PushFrame(frame,"OutBox");
 }
 
@@ -323,7 +323,7 @@ I3Muxer::QueueUpEvent()
       I3Time eventTime = 
       context_.Get<I3EventService>(eventServiceName_).PopEvent(currentEvent_);
       eventTimePtr = I3TimePtr(new I3Time(eventTime));
-      currentEvent_.Put(DRIVING_TIME,eventTimePtr);
+      currentEvent_.Put(DRIVING_TIME,eventTimePtr, 'P');
       currentEventQueued_ = true;
     }
 }
