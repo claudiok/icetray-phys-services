@@ -14,7 +14,7 @@ I3GeometryConstPtr I3StringAdderService::GetGeometry(I3Time time)
   I3GeometryPtr new_geo = I3GeometryPtr(new I3Geometry(*old_geo));
   
   int strng(81);
-  for_each(I3OMGeo& omgeo,omGeoList_){
+  BOOST_FOREACH(I3OMGeo& omgeo,omGeoList_){
 
     unsigned int omNumber(0);
     double z(NAN);
