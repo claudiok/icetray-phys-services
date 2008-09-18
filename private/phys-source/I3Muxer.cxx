@@ -177,6 +177,7 @@ void I3Muxer::SendCalibration()
      nextEvent > currentCalibrationRange_.upper)
     {
       log_fatal("calibration range doesn't straddle the next event time "
+		"(event time is outside calibration range) "
                 "lower:%s  upper:%s  eventTime:%s",
                 toString(currentCalibrationRange_.lower).c_str(),
                 toString(currentCalibrationRange_.upper).c_str(),
@@ -214,6 +215,7 @@ void I3Muxer::SendDetectorStatus()
      nextEvent > currentDetectorStatusRange_.upper)
     {
       log_fatal("status range doesn't straddle the next event time "
+		"(event time is outside status range) "
                 "lower:%s  upper:%s  eventTime:%s",
                 toString(currentDetectorStatusRange_.lower).c_str(),
                 toString(currentDetectorStatusRange_.upper).c_str(),
@@ -250,6 +252,7 @@ void I3Muxer::SendGeometry()
      || nextEvent > currentGeometryRange_.upper)
     {
       log_fatal("geometry range doesn't straddle the next event time "
+		"(event time is outside geometry range) "
                 "lower:%s  upper:%s  eventTime:%s",
                 toString(currentGeometryRange_.lower).c_str(),
                 toString(currentGeometryRange_.upper).c_str(),
