@@ -231,6 +231,23 @@ I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, I3VectorOMKe
   return output_geoptr;
 }
 
+/// Create a reduced geometry in which Bad OM's have been removed.
+I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, vector<OMKey> badomlist) {
+  
+  // The output
+  I3OMGeoMapPtr output_geoptr=I3OMGeoMapPtr(new I3OMGeoMap(input_geo));
+  
+  // Remove Bad OM's from the duplicate geometry which will be used.
+  vector<OMKey>::iterator ib;
+  for(ib = badomlist.begin(); ib != badomlist.end(); ib++) {
+    if (output_geoptr->find(*ib) != output_geoptr->end())
+      output_geoptr->erase(*ib);
+    else 
+      log_warn("Your bad OM %d %d is not in the geometry", 
+               ib->GetString(), ib->GetOM());
+  }
+  return output_geoptr;
+}
 
 /// Create a reduced geometry in which all IceTop DOM's have been removed.
 I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutIceTop(I3OMGeoMap input_geo) {

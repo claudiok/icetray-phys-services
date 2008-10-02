@@ -60,6 +60,7 @@ namespace I3GeoTrimmers
 
   /// Create a reduced geometry in which Bad OM's have been removed.
   I3OMGeoMapPtr GeoWithoutBadOMs(I3OMGeoMap input_geo, I3VectorOMKey badomlist);
+  I3OMGeoMapPtr GeoWithoutBadOMs(I3OMGeoMap input_geo, vector<OMKey> badomlist);
 
   /// Create a reduced geometry in which all IceTop DOM's have been removed.
   I3OMGeoMapPtr GeoWithoutIceTop(I3OMGeoMap input_geo);
