@@ -21,8 +21,8 @@
 #include <utility>
 
 #include <icetray/I3DefaultName.h>
-#include <icetray/I3FrameObject.h>
 #include <icetray/I3Logging.h>
+#include <icetray/I3PointerTypedefs.h>
 #include <dataclasses/I3Time.h>
 
 // definitions
@@ -30,7 +30,7 @@
 
 /**
  * @brief Abstract base class that defines an interface for a service
- * that provides conversions between TWR ID + channel no. and channel ID.
+ * that provides conversions between TWR ID + channel no. and Amanda channel ID.
  * 
  * \note
  * In contrast to the static OM key/motherboard ID and OM key/channel ID conversion tables,
@@ -96,14 +96,14 @@ class TWRTWRKey2ChannelID
    * @return True, if it exists in the table.
    */
   virtual bool TWRKeyExists(TWRKey key, const I3Time& tm) const = 0;
-  /** Returns the channel ID associated with a specified TWR ID + channel no..
+  /** Returns the Amanda channel ID associated with a specified TWR ID + channel no..
    * 
    * @param twrID The TWR ID.
    * @param channel The channel no..
    * @return The channel ID.
    */
   virtual unsigned int GetChannelID(unsigned int twrID, unsigned int channel) const = 0;
-  /** Returns the channel ID associated with a specified TWR ID + channel no..
+  /** Returns the Amanda channel ID associated with a specified TWR ID + channel no..
    * 
    * @param twrID The TWR ID.
    * @param channel The channel no..
@@ -112,39 +112,39 @@ class TWRTWRKey2ChannelID
    */
   virtual unsigned int GetChannelID(unsigned int twrID, unsigned int channel,
                                     const I3Time& tm) const = 0;
-  /** Returns the channel ID associated with a specified TWR ID + channel no..
+  /** Returns the Amanda channel ID associated with a specified TWR ID + channel no..
    * 
    * @param key The TWR ID + channel no..
    * @return The channel ID.
    */
   virtual unsigned int GetChannelID(TWRKey key) const = 0;
-  /** Returns the channel ID associated with a specified TWR ID + channel no..
+  /** Returns the Amanda channel ID associated with a specified TWR ID + channel no..
    * 
    * @param key The TWR ID + channel no..
    * @param tm Time the channel ID should be issued for.
    * @return The channel ID.
    */
   virtual unsigned int GetChannelID(TWRKey key, const I3Time& tm) const = 0;
-  /** Checks whether a specified channel ID exists in the conversion table.
+  /** Checks whether a specified Amanda channel ID exists in the conversion table.
    * 
    * @param channelID The channel ID.
    * @return True, if it exists in the table.
    */
   virtual bool ChannelIDExists(unsigned int channelID) const = 0;  
-  /** Checks whether a specified channel ID exists in the conversion table.
+  /** Checks whether a specified Amanda channel ID exists in the conversion table.
    * 
    * @param channelID The channel ID.
    * @param tm Time the check should be issued for.
    * @return True, if it exists in the table.
    */
   virtual bool ChannelIDExists(unsigned int channelID, const I3Time& tm) const = 0;  
-  /** Returns the TWR ID + channel no. associated with a specified channel ID.
+  /** Returns the TWR ID + channel no. associated with a specified Amanda channel ID.
    * 
    * @param channelID The channel ID.
    * @return The TWR ID + channel no..
    */
   virtual TWRKey GetTWRKey(unsigned int channelID) const = 0;
-  /** Returns the TWR ID + channel no. associated with a specified channel ID.
+  /** Returns the TWR ID + channel no. associated with a specified Amanda channel ID.
    * 
    * @param channelID The channel ID.
    * @param tm Time the TWR ID + channel no. should be issued for.
