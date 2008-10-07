@@ -18,7 +18,6 @@ i3_add_library(phys-services
   private/phys-services/I3Calculator.cxx
   private/phys-services/I3CascadeCutValues.cxx
   private/phys-services/I3CascadeCutValuesStd.cxx
-  private/phys-services/I3ChannelID2OMKey.cxx
   private/phys-services/I3CutValues.cxx
   private/phys-services/I3Cuts.cxx
   private/phys-services/I3CutsModule.cxx
