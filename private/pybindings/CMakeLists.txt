@@ -2,6 +2,7 @@
 i3_add_pybindings(phys_services
   I3Calculator.cxx
   I3CutValues.cxx
+  I3TrackCutValues.cxx
   RandomServices.cxx
   module.cxx
   USE_TOOLS boost python log4cplus root
