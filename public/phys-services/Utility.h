@@ -32,6 +32,8 @@ double GetCharge(const I3MCHit&);
 double GetCharge(const I3RecoPulse&);
 double GetCharge(const I3DOMLaunch&);
 double GetCharge(const I3Waveform&);
+double GetCharge(const vector<I3RecoHit>&);
+double GetCharge(const vector<I3RecoPulse>&);
 
 double GetTime(const I3RecoHit&);
 double GetTime(const I3MCHit&);

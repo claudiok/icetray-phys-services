@@ -8,6 +8,7 @@
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/physics/I3DOMLaunch.h"
 #include "dataclasses/physics/I3Waveform.h"
+#include <boost/foreach.hpp>
 
 string ToString(shared_ptr<const I3FrameObject> obj)
 {
@@ -119,6 +120,21 @@ double GetCharge(const I3Waveform& wf)
     charge += *iter;
   }
   return charge/I3Units::mV; 
+}
+
+double GetCharge(const vector<I3RecoHit>& hit_series)
+{
+  return hit_series.size();
+}
+
+double GetCharge(const vector<I3RecoPulse>& pulse_series)
+{
+  double charge(0);
+  BOOST_FOREACH(I3RecoPulse pulse,pulse_series)
+    {
+      charge+=pulse.GetCharge();
+    }
+  return charge;
 }
 
 // Functions to get time from either RecoPulse or RecoHit or MCHit.
