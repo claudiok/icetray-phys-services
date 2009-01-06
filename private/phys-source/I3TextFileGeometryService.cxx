@@ -7,7 +7,7 @@
 
 void I3TextFileGeometryService::Fatal(const string& message)
 {
-  log_fatal(message.c_str());
+  log_fatal("%s", message.c_str());
 }
 
 I3GeometryConstPtr I3TextFileGeometryService::GetGeometry(I3Time time)

@@ -63,7 +63,7 @@ namespace geo_sel_utils{
 	  <<" COLON ("<<(COLON.find(*iter) != string::npos)<<") "
 	  <<" MINUS ("<<(MINUS.find(*iter) != string::npos)<<") "
 	  <<" DIGIT ("<<(SINGLE_DIGIT_INTEGERS.find(*iter) != string::npos)<<") "<<endl;
-	log_error(os.str().c_str());
+	log_error("%s", os.str().c_str());
 	return false;
       }
     }
