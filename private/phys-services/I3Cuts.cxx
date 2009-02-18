@@ -599,7 +599,10 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   // Error-catching: what if the track goes right through the center of mass? 
   if (I3Calculator::IsOnTrack(track,CM,SMALLNUMBER)) return 0; 
 
-  PutPointsInOrder(&x,&y,xcm,ycm,0);
+  //---- BUG 2/16/09:
+  //---- With IC-40, we have no choice but to assume they are in order! 
+  // do NOT do this!
+  //PutPointsInOrder(&x,&y,xcm,ycm,0);
 
   if (x.size() != y.size()) log_fatal("X and Y are not the same size");
   int n = x.size();
@@ -1058,6 +1061,9 @@ void I3Cuts::CMPolygon(vector<double> x,
   // CW or CCW)... but what if they are not?
   // Here is a VERY awkward but workable way of sorting the points by angle.
   // First, take a quick average to get a guess at the CM
+  //---- BUG 2/16/09: do NOT do this!
+  //---- With IC-40, we have no choice but to assume they are in order!
+  /*
   double xquick = 0;
   double yquick = 0;
   for (i=0; i<n; i++) {
@@ -1067,6 +1073,7 @@ void I3Cuts::CMPolygon(vector<double> x,
   xquick /= n;
   yquick /= n;
   PutPointsInOrder(&x,&y,xquick,yquick,0);
+  */
 
   double running_numerator_x = 0;
   double running_numerator_y = 0;
@@ -1103,6 +1110,10 @@ void I3Cuts::CMPolygon(vector<double> x,
     running_numerator_y += area*ytriangle;
     running_denominator += area;
 	
+    // Assuming the points are in order, if one leg "goes backwards" in angle,
+    // it just corresponds to a negative area.  This will happen automatically,
+    // as "d12.CalcPhi()-d13.CalcPhi()" above will be a negative number.
+
     log_debug("Triangle %d: (%f %f), (%f %f), (%f %f)",
 	   i, x1,y1,x2,y2,x3,y3);
     log_trace("Midpoints (%f %f) and (%f %f)",
@@ -1114,13 +1125,16 @@ void I3Cuts::CMPolygon(vector<double> x,
   *yresult = running_numerator_y/running_denominator;
 
   log_debug("CM Results: x = %f (%f), y = %f (%f)",
-	 *xresult, xquick, *yresult, yquick);
+	 *xresult, *yresult);
+  //log_debug("CM Results: x = %f (%f), y = %f (%f)",
+  //	 *xresult, xquick, *yresult, yquick);
 
   // Sanity-check... make sure the border points are still in order
   // now that we've got the "real" CM.
   // If they appear out-of-order here, it means we've got some kind of 
   // weird shape on our hands, and I'm not sure what to do.
-  PutPointsInOrder(&x,&y,*xresult,*yresult,1);
+  //---- BUG 2/16/09: do NOT do this!
+  //PutPointsInOrder(&x,&y,*xresult,*yresult,1);
 
 }
 

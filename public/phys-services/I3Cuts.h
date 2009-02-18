@@ -8,6 +8,7 @@
 #include "dataclasses/geometry/I3Geometry.h"
 
 #define CONTAINMENT_FUNCTIONS_AVAILABLE
+#define IC40_CONTAINMENT_BUG_HAS_BEEN_FIXED 1
 
 /**
  * @brief The I3Cuts namespace is a collection of functions that calculate 

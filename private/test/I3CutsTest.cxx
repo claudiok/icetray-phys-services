@@ -225,7 +225,8 @@ TEST(Containment_Volume)
   t.SetThetaPhi((180-80)*I3Constants::pi/180, -50*I3Constants::pi/180);
   c = ContainmentVolumeSize(t, x, y, 1, -1);
   ENSURE_DISTANCE(c, 0.912511, 0.00001, "ContainmentVolume side-clipper cube");
-  
+
+  /* OUT OF ORDER WILL NOT WORK ANYMORE   
   // The same thing again, but this time with the border points
   // out of order.
   x.clear();
@@ -250,7 +251,7 @@ TEST(Containment_Volume)
   t.SetThetaPhi((180-80)*I3Constants::pi/180, -50*I3Constants::pi/180);
   c = ContainmentVolumeSize(t, x, y, 1, -1);
   ENSURE_DISTANCE(c, 0.912511, 0.00001, "Out of order ContainmentVolume side-clipper cube");
-
+  */
 }
 
 
@@ -323,7 +324,8 @@ TEST(CMPolygon)
   CMPolygon(x,y,&xcm,&ycm);
   ENSURE_DISTANCE(xcm,392.0216,0.0001, "IT-16 Rhombus CM is wrong (x)");
   ENSURE_DISTANCE(ycm,116.4436,0.0001, "IT-16 Rhombus CM is wrong (y)");
- 
+
+  /* OUT OF ORDER WILL NOT WORK ANYMORE 
   // The IT-16 Rhombus with its points out of order
   // Should be the same answer as above!
   x.clear();
@@ -338,9 +340,101 @@ TEST(CMPolygon)
   y.push_back(144.06);
   CMPolygon(x,y,&xcm,&ycm);
   ENSURE_DISTANCE(xcm,392.0216,0.0001, "IT-16 out-of-order Rhombus CM is wrong (x)");
-  ENSURE_DISTANCE(ycm,116.4436,0.0001, "IT-16 out-of-order Rhombus CM is wrong (y)");
- 
+  ENSURE_DISTANCE(ycm,116.4436,0.0001, "IT-16 out-of-order Rhombus CM is wrong (y)"); */
+}
 
+TEST(IC40bug)
+{
+  vector<double> x;
+  vector<double> y;
+  double xcm, ycm;
+
+  // Sebastian's "simplified IC-40"
+  x.clear();
+  y.clear();
+  x.push_back( 400);
+  x.push_back( 550);
+  x.push_back(   0);
+  x.push_back(-350);
+  x.push_back(-400);
+  x.push_back(-200);
+  x.push_back( 300);
+
+  y.push_back(-200);
+  y.push_back( 150);
+  y.push_back( 500);
+  y.push_back( 450);
+  y.push_back( 200);
+  y.push_back(  50);
+  y.push_back(   0);
+  CMPolygon(x,y,&xcm,&ycm);
+#if IC40_CONTAINMENT_BUG_HAS_BEEN_FIXED
+  // NEW
+  ENSURE_DISTANCE(xcm,56.0494,0.0001, "Simplified IC-40 CM is wrong (x)");
+  ENSURE_DISTANCE(ycm,209.50617,0.0001, "Simplified IC-40 CM is wrong (y)");
+#else
+  // OLD and buggy
+  ENSURE_DISTANCE(xcm,37.7068,0.0001, "Simplified IC-40 CM is wrong (x)");
+  ENSURE_DISTANCE(ycm,195.39007,0.0001, "Simplified IC-40 CM is wrong (y)");
+#endif
+
+  /*
+  // The Real IC-40
+  x.clear();
+  y.clear();
+  //string 21
+  x.push_back(443.80);
+  y.push_back(-194.53);
+  //string 50
+  x.push_back(576.37);
+  y.push_back(170.92);
+  //string 74
+  x.push_back(338.44);
+  y.push_back(463.72);
+  //string 73
+  x.push_back(224.58);
+  y.push_back(432.35);
+  //string 78
+  x.push_back(22.11);
+  y.push_back(509.5);
+  //string 75
+  x.push_back(-347.88);
+  y.push_back(451.52);
+  //string 60
+  x.push_back(-437.04);
+  y.push_back(217.80);
+  //string 52
+  x.push_back(-358.44);
+  y.push_back(120.56);
+  //string 53
+  x.push_back(-234.95);
+  y.push_back(140.44);
+  //string 44
+  x.push_back(-156.23);
+  y.push_back(43.37);
+  //string 46
+  x.push_back(90.49);
+  y.push_back(82.35);
+
+  // First, the smoothed version with no string 38
+  CMPolygon(x,y,&xcm,&ycm);
+  ENSURE_DISTANCE(xcm,99.0742,0.0001, "Real IC-40 CM is wrong (x)");
+  ENSURE_DISTANCE(ycm,223.76308,0.0001, "Real IC-40 CM is wrong (y)");
+
+  //string 38
+  x.push_back(292.90);
+  y.push_back(5.20);
+  CMPolygon(x,y,&xcm,&ycm);
+#if IC40_CONTAINMENT_BUG_HAS_BEEN_FIXED
+  //NEW
+  ENSURE_DISTANCE(xcm,92.4584,0.0001, "Real IC-40 CM is wrong (x)");
+  ENSURE_DISTANCE(ycm,233.4785,0.0001, "Real IC-40 CM is wrong (y)");
+#else
+  //OLD
+  ENSURE_DISTANCE(xcm,60.4606,0.0001, "Real IC-40 CM is wrong (x)");
+  ENSURE_DISTANCE(ycm,249.9794,0.0001, "Real IC-40 CM is wrong (y)");
+#endif
+  */
 }
 
 
