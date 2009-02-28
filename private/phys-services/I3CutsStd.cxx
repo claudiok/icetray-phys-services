@@ -6,8 +6,6 @@
 #include "phys-services/I3Calculator.h"
 #include <cassert>
 
-#include <TVector3.h>
-
 using namespace I3Constants;
 using namespace I3Calculator;
 
