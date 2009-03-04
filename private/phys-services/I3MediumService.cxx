@@ -24,7 +24,6 @@
 
 #include <dataclasses/I3Constants.h>
 #include <dataclasses/I3Units.h>
-#include <phys-services/I3MediumProperties.h>
 
 // namespace declarations
 

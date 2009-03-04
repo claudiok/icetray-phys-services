@@ -17,8 +17,6 @@
 
 // forward declarations
 
-class I3MediumProperties;
-
 // header files
 
 #include <string>
@@ -28,6 +26,7 @@ class I3MediumProperties;
 #include <icetray/I3Logging.h>
 #include <icetray/I3FrameObject.h>
 #include <icetray/I3DefaultName.h>
+#include <phys-services/I3MediumProperties.h>
 
 // definitions
 
@@ -289,7 +288,7 @@ class I3MediumService
   I3MediumService& operator=(const I3MediumService& );
 
   void CheckBounds(double& depth, double& wavelength) const;
-  void CheckProperties(const I3MediumProperties& properties, unsigned int k) const;
+  void CheckProperties(const I3MediumProperties::Layer& layer) const;
   void CheckWLBounds(double & wavelength) const; // from Price/Woschnagg analytical formula
   void Configure(const I3MediumProperties& properties,
                  const std::string& histoOutFilename);
