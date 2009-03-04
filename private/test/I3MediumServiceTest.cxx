@@ -12,6 +12,7 @@
 #include <I3Test.h>
 
 #include <string>
+#include <boost/test/floating_point_comparison.hpp>
 
 #include <phys-services/I3MediumPropertiesFile.h>
 #include <phys-services/I3MediumService.h>
@@ -591,4 +592,11 @@ TEST(CreateI3MediumServiceWithAHA){
   }
   catch(...){}
   ENSURE(ptr);
+}
+TEST(CheckIsClose){
+  double a = 1.23456e-10;
+  double b = 1.23457e-10;
+  
+  ENSURE(!boost::test_tools::check_is_close(a, b, 0.0001));
+  ENSURE(boost::test_tools::check_is_close(a, b, 0.001));
 }
