@@ -9,13 +9,16 @@
  * @author tschmidt
 */
 
+#include <I3Test.h>
+
 #include <string>
-#include "I3Test.h"
-#include "phys-services/I3MediumPropertiesFile.h"
-#include "phys-services/I3MediumService.h"
+
+#include <phys-services/I3MediumPropertiesFile.h>
+#include <phys-services/I3MediumService.h>
 
 #define PERCENTAGE 0.000001
-#define ICE_PROPERTIES "/phys-services/resources/iceProperties.dat"
+#define STD_ICE_PROPERTIES "/phys-services/resources/iceProperties.dat"
+#define AHA_ICE_PROPERTIES "/phys-services/resources/Ice_table.aha.i3coords.cos080.17may2007.txt"
 
 TEST_GROUP(I3MediumServiceTest);
 
@@ -297,7 +300,7 @@ TEST(I3MediumServiceWithoutProperties){
 }
 TEST(I3MediumService380nmWithProperties){
   std::string works(getenv("I3_SRC"));
-  I3MediumPropertiesFile properties(works + ICE_PROPERTIES);
+  I3MediumPropertiesFile properties(works + STD_ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
   ENSURE_DISTANCE(ptr->NPhase(380.), 1.321429e+00, fabs(PERCENTAGE * ptr->NPhase(380.)));
@@ -391,7 +394,7 @@ TEST(I3MediumService380nmWithProperties){
 }
 TEST(I3MediumService460nmWithProperties){
   std::string works(getenv("I3_SRC"));
-  I3MediumPropertiesFile properties(works + ICE_PROPERTIES);
+  I3MediumPropertiesFile properties(works + STD_ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
   ENSURE_DISTANCE(ptr->NPhase(460.), 1.315071e+00, fabs(PERCENTAGE * ptr->NPhase(460.)));
@@ -479,7 +482,7 @@ TEST(I3MediumService460nmWithProperties){
 }
 TEST(I3MediumService540nmWithProperties){
   std::string works(getenv("I3_SRC"));
-  I3MediumPropertiesFile properties(works + ICE_PROPERTIES);
+  I3MediumPropertiesFile properties(works + STD_ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
   ENSURE_DISTANCE(ptr->NPhase(540.), 1.311391e+00, fabs(PERCENTAGE * ptr->NPhase(540.)));
@@ -567,7 +570,7 @@ TEST(I3MediumService540nmWithProperties){
 }
 TEST(I3MediumServiceWithProperties){
   std::string works(getenv("I3_SRC"));
-  I3MediumPropertiesFile properties(works + ICE_PROPERTIES);
+  I3MediumPropertiesFile properties(works + STD_ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
   ENSURE_DISTANCE(ptr->BulkIceAbsorptivity(), 1.020408e-02, fabs(PERCENTAGE * ptr->BulkIceAbsorptivity()));
@@ -578,4 +581,14 @@ TEST(I3MediumServiceWithProperties){
 
   ENSURE_DISTANCE(ptr->BulkIceAbsorptivity() * ptr->BulkIceAbsorptionLength(), 1., PERCENTAGE);
   ENSURE_DISTANCE(ptr->BulkIceEffScattLength() * ptr->BulkIceInvEffScattLength(), 1., PERCENTAGE);
+}
+TEST(CreateI3MediumServiceWithAHA){
+  std::string works(getenv("I3_SRC"));
+  I3MediumServicePtr ptr;
+  try{
+    I3MediumPropertiesFile properties(works + AHA_ICE_PROPERTIES);
+    ptr = I3MediumServicePtr(new I3MediumService(properties));
+  }
+  catch(...){}
+  ENSURE(ptr);
 }

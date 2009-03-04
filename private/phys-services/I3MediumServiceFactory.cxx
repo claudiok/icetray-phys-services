@@ -13,9 +13,9 @@
  
 // class header file
 
-#include "phys-services/I3MediumServiceFactory.h"
+#include <phys-services/I3MediumServiceFactory.h>
 
-#include "phys-services/I3MediumPropertiesFile.h"
+#include <phys-services/I3MediumPropertiesFile.h>
 
 // namespace declarations
 
@@ -25,12 +25,12 @@
 
 I3MediumServiceFactory::I3MediumServiceFactory(const I3Context& context)
   : I3ServiceFactory(context),
-  	medium_(){
+  	  medium_(){
   	
   AddParameter("Properties", "Ice properties file (input)",
-  	mediumPropInFilename_);
+               mediumPropInFilename_);
   AddParameter("Histograms", "ROOT file to dump lookup tables into (output)",
-  	mediumHistoOutFilename_);
+               mediumHistoOutFilename_);
 }
 
 
@@ -41,16 +41,15 @@ I3MediumServiceFactory::~I3MediumServiceFactory(){
 bool I3MediumServiceFactory::InstallService(I3Context& services){
 	
   if(!medium_){
-  	if(!mediumPropInFilename_.empty()){
+    if(!mediumPropInFilename_.empty()){
 			I3MediumPropertiesFile properties(mediumPropInFilename_);
 			medium_ = I3MediumServicePtr(new I3MediumService(properties,
-				mediumHistoOutFilename_));
+                                                       mediumHistoOutFilename_));
 		}
 		else medium_ = I3MediumServicePtr(new I3MediumService);
 	}
 
   return services.Put(medium_);
-
 }
 
 

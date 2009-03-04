@@ -21,7 +21,8 @@
 
 #include <string>
 #include <fstream>
-#include "phys-services/I3MediumProperties.h"
+
+#include <phys-services/I3MediumProperties.h>
 #include <icetray/I3Logging.h>
 
 // definitions
@@ -50,39 +51,35 @@
  * Layer description is considered complete when new LAYER line is encountered.
  * Layers don't have to come or be described in any specific order. 
  */
-class I3MediumPropertiesFile : public I3MediumProperties{
-public:	
+class I3MediumPropertiesFile : public I3MediumProperties
+{
+ public:	
   /**
    * @brief Default constructor.
    */
   I3MediumPropertiesFile();
-
   /**
    * @brief Constructor.
    * 
    * @param propInFilename Path/name of an ice properties file.
    */
   explicit I3MediumPropertiesFile(const std::string& propInFilename);
-
   /**
    * @brief Destructor.
    */ 
   virtual ~I3MediumPropertiesFile();
-
   /**
    * @brief Clone ice properties.
    * 
    * @return A clone of this ice properties.
    */
   virtual I3MediumPropertiesPtr Clone() const;
-
   /**
    * @brief Configure.
    * 
    * @param propInFilename Path/name of an ice properties file.
    */
   void Configure(const std::string& propInFilename);
-	
   /**
    * @brief Returns all ice layers including ice properties.
    * 
@@ -102,6 +99,7 @@ private:
   const static std::string LAYER_TOKEN;
   const static std::string ABS_TOKEN;
   const static std::string SCAT_TOKEN;
+  const static double FP_CMP_TOLERANCE;
 
 
   // private copy constructors and assignment
@@ -116,8 +114,10 @@ private:
                          int nwl, double minwl, double maxwl,
                          std::ifstream& propInFile);
 
+
   // instance member data
   std::vector<Layer> layers_;
+
   	
   // logging
   SET_LOGGER("I3MediumPropertiesFile");
@@ -126,8 +126,10 @@ private:
 typedef boost::shared_ptr<I3MediumPropertiesFile> I3MediumPropertiesFilePtr;
 
 
-inline const std::vector<I3MediumPropertiesFile::Layer>&
-I3MediumPropertiesFile::Layers() const
+inline
+const std::vector<I3MediumPropertiesFile::Layer>&
+I3MediumPropertiesFile
+::Layers() const
 {
   return layers_;
 }

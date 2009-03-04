@@ -21,8 +21,9 @@ class I3Context;
 // header files
 
 #include <string>
-#include "icetray/I3ServiceFactory.h"
-#include "phys-services/I3MediumService.h"
+
+#include <icetray/I3ServiceFactory.h>
+#include <phys-services/I3MediumService.h>
 #include <icetray/I3Logging.h>
 
 // definitions
@@ -40,35 +41,21 @@ class I3Context;
  */
 class I3MediumServiceFactory : public I3ServiceFactory
 {
-public:
-
+ public:
   /**
    * @brief Constructor.
    * 
-   * @param context the context in which the service will exist.
+   * @param context The context in which the service will exist.
    */
   explicit I3MediumServiceFactory(const I3Context& context);
-
   /**
    * @brief Destructor.
    */
   virtual ~I3MediumServiceFactory();
-
-  /**
-   * @brief Installs this objects service into the specified services object.
-   *
-   * @param services The services object into which the service should be installed.
-   * @return True, if the service is successfully installed.
-   */
   virtual bool InstallService(I3Context& services);
-
-  /**
-   * @brief Configure service prior to installing it. 
-   */
   virtual void Configure();
 
-private:
-
+ private:
   // private copy constructors and assignment
   I3MediumServiceFactory(const I3MediumServiceFactory &);
   I3MediumServiceFactory& operator=(const I3MediumServiceFactory &);

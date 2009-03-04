@@ -32,33 +32,30 @@ typedef boost::shared_ptr<I3MediumProperties> I3MediumPropertiesPtr;
  */
 class I3MediumProperties
 {
-public:
-
+ public:
   /**
    * @brief This class describes an ice layer.
    */
   class Layer
   {
-  public:
-
+   public:
     /**
      * @brief This class describes an ice property of an ice layer.
      */
     class Property
     {
-    private:
+     private:
       double lowestWavelength_;
       double highestWavelength_;
       std::vector<double> properties_;
 
-    public:
+     public:
      /**
       * @brief Returns the lowest wavelength, for which the property is known.
       * 
       * @return The lowest wavelength.
       */
      double LowestWavelength() const{ return lowestWavelength_; }
-
      /**
       * @brief Sets the lowest wavelength, for which the property is known.
       * 
@@ -68,14 +65,12 @@ public:
      {
        lowestWavelength_ = lowestWavelength;
      }
-
      /**
       * @brief Returns the highest wavelength, for which the property is known.
       * 
       * @return The highest wavelength.
       */
      double HighestWavelength() const{ return highestWavelength_; }
-
      /**
       * @brief Sets the highest wavelength, for which the property is known.
       * 
@@ -85,14 +80,12 @@ public:
      {
        highestWavelength_ = highestWavelength;
      }
-
      /**
       * @brief Returns the property.
       * 
       * @return Returns the property per wavelength bin.
       */
      const std::vector<double>& Get() const{ return properties_; }
-
      /**
       * @brief Returns the property.
       * 
@@ -101,63 +94,55 @@ public:
      std::vector<double>& Get(){ return properties_; }
     };
 
-
-  private:
+   private:
     double lowerEdge_;
     double upperEdge_;
     Property abs_;
     Property scat_;
 
-  public:
+   public:
     /**
      * @brief Returns the lower edge of the layer.
      * 
      * @return The lower edge of the layer.
      */
     double LowerEdge() const{ return lowerEdge_; }
-
     /**
      * @brief Sets the lower edge of the layer.
      * 
      * @param lowerEdge The lower edge of the layer.
      */
     void SetLowerEdge(double lowerEdge){ lowerEdge_ = lowerEdge; }
-
     /**
      * @brief Returns the upper edge of the layer.
      * 
      * @return The upper edge of the layer.
      */
     double UpperEdge() const{ return upperEdge_; }
-
     /**
      * @brief Sets the upper edge of the layer.
      * 
      * @param upperEdge The upper edge of the layer.
      */
     void SetUpperEdge(double upperEdge){ upperEdge_ = upperEdge; }
-
     /**
      * @brief Returns the absorption coefficents.
      * 
      * @return The absorption coefficents per wavelength bin.
      */
     const Property& AbsorptionCoefficents() const{ return abs_; }
-
     /**
      * @brief Returns the absorption coefficents.
      * 
      * @return The absorption coefficents per wavelength bin.
      */
     Property& AbsorptionCoefficents(){ return abs_; }
-
     /**
      * @brief Returns the scattering coefficents.
      * 
      * @return The scattering coefficents per wavelength bin.
      */
     const Property& ScatteringCoefficents() const{ return scat_; }
-
     /**
      * @brief Returns the scattering coefficents.
      * 
@@ -174,7 +159,7 @@ public:
   {
     bool operator()(const Layer & x, const Layer & y) const
     {
-      return x.LowerEdge() < y.LowerEdge ();
+      return x.LowerEdge() < y.LowerEdge();
     }
   };
 
@@ -183,19 +168,16 @@ public:
    * @brief Default constructor.
    */
   I3MediumProperties(){}
-
   /**
    * @brief Destructor.
    */
   virtual ~I3MediumProperties(){}
-
   /**
    * @brief Clone ice properties.
    * 
    * @return A clone of this ice properties.
    */
   virtual I3MediumPropertiesPtr Clone() const = 0;
-
   /**
    * @brief Returns all ice layers including ice properties.
    * 

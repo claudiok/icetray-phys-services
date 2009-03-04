@@ -14,14 +14,17 @@
  
 // class header file
 
-#include "phys-services/I3MediumService.h"
+#include <phys-services/I3MediumService.h>
 
 #include <algorithm>
 #include <ctype.h>
-#include "TFile.h"
-#include "dataclasses/I3Constants.h"
-#include "dataclasses/I3Units.h"
-#include "phys-services/I3MediumProperties.h"
+#include <TFile.h>
+
+#include <boost/test/floating_point_comparison.hpp>
+
+#include <dataclasses/I3Constants.h>
+#include <dataclasses/I3Units.h>
+#include <phys-services/I3MediumProperties.h>
 
 // namespace declarations
 
@@ -38,6 +41,7 @@ const double I3MediumService::MAX_WAVELENGTH_PRICE = 600.;
 const double I3MediumService::MEAN_SCATT_COSINE = 0.8;
 const double I3MediumService::MIN_WAVELENGTH_PRICE = 300.;
 const double I3MediumService::RECO_WAVELENGTH = 380.;
+const double I3MediumService::FP_CMP_TOLERANCE = 1e-6;
 
 
 I3MediumService::I3MediumService()
@@ -49,14 +53,14 @@ I3MediumService::I3MediumService()
 }
 
 
-I3MediumService::I3MediumService
-(const I3MediumProperties& properties, const string& histoOutFilename)
+I3MediumService
+::I3MediumService(const I3MediumProperties& properties,
+                  const string& histoOutFilename)
 	: bulkiceAbsorptivity_(1. / BULKICE_ABSORPTION_LENGTH),
 		bulkiceInvEffScattLength_(1. / BULKICE_EFF_SCATT_LENGTH),
 		hIntAbsLen_(0), hIntEffScattLen_(0),
 		hIceLayerAbsorptivity_(0), hIceLayerInvEffScattLen_(0),
 		isBulkice_(true), meanScatCosine_(MEAN_SCATT_COSINE){
-			
 	try{
 		Configure(properties, histoOutFilename);
 	}catch(...){
@@ -70,24 +74,34 @@ I3MediumService::~I3MediumService(){
 }
 
 
-void I3MediumService::CheckProperties
-(const I3MediumProperties& properties, unsigned int k) const{
-	if((properties.Layers()[k].UpperEdge()
-		- properties.Layers()[k].LowerEdge()) != binw_)
+void
+I3MediumService
+::CheckProperties(const I3MediumProperties::Layer& layer) const{
+  const I3MediumProperties::Layer::Property& absorption =
+    layer.AbsorptionCoefficents();
+  const I3MediumProperties::Layer::Property& scattering =
+    layer.ScatteringCoefficents();
+	if(!boost::test_tools::check_is_close(layer.UpperEdge() - layer.LowerEdge(),
+                                        binw_, FP_CMP_TOLERANCE))
 		log_fatal("non-constant width of layers");
-	if((properties.Layers()[k].AbsorptionCoefficents().Get().size() != nwl_)
-		|| (properties.Layers()[k].ScatteringCoefficents().Get().size() != nwl_))
+	if((absorption.Get().size() != nwl_)
+     || (scattering.Get().size() != nwl_))
 		log_fatal("non-constant wavelength binning");
-	if((properties.Layers()[k].AbsorptionCoefficents().LowestWavelength() != minwl_)
-		|| (properties.Layers()[k].ScatteringCoefficents().LowestWavelength() != minwl_)
-		|| (properties.Layers()[k].AbsorptionCoefficents().HighestWavelength() != maxwl_)
-		|| (properties.Layers()[k].ScatteringCoefficents().HighestWavelength() != maxwl_))
+	if((!boost::test_tools::check_is_close(absorption.LowestWavelength(),
+                                         minwl_, FP_CMP_TOLERANCE))
+     || (!boost::test_tools::check_is_close(scattering.LowestWavelength(),
+                                            minwl_, FP_CMP_TOLERANCE))
+     || (!boost::test_tools::check_is_close(absorption.HighestWavelength(),
+                                            maxwl_, FP_CMP_TOLERANCE))
+     || (!boost::test_tools::check_is_close(scattering.HighestWavelength(),
+                                            maxwl_, FP_CMP_TOLERANCE)))
 		log_fatal("non-constant wavelength interval");
 }
 
 
-void I3MediumService::Configure
-(const I3MediumProperties& properties, const string& histoOutFilename){
+void
+I3MediumService
+::Configure(const I3MediumProperties& properties, const string& histoOutFilename){
 	// geometry
 	if(!(nlayer_ = properties.Layers().size())) log_fatal("undefined layers");
 	minz_ = properties.Layers()[0].LowerEdge();
@@ -100,23 +114,23 @@ void I3MediumService::Configure
 	maxwl_ = properties.Layers()[0].AbsorptionCoefficents().HighestWavelength();
 	wlstep_ = (maxwl_ - minwl_) / nwl_;
 	if((RECO_WAVELENGTH < minwl_)
-		|| (RECO_WAVELENGTH > maxwl_)
-		|| (minwl_ == maxwl_))
+     || (RECO_WAVELENGTH > maxwl_)
+     || (minwl_ == maxwl_))
 		log_fatal("wavelength interval to small");
 		
   hIceLayerAbsorptivity_ =
-  	new TH2D("hIceLayerAbsorptivity_", "absorptivity",
-  		nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
+  	  new TH2D("hIceLayerAbsorptivity_", "absorptivity",
+             nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
   hIceLayerInvEffScattLen_ =
-  	new TH2D("hIceLayerInvEffScattLen_", "inverse eff. scatt. length",
-  		nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
+  	  new TH2D("hIceLayerInvEffScattLen_", "inverse eff. scatt. length",
+             nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
   recobinwl_ = hIceLayerAbsorptivity_->GetYaxis()->FindBin(RECO_WAVELENGTH);
 	
 	//////////////////////////////////////////////////////////////
 	
   // fill the scatt. and abs. histo, including unfl/ovfl bins 
 	for(unsigned int i = 1; i <= nlayer_; ++i){
-		CheckProperties(properties, i - 1);			
+    CheckProperties(properties.Layers()[i-1]);
 		for(unsigned int j = 1; j <= nwl_; ++j){
 			hIceLayerAbsorptivity_->SetBinContent(i, j,
 				properties.Layers()[i - 1].AbsorptionCoefficents().Get()[j - 1]);
@@ -160,15 +174,15 @@ void I3MediumService::DumpLookupTable(const string& histoOutFilename) const{
   	TFile* f = new TFile(histoOutFilename.c_str(), "recreate");
   	try{
 	    if(!f->IsOpen())
-  	    log_error("cannot open file: %s", histoOutFilename.c_str());
-    	else{
-      	hIceLayerAbsorptivity_->Write();
+        log_error("cannot open file: %s", histoOutFilename.c_str());
+      else{
+        hIceLayerAbsorptivity_->Write();
 	      hIceLayerInvEffScattLen_->Write();
-  	    hIntAbsLen_->Write();
-    	  hIntEffScattLen_->Write();
-      	f->Close();
+        hIntAbsLen_->Write();
+        hIntEffScattLen_->Write();
+        f->Close();
 	    }
-  	  delete f;
+      delete f;
 	  }catch(...){ delete f; }
 	}
 }
@@ -290,8 +304,9 @@ void I3MediumService::CheckBounds(double& depth, double& wavelength) const{
 }
 
 
-void I3MediumService::GetBin
-(TAxis* axis, double val, int& bin1, int& bin2, double& delta) const{
+void
+I3MediumService
+::GetBin(TAxis* axis, double val, int& bin1, int& bin2, double& delta) const{
   int bin = axis->FindBin(val);
   delta = val - axis->GetBinCenter(bin);
 
@@ -307,9 +322,9 @@ void I3MediumService::GetBin
 }
 
 
-double I3MediumService::Interp2DLin
-
-(double& depth, double& wavelength, const TH2D* h) const{
+double
+I3MediumService
+::Interp2DLin(double& depth, double& wavelength, const TH2D* h) const{
   int depth1, depth2, wl1, wl2;
   double deltaDepth, deltaWl;
   
@@ -338,8 +353,10 @@ double I3MediumService::Interp2DLin
 }
 
 
-double I3MediumService::Interp2DIntLin
-(double& depth, double& wavelength, const TH2D* h, const TH2D* hDeriv) const{
+double
+I3MediumService
+::Interp2DIntLin(double& depth, double& wavelength,
+                 const TH2D* h, const TH2D* hDeriv) const{
   int depth1, depth2, wl1, wl2;
   double deltaDepth, deltaWl;
 
@@ -387,8 +404,9 @@ double I3MediumService::InvEffScattLength(double depth, double wavelength) const
 }
 
 
-double I3MediumService::AveragedAbsorptivity
-(double z1, double z2, double wavelength) const{
+double
+I3MediumService
+::AveragedAbsorptivity(double z1, double z2, double wavelength) const{
   if(!IsBulkiceWithWarning()) return BulkIceAbsorptivity();
   
   if(z2 < z1) swap(z1, z2);
@@ -401,8 +419,9 @@ double I3MediumService::AveragedAbsorptivity
 }
 
 
-double I3MediumService::AveragedInvEffScattLength
-(double z1, double z2, double wavelength) const{
+double
+I3MediumService
+::AveragedInvEffScattLength(double z1, double z2, double wavelength) const{
   if(!IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
   
   if(z2 < z1) swap(z1, z2);
@@ -474,9 +493,11 @@ int I3MediumService::GetLayerNumber(double z){
 
 ////////////////////////////////////////////////////////////////
 
-TH1D* I3MediumService::GetAveragedAbsorptionLengthHistogram
-(const string& name, int nbin, double from,
-double min, double max, double wavelength) const{
+TH1D*
+I3MediumService
+::GetAveragedAbsorptionLengthHistogram(const string& name,
+                                       int nbin, double from, double min, double max,
+                                       double wavelength) const{
   TH1D* h = new TH1D(name.c_str(), "\\int 1/#lambda_{abs}", nbin, min, max);
   for(int i = 1; i <= nbin; ++i){
     double c = h->GetBinCenter(i);
@@ -487,9 +508,11 @@ double min, double max, double wavelength) const{
 }
 
 
-TH1D* I3MediumService::GetAveragedEffScatteringLengthHistogram
-(const string& name, int nbin, double from,
-double min, double max, double wavelength) const{
+TH1D*
+I3MediumService
+::GetAveragedEffScatteringLengthHistogram(const string& name,
+                                          int nbin, double from, double min, double max,
+                                          double wavelength) const{
   TH1D* h = new TH1D(name.c_str(), "\\int 1/#lambda_{es}", nbin, min, max);
   for(int i = 1; i <= nbin; ++i){
     double c = h->GetBinCenter(i);
@@ -500,8 +523,11 @@ double min, double max, double wavelength) const{
 }
 
 
-TH1D* I3MediumService::GetAbsorptionLengthHistogram
-(const string& name, int nbin, double min, double max, double wavelength) const{
+TH1D*
+I3MediumService
+::GetAbsorptionLengthHistogram(const string& name,
+                               int nbin, double min, double max,
+                               double wavelength) const{
   TH1D* h = new TH1D(name.c_str(), "#lambda_{abs}", nbin, min, max);
   for(int i = 1; i <= nbin; ++i){
     double c = h->GetBinCenter(i);
@@ -512,8 +538,11 @@ TH1D* I3MediumService::GetAbsorptionLengthHistogram
 }
 
 
-TH1D* I3MediumService::GetEffScatteringLengthHistogram
-(const string& name, int nbin, double min, double max, double wavelength) const{
+TH1D*
+I3MediumService
+::GetEffScatteringLengthHistogram(const string& name,
+                                  int nbin, double min, double max,
+                                  double wavelength) const{
   TH1D* h = new TH1D(name.c_str(), "#lambda_{es}", nbin, min, max);
   for(int i = 1; i <= nbin; ++i){
     double c = h->GetBinCenter(i);
