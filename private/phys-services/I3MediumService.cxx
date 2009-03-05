@@ -20,6 +20,7 @@
 #include <ctype.h>
 #include <TFile.h>
 
+#include <boost/version.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <dataclasses/I3Constants.h>
@@ -28,6 +29,12 @@
 // namespace declarations
 
 using namespace std;
+#if BOOST_VERSION >= 103400
+using boost::test_tools::percent_tolerance;
+#else
+#define percent_tolerance
+#endif
+using boost::test_tools::check_is_close;
 
 // implementation
 
@@ -80,20 +87,20 @@ I3MediumService
     layer.AbsorptionCoefficents();
   const I3MediumProperties::Layer::Property& scattering =
     layer.ScatteringCoefficents();
-	if(!boost::test_tools::check_is_close(layer.UpperEdge() - layer.LowerEdge(),
-                                        binw_, FP_CMP_TOLERANCE))
+	if(!check_is_close(layer.UpperEdge() - layer.LowerEdge(), binw_,
+                     percent_tolerance(FP_CMP_TOLERANCE)))
 		log_fatal("non-constant width of layers");
 	if((absorption.Get().size() != nwl_)
      || (scattering.Get().size() != nwl_))
 		log_fatal("non-constant wavelength binning");
-	if((!boost::test_tools::check_is_close(absorption.LowestWavelength(),
-                                         minwl_, FP_CMP_TOLERANCE))
-     || (!boost::test_tools::check_is_close(scattering.LowestWavelength(),
-                                            minwl_, FP_CMP_TOLERANCE))
-     || (!boost::test_tools::check_is_close(absorption.HighestWavelength(),
-                                            maxwl_, FP_CMP_TOLERANCE))
-     || (!boost::test_tools::check_is_close(scattering.HighestWavelength(),
-                                            maxwl_, FP_CMP_TOLERANCE)))
+	if((!check_is_close(absorption.LowestWavelength(), minwl_,
+                      percent_tolerance(FP_CMP_TOLERANCE)))
+     || (!check_is_close(scattering.LowestWavelength(), minwl_,
+                         percent_tolerance(FP_CMP_TOLERANCE)))
+     || (!check_is_close(absorption.HighestWavelength(), maxwl_,
+                         percent_tolerance(FP_CMP_TOLERANCE)))
+     || (!check_is_close(scattering.HighestWavelength(), maxwl_,
+                         percent_tolerance(FP_CMP_TOLERANCE))))
 		log_fatal("non-constant wavelength interval");
 }
 

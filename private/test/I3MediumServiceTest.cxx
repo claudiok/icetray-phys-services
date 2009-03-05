@@ -12,10 +12,19 @@
 #include <I3Test.h>
 
 #include <string>
+#include <boost/version.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <phys-services/I3MediumPropertiesFile.h>
 #include <phys-services/I3MediumService.h>
+
+#if BOOST_VERSION >= 103400
+using boost::test_tools::percent_tolerance;
+#else
+#define percent_tolerance
+#endif
+using boost::test_tools::check_is_close;
+using boost::test_tools::check_is_small;
 
 #define PERCENTAGE 0.000001
 #define STD_ICE_PROPERTIES "/phys-services/resources/iceProperties.dat"
@@ -597,6 +606,12 @@ TEST(CheckIsClose){
   double a = 1.23456e-10;
   double b = 1.23457e-10;
   
-  ENSURE(!boost::test_tools::check_is_close(a, b, 0.0001));
-  ENSURE(boost::test_tools::check_is_close(a, b, 0.001));
+  ENSURE(!check_is_close(a, b, percent_tolerance(0.0001)));
+  ENSURE(check_is_close(a, b, percent_tolerance(0.001)));
+}
+TEST(CheckIsSmall){
+  double a = 11e-5;
+  
+  ENSURE(!check_is_small(a, 0.0001));
+  ENSURE(check_is_small(a, 0.001));
 }

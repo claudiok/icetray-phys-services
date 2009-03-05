@@ -25,6 +25,7 @@
 // namespace declarations
 
 using namespace std;
+using boost::test_tools::check_is_small;
 
 // implementation
 
@@ -99,8 +100,10 @@ I3MediumPropertiesFile::Configure(const string& propInFilename){
 bool
 I3MediumPropertiesFile::Contiguous(const std::vector<Layer>& layers){
 	for(unsigned int i = 1; i < layers.size(); ++i)
-    if(!boost::test_tools::check_is_close(layers[i - 1].UpperEdge(),
-                                          layers[i].LowerEdge(), FP_CMP_TOLERANCE))
+    // layers are continous,
+    // unless upper and lower edge differ more than 1 micrometer 
+    if(!check_is_small(layers[i - 1].UpperEdge() - layers[i].LowerEdge(),
+                       FP_CMP_TOLERANCE))
       return false;
 	return true;
 }
