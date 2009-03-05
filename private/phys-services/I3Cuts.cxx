@@ -1124,7 +1124,7 @@ void I3Cuts::CMPolygon(vector<double> x,
   *xresult = running_numerator_x/running_denominator;
   *yresult = running_numerator_y/running_denominator;
 
-  log_debug("CM Results: x = %f (%f), y = %f (%f)",
+  log_debug("CM Results: x = %f, y = %f",
 	 *xresult, *yresult);
   //log_debug("CM Results: x = %f (%f), y = %f (%f)",
   //	 *xresult, xquick, *yresult, yquick);
