@@ -68,7 +68,7 @@ i3_executable(CreateXMLOMKey2MBIDConversionTable
   USE_PROJECTS phys-services)
 
 i3_test_executable(test private/test/*.cxx
-  USE_PROJECTS phys-services)
+  USE_PROJECTS phys-services dataio)
 
 i3_test_scripts(resources/scripts/*.py)
 
