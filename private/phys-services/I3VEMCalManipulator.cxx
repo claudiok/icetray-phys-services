@@ -1,7 +1,7 @@
 #include <phys-services/I3VEMCalManipulator.h>
-#include <TSystem.h>
 #include <fstream>
 #include <math.h>
+#include <dirent.h>
 
 I3VEMCalManipulator::I3VEMCalManipulator(I3CalibrationService& calService):
 calService_(calService)
@@ -165,24 +165,26 @@ void I3VEMCalManipulator::LoadDirectory(std::string path)
     while(path.find_last_of("/")==path.length()-1) path.erase(path.length()-1); 
     path += "/";
     
-    void *dir = gSystem->OpenDirectory(path.c_str());
+    DIR *dir = opendir(path.c_str());
     if(!dir)
     { 
 	log_error("Unable to open directory \"%s\"!", path.c_str()); 
 	return;
     }
     
-    const char* file;
-    while((file = gSystem->GetDirEntry(dir)))
+    struct dirent file, *lfile;
+    while(readdir_r(dir, &file, &lfile) == 0)
     {
-	std::string filename = path + file;
+	if (lfile == NULL) break;
+	
+	std::string filename = path + file.d_name;
 	
 	if(filename.find(".xml")!=std::string::npos)
 	{
 	    AddVEMCalibration(filename);
 	}
     }
-    gSystem->FreeDirectory(dir);
+    closedir(dir);
     
     I3VEMCalList::iterator vemcal_iter;
     log_info("Loaded %zu VEM calibrations from \"%s\":", vemCalList_.size(), path.c_str());

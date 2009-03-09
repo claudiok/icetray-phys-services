@@ -3,6 +3,18 @@
 #
 i3_project(phys-services)
 
+if (USE_ROOT)
+  # These are the parts of phys-services that absolutely need ROOT to work.
+  # For TRandomService, this is intrinsic to being related to TRandom.
+  # I3MediumService could perhaps be moved out of this section.
+  set(ROOT_SOURCES 
+	private/phys-services/I3MediumService.cxx
+	private/phys-services/I3MediumServiceFactory.cxx
+	private/phys-services/I3TRandomService.cxx
+	private/phys-services/I3TRandomServiceFactory.cxx
+  )
+endif (USE_ROOT)
+
 i3_add_library(phys-services 
   private/empty-streams/I3EmptyCalibrationService.cxx
   private/empty-streams/I3EmptyDetectorStatusService.cxx
@@ -31,12 +43,8 @@ i3_add_library(phys-services
   private/phys-services/I3GSLRandomServiceFactory.cxx
   private/phys-services/I3MC2Reco.cxx
   private/phys-services/I3MediumPropertiesFile.cxx
-  private/phys-services/I3MediumService.cxx
-  private/phys-services/I3MediumServiceFactory.cxx
   private/phys-services/I3SPRNGRandomService.cxx
   private/phys-services/I3SPRNGRandomServiceFactory.cxx
-  private/phys-services/I3TRandomService.cxx
-  private/phys-services/I3TRandomServiceFactory.cxx
   private/phys-services/I3TrackCutValues.cxx
   private/phys-services/I3TrackCutValuesStd.cxx
   private/phys-services/I3VEMCalManipulator.cxx
@@ -50,6 +58,8 @@ i3_add_library(phys-services
   private/phys-source/I3Muxer.cxx
   private/phys-source/I3TextFileGeometryService.cxx
   private/phys-source/I3TextFileGeometryServiceFactory.cxx
+  ${ROOT_SOURCES}
+
   USE_PROJECTS icetray dataclasses interfaces
 
   USE_TOOLS sprng gsl log4cplus boost root python

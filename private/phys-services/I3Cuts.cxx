@@ -1,15 +1,44 @@
-//#include <vector>
 #include "phys-services/I3Cuts.h"
 #include "dataclasses/I3Constants.h"
 #include "phys-services/Utility.h"
 #include "phys-services/I3Calculator.h"
-#include <cassert>
 
-#include <TVector3.h>
+#include <cassert>
+#include <cmath>
+#include <float.h>
 
 using namespace I3Constants;
 using namespace I3Calculator;
 
+static void
+crossproduct(double c[3], double a[3], double b[3])
+{
+	c[0] = a[1]*b[2] - a[2]*b[1];
+	c[1] = a[2]*b[0] - a[0]*b[2];
+	c[2] = a[0]*b[1] - a[1]*b[0];
+}
+
+static double
+dotproduct(double a[3], double b[3])
+{
+	return a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+}
+
+static void
+rotate(double a[3], double delphi, int axis)
+{
+	double phi, r;
+	int x, y;
+
+	x = (axis + 1) % 3;
+	y = (axis + 2) % 3;
+	
+	r = hypot(a[x],a[y]);
+	phi = atan2(a[y],a[x]) + delphi;
+
+	a[x] = r*cos(phi);
+	a[y] = r*sin(phi);
+}
 
 //--------------------------------------------------------------
 template<class HitType>
@@ -532,12 +561,7 @@ double I3Cuts::CylinderSize(const I3Particle& track,
   // 2) Solve for cylinder-clipper
   if ((px==0) && (py==0)) {
     //  it's straight vertical
-    r = xx*xx + yy*yy;
-    if (r > 0) {
-      r = sqrt(r);
-    } else {
-      r = 0.;
-    }
+    r = hypot(xx,yy);
     bestcyl = r/R0;
   } else {
     // not straight vertical
@@ -568,12 +592,6 @@ double I3Cuts::CylinderSize(const I3Particle& track,
   
 }  // end cylindersize function
 
-#define SMALLNUMBER 1e-12
-// <<----- Careful!! Machine dependent?
-// I had to stick this in because sometimes
-// "-0" or -5.088887e-14 was sneaking in and
-// messing things up.
-
 //------------------------------------
 // Generalized version of "CylinderSize" for a general in-ice
 // array shape
@@ -597,7 +615,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   I3Position CM(xcm,ycm,zcm);
 
   // Error-catching: what if the track goes right through the center of mass? 
-  if (I3Calculator::IsOnTrack(track,CM,SMALLNUMBER)) return 0; 
+  if (I3Calculator::IsOnTrack(track,CM,DBL_EPSILON)) return 0; 
 
   //---- BUG 2/16/09:
   //---- With IC-40, we have no choice but to assume they are in order! 
@@ -668,41 +686,43 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     C.ShiftCoordSystem(CM);
     P.ShiftCoordSystem(CM);
     // Is it between the goalposts?
-    TVector3 vB(B.GetX(), B.GetY(), B.GetZ());
-    TVector3 vC(C.GetX(), C.GetY(), C.GetZ());
-    TVector3 vP(P.GetX(), P.GetY(), P.GetZ());
-    TVector3 vn = vB.Cross(vC);
+    double vB[3] = {B.GetX(), B.GetY(), B.GetZ()};
+    double vC[3] = {C.GetX(), C.GetY(), C.GetZ()};
+    double vP[3] = {P.GetX(), P.GetY(), P.GetZ()};
+    double vn[3];
+
+    crossproduct(vn,vB,vC);
     log_trace("Pre-rotation: (%f, %f, %f) (%f, %f, %f) (%f, %f, %f)\n",
-             vB.X(), vB.Y(), vB.Z(),
-             vC.X(), vC.Y(), vC.Z(),
-             vP.X(), vP.Y(), vP.Z()
+             vB[0], vB[1], vB[2],
+             vC[0], vC[1], vC[2],
+             vP[0], vP[1], vP[2]
              );
     // First rotate so that n-hat lines up with the x-axis
-    double nphi = vn.Phi();
-    vB.RotateZ(-nphi);
-    vC.RotateZ(-nphi);
-    vP.RotateZ(-nphi);
+    double nphi = atan2(vn[1],vn[0]);
+    rotate(vB,-nphi,2);
+    rotate(vC,-nphi,2);
+    rotate(vP,-nphi,2);
     // Now rotate so that n-hat goes straight up the z-axis
-    double ntheta = vn.Theta();
-    vB.RotateY(-ntheta);
-    vC.RotateY(-ntheta);
-    vP.RotateY(-ntheta);
+    double ntheta = M_PI_2 - atan2(vn[2],hypot(vn[0],vn[1]));
+    rotate(vB,-ntheta,1);
+    rotate(vC,-ntheta,1);
+    rotate(vP,-ntheta,1);
     // Now put B on the x-axis
-    double bphi = vB.Phi();
-    vB.RotateZ(-bphi);
-    vC.RotateZ(-bphi);
-    vP.RotateZ(-bphi);
+    double bphi = atan2(vB[1],vB[0]);
+    rotate(vB,-bphi,2);
+    rotate(vC,-bphi,2);
+    rotate(vP,-bphi,2);
     log_trace("Rotated: (%f, %f, %f) (%f, %f, %f) (%f, %f, %f)\n",
-	     vB.X(), vB.Y(), vB.Z(),
-	     vC.X(), vC.Y(), vC.Z(),
-	     vP.X(), vP.Y(), vP.Z()
+	     vB[0], vB[1], vB[2],
+	     vC[0], vC[1], vC[2],
+	     vP[0], vP[1], vP[2]
 	     );
 
-    double theta_wall = vC.DeltaPhi(vB);
-    double theta_P = vP.DeltaPhi(vB);
+    double theta_wall = atan2(vC[1],vC[0]);
+    double theta_P = atan2(vP[1],vP[0]);
     // Fix "-0" precision problem
-    if (abs(theta_wall)<SMALLNUMBER) theta_wall=0;
-    if (abs(theta_P)<SMALLNUMBER) theta_P=0;
+    if (fabs(theta_wall)<DBL_EPSILON) theta_wall=0;
+    if (fabs(theta_P)<DBL_EPSILON) theta_P=0;
     // Make them all positive angles
     if (theta_wall<0) theta_wall += 2*I3Constants::pi;
     if (theta_P<0) theta_P += 2*I3Constants::pi;
@@ -720,10 +740,10 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       // "di" is the point along lineP
       // which intersects the line from B to C.
       double dix, diy;
-      IntersectionOfTwoLines(0,0,vP.X(),vP.Y(),
-			     vB.X(),vB.Y(),vC.X(),vC.Y(),
+      IntersectionOfTwoLines(0,0,vP[0],vP[1],
+			     vB[0],vB[1],vC[0],vC[1],
 			     &dix, &diy);
-      double di = sqrt(dix*dix + diy*diy);
+      double di = hypot(dix,diy);
 
       // Hooray!  We did it!  Is it the best one?
       if (isnan(bestanswer) || dprime/di < bestanswer)
@@ -800,7 +820,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
     // Is this the one?
     log_debug ("This (%f, %f) ang = %f, anglediff = %e", 
 	    x[i], y[i], ang[i], angdiff);
-    if (abs(angdiff)<SMALLNUMBER) { // we found an exact match!
+    if (fabs(angdiff)<DBL_EPSILON) { // we found an exact match!
       less = 0; n_less = i;
       more = 0; n_more = i;
     }
@@ -842,8 +862,8 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   }
 
   // Compute ratio of distances
-  double dprime = sqrt((xprime-xcm)*(xprime-xcm) + (yprime-ycm)*(yprime-ycm));
-  double di = sqrt((xi-xcm)*(xi-xcm) + (yi-ycm)*(yi-ycm));
+  double dprime = hypot(xprime-xcm,yprime-ycm);
+  double di = hypot(xi-xcm,yi-ycm);
   log_debug("dprime = %f, di = %f", dprime, di);
 
   return dprime/di;
@@ -964,31 +984,42 @@ I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
 // Intersection point of a line and a plane (in 3-d)
 // THE DOT- AND CROSS-PRODUCT VERSION
 I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
-					      I3Position A, I3Position B, I3Position C) {
-  TVector3 vA(A.GetX(), A.GetY(), A.GetZ());
-  TVector3 vB(B.GetX(), B.GetY(), B.GetZ());
-  TVector3 vC(C.GetX(), C.GetY(), C.GetZ());
-  TVector3 vBminusA = vB-vA;
-  TVector3 vn =  vBminusA.Cross(vC-vA);
-  //printf("\n");
-  //vn.Print();
+			      I3Position A, I3Position B, I3Position C) {
+  double vA[3] = {A.GetX(), A.GetY(), A.GetZ()};
+  double vB[3] = {B.GetX(), B.GetY(), B.GetZ()};
+  double vC[3] = {C.GetX(), C.GetY(), C.GetZ()};
+  double vBminusA[3] = {vB[0] - vA[0], vB[1] - vA[1], vB[2] - vA[2]};
+  double vCminusA[3] = {vC[0] - vA[0], vC[1] - vA[1], vC[2] - vA[2]};
+  double vn[3];
+
+  crossproduct(vn, vBminusA, vCminusA);
 
   // The track direction components
   I3Direction tdir = t.GetDir();
-  TVector3 vd(tdir.GetX(), tdir.GetY(), tdir.GetZ());
+  double vd[3] = {tdir.GetX(), tdir.GetY(), tdir.GetZ()};
   // The track vertex components
   I3Position tpos = t.GetPos();
-  TVector3 vx(tpos.GetX(), tpos.GetY(), tpos.GetZ());
+  double vx[3] = {tpos.GetX(), tpos.GetY(), tpos.GetZ()};
 
-  //vx.Print();
-  //vd.Print();
+  double answer[3], temp[3], scale;
 
-  TVector3 answer = (vn.Cross(vx.Cross(vd)) + vd*(vn.Dot(vA)))*(1/vn.Dot(vd));
-  //answer.Print();
+  // answer = vn x (vx x vd)
+  crossproduct(temp,vx,vd);
+  crossproduct(answer,vn,temp);
+
+  // answer += vd * (vn . vA)
+  scale = dotproduct(vn,vA);
+  for (int i = 0; i < 3; i++)
+	answer[i] += vd[i]*scale;
+
+  // answer /= (vn . vd)
+  scale = dotproduct(vn,vd); 
+  for (int i = 0; i < 3; i++)
+	answer[i] /= scale;
 
   // Output the solution as an I3Position
-  log_trace("L-P intersection: (x, y, z ) = (%f, %f, %f)", answer.X(),answer.Y(),answer.Z()); 
-  I3Position result(answer.X(),answer.Y(),answer.Z());
+  log_trace("L-P intersection: (x, y, z ) = (%f, %f, %f)", answer[0],answer[1],answer[2]); 
+  I3Position result(answer[0],answer[1],answer[2]);
   return result;
 
 }
@@ -1102,8 +1133,7 @@ void I3Cuts::CMPolygon(vector<double> x,
     I3Direction d12(x2-x1,y2-y1,0);
     I3Direction d13(x3-x1,y3-y1,0);
     double area = 
-      0.5*sqrt((y2-y1)*(y2-y1)+(x2-x1)*(x2-x1))
-         *sqrt((y3-y1)*(y3-y1)+(x3-x1)*(x3-x1))
+      0.5*hypot(y2-y1,x2-x1)*hypot(y3-y1,x3-x1)
       *sin(d12.CalcPhi()-d13.CalcPhi());
     // Weighted average...
     running_numerator_x += area*xtriangle;
