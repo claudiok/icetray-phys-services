@@ -77,7 +77,30 @@ i3_executable(CreateXMLOMKey2MBIDConversionTable
   private/CreateXMLOMKey2MBIDConversionTable/*.cxx
   USE_PROJECTS phys-services)
 
-i3_test_executable(test private/test/*.cxx
+if (USE_ROOT)
+  # These tests require ROOT to run, so conditionally build them
+  set(ROOT_TESTS
+	private/test/FastLogSumTest.cxx
+	private/test/I3CalculatorTest.cxx
+	private/test/I3MediumServiceTest.cxx
+	private/test/I3RandomServiceTest.cxx
+  )
+endif (USE_ROOT)
+
+i3_test_executable(test
+  private/test/ContainmentSizeTest.cxx
+  private/test/GeometrySelectorTests.cxx
+  private/test/I3CutsTest.cxx
+  private/test/I3FunctionTest.cxx
+  private/test/I3GeoSelTestModule.cxx
+  private/test/I3XMLOMKey2MBIDTest.cxx
+  private/test/OMKey2MBIDTest.cxx
+  private/test/OneFrameTest.cxx
+  private/test/SmoothnessTest.cxx
+  private/test/TestGeoTrimmers.cxx
+  private/test/TestSourceTests.cxx
+  private/test/main.cxx
+  ${ROOT_TESTS}
   USE_PROJECTS phys-services dataio)
 
 i3_test_scripts(resources/scripts/*.py)
