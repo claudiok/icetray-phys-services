@@ -42,7 +42,7 @@ rotate(double a[3], double delphi, int axis)
 
 //--------------------------------------------------------------
 template<class HitType>
-void TrackCutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
+void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
 		  const I3Map<OMKey, vector<HitType> >& hitmap,
 		  const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		  int& Ndir, double& Ldir, double& Sdir, double& Sall)
@@ -319,23 +319,23 @@ I3Position I3Cuts::COG(const I3Geometry& geometry,
 
 
 //--------------------------------------------------------------
-void I3Cuts::TrackCutsCalc(const I3Particle& track, const I3Geometry& geometry, 
+void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
 		      const I3RecoHitSeriesMap& hitmap,
 		      const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
-  TrackCutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoHit>
     (track, geometry, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
 }
 
 
 //--------------------------------------------------------------
-void I3Cuts::TrackCutsCalc(const I3Particle& track, const I3Geometry& geometry, 
+void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
 		      const I3RecoPulseSeriesMap& pulsemap,
 		      const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
-  TrackCutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl<I3RecoPulse>
     (track, geometry, pulsemap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
 }
 
@@ -368,7 +368,7 @@ int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  TrackCutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nchan;
 }
@@ -382,7 +382,7 @@ int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  TrackCutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nhit;
 }
@@ -405,7 +405,7 @@ int I3Cuts::Nstring(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  TrackCutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nstring;
 }
@@ -417,7 +417,7 @@ int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  TrackCutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Ndir;
 }
@@ -463,7 +463,7 @@ double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  TrackCutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Ldir;
 }
@@ -476,7 +476,7 @@ double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  TrackCutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Sall;
 }
@@ -489,7 +489,7 @@ double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  TrackCutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoHit>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Sdir;
 }

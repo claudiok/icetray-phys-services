@@ -12,7 +12,7 @@ using namespace I3Calculator;
 
 //--------------------------------------------------------------
 template<class HitType>
-void TrackCutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
+void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
 		  const I3Map<OMKey, vector<HitType> >& hitmap,
 		  int& Nchan, int& Nhit, int& Nstring,
 		  int& Nearly, int& Nlate,
@@ -541,7 +541,7 @@ I3Position I3CutsStd::COG(const I3Geometry& geometry,
 
 
 //--------------------------------------------------------------
-void I3CutsStd::TrackCutsCalc(const I3Particle& track, const I3Geometry& geometry, 
+void I3CutsStd::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
 		      const I3RecoHitSeriesMap& hitmap,
 		      int& Nchan, int& Nhit, int& Nstring,
 		      int& Nearly, int& Nlate,
@@ -553,7 +553,7 @@ void I3CutsStd::TrackCutsCalc(const I3Particle& track, const I3Geometry& geometr
               double& Sall, double& Lall)
               //double& Sall, double& Lall, double& cSize)
 {
-  TrackCutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoHit>
     (track, geometry, hitmap,
      Nchan, Nhit, Nstring, 
      Nearly, Nlate,
@@ -568,7 +568,7 @@ void I3CutsStd::TrackCutsCalc(const I3Particle& track, const I3Geometry& geometr
 
 
 //--------------------------------------------------------------
-void I3CutsStd::TrackCutsCalc(const I3Particle& track, const I3Geometry& geometry, 
+void I3CutsStd::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
 		      const I3RecoPulseSeriesMap& pulsemap,
 		      int& Nchan, int& Nhit, int& Nstring,
 		      int& Nearly, int& Nlate,
@@ -580,7 +580,7 @@ void I3CutsStd::TrackCutsCalc(const I3Particle& track, const I3Geometry& geometr
               double& Sall, double& Lall)
               //double& Sall, double& Lall, double& cSize)
 {
-  TrackCutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl<I3RecoPulse>
     (track, geometry, pulsemap,
      Nchan, Nhit, Nstring, 
      Nearly, Nlate,

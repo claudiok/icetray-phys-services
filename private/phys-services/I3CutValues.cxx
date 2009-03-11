@@ -1,12 +1,30 @@
-/**
-  This class has been deprecated!
-  The name has been changed to I3TrackCutValues to differentiate
-  between I3CascadeCutValues
-*/
-
 #include "icetray/serialization.h"
 #include "phys-services/I3Cuts.h"
 #include "phys-services/I3CutValues.h"
+
+void I3CutValues::Calculate(const I3Particle& track, 
+			    const I3Geometry& geometry, 
+			    const I3RecoHitSeriesMap& hitmap,
+			    const double& begTWindow,
+			    const double& endTWindow)
+{
+  I3Cuts::CutsCalc(track, geometry, hitmap, begTWindow, endTWindow,
+		   Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
+  cog = I3Cuts::COG(geometry, hitmap);
+}
+
+void I3CutValues::Calculate(const I3Particle& track, 
+			    const I3Geometry& geometry, 
+			    const I3RecoPulseSeriesMap& pulsemap,
+			    const double& begTWindow,
+			    const double& endTWindow)
+{
+  I3Cuts::CutsCalc(track, geometry, pulsemap, begTWindow, endTWindow,
+		   Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
+  cog = I3Cuts::COG(geometry, pulsemap);
+}
+
+I3CutValues::~I3CutValues() { }
 
 template <class Archive>
 void I3CutValues::serialize(Archive& ar, unsigned version)

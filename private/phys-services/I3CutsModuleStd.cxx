@@ -8,7 +8,7 @@
 #include "dataclasses/geometry/I3Geometry.h"
 #include "phys-services/Utility.h"
 #include "phys-services/I3CutsModuleStd.h"
-#include "phys-services/I3TrackCutValuesStd.h"
+#include "phys-services/I3CutValuesStd.h"
 #include "phys-services/I3CascadeCutValuesStd.h"
 
 using namespace std;
@@ -87,7 +87,7 @@ void I3CutsModuleStd::Physics(I3FramePtr frame)
 	if(particle->IsTrack()){
 	  
 	  log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", name.c_str());
-	  I3TrackCutValuesStdPtr cuts(new I3TrackCutValuesStd());
+	  I3CutValuesStdPtr cuts(new I3CutValuesStd());
 	  
 	  if (hitmap)
 	    cuts->Calculate(*particle,geometry,*hitmap);
@@ -139,7 +139,7 @@ void I3CutsModuleStd::Physics(I3FramePtr frame)
 	if(particle->IsTrack()){
 	  
 	  log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", name.c_str());
-	  I3TrackCutValuesStdPtr cuts(new I3TrackCutValuesStd());
+	  I3CutValuesStdPtr cuts(new I3CutValuesStd());
 	  
 	  if (hitmap)
 	    cuts->Calculate(*particle,geometry,*hitmap);

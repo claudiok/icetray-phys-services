@@ -1,12 +1,12 @@
 #include "icetray/serialization.h"
 #include "phys-services/I3CutsStd.h"
-#include "phys-services/I3TrackCutValuesStd.h"
+#include "phys-services/I3CutValuesStd.h"
 
-void I3TrackCutValuesStd::Calculate(const I3Particle& track, 
+void I3CutValuesStd::Calculate(const I3Particle& track, 
 			    const I3Geometry& geometry, 
 			    const I3RecoHitSeriesMap& hitmap)
 {
-  I3CutsStd::TrackCutsCalc(track, geometry, hitmap,
+  I3CutsStd::CutsCalc(track, geometry, hitmap,
 		   Nchan, Nhit, Nstring,
            Nearly, Nlate,
            NdirA, LdirA, SdirA,
@@ -19,11 +19,11 @@ void I3TrackCutValuesStd::Calculate(const I3Particle& track,
   cog = I3CutsStd::COG(geometry, hitmap);
 }
 
-void I3TrackCutValuesStd::Calculate(const I3Particle& track, 
+void I3CutValuesStd::Calculate(const I3Particle& track, 
 			    const I3Geometry& geometry, 
 			    const I3RecoPulseSeriesMap& pulsemap)
 {
-  I3CutsStd::TrackCutsCalc(track, geometry, pulsemap,
+  I3CutsStd::CutsCalc(track, geometry, pulsemap,
 		   Nchan, Nhit, Nstring,
            Nearly, Nlate,
            NdirA, LdirA, SdirA,
@@ -36,10 +36,10 @@ void I3TrackCutValuesStd::Calculate(const I3Particle& track,
   cog = I3CutsStd::COG(geometry, pulsemap);
 }
 
-I3TrackCutValuesStd::~I3TrackCutValuesStd() { }
+I3CutValuesStd::~I3CutValuesStd() { }
 
 template <class Archive>
-void I3TrackCutValuesStd::serialize(Archive& ar, unsigned version)
+void I3CutValuesStd::serialize(Archive& ar, unsigned version)
 {
   ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
   ar & make_nvp("Nchan",Nchan);
@@ -68,5 +68,5 @@ void I3TrackCutValuesStd::serialize(Archive& ar, unsigned version)
   ar & make_nvp("cog",cog);
 }
   
-BOOST_CLASS_VERSION(I3TrackCutValuesStd, 1);
-I3_SERIALIZABLE(I3TrackCutValuesStd);
+BOOST_CLASS_VERSION(I3CutValuesStd, 1);
+I3_SERIALIZABLE(I3CutValuesStd);

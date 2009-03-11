@@ -62,7 +62,7 @@ namespace I3Cuts
    * 
    * @todo Think about making the code more efficient...
    */
-  void TrackCutsCalc(const I3Particle& track, 
+  void CutsCalc(const I3Particle& track, 
 		const I3Geometry& geometry, 
 		const I3RecoHitSeriesMap& hitmap,
 		const double t1, 
@@ -79,7 +79,7 @@ namespace I3Cuts
    * INPUT:
    * @parameter pulsemap -- Map of I3RecoPulseSeries to be used.
    */
-  void TrackCutsCalc(const I3Particle& track, 
+  void CutsCalc(const I3Particle& track, 
 		const I3Geometry& geometry, 
 		const I3RecoPulseSeriesMap& pulsemap,
 		const double t1, 

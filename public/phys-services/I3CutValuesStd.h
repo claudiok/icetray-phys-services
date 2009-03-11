@@ -5,8 +5,8 @@
     @author J.Dumm, plagiarizing from dule
 */
 
-#ifndef I3TRACKCUTVALUESSTD_H
-#define I3TRACKCUTVALUESSTD_H
+#ifndef I3CUTVALUESSTD_H
+#define I3CUTVALUESSTD_H
 
 #include "icetray/I3FrameObject.h"
 #include "dataclasses/Utility.h"
@@ -20,7 +20,7 @@
 /**
  * @brief A class to store the basic hit information from the event
  */
-class I3TrackCutValuesStd : public I3FrameObject
+class I3CutValuesStd : public I3FrameObject
 {
  public:
   int Nchan;
@@ -48,7 +48,7 @@ class I3TrackCutValuesStd : public I3FrameObject
   double cSize;
   I3Position cog;
 
-  I3TrackCutValuesStd() :
+  I3CutValuesStd() :
     Nchan(-1),
     Nhit(-1),
     Nstring(-1),
@@ -82,7 +82,7 @@ class I3TrackCutValuesStd : public I3FrameObject
 		 const I3Geometry& geometry, 
 		 const I3RecoPulseSeriesMap& pulsemap);
 
-  virtual ~I3TrackCutValuesStd();
+  virtual ~I3CutValuesStd();
 
  private:
 
@@ -91,6 +91,6 @@ class I3TrackCutValuesStd : public I3FrameObject
 
 };
 
-I3_POINTER_TYPEDEFS(I3TrackCutValuesStd);
+I3_POINTER_TYPEDEFS(I3CutValuesStd);
 
 #endif

@@ -3,9 +3,6 @@
     the icecube collaboration
     $Id: I3CutValues.h 10512 2005-08-03 19:04:51Z dule $
     @author dule
-    @brief This class has been deprecated and will be removed!
-           The name changed to I3TrackCutValues to differentiate 
-           between I3CascadeCutValues
 */
 
 #ifndef I3CUTVALUES_H
@@ -34,6 +31,30 @@ class I3CutValues : public I3FrameObject
   double Sdir;
   double Sall;
   I3Position cog;
+
+  I3CutValues() :
+    Nchan(-1),
+    Nhit(-1),
+    Nstring(-1),
+    Ndir(-1),
+    Ldir(NAN),
+    Sdir(NAN),
+    Sall(NAN)
+    { cog.NullPos(); };
+
+  void Calculate(const I3Particle& track, 
+		 const I3Geometry& geometry, 
+		 const I3RecoHitSeriesMap& hitmap,
+		 const double& begTWindow = I3Constants::dt_window_l,
+		 const double& endTWindow = I3Constants::dt_window_h);
+
+  void Calculate(const I3Particle& track, 
+		 const I3Geometry& geometry, 
+		 const I3RecoPulseSeriesMap& pulsemap,
+		 const double& begTWindow = I3Constants::dt_window_l,
+		 const double& endTWindow = I3Constants::dt_window_h);
+
+  virtual ~I3CutValues();
 
  private:
 

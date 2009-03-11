@@ -14,9 +14,9 @@
 
 // classes
 
-#pragma link C++ namespace I3TrackCutValues+;
+#pragma link C++ namespace I3CutValues+;
 #pragma link C++ namespace I3CascadeCutValues+;
-#pragma link C++ namespace I3TrackCutValuesStd+;
+#pragma link C++ namespace I3CutValuesStd+;
 #pragma link C++ namespace I3CascadeCutValuesStd+;
 
 // namespaces
@@ -41,7 +41,7 @@
 #pragma link C++ function I3Calculator::InTrackSystem; //
 #pragma link C++ function I3Calculator::InNominalSystem; //
 
-#pragma link C++ function I3Cuts::TrackCutsCalc; //
+#pragma link C++ function I3Cuts::CutsCalc; //
 #pragma link C++ function I3Cuts::Ndir; //
 #pragma link C++ function I3Cuts::Ldir; //
 #pragma link C++ function I3Cuts::SmoothAll; //

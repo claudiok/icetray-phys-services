@@ -30,7 +30,6 @@ i3_add_library(phys-services
   private/phys-services/I3Calculator.cxx
   private/phys-services/I3CascadeCutValues.cxx
   private/phys-services/I3CascadeCutValuesStd.cxx
-  private/phys-services/I3CutValues.cxx
   private/phys-services/I3Cuts.cxx
   private/phys-services/I3CutsModule.cxx
   private/phys-services/I3CutsModuleStd.cxx
@@ -45,8 +44,8 @@ i3_add_library(phys-services
   private/phys-services/I3MediumPropertiesFile.cxx
   private/phys-services/I3SPRNGRandomService.cxx
   private/phys-services/I3SPRNGRandomServiceFactory.cxx
-  private/phys-services/I3TrackCutValues.cxx
-  private/phys-services/I3TrackCutValuesStd.cxx
+  private/phys-services/I3CutValues.cxx
+  private/phys-services/I3CutValuesStd.cxx
   private/phys-services/I3VEMCalManipulator.cxx
   private/phys-services/I3VEMCalManipulatorFactory.cxx
   private/phys-services/I3XMLOMKey2MBID.cxx
@@ -67,9 +66,9 @@ i3_add_library(phys-services
   ROOTCINT public/phys-services/I3Calculator.h
   public/phys-services/I3Cuts.h
   public/phys-services/I3CutsStd.h
-  public/phys-services/I3TrackCutValues.h
+  public/phys-services/I3CutValues.h
   public/phys-services/I3CascadeCutValues.h
-  public/phys-services/I3TrackCutValuesStd.h
+  public/phys-services/I3CutValuesStd.h
   public/phys-services/I3CascadeCutValuesStd.h
   )
 
