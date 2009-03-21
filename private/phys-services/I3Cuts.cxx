@@ -6,6 +6,7 @@
 #include <cassert>
 #include <cmath>
 #include <float.h>
+#include <TMath.h>
 
 using namespace I3Constants;
 using namespace I3Calculator;
@@ -770,12 +771,12 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 {
 
   // Error-checking... need at least three strings to have an area 
+  int xsize = x.size();
   if (x.size()<3) { 
     log_warn("ContainmentArea of zero/1/2 strings: will be NAN"); 
     return NAN;
   }
 
-  // INSERT OLGA'S ALGORITHM HERE!
   // First, compute the center of mass
   double xcm, ycm;
   CMPolygon(x, y, &xcm, &ycm);
@@ -793,6 +794,82 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   //double xprime = track.GetX();
   //double yprime = track.GetY();
 
+#if 1
+  // Compute the angle of point P:
+  I3Direction d(xprime-xcm,yprime-ycm,0);
+  double pang = d.CalcPhi();
+  //  double pang = angle(xcm,xprime,ycm,yprime);
+  log_debug("This point's ang = %f", pang);
+
+  double cvector[9];  // collection of odd number of segments intersected
+  int nc = 0;
+  
+  // Now, compute angles for each corner point,
+  // and figure out which two bracket the point
+  //int xsize = 7;
+  double ang[100];
+  
+  for (unsigned int i=0; i<xsize; i++) {
+    I3Direction dd(x[i]-xcm,y[i]-ycm,0);
+    ang[i] = dd.CalcPhi();
+  }
+  for (unsigned int i=0; i<xsize; i++) {
+    unsigned int inext = i+1;
+    if (inext==xsize) inext = 0;
+    if (CCW(ang[i],pang,1) && 
+	CCW(pang,ang[inext],0) && 
+	CCW(ang[i],ang[inext],0)) {
+      log_debug("I found a (regular) pair of angles! %d->%d",i,inext);
+      double c = TriangleExpansionFactor(xcm,ycm,
+					 x[i], y[i],
+					 x[inext], y[inext],
+					 xprime, yprime);
+      cvector[nc] = c;
+      nc++;
+      
+    }
+    if (!CCW(ang[i],pang,1) && 
+	!CCW(pang,ang[inext],0) && 
+	!CCW(ang[i],ang[inext],0)) {
+      log_debug("I found a (backwards) pair of angles! %d->%d",i,inext);
+      
+      // Calculated the "INVERTED C"
+      double c = TriangleExpansionFactor(xcm,ycm,
+					 x[inext], y[inext],
+					 x[i], y[i],
+					 xprime, yprime);
+      log_debug("Flipping it to: %f", 2-c);
+      cvector[nc] = 2-c;
+      nc++;
+    }
+  }
+  
+  // Now figure out the final answer from the C's!
+  // Now figure out the final answer from the C's!
+  double best_c_so_far = 9999999;
+  if (TMath::Even(nc)) log_fatal("Number of triangles should not be even! %d",nc);
+  if (nc==1) best_c_so_far = cvector[0]; 
+  else {
+    // Is it inside or outside?  Find out by multiplying insides/outsides
+    double product = 1;
+    for (int ic=0; ic<nc; ic++) product *= cvector[ic]-1;
+    bool inside = product>0;
+    if (inside) printf("This one is inside. %f\n",inside);
+    else  printf("This one is outside. %f\n",inside);
+
+    // Construct the best C
+    for (int ic=0; ic<nc; ic++) {
+      double c = cvector[ic];
+      bool cinside = c<1;
+      if (cinside == inside) 
+	if (c<best_c_so_far) best_c_so_far = c;
+    }
+  }
+
+  log_debug("RETURNING: %f\n", best_c_so_far);
+  return best_c_so_far;
+  
+#else
   // Compute the angle of point P:
   I3Direction d(xprime-xcm,yprime-ycm,0);
   double pang = d.CalcPhi();
@@ -867,6 +944,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   log_debug("dprime = %f, di = %f", dprime, di);
 
   return dprime/di;
+#endif
 
 }
 
@@ -1142,7 +1220,7 @@ void I3Cuts::CMPolygon(vector<double> x,
 	
     // Assuming the points are in order, if one leg "goes backwards" in angle,
     // it just corresponds to a negative area.  This will happen automatically,
-    // as "d12.CalcPhi()-d13.CalcPhi()" above will be a negative number.
+    // as "sin(d12.CalcPhi()-d13.CalcPhi())" above will be a negative number.
 
     log_debug("Triangle %d: (%f %f), (%f %f), (%f %f)",
 	   i, x1,y1,x2,y2,x3,y3);
@@ -1168,6 +1246,39 @@ void I3Cuts::CMPolygon(vector<double> x,
 
 }
 
+bool I3Cuts::CCW(double ang1, double ang2, bool exact) {
+  if (exact) {
+    if (sin(ang2-ang1)>=0) return 1;
+    else return 0;
+  } else {
+    if (sin(ang2-ang1)>0) return 1;
+    else return 0;
+  }
+}
+
+
+double I3Cuts::TriangleExpansionFactor(double xcm, double ycm, //vertex from which triangle will expand
+				       double x1, double y1,  // triangle point 2
+				       double x2, double y2,  // triangle point 3
+				       double xprime, double yprime)  // "the point" 
+{
+  //printf("point 1: (%f, %f)\n", x1, y1);
+  //printf("point 2: (%f, %f)\n", x2, y2);
+  //printf("CM     : (%f, %f)\n", xcm, ycm);
+  //printf("the point: (%f, %f)\n", xprime, yprime);
+  
+  // Compute intersection point
+  double xi, yi;
+  IntersectionOfTwoLines(x1,y1,x2,y2,xcm,ycm,xprime,yprime,&xi,&yi);
+  //printf("intersection: (%f, %f)\n", xi, yi);
+  
+  // Compute ratio of distances
+  double dprime = sqrt((xprime-xcm)*(xprime-xcm) + (yprime-ycm)*(yprime-ycm));
+  double di = sqrt((xi-xcm)*(xi-xcm) + (yi-ycm)*(yi-ycm));
+  log_debug("dprime = %f, di = %f, c = %f", dprime, di, dprime/di);
+  log_debug("---------------------------------");
+  return dprime/di;
+}       
 
 
 

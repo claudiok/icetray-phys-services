@@ -345,6 +345,7 @@ TEST(CMPolygon)
 
 TEST(IC40bug)
 {
+
   vector<double> x;
   vector<double> y;
   double xcm, ycm;
@@ -368,15 +369,12 @@ TEST(IC40bug)
   y.push_back(  50);
   y.push_back(   0);
   CMPolygon(x,y,&xcm,&ycm);
-#if IC40_CONTAINMENT_BUG_HAS_BEEN_FIXED
   // NEW
   ENSURE_DISTANCE(xcm,56.0494,0.0001, "Simplified IC-40 CM is wrong (x)");
   ENSURE_DISTANCE(ycm,209.50617,0.0001, "Simplified IC-40 CM is wrong (y)");
-#else
   // OLD and buggy
-  ENSURE_DISTANCE(xcm,37.7068,0.0001, "Simplified IC-40 CM is wrong (x)");
-  ENSURE_DISTANCE(ycm,195.39007,0.0001, "Simplified IC-40 CM is wrong (y)");
-#endif
+  //ENSURE_DISTANCE(xcm,37.7068,0.0001, "Simplified IC-40 CM is wrong (x)");
+  //ENSURE_DISTANCE(ycm,195.39007,0.0001, "Simplified IC-40 CM is wrong (y)");
 
   /*
   // The Real IC-40
@@ -453,6 +451,9 @@ TEST(Containment_Square)
   y.push_back(-1);
   y.push_back(1);
   double z=0.9520;  // this is a problematic z for some reason
+  // Update: this function now REQUIRES the points to be in counterclockwise order.
+  // I need to rearrange them.  
+  PutPointsInOrder(&x,&y,0,0,0);
 
   // Olga's test track
   I3Particle t(I3Particle::InfiniteTrack, I3Particle::unknown);
@@ -523,6 +524,9 @@ TEST(Containment_IceTopRhombus)
   y.push_back(119.39);
   y.push_back(428.2);
   y.push_back(144.06);
+  // Update: this function now REQUIRES the points to be in counterclockwise order.
+  // I need to rearrange them.  Use approximate cm of (393.74, 120.45)
+  PutPointsInOrder(&x,&y,393.74,120.45,0);
   double z=0;
   I3Particle seed;
   seed.SetShape(I3Particle::InfiniteTrack);

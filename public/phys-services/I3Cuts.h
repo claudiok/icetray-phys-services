@@ -8,6 +8,7 @@
 #include "dataclasses/geometry/I3Geometry.h"
 
 #define CONTAINMENT_FUNCTIONS_AVAILABLE
+
 // Not ready yet...
 //#define IC40_CONTAINMENT_BUG_HAS_BEEN_FIXED 1
 
@@ -354,6 +355,24 @@ namespace I3Cuts
 			vector<double> *yinput, 
 			double xcenter, double ycenter,
 			bool justcheck);
+
+  /**
+   * A helper function which quickly says whether ang2 is 
+   * counter-clockwise from ang1 (by less than 180 degrees) or not.
+   */
+  bool CCW(double ang1, double ang2, bool exact);
+
+  /**
+   * A helper function which, given a center (xcm,ycm), two triangle endpoints, 
+   * and a "question point" (xprime, yprime), computes the factor by which a
+   * line would have to expand outwards from the center in order to intersect
+   * the question point.  (This is part of ContainmentAreaSize.)
+   */
+  double TriangleExpansionFactor(double xcm, double ycm, //vertex from which triangle will expand
+				 double x1, double y1,  // triangle point 2
+				 double x2, double y2,  // triangle point 3
+				 double xprime, double yprime);  // "the point" 
+
 
   /**
    * Computes the size of the "containment volume of closest approach", 
