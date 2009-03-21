@@ -376,6 +376,42 @@ TEST(IC40bug)
   //ENSURE_DISTANCE(xcm,37.7068,0.0001, "Simplified IC-40 CM is wrong (x)");
   //ENSURE_DISTANCE(ycm,195.39007,0.0001, "Simplified IC-40 CM is wrong (y)");
 
+  // Some ContainmentAreaSize tests 
+  double c;
+  I3Particle t(I3Particle::InfiniteTrack, I3Particle::unknown);
+  t.SetThetaPhi((180-30)*I3Constants::pi/180, 45*I3Constants::pi/180);
+
+  t.SetPos(360,-80,0);
+  c = ContainmentAreaSize(t, x, y, 0);
+  ENSURE_DISTANCE(c, 0.856319, 0.000001, "Simplified IC-40 (point 1) Area didn't work");
+
+  t.SetPos(330,-80,0);
+  c = ContainmentAreaSize(t, x, y, 0);
+  ENSURE_DISTANCE(c, 1.071840, 0.000001, "Simplified IC-40 (point 2) Area didn't work");
+
+  t.SetPos(330,-80,0);
+  c = ContainmentAreaSize(t, x, y, 0);
+  ENSURE_DISTANCE(c, 1.071840, 0.000001, "Simplified IC-40 (point 3) Area didn't work");
+
+  t.SetPos(275,-10,0);
+  c = ContainmentAreaSize(t, x, y, 0);
+  ENSURE_DISTANCE(c, 1.067527, 0.000001, "Simplified IC-40 (point 4) Area didn't work");
+
+  t.SetPos(250,20,0);
+  c = ContainmentAreaSize(t, x, y, 0);
+  ENSURE_DISTANCE(c, 0.918968, 0.000001, "Simplified IC-40 (point 5) Area didn't work");
+
+  t.SetPos(420,-120,0);
+  c = ContainmentAreaSize(t, x, y, 0);
+  ENSURE_DISTANCE(c, 0.972499, 0.000001, "Simplified IC-40 (point 6) Area didn't work");
+
+  t.SetPos(450,-150,0);
+  c = ContainmentAreaSize(t, x, y, 0);
+  ENSURE_DISTANCE(c, 1.055003, 0.000001, "Simplified IC-40 (point 7) Area didn't work");
+
+
+
+
   /*
   // The Real IC-40
   x.clear();

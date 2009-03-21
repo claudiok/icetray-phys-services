@@ -845,7 +845,6 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   }
   
   // Now figure out the final answer from the C's!
-  // Now figure out the final answer from the C's!
   double best_c_so_far = 9999999;
   if (TMath::Even(nc)) log_fatal("Number of triangles should not be even! %d",nc);
   if (nc==1) best_c_so_far = cvector[0]; 
@@ -854,15 +853,17 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
     double product = 1;
     for (int ic=0; ic<nc; ic++) product *= cvector[ic]-1;
     bool inside = product>0;
-    if (inside) printf("This one is inside. %f\n",inside);
-    else  printf("This one is outside. %f\n",inside);
+    if (inside) log_debug("This one is inside. %d\n",inside);
+    else  log_debug("This one is outside. %d\n",inside);
 
     // Construct the best C
     for (int ic=0; ic<nc; ic++) {
       double c = cvector[ic];
       bool cinside = c<1;
-      if (cinside == inside) 
-	if (c<best_c_so_far) best_c_so_far = c;
+      if (cinside == inside) { 
+	if (best_c_so_far>1 && c<best_c_so_far) best_c_so_far = c;
+	if (best_c_so_far<1 && c>best_c_so_far) best_c_so_far = c;
+      }
     }
   }
 
