@@ -729,10 +729,10 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     if (theta_P<0) theta_P += 2*I3Constants::pi;
     
     // Compute the difference
-    log_trace(" %d          ang_wall = %f, ang_P = %f", 
+    log_debug(" %d          ang_wall = %f, ang_P = %f", 
 	     i, theta_wall, theta_P);
     if (theta_wall>=theta_P) { // we found an exact match!
-      log_trace("Found it! %d", i);
+      log_debug("Found it! %d", i);
 
       // We got the right wall, now compute C = dprime/di:
       // "dprime" is the distance from the origin to the intersection point
@@ -749,7 +749,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       // Hooray!  We did it!  Is it the best one?
       if (isnan(bestanswer) || dprime/di < bestanswer)
 	bestanswer = dprime/di;
-      log_trace("New Answer: %f/%f = %f", dprime, di, bestanswer);
+      log_debug("New Answer: %f/%f = %f", dprime, di, bestanswer);
     
     } // end if we found the right wall
   } else { log_debug("This track is parallel to the plane!  Ignoring."); } 
@@ -794,12 +794,11 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   //double xprime = track.GetX();
   //double yprime = track.GetY();
 
-#if 1
   // Compute the angle of point P:
   I3Direction d(xprime-xcm,yprime-ycm,0);
   double pang = d.CalcPhi();
   //  double pang = angle(xcm,xprime,ycm,yprime);
-  log_debug("This point's ang = %f", pang);
+  log_trace("This point's ang = %f", pang);
 
   double cvector[9];  // collection of odd number of segments intersected
   int nc = 0;
@@ -853,8 +852,8 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
     double product = 1;
     for (int ic=0; ic<nc; ic++) product *= cvector[ic]-1;
     bool inside = product>0;
-    if (inside) log_debug("This one is inside. %d\n",inside);
-    else  log_debug("This one is outside. %d\n",inside);
+    if (inside) log_trace("This one is inside. %d\n",inside);
+    else  log_trace("This one is outside. %d\n",inside);
 
     // Construct the best C
     for (int ic=0; ic<nc; ic++) {
@@ -870,83 +869,6 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   log_debug("RETURNING: %f\n", best_c_so_far);
   return best_c_so_far;
   
-#else
-  // Compute the angle of point P:
-  I3Direction d(xprime-xcm,yprime-ycm,0);
-  double pang = d.CalcPhi();
-  //  double pang = angle(xcm,xprime,ycm,yprime);
-  int n_more = -1;
-  double more = 9999;
-  int n_less = -1;
-  double less = -9999;
-
-  // Now, compute angles for each corner point,
-  // and figure out which two bracket the point
-  if (x.size() != y.size()) log_fatal("X and Y are not the same size");
-  vector<double> ang;
-  ang.resize(x.size());
-  for (unsigned int i=0; i<x.size(); i++) {
-    I3Direction dd(x[i]-xcm,y[i]-ycm,0);
-    ang[i] = dd.CalcPhi();
-    //ang[i] = angle(xcm, x[i], ycm, y[i]);
-
-    // Compute the difference
-    double angdiff = pang-ang[i];
-    if (angdiff<-I3Constants::pi) angdiff += 2*I3Constants::pi;
-    if (angdiff>I3Constants::pi) angdiff -= 2*I3Constants::pi;
-
-    // Is this the one?
-    log_debug ("This (%f, %f) ang = %f, anglediff = %e", 
-	    x[i], y[i], ang[i], angdiff);
-    if (fabs(angdiff)<DBL_EPSILON) { // we found an exact match!
-      less = 0; n_less = i;
-      more = 0; n_more = i;
-    }
-    else if (angdiff<0 && angdiff>less) { // we found a new less
-      less = angdiff;
-      n_less = i;
-    }
-    else if (angdiff>0 && angdiff<more) { // we found a new more
-      more = angdiff;
-      n_more = i;
-    }
-
-  }
-  
-  double xi, yi;
-  if (less==0 && more==0) {
-    log_debug("An exact match was found... %i", n_more);
-    xi = x[n_more];
-    yi = y[n_more];
-
-  } else {
-    log_trace("PAngle = %f, closest above = %f (%i), closest below = %f (%i)",
-	   pang,
-	   more, n_more,
-	   less, n_less);
-    
-    // Use Olga's notation
-    double x1 = x[n_less]; double y1 = y[n_less];
-    double x2 = x[n_more]; double y2 = y[n_more];
-
-    // Compute intersection point
-    IntersectionOfTwoLines(x1,y1,x2,y2,xcm,ycm,xprime,yprime,&xi,&yi);
-
-    log_debug("point 1: (%f, %f)", x1, y1);
-    log_debug("point 2: (%f, %f)", x2, y2);
-    log_debug("CM     : (%f, %f)", xcm, ycm);
-    log_debug("the point: (%f, %f)", xprime, yprime);
-    log_debug("intersection: (%f, %f)", xi, yi);
-  }
-
-  // Compute ratio of distances
-  double dprime = hypot(xprime-xcm,yprime-ycm);
-  double di = hypot(xi-xcm,yi-ycm);
-  log_debug("dprime = %f, di = %f", dprime, di);
-
-  return dprime/di;
-#endif
-
 }
 
 ////// HELPER FUNCTIONS FOR GEOMETRIC STUFF ///////
@@ -956,14 +878,6 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 void I3Cuts::IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
 				    double x3, double y3, double x4, double y4,
 				    double *xi, double *yi) {
-#if 0
-  // Olga's formula for the intersection point of two lines
-  *xi = 
-    (((y2-y1)/(x2-x1)*x1 - (y3-y4)/(x3-x4)*x4) + y4 - y1) / 
-    ((y2-y1)/(x2-x1) - (y3-y4)/(x3-x4));
-  *yi = 
-    (y2-y1)/(x2-x1)*(*xi-x1) + y1;
-#else
   // An alternative method I found on the web, less prone to divide-by-zeros
   // From: http://www.pdas.com/lineint.htm
   //  ...based on: http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/
@@ -984,81 +898,9 @@ void I3Cuts::IntersectionOfTwoLines(double x1, double y1, double x2, double y2,
   *xi =(b1*c2 - b2*c1)/denom; 
   *yi =(a2*c1 - a1*c2)/denom; 
   } 
-#endif
 
 }
 
-#if 0
-// Olga's way
-//------------------------------------
-// Intersection point of a line and a plane (in 3-d)
-I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
-					      I3Position A, I3Position B, I3Position C) {
-  // First find the vector of the normal out of the plane.  This is (B-A)x(C-A)
-  // Get the components to be cross-producted
-  double bx = B.GetX()-A.GetX();
-  double by = B.GetY()-A.GetY();
-  double bz = B.GetZ()-A.GetZ();
-  double cx = C.GetX()-A.GetX();
-  double cy = C.GetY()-A.GetY();
-  double cz = C.GetZ()-A.GetZ();
-  // The components of the normal vector
-  double nx = by*cz - bz*cy;
-  double ny = - bx*cz + bz*cx;
-  double nz = bx*cy - by*cx;
-
-  // More of Olga's variables which are needed
-  // The track direction components
-  I3Direction tdir = t.GetDir();
-  double a = tdir.GetX();
-  double b = tdir.GetY();
-  double c = tdir.GetZ();
-  // The track vertex components
-  I3Position tpos = t.GetPos();
-  double x1 = tpos.GetX();
-  double y1 = tpos.GetY();
-  double z1 = tpos.GetZ();
-  // The "origin" of the three points defining the plane
-  double ax = A.GetX();
-  double ay = A.GetY();
-  double az = A.GetZ();
-
-  log_trace("(Ax, Ay, Az) = (%f, %f, %f)", ax, ay, az);
-  log_trace("(nx, ny, nz) = (%f, %f, %f)", nx, ny, nz);
-  log_trace("(x1, y1, z1) = (%f, %f, %f)", x1, y1, z1);
-  log_trace("(a, b, c) = (%f, %f, %f)", a, b, c);
-
-  // Olga's formula for the intersection point of a line with a plane:
-  //double y = 
-  //  ( nx*(y1*a/b - x1 + ax) + ay*ny + nz*(y1*c/b - z1 + az) ) /
-  //  ( (nx*a + nz*c)/b + ny );
-  //double x = 
-  //  (y-y1)*a/b + x1;
-  //double z =
-  //  (y-y1)*c/b + z1;
-
-  // Version without divide by b (multiply whole thing by b)
-  // For the others... rotate the coordinates
-  double x = 
-  //(y-y1)*a/b + x1;
-    ( nz*(x1*c - z1*a + az*a) + ax*nx*a + ny*(x1*b - y1*a + ay*a) ) /
-    ( (nz*c + ny*b) + nx*a );
-  double y = 
-    ( nx*(y1*a - x1*b + ax*b) + ay*ny*b + nz*(y1*c - z1*b + az*b) ) /
-    ( (nx*a + nz*c) + ny*b );
-  double z =
-    // (y-y1)*c/b + z1;
-    ( ny*(z1*b - y1*c + ay*c) + az*nz*c + nx*(z1*a - x1*c + ax*c) ) /
-    ( (ny*b + nx*a) + nz*c );
-  
-  // Output the solution as an I3Position
-  log_debug("L-P intersection: (x, y, z ) = (%f, %f, %f)", x, y, z);
-  I3Position result(x,y,z);
-  return result;
-
-}
-
-#else
 //------------------------------------
 // Intersection point of a line and a plane (in 3-d)
 // THE DOT- AND CROSS-PRODUCT VERSION
@@ -1102,7 +944,6 @@ I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
   return result;
 
 }
-#endif
 
 
 
@@ -1276,8 +1117,8 @@ double I3Cuts::TriangleExpansionFactor(double xcm, double ycm, //vertex from whi
   // Compute ratio of distances
   double dprime = sqrt((xprime-xcm)*(xprime-xcm) + (yprime-ycm)*(yprime-ycm));
   double di = sqrt((xi-xcm)*(xi-xcm) + (yi-ycm)*(yi-ycm));
-  log_debug("dprime = %f, di = %f, c = %f", dprime, di, dprime/di);
-  log_debug("---------------------------------");
+  log_trace("dprime = %f, di = %f, c = %f", dprime, di, dprime/di);
+  log_trace("---------------------------------");
   return dprime/di;
 }       
 
