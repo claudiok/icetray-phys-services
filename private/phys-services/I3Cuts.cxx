@@ -6,7 +6,6 @@
 #include <cassert>
 #include <cmath>
 #include <float.h>
-#include <TMath.h>
 
 using namespace I3Constants;
 using namespace I3Calculator;
@@ -845,7 +844,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   
   // Now figure out the final answer from the C's!
   double best_c_so_far = 9999999;
-  if (TMath::Even(nc)) log_fatal("Number of triangles should not be even! %d",nc);
+  if (nc % 2 == 0) log_fatal("Number of triangles should not be even! %d",nc);
   if (nc==1) best_c_so_far = cvector[0]; 
   else {
     // Is it inside or outside?  Find out by multiplying insides/outsides
