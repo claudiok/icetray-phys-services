@@ -628,51 +628,84 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   // We're going to loop through each "wall" of the structure, extending
   // out from the center.
 
-  // Set up pairs of points which make "walls"
-  vector<I3Position> pairs1;
-  vector<I3Position> pairs2;
-  for (int i=0; i<n-1; i++) {
-    // The high pair
-    I3Position B(x[i],y[i],zhigh);
-    I3Position C(x[i+1],y[i+1],zhigh);
-    pairs1.push_back(B);
-    pairs2.push_back(C);
-    // The low pair
-    B.SetPosition(x[i],y[i],zlow);
-    C.SetPosition(x[i+1],y[i+1],zlow);
-    pairs1.push_back(B);
-    pairs2.push_back(C);
-    // The vertical pair
-    B.SetPosition(x[i],y[i],zhigh);
-    C.SetPosition(x[i],y[i],zlow);
-    pairs1.push_back(B);
-    pairs2.push_back(C);
-  }
-  // The last vertical pair which was left out
-  I3Position B(x[n-1],y[n-1],zhigh);
-  I3Position C(x[n-1],y[n-1],zlow);
-  pairs1.push_back(B);
-  pairs2.push_back(C);
   
+  // Set up pairs of points which make "walls"
+  I3Position B;
+  I3Position C;
+  vector<I3Position> highs1;
+  vector<I3Position> highs2;
+  vector<I3Position> lows1;
+  vector<I3Position> lows2;
+  vector<I3Position> verts1;
+  vector<I3Position> verts2;
+  // The high pairs
+  for (int i=0; i<n-1; i++) {
+    B.SetPosition(x[i],y[i],zhigh);
+    C.SetPosition(x[i+1],y[i+1],zhigh);
+    highs1.push_back(B);
+    highs2.push_back(C);
+  }
   // The last-to-first pair which was left out (upper and lower) 
   B.SetPosition(x[n-1],y[n-1],zhigh); 
   C.SetPosition(x[0],y[0],zhigh); 
-  pairs1.push_back(B); 
-  pairs2.push_back(C); 
+  highs1.push_back(B); 
+  highs2.push_back(C); 
+  // The low pairs
+  for (int i=0; i<n-1; i++) {
+    B.SetPosition(x[i],y[i],zlow);
+    C.SetPosition(x[i+1],y[i+1],zlow);
+    lows1.push_back(B);
+    lows2.push_back(C);
+  }
+  // The last-to-first pair which was left out (upper and lower) 
   B.SetPosition(x[n-1],y[n-1],zlow); 
   C.SetPosition(x[0],y[0],zlow); 
-  pairs1.push_back(B); 
-  pairs2.push_back(C); 
+  lows1.push_back(B); 
+  lows2.push_back(C); 
+  // The vertical pairs
+  for (int i=0; i<n-1; i++) {
+    B.SetPosition(x[i],y[i],zhigh);
+    C.SetPosition(x[i],y[i],zlow);
+    verts1.push_back(B);
+    verts2.push_back(C);
+  }
+  // The last vertical pair which was left out
+  B.SetPosition(x[n-1],y[n-1],zhigh);
+  C.SetPosition(x[n-1],y[n-1],zlow);
+  verts1.push_back(B);
+  verts2.push_back(C);
+  
+  // The structure of pairs
+  log_debug("Number of highs: %zu", highs1.size()); 
+  log_debug("Number of lows: %zu", lows1.size()); 
+  log_debug("Number of verts: %zu", verts1.size()); 
+  vector<vector<I3Position> > pairs1;
+  vector<vector<I3Position> > pairs2;
+  pairs1.push_back(highs1);
+  pairs1.push_back(lows1);
+  pairs1.push_back(verts1);
+  pairs2.push_back(highs2);
+  pairs2.push_back(lows2);
+  pairs2.push_back(verts2);
 
-  log_debug("Number of pairs: %zu", pairs1.size()); 
 
   // Now, compute intersection points for each "wall",
   // and figure out which one has the tracking going
   // "through the goalposts"
-  for (unsigned int i=0; i<pairs1.size(); i++) {
+
+  // Loop over the high series, low series, and vertical series
+  for (unsigned int j=0; j<pairs1.size(); j++) {
+
+  vector<double> cvector;  // collection of odd number of segments intersected
+
+  for (unsigned int i=0; i<pairs1[j].size(); i++) {
+    //for (int i=0; i<n-1; i++) {
     
-    I3Position B(pairs1[i]);
-    I3Position C(pairs2[i]);
+    // First, the high pairs
+    I3Position B(pairs1[j][i]);
+    I3Position C(pairs2[j][i]);
+
+
     I3Position P = IntersectionOfLineAndPlane(track,CM,B,C);
     // Error catching: if there is no point "P", then the track  
     // is exactly parallel to the plane being tested.   
@@ -724,13 +757,33 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     if (fabs(theta_wall)<DBL_EPSILON) theta_wall=0;
     if (fabs(theta_P)<DBL_EPSILON) theta_P=0;
     // Make them all positive angles
-    if (theta_wall<0) theta_wall += 2*I3Constants::pi;
-    if (theta_P<0) theta_P += 2*I3Constants::pi;
+    //if (theta_wall<0) theta_wall += 2*I3Constants::pi;
+    //if (theta_P<0) theta_P += 2*I3Constants::pi;
     
     // Compute the difference
     log_debug(" %d          ang_wall = %f, ang_P = %f", 
 	     i, theta_wall, theta_P);
-    if (theta_wall>=theta_P) { // we found an exact match!
+    if (CCW(0,theta_P,1) &&
+        CCW(theta_P,theta_wall,0) &&
+        CCW(0,theta_wall,0)) {
+      log_debug("I found a (regular) pair of angles! %d",i);
+      double c = TriangleExpansionFactor(0,0, vB[0], vB[1], vC[0], vC[1], vP[0], vP[1]);
+      log_debug("This c = %f",c);
+      cvector.push_back(c);
+    }    
+    if (!CCW(0,theta_P,1) &&
+        !CCW(theta_P,theta_wall,0) &&
+        !CCW(0,theta_wall,0)) {
+      log_debug("I found a (backwards) pair of angles! %d",i);
+      // Calculated the "INVERTED C"
+      double c = TriangleExpansionFactor(0,0, vB[0], vB[1], vC[0], vC[1], vP[0], vP[1]);
+      log_debug("This c = %f",c);
+      log_debug("Flipping it to: %f", 2-c);
+      cvector.push_back(2-c);
+    }    
+
+    /*
+    if (theta_wall>=theta_P && theta_P>0) { // we found an exact match!
       log_debug("Found it! %d", i);
 
       // We got the right wall, now compute C = dprime/di:
@@ -751,9 +804,28 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       log_debug("New Answer: %f/%f = %f", dprime, di, bestanswer);
     
     } // end if we found the right wall
+    */
+
+
   } else { log_debug("This track is parallel to the plane!  Ignoring."); } 
     // end the error-catching 
   } //end loop over the walls
+
+
+  // Construct the best C
+  double best_this_series = 9999999;
+  for (int ic=0; ic<cvector.size(); ic++) {
+    double c = cvector[ic];
+    if (c<best_this_series) best_this_series = c;
+    //if (best_this_series>1 && c<best_this_series) best_this_series = c;
+    //if (best_this_series<1 && c>best_this_series) best_this_series = c;
+  }
+
+
+  log_debug("THIS SERIES BEST C: %f", best_this_series);
+  if (best_this_series<bestanswer || isnan(bestanswer)) bestanswer = best_this_series;
+
+  }  //end loop over the three series
 
   return bestanswer;
 
