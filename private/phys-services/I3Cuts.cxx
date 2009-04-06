@@ -778,8 +778,9 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       // Calculated the "INVERTED C"
       double c = TriangleExpansionFactor(0,0, vB[0], vB[1], vC[0], vC[1], vP[0], vP[1]);
       log_debug("This c = %f",c);
-      log_debug("Flipping it to: %f", 2-c);
-      cvector.push_back(2-c);
+      //log_debug("Flipping it to: %f", 2-c);
+      //cvector.push_back(2-c);
+      cvector.push_back(c);
     }    
 
     /*
