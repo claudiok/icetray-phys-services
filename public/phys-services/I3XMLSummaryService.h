@@ -72,6 +72,11 @@ class I3XMLSummaryService: public I3SummaryService {
   void WriteXML(std::string outfile);
 
   /**
+   * Write an I3XMLSummaryService map to file
+   */
+  void WriteXML();
+
+  /**
    * Load an I3XMLSummaryService map from an iostream
    */
   void ReadXML(istream& iss);

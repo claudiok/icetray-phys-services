@@ -16,6 +16,7 @@ I3_SERVICE_FACTORY(I3SPRNGRandomServiceFactory);
 // Other header files
 
 #include "phys-services/I3SPRNGRandomService.h"
+#include <sys/stat.h>
 
 // Constructors
 
@@ -65,11 +66,27 @@ I3SPRNGRandomServiceFactory::InstallService(I3Context& services)
 
 void I3SPRNGRandomServiceFactory::Configure()
 {
+  struct stat istat;
+
   GetParameter("Seed",seed_);
   GetParameter("NStreams",nstreams_);
   GetParameter("StreamNum",streamnum_);
   GetParameter("inStateFile",instatefile_);
   GetParameter("outStateFile",outstatefile_);
   GetParameter("InstallServiceAs",installServiceAs_);
+
+  // do some configuration checks before trying to install
+  if ( !(nstreams_ > streamnum_) ) {
+     log_fatal("SPRNG: Number of RNG streams must be greater than the stream number");
+  }
+
+  // check rng state
+  if (!instatefile_.empty()) { 
+     log_debug("checking saved input RNG state %s", instatefile_.c_str());
+
+     if (stat(instatefile_.c_str(), &istat)) { 
+       log_fatal("SPRNG: Input RNG state file '%s' cannot be read!!!", instatefile_.c_str());
+     }
+  }
 }
 /* eof */

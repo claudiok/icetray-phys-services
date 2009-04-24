@@ -122,6 +122,12 @@ I3XMLSummaryService::WriteXML(string outfile)
 }
 
 void
+I3XMLSummaryService::WriteXML()
+{ 
+	WriteXML(filename_);
+}
+
+void
 I3XMLSummaryService::ReadXML(istream& iss)
 { 
 	iss >> valuemap_; 
@@ -163,5 +169,5 @@ I3XMLSummaryService::~I3XMLSummaryService()
 	valuemap_["real_time"] += difftime(stop_real_, start_real_);
 
 	// print the xml
-	WriteXML(filename_);
+	WriteXML();
 }

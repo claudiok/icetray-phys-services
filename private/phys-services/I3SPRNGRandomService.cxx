@@ -14,6 +14,7 @@
 #include <string>
 #include <fstream>
 #include <cassert>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -34,13 +35,23 @@ I3SPRNGRandomService::I3SPRNGRandomService(
 {
   char buffer[MAX_PACKED_LENGTH];
   int size;
+  struct stat istat;
 
+  // do some configuration checks before trying to install
+  if ( !(nstreams > streamnum) ) {
+     log_fatal("SPRNG: Number of RNG streams must be greater than the stream number");
+  }
   assert(streamnum<nstreams);
   assert(streamnum>=0);
   gsl_rng_env_setup();
 
-  /*if (instatefile_.length() > 0) {*/
-  if (!instatefile_.empty()) {
+  if (!instatefile_.empty()) { 
+     log_debug("checking saved input RNG state %s", instatefile_.c_str());
+
+    // check saved rng state
+    if (stat(instatefile_.c_str(), &istat)) { 
+       log_fatal("SPRNG: Input RNG state file '%s' cannot be read!!!", instatefile_.c_str());
+    }
   	ifstream in(instatefile_.c_str()); 
   	in.read((char*) &size,sizeof(int));  // read size of array
   	in.read(buffer,size);		// read array
@@ -54,12 +65,10 @@ I3SPRNGRandomService::I3SPRNGRandomService(
 
 I3SPRNGRandomService::~I3SPRNGRandomService()
 {
-   /*if (outstatefile_.length() > 0) { //save rng state to file*/
    if ( !outstatefile_.empty() ) { //save rng state to file
 	   int size;
 	   char *bytes;
 
-	   /*ofstream statefile(outstatefile_.c_str(),ofstream::binary); */
 	   ofstream out(outstatefile_.c_str()); 
 	   size = gsl_sprng_pack(rng_, &bytes);
 	   out.write((char*) &size,sizeof(int)); // write the size of array
