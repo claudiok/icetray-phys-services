@@ -1,0 +1,83 @@
+/**
+ @page distributed-rng Using I3SPRNGRandomService in distributed systems
+ @author <a href="http://www.icecube.wisc.edu/~juancarlos">Juan Carlos Diaz-Velez</a>
+
+
+<hr>
+
+ @section description Description:
+
+ I3SPRNGRandomService inherits from I3RandomService. I3SPRNGRandomService is intended for use 
+ in distributed systems but can also be used in a single processor
+ environment. For a description and usage of I3RandomService or Physics Services in general 
+ see the phys-services documentation.
+
+ @section about About I3SPRNGRandomService
+
+ I3SPRNGRandomService is and implementation of the I3RandomService interface
+ which uses the Scalable Pseudo-Random Number Generator (SPRNG) library in
+ combination with GSL to generate <i>statistically independent</i> streams of 
+ pseudo-random number distributions.
+ SPRNG was developed by Michael Mascagni, <i>et al</i> at Florida State University
+ <href="http://sprng.cs.fsu.edu">http://sprng.cs.fsu.edu</a>
+ 
+ The purpose of this implementation is to provide an I3RandomService that
+ can be used in a distributed computing environment and minimizing
+ correlation between parallel streams of numbers. 
+
+ SPRNG uses a parameterized approach to generate independent streams rather
+ than splitting or "leap-frog" approaches used in some parallel algorithms.
+
+ The basic approach for adapting sprng for use with gsl via a gsl_rng_type is based on code 
+ from Darren Wilkinson http://www.staff.ncl.ac.uk/d.j.wilkinson who wrote an MPI simple interface
+ that doesn't does not require configuration of streams.
+
+
+ @section configuration Configuring the I3SPRNGRandomService
+
+ As of 10 Mar 2005, IceTray services are configurable thanks to John Pretz.
+ To be accurate, it is the ServiceFactory which is configured.
+ The process is similar to that of configuring an I3Module.  The method 
+ @code 
+ I3Tray::AddService(const char* classname) 
+ @endcode 
+ has been replaced with 
+ @code 
+ I3Tray::AddService(const char* classname,const char* name) 
+ @endcode
+
+ Service parameters can be configured using
+ @code 
+ bool I3Tray::SetParameter(const char* module, const char* parameter, <int> value)
+ @endcode
+
+ For reproducibility SPRNG requires that for each generator to be given in
+ addition to the <b>seed</b> two other parameters which are used for
+ determining the stream of random numbers and their state. The following are
+ the parameters used to configure I3SPRNGRandomService:
+
+ @li Seed: this determines the initial state of the rng.
+ @li NStreams: the total number of streams used throughout the the entire computing environment. 
+ A single stream per process or instance of IceTray is assumed.
+ @li StreamNum: the stream number [0,NStreams-1]. In most applications this
+ would correspond to the proccess ID for an instance of IceTray.
+
+ Within IceTray the service is then added and configured using the syntax:
+ @code
+	tray.AddService("I3SPRNGRandomServiceFactory","random");
+	tray.SetParameter("random","Seed",0);
+	tray.SetParameter("random","NStreams",2);
+	tray.SetParameter("random","StreamNum",1);
+ @endcode
+
+ @section todo To do
+
+ In addition to the three parameters described above, it is possible to
+ indicate the type of rng used by SPRNG. At this time the DEFAULT_RNG_TYPE is
+ being used but I'll probably add the option to set this parameter within
+ I3Tray. 
+
+ In future versions of this service, there will be an option to save
+ the state of each rng at the end of each run and loaded at the begining of a
+ new run.
+*/
