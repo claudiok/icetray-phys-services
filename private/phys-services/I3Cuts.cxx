@@ -753,9 +753,15 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 
     double theta_wall = atan2(vC[1],vC[0]);
     double theta_P = atan2(vP[1],vP[0]);
+
     // Fix "-0" precision problem
-    if (fabs(theta_wall)<DBL_EPSILON) theta_wall=0;
-    if (fabs(theta_P)<DBL_EPSILON) theta_P=0;
+    // XXX: Note that this code is dangerous! It depends on arbitrary
+    //   constants, and can have large effects on output. The precision
+    //   of atan2() depends on compiler/CPU/operating system. Later logic
+    //   should be fixed instead.
+    if (fabs(theta_wall)<5.*DBL_EPSILON) theta_wall=0;
+    if (fabs(theta_P)<5.*DBL_EPSILON) theta_P=0;
+
     // Make them all positive angles
     //if (theta_wall<0) theta_wall += 2*I3Constants::pi;
     //if (theta_P<0) theta_P += 2*I3Constants::pi;
