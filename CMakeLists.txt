@@ -1,7 +1,9 @@
 #
 # $Id$
 #
-i3_project(phys-services)
+i3_project(phys-services
+  DOCS_DIR resources/docs)
+
 
 if (USE_ROOT)
   # These are the parts of phys-services that absolutely need ROOT to work.
