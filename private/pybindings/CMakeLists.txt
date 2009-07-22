@@ -2,6 +2,9 @@
 i3_add_pybindings(phys_services
   I3Calculator.cxx
   I3CutValues.cxx
+  I3CutValuesStd.cxx
+  I3CascadeCutValues.cxx
+  I3CascadeCutValuesStd.cxx
   RandomServices.cxx
   I3Cuts.cxx
   module.cxx
