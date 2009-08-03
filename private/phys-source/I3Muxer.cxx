@@ -29,7 +29,7 @@ const char* I3Muxer::DRIVING_TIME = "DrivingTime";
 
 
 I3Muxer::I3Muxer(const I3Context& context) : I3Module(context),
-                 currentEvent_(I3Frame::None),
+                 currentEvent_(I3Frame::Physics),
                  currentEventQueued_(false),
                  geometryServiceName_(I3DefaultName<I3GeometryService>::value()),
                  statusServiceName_(I3DefaultName<I3DetectorStatusService>::value()),
