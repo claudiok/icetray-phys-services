@@ -55,7 +55,7 @@ I3MediumService::I3MediumService()
 		bulkiceInvEffScattLength_(1. / BULKICE_EFF_SCATT_LENGTH),
 		hIntAbsLen_(0), hIntEffScattLen_(0),
 		hIceLayerAbsorptivity_(0), hIceLayerInvEffScattLen_(0),
-		isBulkice_(false), meanScatCosine_(MEAN_SCATT_COSINE){
+		isBulkice_(true), meanScatCosine_(MEAN_SCATT_COSINE){
 }
 
 
@@ -66,7 +66,7 @@ I3MediumService
 		bulkiceInvEffScattLength_(1. / BULKICE_EFF_SCATT_LENGTH),
 		hIntAbsLen_(0), hIntEffScattLen_(0),
 		hIceLayerAbsorptivity_(0), hIceLayerInvEffScattLen_(0),
-		isBulkice_(true), meanScatCosine_(MEAN_SCATT_COSINE){
+		isBulkice_(false), meanScatCosine_(MEAN_SCATT_COSINE){
 	try{
 		Configure(properties, histoOutFilename);
 	}catch(...){
