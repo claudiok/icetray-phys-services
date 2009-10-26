@@ -35,6 +35,8 @@ TEST_GROUP(I3MediumServiceTest);
 TEST(I3MediumService380nmWithoutProperties){
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService);
 
+  ENSURE(ptr->IsBulkice());
+
   ENSURE_DISTANCE(ptr->NPhase(380.), 1.321429e+00, fabs(PERCENTAGE * ptr->NPhase(380.)));
   ENSURE_DISTANCE(ptr->DNPhaseDLambda(380.), -1.089763e-01, fabs(PERCENTAGE * ptr->DNPhaseDLambda(380.)));
   ENSURE_DISTANCE(ptr->NGroup(380.), 1.362840e+00, fabs(PERCENTAGE * ptr->NGroup(380.)));
@@ -213,6 +215,8 @@ TEST(I3MediumService460nmWithoutProperties){
 TEST(I3MediumService540nmWithoutProperties){
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService);
 
+  ENSURE(ptr->IsBulkice());
+
   ENSURE_DISTANCE(ptr->NPhase(540.), 1.311391e+00, fabs(PERCENTAGE * ptr->NPhase(540.)));
   ENSURE_DISTANCE(ptr->DNPhaseDLambda(540.), -3.776158e-02, fabs(PERCENTAGE * ptr->DNPhaseDLambda(540.)));
   ENSURE_DISTANCE(ptr->NGroup(540.), 1.331782e+00, fabs(PERCENTAGE * ptr->NGroup(540.)));
@@ -313,6 +317,8 @@ TEST(I3MediumService380nmWithProperties){
   I3MediumPropertiesFile properties(works + STD_ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
+  ENSURE(!ptr->IsBulkice());
+
   ENSURE_DISTANCE(ptr->NPhase(380.), 1.321429e+00, fabs(PERCENTAGE * ptr->NPhase(380.)));
   ENSURE_DISTANCE(ptr->DNPhaseDLambda(380.), -1.089763e-01, fabs(PERCENTAGE * ptr->DNPhaseDLambda(380.)));
   ENSURE_DISTANCE(ptr->NGroup(380.), 1.362840e+00, fabs(PERCENTAGE * ptr->NGroup(380.)));
@@ -407,6 +413,8 @@ TEST(I3MediumService460nmWithProperties){
   I3MediumPropertiesFile properties(works + STD_ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
+  ENSURE(!ptr->IsBulkice());
+
   ENSURE_DISTANCE(ptr->NPhase(460.), 1.315071e+00, fabs(PERCENTAGE * ptr->NPhase(460.)));
   ENSURE_DISTANCE(ptr->DNPhaseDLambda(460.), -5.742147e-02, fabs(PERCENTAGE * ptr->DNPhaseDLambda(460.)));
   ENSURE_DISTANCE(ptr->NGroup(460.), 1.341485e+00, fabs(PERCENTAGE * ptr->NGroup(460.)));
@@ -495,6 +503,8 @@ TEST(I3MediumService540nmWithProperties){
   I3MediumPropertiesFile properties(works + STD_ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
 
+  ENSURE(!ptr->IsBulkice());
+
   ENSURE_DISTANCE(ptr->NPhase(540.), 1.311391e+00, fabs(PERCENTAGE * ptr->NPhase(540.)));
   ENSURE_DISTANCE(ptr->DNPhaseDLambda(540.), -3.776158e-02, fabs(PERCENTAGE * ptr->DNPhaseDLambda(540.)));
   ENSURE_DISTANCE(ptr->NGroup(540.), 1.331782e+00, fabs(PERCENTAGE * ptr->NGroup(540.)));
@@ -582,6 +592,8 @@ TEST(I3MediumServiceWithProperties){
   std::string works(getenv("I3_SRC"));
   I3MediumPropertiesFile properties(works + STD_ICE_PROPERTIES);
   I3MediumServicePtr ptr = I3MediumServicePtr(new I3MediumService(properties));
+
+  ENSURE(!ptr->IsBulkice());
 
   ENSURE_DISTANCE(ptr->BulkIceAbsorptivity(), 1.020408e-02, fabs(PERCENTAGE * ptr->BulkIceAbsorptivity()));
   ENSURE_DISTANCE(ptr->BulkIceInvEffScattLength(), 3.003003e-02, fabs(PERCENTAGE * ptr->BulkIceInvEffScattLength()));
