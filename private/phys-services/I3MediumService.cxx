@@ -397,14 +397,14 @@ I3MediumService
 
 
 double I3MediumService::Absorptivity(double depth, double wavelength) const{
-  if(!IsBulkiceWithWarning()) return BulkIceAbsorptivity();
+  if(IsBulkiceWithWarning()) return BulkIceAbsorptivity();
   
   return Interp2DLin(depth, wavelength, hIceLayerAbsorptivity_);
 }
 
 
 double I3MediumService::InvEffScattLength(double depth, double wavelength) const{
-  if(!IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
+  if(IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
   
   return Interp2DLin(depth, wavelength, hIceLayerInvEffScattLen_);
 }
@@ -413,7 +413,7 @@ double I3MediumService::InvEffScattLength(double depth, double wavelength) const
 double
 I3MediumService
 ::AveragedAbsorptivity(double z1, double z2, double wavelength) const{
-  if(!IsBulkiceWithWarning()) return BulkIceAbsorptivity();
+  if(IsBulkiceWithWarning()) return BulkIceAbsorptivity();
   
   if(z2 < z1) swap(z1, z2);
   double valz1 = Interp2DIntLin(z1, wavelength, hIntAbsLen_, hIceLayerAbsorptivity_);
@@ -428,7 +428,7 @@ I3MediumService
 double
 I3MediumService
 ::AveragedInvEffScattLength(double z1, double z2, double wavelength) const{
-  if(!IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
+  if(IsBulkiceWithWarning()) return BulkIceInvEffScattLength();
   
   if(z2 < z1) swap(z1, z2);
   double valz1 = Interp2DIntLin(z1, wavelength, hIntEffScattLen_, hIceLayerInvEffScattLen_);

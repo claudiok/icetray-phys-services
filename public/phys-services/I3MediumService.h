@@ -441,7 +441,7 @@ inline
 bool 
 I3MediumService
 ::IsBulkiceWithWarning() const{
-  if(!IsBulkice()) log_warn("using bulk ice medium");	
+  if(IsBulkice()) log_warn("using bulk ice medium");	
 	
   return IsBulkice();
 }
