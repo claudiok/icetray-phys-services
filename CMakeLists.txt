@@ -17,6 +17,14 @@ if (USE_ROOT)
   )
 endif (USE_ROOT)
 
+if (SPRNG_FOUND)
+  message(STATUS "Sprng found, adding SPRNGRandomService")
+  set(SPRNG_SOURCES
+    private/phys-services/I3SPRNGRandomService.cxx
+    private/phys-services/I3SPRNGRandomServiceFactory.cxx)
+  set(SPRNG_TOOL sprng)
+endif()
+
 i3_add_library(phys-services 
   private/empty-streams/I3EmptyCalibrationService.cxx
   private/empty-streams/I3EmptyDetectorStatusService.cxx
@@ -44,8 +52,6 @@ i3_add_library(phys-services
   private/phys-services/I3GSLRandomServiceFactory.cxx
   private/phys-services/I3MC2Reco.cxx
   private/phys-services/I3MediumPropertiesFile.cxx
-  private/phys-services/I3SPRNGRandomService.cxx
-  private/phys-services/I3SPRNGRandomServiceFactory.cxx
   private/phys-services/I3CutValues.cxx
   private/phys-services/I3CutValuesStd.cxx
   private/phys-services/I3VEMCalManipulator.cxx
@@ -60,10 +66,11 @@ i3_add_library(phys-services
   private/phys-source/I3TextFileGeometryService.cxx
   private/phys-source/I3TextFileGeometryServiceFactory.cxx
   ${ROOT_SOURCES}
+  ${SPRNG_SOURCES}
 
   USE_PROJECTS icetray dataclasses interfaces
 
-  USE_TOOLS sprng gsl log4cplus boost root python
+  USE_TOOLS ${SPRNG_TOOL} gsl log4cplus boost root python
 
   ROOTCINT public/phys-services/I3Calculator.h
   public/phys-services/I3Cuts.h
