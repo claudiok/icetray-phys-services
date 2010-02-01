@@ -243,7 +243,7 @@ I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, vector<OMKey
     if (output_geoptr->find(*ib) != output_geoptr->end())
       output_geoptr->erase(*ib);
     else 
-      log_warn("Your bad OM %d %d is not in the geometry", 
+      log_info("Your bad OM %d %d is not in the geometry", 
                ib->GetString(), ib->GetOM());
   }
   return output_geoptr;
