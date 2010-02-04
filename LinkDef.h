@@ -16,14 +16,11 @@
 
 #pragma link C++ namespace I3CutValues+;
 #pragma link C++ namespace I3CascadeCutValues+;
-#pragma link C++ namespace I3CutValuesStd+;
-#pragma link C++ namespace I3CascadeCutValuesStd+;
 
 // namespaces
 
 #pragma link C++ namespace I3Calculator;
 #pragma link C++ namespace I3Cuts;
-#pragma link C++ namespace I3CutsStd;
 
 // functions
 
@@ -48,10 +45,6 @@
 #pragma link C++ function I3Cuts::SmoothDir; //
 #pragma link C++ function I3Cuts::CylinderSize; //
 #pragma link C++ function I3Cuts::COG; //
-
-// Include these ??
-//#pragma link C++ function I3CutsStd::CutsCalc; //
-//#pragma link C++ function I3CutsStd::COG; //
 
 #endif
 

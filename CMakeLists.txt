@@ -39,11 +39,8 @@ i3_add_library(phys-services
   private/geo-selector/I3StringAdderServiceFactory.cxx
   private/phys-services/I3Calculator.cxx
   private/phys-services/I3CascadeCutValues.cxx
-  private/phys-services/I3CascadeCutValuesStd.cxx
   private/phys-services/I3Cuts.cxx
   private/phys-services/I3CutsModule.cxx
-  private/phys-services/I3CutsModuleStd.cxx
-  private/phys-services/I3CutsStd.cxx
   private/phys-services/I3EventCounter.cxx
   private/phys-services/I3FileOMKey2MBID.cxx
   private/phys-services/I3FileOMKey2MBIDFactory.cxx
@@ -53,7 +50,6 @@ i3_add_library(phys-services
   private/phys-services/I3MC2Reco.cxx
   private/phys-services/I3MediumPropertiesFile.cxx
   private/phys-services/I3CutValues.cxx
-  private/phys-services/I3CutValuesStd.cxx
   private/phys-services/I3VEMCalManipulator.cxx
   private/phys-services/I3VEMCalManipulatorFactory.cxx
   private/phys-services/I3XMLOMKey2MBID.cxx
@@ -74,11 +70,8 @@ i3_add_library(phys-services
 
   ROOTCINT public/phys-services/I3Calculator.h
   public/phys-services/I3Cuts.h
-  public/phys-services/I3CutsStd.h
   public/phys-services/I3CutValues.h
   public/phys-services/I3CascadeCutValues.h
-  public/phys-services/I3CutValuesStd.h
-  public/phys-services/I3CascadeCutValuesStd.h
   )
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable
