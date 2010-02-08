@@ -46,9 +46,10 @@ bool
 I3GSLRandomServiceFactory::InstallService(I3Context& services)
 {
   if(!random_)
-		if(seed_ < 0) random_ = I3RandomServicePtr(new I3GSLRandomService());
-		else  random_ = I3RandomServicePtr(new I3GSLRandomService(seed_));
-		
+    {
+      if(seed_ < 0) random_ = I3RandomServicePtr(new I3GSLRandomService());
+      else  random_ = I3RandomServicePtr(new I3GSLRandomService(seed_));
+    }		
   return services.Put<I3RandomService>(installServiceAs_, random_);
 }
 

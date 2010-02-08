@@ -821,7 +821,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 
   // Construct the best C
   double best_this_series = 9999999;
-  for (int ic=0; ic<cvector.size(); ic++) {
+  for (unsigned ic=0; ic<cvector.size(); ic++) {
     double c = cvector[ic];
     if (c<best_this_series) best_this_series = c;
     //if (best_this_series>1 && c<best_this_series) best_this_series = c;
@@ -849,7 +849,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
 {
 
   // Error-checking... need at least three strings to have an area 
-  int xsize = x.size();
+  unsigned xsize = x.size();
   if (x.size()<3) { 
     log_warn("ContainmentArea of zero/1/2 strings: will be NAN"); 
     return NAN;
