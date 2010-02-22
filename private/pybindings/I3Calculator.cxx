@@ -36,7 +36,7 @@ void register_I3Calculator()
   def("ClosestApproachPosition", I3Calculator::ClosestApproachPosition);
   def("DistanceAlongTrack", I3Calculator::DistanceAlongTrack);
   def("IsOnTrack", I3Calculator::IsOnTrack);
-  def("TimeResidual", I3Calculator::TimeResidual);
+  def("TimeResidual", (double (*)( const I3Particle&, const I3Position&,  double, const double, const double)) &I3Calculator::TimeResidual);
   def("Angle", I3Calculator::Angle);
   def("Distance", I3Calculator::Distance);
   def("FourDistance", I3Calculator::FourDistance);
