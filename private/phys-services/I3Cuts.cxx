@@ -40,16 +40,6 @@ rotate(double a[3], double delphi, int axis)
 	a[y] = r*sin(phi);
 }
 
-double get_charge(const I3RecoHit& h)
-{
-  return 1.0;
-}
-
-double get_charge(const I3RecoPulse& p)
-{
-  return p.GetCharge();
-}
-
 //--------------------------------------------------------------
 template<class HitType>
 void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
@@ -57,24 +47,14 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
 		  const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		  int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
-  int StringNumber[120] = {0};	// an array to keep track of the number of
-				// strings in the supplied pulse series.
-  Ndir = 0;	// Number of channels which have the first pulse within the
-		// specified time window for a direct photon.
-  Nhit = 0;	// Number of photo electrons in the supplied pulse series.
-  double qtot = 0.0;	// A variable to sum the total charge for the event,
-			// which will be converted to an int and returned
-			// as Nhit.
-  Nstring = 0;	// Number of IceCube and AMANDA strings with modules in the
-		// supplied pulse series.
-  vector<double> lengthAll;	// A vector to hold the distance along the 
-				// track to each module in the pulse series for
-				// a calculation of Smoothness.
-  vector<double> lengthDir;	// Vector to hold distances of direct pulses 
-				// for another calculation of smoothness.
-  double min = 999999;	// Variable to hold the distance of the first direct
-			// pulse along the track.
-  double max = -999999;	// the distance of the last direct pulse..
+  int StringNumber[120] = {0};
+  Ndir = 0;
+  Nhit = 0;
+  Nstring = 0;
+  vector<double> lengthAll;
+  vector<double> lengthDir;
+  double min = 999999;
+  double max = -999999;
   typename I3Map<OMKey, vector<HitType> >::const_iterator hits_i;
   for (hits_i=hitmap.begin(); hits_i!=hitmap.end(); hits_i++) {
     const vector<HitType>& hits = hits_i->second;
@@ -87,42 +67,39 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
 
     StringNumber[(int) 19+omkey.GetString()] = 1; // "19+" includes AMANDA strings
     const I3Position& ompos = geom->second.position;
-    I3RecoHit firstHit;	// This hit represents the first hit in time for this
-			// module.  It will be used for all calculations except
-			// Nhit.
-    
+
     typename vector<HitType>::const_iterator hit;
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
-      qtot += get_charge(*hit);
-      if (!(hit->GetTime() > firstHit.GetTime())) {
-        firstHit.SetTime(hit->GetTime());
-        // These other properties are unneeded for this implementation:
-        //firstHit.SetID(hit->GetID())
-        //firstHit.SetSourceIndex(hit->GetSourceIndex())
+      
+      double Tres = TimeResidual(track, ompos, hit->GetTime());
+      log_trace("residual: %f",Tres);
+
+      // calculate projections of hits onto track...
+      Nhit++; // keep track of total hits
+      /*
+      I3Position pos(ompos);
+      pos.ShiftCoordSystem(track.GetPos());
+      pos.RotateZ(-track.GetDir().CalcPhi());
+      pos.RotateY(-track.GetDir().CalcTheta());
+      double dist = pos.GetZ();
+      */
+      // Replace this with the function version
+      double dist = DistanceAlongTrack(track, ompos);
+      log_trace("dist: %f",dist);
+      lengthAll.push_back(dist);        // set up for SmoothnessAll calculation
+
+      // this is a direct hit...
+      if (Tres>t1 && Tres<t2) {
+	Ndir+=1;                     // add direct hits
+	if (dist<min) min = dist;    // set minimum for "event length"
+	if (dist>max) max = dist;    // set maximum for "event length"
+	lengthDir.push_back(dist);  // set up for SmoothnessDir calculation
       }
+
     } // end loop over hitseries
 
-    // Calculate the time residual to the first hit
-    double Tres = TimeResidual(track, ompos, firstHit.GetTime());
-    log_trace("residual: %f",Tres);
-
-    // calculate projections of hits onto track...
-    double dist = DistanceAlongTrack(track, ompos);
-    log_trace("dist: %f",dist);
-    lengthAll.push_back(dist);        // set up for SmoothnessAll calculation
-
-    // this is a direct hit...
-    if (Tres>t1 && Tres<t2) {
-      Ndir+=1;                     // add direct hits
-      if (dist<min) min = dist;    // set minimum for "event length"
-      if (dist>max) max = dist;    // set maximum for "event length"
-      lengthDir.push_back(dist);  // set up for SmoothnessDir calculation
-    }
-
   } // end loop over hitseriesmap
-  
-  // return the rounded total charge as Nhit
-  Nhit = (int) ceil(qtot);
+
   //calculate Nstring
   for (int i = 0; i < 120; i++) {
     if (StringNumber[i])
