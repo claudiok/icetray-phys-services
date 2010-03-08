@@ -118,37 +118,57 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
 
   // average the dom positions to calculate the tank positions
   for (I3StationGeoMap::iterator
-	 i_station = Geometry.stationgeo.begin ();
-       i_station != Geometry.stationgeo.end ();
-       ++i_station) {
-
-    int station_id = i_station->first;
-
-    // now, set the position of each tank
-    // first tank, OMs 61 & 62
+       iter_station = Geometry.stationgeo.begin();
+       iter_station != Geometry.stationgeo.end();
+       ++iter_station) {
+       
+    int station_id = iter_station->first;
+    
+    //Set the tank positions
     I3Position p61 (Geometry.omgeo[OMKey (station_id, 61)].position);
     I3Position p62 (Geometry.omgeo[OMKey (station_id, 62)].position);
     I3Position p63 (Geometry.omgeo[OMKey (station_id, 63)].position);
     I3Position p64 (Geometry.omgeo[OMKey (station_id, 64)].position);
-
-    i_station->second[0].position
-      = I3Position (.5 * (p61.GetX () + p62.GetX ()),
-		    .5 * (p61.GetY () + p62.GetY ()),
-		    .5 * (p61.GetZ () + p62.GetZ ()));
-
-    // enter these oms. Needed for simulation
-    i_station->second[0].omKeyList_.push_back (OMKey (i_station->first, 61));
-    i_station->second[0].omKeyList_.push_back (OMKey (i_station->first, 62));
     
-    i_station->second[1].position
-      = I3Position (.5 * (p63.GetX () + p64.GetX ()),
-		    .5 * (p63.GetY () + p64.GetY ()),
-		    .5 * (p63.GetZ () + p64.GetZ ()));
-
-    // enter these oms. Needed for simulation
-    i_station->second[1].omKeyList_.push_back (OMKey (i_station->first, 63));
-    i_station->second[1].omKeyList_.push_back (OMKey (i_station->first, 64));
-
+    //DOMs 61 and 62 -> Tank A
+    iter_station->second[0].position = I3Position(.5 * (p61.GetX () + p62.GetX ()),
+						  .5 * (p61.GetY () + p62.GetY ()),
+						  .5 * (p61.GetZ () + p62.GetZ ()));
+    
+    iter_station->second[0].omKeyList_.push_back(OMKey(iter_station->first, 61));
+    iter_station->second[0].omKeyList_.push_back(OMKey(iter_station->first, 62));
+    
+    //DOMs 63 and 64 -> Tank B
+    iter_station->second[1].position = I3Position(.5 * (p63.GetX () + p64.GetX ()),
+						  .5 * (p63.GetY () + p64.GetY ()),
+						  .5 * (p63.GetZ () + p64.GetZ ()));
+     
+    iter_station->second[1].omKeyList_.push_back (OMKey (iter_station->first, 63));
+    iter_station->second[1].omKeyList_.push_back (OMKey (iter_station->first, 64));
+     
+    //Set const values
+    const double tankradius = 0.93 * I3Units::m;
+    const double tankheight = 1.30 * I3Units::m;
+    const double fillheight = 0.90 * I3Units::m;
+    iter_station->second[0].tankradius = tankradius;
+    iter_station->second[0].tankheight = tankheight;
+    iter_station->second[0].fillheight = fillheight;
+    iter_station->second[1].tankradius = tankradius;
+    iter_station->second[1].tankheight = tankheight;
+    iter_station->second[1].fillheight = fillheight;
+     
+    if (station_id == 21 || station_id == 29 || station_id == 30 || station_id == 39 ) {
+      iter_station->second[0].tanktype = I3TankGeo::Tyvek_Lined;
+      iter_station->second[1].tanktype = I3TankGeo::Tyvek_Lined;
+    }
+    else {
+      iter_station->second[0].tanktype = I3TankGeo::Zirconium_Lined;
+      iter_station->second[1].tanktype = I3TankGeo::Zirconium_Lined;
+    }
+     
+    //Set SnowHeights
+    iter_station->second[0].snowheight = 0;
+    iter_station->second[1].snowheight = 0;
   }
   
   AmaGeoInFile.close();
