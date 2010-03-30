@@ -2,6 +2,7 @@
 #define I3CUTS_H
 
 #include "dataclasses/I3Units.h"
+#include "dataclasses/I3Constants.h"
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/physics/I3RecoHit.h"

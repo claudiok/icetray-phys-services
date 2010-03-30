@@ -20,8 +20,6 @@
 #include "dataclasses/I3Direction.h"
 
 
-using namespace I3Units;
-
 /**
  * @brief This is a namespace, which provides a collection of stand-alone 
  * functions that calculate various quantites relating a track, a cascade, 

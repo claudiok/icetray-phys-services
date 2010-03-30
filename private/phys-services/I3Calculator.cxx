@@ -40,7 +40,7 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
 
     chdist = apdist/sin(changle);  //distance between cherenkov position and OM
     double a = s - apdist/tan(changle); //distance between track position and cherenkov position
-    chtime = (a + chdist*IndexRefG)/c; //time between track position and OM
+    chtime = (a + chdist*IndexRefG)/I3Constants::c; //time between track position and OM
 
     double pos1_x = particle.GetX() + a*particle.GetDir().GetX(); //cher pos
     double pos1_y = particle.GetY() + a*particle.GetDir().GetY();
@@ -51,8 +51,8 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
 
     //angle between (vector between cherenkov position and OM) 
     //and (OM axis - can be seen as a vector with (0, 0, +/-1))
-    if(orient==I3OMGeo::Up) {chapangle = pi-acos(chdist_z/chdist);}  
-    if(orient==I3OMGeo::Down) {chapangle = pi-acos(-chdist_z/chdist);}
+    if(orient==I3OMGeo::Up) {chapangle = I3Constants::pi-acos(chdist_z/chdist);}  
+    if(orient==I3OMGeo::Down) {chapangle = I3Constants::pi-acos(-chdist_z/chdist);}
 
     if((particle.GetShape()==I3Particle::StartingTrack && a<0) || 
              //track starts after pos1 (cherenkov point)
@@ -251,7 +251,7 @@ double I3Calculator::CherenkovTime(const I3Particle& particle, const I3Position&
    return chtime;
   }
   else if (particle.IsCascade()) {
-    double speed = c/IndexRefG;
+    double speed = I3Constants::c/IndexRefG;
     return position.CalcDistance(particle.GetPos()) / speed;
   }
   else {
@@ -288,7 +288,7 @@ double I3Calculator::CherenkovApproachAngle(const I3Particle& track, const I3Pos
     I3Position chpos;
     double chtime,chdist,chapangle;
     CherenkovCalc(track,position,chpos,chtime,chdist,chapangle,
-		  I3Constants::n_ice_group,n_ice_phase,orient);
+		  I3Constants::n_ice_group,I3Constants::n_ice_phase,orient);
     return chapangle;
   }
   else {
