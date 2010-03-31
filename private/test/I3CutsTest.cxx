@@ -45,16 +45,16 @@ TEST(FakeTrack)
   I3Particle track(I3Particle::InfiniteTrack);
   track.SetPos(0,0,0);
   track.SetDir(0,0);
-  double ang = 180*deg-theta_cherenkov;
-  I3Position aa(10,ang,45*deg,I3Position::sph);
-  I3Position bb(5,ang,-30*deg,I3Position::sph);
-  I3Position cc(20,ang,45*deg,I3Position::sph); cc.SetZ(cc.GetZ()-100);
-  I3Position dd(50,ang,180*deg,I3Position::sph); dd.SetZ(dd.GetZ()+50);
+  double ang = 180*I3Units::deg-theta_cherenkov;
+  I3Position aa(10,ang,45*I3Units::deg,I3Position::sph);
+  I3Position bb(5,ang,-30*I3Units::deg,I3Position::sph);
+  I3Position cc(20,ang,45*I3Units::deg,I3Position::sph); cc.SetZ(cc.GetZ()-100);
+  I3Position dd(50,ang,180*I3Units::deg,I3Position::sph); dd.SetZ(dd.GetZ()+50);
   double A = 1./(c_ice*sin(theta_cherenkov));
-  double ta = sqrt(pow(aa.GetX(),2)+pow(aa.GetY(),2))*A + 7*ns;
-  double tb = sqrt(pow(bb.GetX(),2)+pow(bb.GetY(),2))*A - 9*ns;
-  double tc = 100/c + sqrt(pow(cc.GetX(),2)+pow(cc.GetY(),2))*A + 5*ns;
-  double td = -50/c + sqrt(pow(dd.GetX(),2)+pow(dd.GetY(),2))*A - 3*ns;
+  double ta = sqrt(pow(aa.GetX(),2)+pow(aa.GetY(),2))*A + 7*I3Units::ns;
+  double tb = sqrt(pow(bb.GetX(),2)+pow(bb.GetY(),2))*A - 9*I3Units::ns;
+  double tc = 100/c + sqrt(pow(cc.GetX(),2)+pow(cc.GetY(),2))*A + 5*I3Units::ns;
+  double td = -50/c + sqrt(pow(dd.GetX(),2)+pow(dd.GetY(),2))*A - 3*I3Units::ns;
   ENSURE_DISTANCE(CherenkovTime(track,aa)+7,ta,0.0001);
   ENSURE_DISTANCE(CherenkovTime(track,bb)-9,tb,0.0001);
   ENSURE_DISTANCE(CherenkovTime(track,cc)+5,tc,0.0001);
@@ -74,15 +74,15 @@ TEST(Ndir_DownTrack)
   double z[] =   { 0,   0,  0, 100, -250, -50};
   double off[] = {17, -19,  5,  -3,   78,  50};
 
-  double ang = 180*deg-theta_cherenkov;
+  double ang = 180*I3Units::deg-theta_cherenkov;
   vector<I3Position> pos;
   double A = 1./(c_ice*sin(theta_cherenkov));
   vector<double> time;
   for (int i=0; i<size; i++) {
-    I3Position p(r[i],ang,phi[i]*deg,I3Position::sph); p.SetZ(p.GetZ()-z[i]);
+    I3Position p(r[i],ang,phi[i]*I3Units::deg,I3Position::sph); p.SetZ(p.GetZ()-z[i]);
     pos.push_back(p);
     double t = (z[i]/c + sqrt(pow(pos[i].GetX(),2)+pow(pos[i].GetY(),2))*A
-		+ track.GetTime() + off[i]*ns);
+		+ track.GetTime() + off[i]*I3Units::ns);
     time.push_back(t);
     ENSURE_DISTANCE(CherenkovTime(track,pos[i])+off[i],
 		    time[i]-track.GetTime(), 0.0001,
@@ -116,7 +116,7 @@ TEST(AllCuts_TiltedTrack)
 
   I3Particle track(I3Particle::InfiniteTrack);
   track.SetPos(10,10,0);
-  track.SetDir(180*deg-ang,90*deg);
+  track.SetDir(180*I3Units::deg-ang,90*I3Units::deg);
   track.SetTime(15);
 
   vector<I3Position> pos;
@@ -165,7 +165,7 @@ TEST(CylinderSize)
   vector<double> ycir;
   int npoints = 500;
   for (int i=0; i<npoints; i++) {
-    double th = 360*deg/(npoints+1)*i;
+    double th = 360*I3Units::deg/(npoints+1)*i;
     xcir.push_back(centerx + R0*sin(th));
     ycir.push_back(centery + R0*cos(th));
   }
@@ -187,7 +187,7 @@ TEST(CylinderSize)
 
   // Edge-grazer:
   t.SetPos(50,1000,1000);
-  t.SetDir(45*deg,90*deg);
+  t.SetDir(45*I3Units::deg,90*I3Units::deg);
   cylsiz = CylinderSize(t, H0, R0, center);
   ENSURE_DISTANCE(cylsiz, 0.500, 0.001, "CylinderSize edge-grazer not working");
 
@@ -302,7 +302,7 @@ TEST(CMPolygon)
   vector<double> ycir;
   int npoints = 100;
   for (int i=0; i<npoints; i++) {
-    double th = 360*deg/npoints*i;
+    double th = 360*I3Units::deg/npoints*i;
     xcir.push_back(centerx + R*sin(th));
     ycir.push_back(centery + R*cos(th));
   }

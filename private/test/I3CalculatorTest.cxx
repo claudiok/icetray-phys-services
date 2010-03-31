@@ -29,7 +29,6 @@
 using std::string;
 using std::cout;
 using std::endl;
-using namespace I3Units;
 using namespace I3Calculator;
 
 static I3Particle inftrack()
@@ -45,7 +44,7 @@ static I3Particle muon()
 {
   I3Particle muon;
   muon.SetPos(10,0,0);
-  muon.SetDir(90*deg,0); // muon moving toward -x axis
+  muon.SetDir(90*I3Units::deg,0); // muon moving toward -x axis
   muon.SetShape(I3Particle::InfiniteTrack);
   return muon;
 }
@@ -101,16 +100,16 @@ TEST(ShiftAlongTrack)
 
 TEST(IsOnTrack)
 {
-  I3Position on(2,0.09*m,0);
-  ENSURE(IsOnTrack(muon(),on,0.1*m));
+  I3Position on(2,0.09*I3Units::m,0);
+  ENSURE(IsOnTrack(muon(),on,0.1*I3Units::m));
 
   I3Position n = inftrack().ShiftAlongTrack(2.38);
-  ENSURE(IsOnTrack(inftrack(),n,0.1*m));
+  ENSURE(IsOnTrack(inftrack(),n,0.1*I3Units::m));
 
-  ENSURE(!IsOnTrack(starttrack(),on,0.1*m));
+  ENSURE(!IsOnTrack(starttrack(),on,0.1*I3Units::m));
 
   on.SetPosition(1,1,1.1);
-  ENSURE(!IsOnTrack(starttrack(),on,0.1*m));
+  ENSURE(!IsOnTrack(starttrack(),on,0.1*I3Units::m));
 }
 
 TEST(ClosestApproachDistance)
@@ -149,13 +148,13 @@ TEST(CherenkovTime)
   ENSURE(isnan(CherenkovTime(starttrack(),a1)));
 
   a1.SetPosition(1,0,-1);
-  ENSURE_DISTANCE(CherenkovTime(starttrack(),a1)/ns,9.731156,0.0001);
+  ENSURE_DISTANCE(CherenkovTime(starttrack(),a1)/I3Units::ns,9.731156,0.0001);
 
   a1.SetPosition(1,0,-11);
-  ENSURE_DISTANCE(CherenkovTime(starttrack(),a1)/ns,43.08756,0.0001);
+  ENSURE_DISTANCE(CherenkovTime(starttrack(),a1)/I3Units::ns,43.08756,0.0001);
 
   a1.SetPosition(-2,1,0);
-  ENSURE_DISTANCE(CherenkovTime(muon(),a1)/ns,43.08756,0.0001);
+  ENSURE_DISTANCE(CherenkovTime(muon(),a1)/I3Units::ns,43.08756,0.0001);
 }
 
 TEST(CherenkovDistance)
@@ -178,12 +177,12 @@ TEST(CherenkovDistance)
 TEST(CherenkovAngle)
 { 
   a1.SetPosition(0,1,0);
-  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/deg,90.0,0.0001);
+  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/I3Units::deg,90.0,0.0001);
 
   a1.SetPosition(0,0,1);
-  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/deg,49.2761,0.0001);
+  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/I3Units::deg,49.2761,0.0001);
 
-  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),p,I3OMGeo::Up)/deg,117.47272,0.0001);
+  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),p,I3OMGeo::Up)/I3Units::deg,117.47272,0.0001);
 }
 
 TEST(CascadeDistance)
@@ -193,7 +192,7 @@ TEST(CascadeDistance)
 
 TEST(CascadeTime)
 {
-  ENSURE_DISTANCE(CherenkovTime(casc1(),r)/ns, 15.6725, 0.001);
+  ENSURE_DISTANCE(CherenkovTime(casc1(),r)/I3Units::ns, 15.6725, 0.001);
 }
 
 TEST(TimeResidual_track)
@@ -209,14 +208,14 @@ TEST(TimeResidual_cascade)
 
 TEST(Angle)
 {
-  ENSURE_DISTANCE(Angle(inftrack(),muon())/deg,90.,0.001);
+  ENSURE_DISTANCE(Angle(inftrack(),muon())/I3Units::deg,90.,0.001);
     
   I3Particle track1(I3Particle::InfiniteTrack);
   track1.SetDir(0,1,-1);
   I3Particle track2(I3Particle::InfiniteTrack);
   track2.SetDir(1,0,-1);
 
-  ENSURE_DISTANCE(Angle(track1,track2)/deg,60.,0.001);
+  ENSURE_DISTANCE(Angle(track1,track2)/I3Units::deg,60.,0.001);
 }
 
 TEST(Distance)
@@ -365,8 +364,8 @@ TEST(JAMS_time_residual_many)
   track.SetPos(0,0,0);
 
   for (int i=1; i<10; i++) {
-    double zen = 180*deg/10 * (double)i;
-    double azi = 360*deg/10 * (double)i;
+    double zen = 180*I3Units::deg/10 * (double)i;
+    double azi = 360*I3Units::deg/10 * (double)i;
     track.SetDir(zen, azi);
     double time(10);
 
@@ -378,7 +377,7 @@ TEST(JAMS_time_residual_many)
 
     //--Calculate dt,rho from phys-services, SIMPLEST WAY
     double rho = ClosestApproachDistance(track, pos);
-    double dt = TimeResidual(track, pos, time, n_ice, n_ice);
+    double dt = TimeResidual(track, pos, time, I3Constants::n_ice, I3Constants::n_ice);
 
     //--Calculate dt,rho using phys-services, but break up calculation
     double rho_ = ClosestApproachDistance(track, pos);
