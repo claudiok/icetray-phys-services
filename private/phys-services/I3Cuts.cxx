@@ -872,6 +872,11 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   //double xprime = track.GetX();
   //double yprime = track.GetY();
 
+  if (isnan(xprime) || isnan(yprime)) {
+    log_warn("Input core was NAN. Will return a NAN.");
+    return NAN;
+  }
+
   // Compute the angle of point P:
   I3Direction d(xprime-xcm,yprime-ycm,0);
   double pang = d.CalcPhi();
