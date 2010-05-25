@@ -26,6 +26,8 @@ if (SPRNG_FOUND)
 endif()
 
 i3_add_library(phys-services 
+  private/converter/I3EventInfoConverter.cxx
+  private/converter/I3RecoInfoConverter.cxx
   private/empty-streams/I3EmptyCalibrationService.cxx
   private/empty-streams/I3EmptyDetectorStatusService.cxx
   private/empty-streams/I3EmptyEventService.cxx
@@ -50,6 +52,7 @@ i3_add_library(phys-services
   private/phys-services/I3MC2Reco.cxx
   private/phys-services/I3MediumPropertiesFile.cxx
   private/phys-services/I3CutValues.cxx
+  private/phys-services/I3ScaleCalculator.cxx
   private/phys-services/I3VEMCalManipulator.cxx
   private/phys-services/I3VEMCalManipulatorFactory.cxx
   private/phys-services/I3XMLOMKey2MBID.cxx
@@ -64,7 +67,7 @@ i3_add_library(phys-services
   ${ROOT_SOURCES}
   ${SPRNG_SOURCES}
 
-  USE_PROJECTS icetray dataclasses interfaces
+  USE_PROJECTS icetray dataclasses interfaces tableio
 
   USE_TOOLS ${SPRNG_TOOL} gsl log4cplus boost root python
 
@@ -94,6 +97,7 @@ i3_test_executable(test
   private/test/I3CutsTest.cxx
   private/test/I3FunctionTest.cxx
   private/test/I3GeoSelTestModule.cxx
+  private/test/I3ScaleCalculatorTest.cxx
   private/test/I3XMLOMKey2MBIDTest.cxx
   private/test/OMKey2MBIDTest.cxx
   private/test/OneFrameTest.cxx
