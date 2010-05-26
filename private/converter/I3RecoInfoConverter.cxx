@@ -82,12 +82,12 @@ I3TableRowDescriptionPtr I3RecoInfoConverter::CreateDescription(const I3Particle
     desc->AddField<int32_t>("ndirD", "", generateDocString("number of direct hits in timeinterval D", "D", false) );
     desc->AddField<int32_t>("ndirE", "", generateDocString("number of direct hits in timeinterval E", "E", false) );
     
-    desc->AddField<int32_t>("ldirA", "", generateDocString("number of late hits in timeinterval A", "A", false));
-    desc->AddField<int32_t>("ldirB", "", generateDocString("number of late hits in timeinterval B", "B", false));
-    desc->AddField<int32_t>("ldirC", "", generateDocString("number of late hits in timeinterval C", "C", false));
-    desc->AddField<int32_t>("ldirD", "", generateDocString("number of late hits in timeinterval D", "D", false));
-    desc->AddField<int32_t>("ldirE", "", generateDocString("number of late hits in timeinterval E", "E", false));
-    
+    desc->AddField<double>("ldirA", "", generateDocString("length (projected along the track) between hits in timeinterval A", "A", false));
+    desc->AddField<double>("ldirB", "", generateDocString("length (projected along the track) between hits in timeinterval B", "B", false));
+    desc->AddField<double>("ldirC", "", generateDocString("length (projected along the track) between hits in timeinterval C", "C", false));
+    desc->AddField<double>("ldirD", "", generateDocString("length (projected along the track) between hits in timeinterval D", "D", false));
+    desc->AddField<double>("ldirE", "", generateDocString("length (projected along the track) between hits in timeinterval E", "E", false));
+
     desc->AddField<int32_t>("nearly", "", generateDocString("number of early hits for muons in timeinterval", "early", true));
     desc->AddField<int32_t>("nlate", "", generateDocString("number of late hits for muons in timeinterval", "late", true));
     
@@ -211,12 +211,12 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
     rows->Set<int32_t>("ndirD", nDirs["D"]);
     rows->Set<int32_t>("ndirE", nDirs["E"]);
     
-    rows->Set<int32_t>("ldirA", lDirs["A"]);
-    rows->Set<int32_t>("ldirB", lDirs["B"]);
-    rows->Set<int32_t>("ldirC", lDirs["C"]);
-    rows->Set<int32_t>("ldirD", lDirs["D"]);
-    rows->Set<int32_t>("ldirE", lDirs["E"]);
-    
+    rows->Set<double>("ldirA", lDirs["A"]);
+    rows->Set<double>("ldirB", lDirs["B"]);
+    rows->Set<double>("ldirC", lDirs["C"]);
+    rows->Set<double>("ldirD", lDirs["D"]);
+    rows->Set<double>("ldirE", lDirs["E"]);
+
     rows->Set<int32_t>("nearly", nEarly);
     rows->Set<int32_t>("nlate" , nLate);
   
