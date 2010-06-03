@@ -9,8 +9,8 @@
 
 
 I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo, 
-				      IceCubeConfig iceConf, 
-				      IceTopConfig topConf) :
+                                      IceCubeConfig iceConf, 
+                                      IceTopConfig topConf) :
   geo_(geo), iceConf_(iceConf), topConf_(topConf) {
  
   if (iceConf_ == IC_GUESS) {
@@ -47,13 +47,13 @@ I3ScaleCalculator::GuessIceCubeConfig () const {
   }
   else switch (stringNo) {
     case 9:
-    case 16: // + IceTop	   
-    case 28: // + AMANDA	   
+    case 16: // + IceTop           
+    case 28: // + AMANDA           
     case 35: // + ICETOP and AMANDA
       return IC9;
     case 22:
-    case 26: // + IceTop	   
-    case 41: // + AMANDA	   
+    case 26: // + IceTop           
+    case 41: // + AMANDA           
     case 45: // + ICETOP and AMANDA
       return IC22;
     case 40:
@@ -220,9 +220,9 @@ std::vector<int > I3ScaleCalculator::GetOuterStations () const {
 
   
 void I3ScaleCalculator::CalcOuterStringPositions (std::vector<double > &x, 
-						  std::vector<double > &y,
-						  double &zMin,
-						  double &zMax) const {
+                                                  std::vector<double > &y,
+                                                  double &zMin,
+                                                  double &zMax) const {
  
   // get the string numbers
   std::vector<int > outerStrings = GetOuterStrings ();
@@ -256,8 +256,8 @@ void I3ScaleCalculator::CalcOuterStringPositions (std::vector<double > &x,
 }
 
 void I3ScaleCalculator::CalcOuterStationPositions (std::vector<double > &x, 
-						   std::vector<double > &y,
-						   double &z) const {
+                                                   std::vector<double > &y,
+                                                   double &z) const {
 
   // get the station numbers
   std::vector<int > outerStrings = GetOuterStations ();
@@ -270,9 +270,9 @@ void I3ScaleCalculator::CalcOuterStationPositions (std::vector<double > &x,
   // calculate the positions
   BOOST_FOREACH (int stringNo, outerStrings) {
     x.push_back ((stationMap[stringNo][0].position.GetX () 
-		  + stationMap[stringNo][1].position.GetX ()) / 2);
+                  + stationMap[stringNo][1].position.GetX ()) / 2);
     y.push_back ((stationMap[stringNo][0].position.GetY ()
-		  + stationMap[stringNo][1].position.GetY ()) / 2);
+                  + stationMap[stringNo][1].position.GetY ()) / 2);
   }
   z = Z_TOP;
 }
@@ -365,14 +365,14 @@ bool I3ScaleCalculator::VertexIsInside (const I3Particle &part) const {
   yp.push_back (yp[0]);
 
   return ((z < zTop)
-	  && (z > zBot)
-	  && IsInside (x, y, xp, yp));
+          && (z > zBot)
+          && IsInside (x, y, xp, yp));
 
 }
 
 bool I3ScaleCalculator::IsInside(double xp, double yp,
-				 const std::vector<double > &x, 
-				 const std::vector<double > &y) const {
+                                 const std::vector<double > &x, 
+                                 const std::vector<double > &y) const {
   //  implementation found in root.
    double xint;
    int inter = 0;
@@ -383,12 +383,12 @@ bool I3ScaleCalculator::IsInside(double xp, double yp,
    for (int i=0; i < np; ++i) {
      
       if (i <np-1) {
-	xn = x[i+1]; 
-	yn = y[i+1];
+        xn = x[i+1]; 
+        yn = y[i+1];
       }
       else {
-	xn = x[0];   
-	yn = y[0];
+        xn = x[0];   
+        yn = y[0];
       }
       if (y[i] == yn) continue;
       if (yp <= y[i] && yp <= yn) continue;
@@ -406,5 +406,4 @@ bool I3ScaleCalculator::IsInside(double xp, double yp,
    }
 }
 
-
-//const double I3StationGeoMap::Z_TOP;
+const double I3ScaleCalculator::Z_TOP;

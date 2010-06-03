@@ -33,14 +33,14 @@ class I3ScaleCalculator {
 
   // lets give our detector some common names
   enum IceCubeConfig {IC_UNKNOWN=-2, IC_GUESS=-1, IC_EMPTY=0, 
-		      IC9=9, IC22=22, IC40=40, IC58=58, IC80=80};
+                      IC9=9, IC22=22, IC40=40, IC58=58, IC80=80};
   enum IceTopConfig {IT_UNKNOWN=-2, IT_GUESS=-1, IT_EMPTY=0,
-		     IT16, IT26, IT40, IT80};
+                     IT16, IT26, IT40, IT80};
 
 
   I3ScaleCalculator (I3GeometryConstPtr geo, 
-		     IceCubeConfig iceConf = IC_GUESS, 
-		     IceTopConfig topConf = IT_GUESS);
+                     IceCubeConfig iceConf = IC_GUESS, 
+                     IceTopConfig topConf = IT_GUESS);
   
   IceCubeConfig GuessIceCubeConfig () const;
   IceTopConfig GuessIceTopConfig () const;
@@ -48,12 +48,12 @@ class I3ScaleCalculator {
   std::vector<int > GetOuterStrings () const;
   std::vector<int > GetOuterStations () const;
   void CalcOuterStringPositions (std::vector<double > &x, 
-				 std::vector<double > &y,
-				 double &zMin,
-				 double &zMax) const;
+                                 std::vector<double > &y,
+                                 double &zMin,
+                                 double &zMax) const;
   void CalcOuterStationPositions (std::vector<double > &x, 
-				 std::vector<double > &y,
-				 double &z) const;
+                                 std::vector<double > &y,
+                                 double &z) const;
 
   double ScaleInIce (I3Particle part) const;  
   double ScaleIceTop (I3Particle part) const;
@@ -66,8 +66,8 @@ class I3ScaleCalculator {
   double ScaleInIceCascade (I3Particle part) const;
   
   bool IsInside (double xp, double yp,
-		const std::vector<double > &x, 
-		const std::vector<double > &y) const;
+                const std::vector<double > &x, 
+                const std::vector<double > &y) const;
 
   I3GeometryConstPtr geo_;
   IceCubeConfig iceConf_;
