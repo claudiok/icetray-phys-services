@@ -72,9 +72,6 @@ class I3ScaleCalculator {
   I3GeometryConstPtr geo_;
   IceCubeConfig iceConf_;
   IceTopConfig topConf_;
-
-  const static double Z_TOP = 1950;
-
 };
 
 #endif

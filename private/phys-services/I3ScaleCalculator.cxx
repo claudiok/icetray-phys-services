@@ -7,6 +7,7 @@
 #include <set>
 #include <limits>
 
+#define Z_TOP 1950.
 
 I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo, 
                                       IceCubeConfig iceConf, 
@@ -406,4 +407,3 @@ bool I3ScaleCalculator::IsInside(double xp, double yp,
    }
 }
 
-const double I3ScaleCalculator::Z_TOP;
