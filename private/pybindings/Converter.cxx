@@ -14,7 +14,7 @@
 #include "../converter/I3RecoInfoConverter.h"
 
 void register_Converter() {
-    I3CONVERTER_NAMESPACE(converter_limbo);
+    I3CONVERTER_NAMESPACE(phys_services);
 
     //typedef I3EventInfoConverter<I3RecoPulse> I3EventInfoConverterFromRecoPulses;
     I3CONVERTER_EXPORT(I3EventInfoConverterFromRecoPulses,"Dumps event information calculated from I3RecoPulses");
