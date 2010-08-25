@@ -12,7 +12,6 @@
 
 #include "I3RecoInfoConverter.h"
 
-#include "phys-services/I3ScaleCalculator.h"
 #include "phys-services/I3Cuts.h"
 
 #include <dataclasses/geometry/I3Geometry.h>
@@ -22,13 +21,9 @@
 
 /******************************************************************************/
 
-I3RecoInfoConverter::I3RecoInfoConverter(std::string pulseMapName, 
-                                         int icecubeConf, 
-                                         int icetopConf) :
+I3RecoInfoConverter::I3RecoInfoConverter(std::string pulseMapName) :
     I3ConverterImplementation<I3Particle>(),
     pulseMapName_(pulseMapName),
-    icecubeConf_(icecubeConf),
-    icetopConf_(icetopConf),
     timeWindows_(),
     muonTimeWindows_()
 {
@@ -190,21 +185,6 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
 
     }
 
-    // init scaleCalculator
-    I3ScaleCalculator scaleCalc(geometry,
-            static_cast<I3ScaleCalculator::IceCubeConfig > 
-            (icecubeConf_),
-            static_cast<I3ScaleCalculator::IceTopConfig >
-            (icetopConf_));
-
-    rows->Set<double>("icecube_scale", scaleCalc.ScaleInIce (reco) );
-    if (reco.IsTrack())
-        rows->Set<double>("icetop_scale", scaleCalc.ScaleIceTop (reco) );
-    else
-        rows->Set<double>("icetop_scale", -1 );
-
-    rows->Set<int8_t>("contained", scaleCalc.VertexIsInside (reco) ? -1 : 0);
-    
     rows->Set<int32_t>("ndirA", nDirs["A"]);
     rows->Set<int32_t>("ndirB", nDirs["B"]);
     rows->Set<int32_t>("ndirC", nDirs["C"]);

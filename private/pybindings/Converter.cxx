@@ -35,6 +35,6 @@ void register_Converter() {
     bp::bases<I3Converter>,                      
     boost::noncopyable >("I3RecoInfoConverter", 
                          "calculates number of direct hits and icecube scale cut variables", 
-                         bp::init<std::string, int, int>())
+                         bp::init<std::string>())
     ;
 };
