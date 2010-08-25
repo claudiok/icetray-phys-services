@@ -67,10 +67,6 @@ std::string I3RecoInfoConverter::generateDocString(std::string prefix,
 I3TableRowDescriptionPtr I3RecoInfoConverter::CreateDescription(const I3Particle& reco) {
     I3TableRowDescriptionPtr desc = I3TableRowDescriptionPtr(new I3TableRowDescription() );
     
-    desc->AddField<double>("icecube_scale", "", "factor by which one has to scale the inice-detector so that the vertex is contained");
-    desc->AddField<double>("icetop_scale", "", "factor by which one has to scale the array so that the vertex is contained");
-    desc->AddField<int8_t>("contained", "", "flag if the vertex is contained");
-    
     desc->AddField<int32_t>("ndirA", "", generateDocString("number of direct hits in timeinterval A", "A", false) );
     desc->AddField<int32_t>("ndirB", "", generateDocString("number of direct hits in timeinterval B", "B", false) );
     desc->AddField<int32_t>("ndirC", "", generateDocString("number of direct hits in timeinterval C", "C", false) );
