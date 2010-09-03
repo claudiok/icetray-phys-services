@@ -12,6 +12,7 @@
 #include <tableio/converter/pybindings.h>
 #include "../converter/I3EventInfoConverter.h"
 #include "../converter/I3RecoInfoConverter.h"
+#include "../converter/OMBlockConverter.h"
 
 void register_Converter() {
     I3CONVERTER_NAMESPACE(phys_services);
@@ -37,4 +38,15 @@ void register_Converter() {
                          "calculates number of direct hits and icecube scale cut variables", 
                          bp::init<std::string>())
     ;
+
+    bp::class_<OMBlockConverter,
+	       boost::shared_ptr<OMBlockConverter>,
+	       bp::bases<I3Converter>,
+	       boost::noncopyable >
+      ("OMBlockConverter",
+       "Dumps I3RecoPulses, together with the DOM geometry, and, optionally distances and residuals to a reconstruction or MCPrimary track.")
+      .def(bp::init<const std::string&>())
+      .def(bp::init<const std::string&, bool>())
+      ;
+
 };
