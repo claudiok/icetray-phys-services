@@ -12,7 +12,6 @@
 #include <tableio/converter/pybindings.h>
 #include "../converter/I3EventInfoConverter.h"
 #include "../converter/I3RecoInfoConverter.h"
-#include "../converter/OMBlockConverter.h"
 
 void register_Converter() {
     I3CONVERTER_NAMESPACE(phys_services);
