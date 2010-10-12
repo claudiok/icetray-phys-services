@@ -12,6 +12,7 @@
 #include <tableio/converter/pybindings.h>
 #include "../converter/I3EventInfoConverter.h"
 #include "../converter/I3RecoInfoConverter.h"
+#include "../converter/I3CutValuesConverter.h"
 
 void register_Converter() {
     I3CONVERTER_NAMESPACE(phys_services);
@@ -27,7 +28,8 @@ void register_Converter() {
     typedef I3EventInfoConverter<I3Waveform> I3EventInfoConverterFromWaveform;
     I3CONVERTER_EXPORT(I3EventInfoConverterFromWaveform,"Dumps event information calculated from I3Waveform");
     
-    
+    I3CONVERTER_EXPORT_DEFAULT(I3CutValuesConverter, "Dumps I3CutValues verbatim");
+
     // I3RecoInfoConverter has a non-default constructor
     // don't register this converter, since registered converters need default constructors
     bp::class_<I3RecoInfoConverter,                                      
