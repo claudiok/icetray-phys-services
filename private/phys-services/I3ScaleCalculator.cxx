@@ -38,7 +38,9 @@ I3ScaleCalculator::GuessIceCubeConfig () const {
   // count strings
   std::set<int > stringSet;
   BOOST_FOREACH(I3OMGeoMap::value_type om, omMap){
-    stringSet.insert (om.first.GetString ());
+    // avoid AMANDA conflicts
+    if(om.first.GetString() > 0)
+      stringSet.insert (om.first.GetString ());
   }
 
   // guess different configs
@@ -48,18 +50,22 @@ I3ScaleCalculator::GuessIceCubeConfig () const {
   }
   else switch (stringNo) {
     case 9:
-    case 16: // + IceTop           
-    case 28: // + AMANDA           
-    case 35: // + ICETOP and AMANDA
+    case 16: // + IceTop ?         
+ // case 28: // + AMANDA           
+ // case 35: // + ICETOP and AMANDA
       return IC9;
     case 22:
-    case 26: // + IceTop           
-    case 41: // + AMANDA           
-    case 45: // + ICETOP and AMANDA
+    case 26: // + IceTop ?
+ // case 41: // + AMANDA           
+ // case 45: // + ICETOP and AMANDA
       return IC22;
     case 40:
-    case 59:  // IC40 + AMANDA => conflicts with IC59! 
+//  case 59:  // IC40 + AMANDA => conflicts with IC59! 
       return IC40;
+    case 59:
+      return IC59;
+    case 79:
+      return IC79;
     default:
       return IC_UNKNOWN;
     }
@@ -82,6 +88,11 @@ I3ScaleCalculator::GuessIceTopConfig () const {
       return IT26;
     case 40:
       return IT40;
+    case 59:
+      return IT59;
+    case 73:
+      return IT73;
+
     default:
       return IT_UNKNOWN;
     }
@@ -127,13 +138,13 @@ std::vector<int > I3ScaleCalculator::GetOuterStrings () const {
     outerStrings.push_back(75);
     outerStrings.push_back(60);
     outerStrings.push_back(52);
-    outerStrings.push_back(53);
+    outerStrings.push_back(53);    // different from ContainmentSize.cxx in flat-ntuple
     outerStrings.push_back(44);
     outerStrings.push_back(46);
-    outerStrings.push_back(38);
+    outerStrings.push_back(38);    // different from ContainmentSize.cxx in flat-ntuple
     break;
-  case IC58:
-    outerStrings.push_back( 6);
+  case IC59:
+    outerStrings.push_back( 6);  
     outerStrings.push_back(50);
     outerStrings.push_back(74);
     outerStrings.push_back(73);
@@ -141,11 +152,21 @@ std::vector<int > I3ScaleCalculator::GetOuterStrings () const {
     outerStrings.push_back(75);
     outerStrings.push_back(60);
     outerStrings.push_back(52);
-    outerStrings.push_back(53);
-    outerStrings.push_back(44);
-    outerStrings.push_back(45);
-    outerStrings.push_back(26);
-    outerStrings.push_back( 2);
+    outerStrings.push_back(53);   // different from ContainmentSize.cxx in flat-ntuple
+    outerStrings.push_back(44);   // different from ContainmentSize.cxx in flat-ntuple
+    outerStrings.push_back(36);
+    outerStrings.push_back(17);
+    outerStrings.push_back(3);
+    break;
+  case IC79:
+    outerStrings.push_back(2);  
+    outerStrings.push_back(6);
+    outerStrings.push_back(50);
+    outerStrings.push_back(74);
+    outerStrings.push_back(73);
+    outerStrings.push_back(78);
+    outerStrings.push_back(75);
+    outerStrings.push_back(41);
     break;
   case IC80:
     outerStrings.push_back(1);
@@ -201,10 +222,34 @@ std::vector<int > I3ScaleCalculator::GetOuterStations () const {
     outerStations.push_back(75);
     outerStations.push_back(60);
     outerStations.push_back(52);
-    outerStations.push_back(53);
+    outerStations.push_back(53);   // different from ContainmentSize.cxx in flat-ntuple
     outerStations.push_back(44);
     outerStations.push_back(46);
-    outerStations.push_back(38);
+    outerStations.push_back(38);   // different from ContainmentSize.cxx in flat-ntuple
+    break;
+  case IT59:
+    outerStations.push_back(6);
+    outerStations.push_back(50);
+    outerStations.push_back(74);
+    outerStations.push_back(73);
+    outerStations.push_back(78);
+    outerStations.push_back(75);
+    outerStations.push_back(60);
+    outerStations.push_back(52);
+    outerStations.push_back(53);   // different from ContainmentSize.cxx in flat-ntuple
+    outerStations.push_back(44);   // different from ContainmentSize.cxx in flat-ntuple
+    outerStations.push_back(36);
+    outerStations.push_back(2);
+    break;
+  case IT73:
+    outerStations.push_back(2);
+    outerStations.push_back(6);
+    outerStations.push_back(50);
+    outerStations.push_back(74);
+    outerStations.push_back(73);
+    outerStations.push_back(78);
+    outerStations.push_back(75);
+    outerStations.push_back(41);
     break;
   case IT80:
     outerStations.push_back(1);
