@@ -6,6 +6,7 @@ i3_add_pybindings(phys_services
   Converter.cxx
   RandomServices.cxx
   I3Cuts.cxx
+  I3Muxer.cxx
   module.cxx
   USE_TOOLS boost python log4cplus root
   USE_PROJECTS phys-services

@@ -44,11 +44,12 @@ class I3Muxer : public I3Module
  public:
   static const char* DRIVING_TIME;
 
-
   I3Muxer(const I3Context& ctx);
 
+  I3FramePtr PopFrame();
+
   void Process();
-  
+
   void Configure();
 
  private:
@@ -57,13 +58,13 @@ class I3Muxer : public I3Module
 
   I3Frame::Stream NextStream();
 
-  void SendEvent();
+  I3FramePtr SendEvent();
   
-  void SendGeometry();
+  I3FramePtr SendGeometry();
 
-  void SendCalibration();
+  I3FramePtr SendCalibration();
 
-  void SendDetectorStatus();
+  I3FramePtr SendDetectorStatus();
 
   bool IsGeometryCurrent(I3Time time);
   
@@ -91,6 +92,12 @@ class I3Muxer : public I3Module
   std::string statusServiceName_;
   std::string calibrationServiceName_;
   std::string eventServiceName_;
+
+  I3GeometryServicePtr geometryService_;
+  I3CalibrationServicePtr calibrationService_;
+  I3DetectorStatusServicePtr statusService_;
+  I3EventServicePtr eventService_;
+  I3MetaServicePtr metaService_;
   
   
   // logging

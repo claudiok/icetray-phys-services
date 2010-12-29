@@ -61,60 +61,76 @@ void I3Muxer::Configure()
   GetParameter("CalibrationService",calibrationServiceName_);
   GetParameter("DetectorStatusService",statusServiceName_);
   GetParameter("EventService",eventServiceName_);
+
+  geometryService_ = context_.Get<I3GeometryServicePtr>(geometryServiceName_);
+  calibrationService_ = context_.Get<I3CalibrationServicePtr>(calibrationServiceName_);
+  statusService_ = context_.Get<I3DetectorStatusServicePtr>(statusServiceName_);
+  eventService_ = context_.Get<I3EventServicePtr>(eventServiceName_);
+
+  if (context_.Has<I3MetaServicePtr>())
+    metaService_ = context_.Get<I3MetaServicePtr>();
+
+  log_trace("Services: G %p C %p D %p E %p M %p", geometryService_.get(), calibrationService_.get(),
+    statusService_.get(), eventService_.get(), metaService_.get());
 }
 
+
+I3FramePtr
+I3Muxer::PopFrame()
+{
+  //
+  // first check for 'meta streams', like TrayInfo, send em if they
+  // exist.  These run at "speeds" unrelated to G/C/S/P
+  //  
+  if (metaService_)
+    {
+      I3FramePtr frame = metaService_->PopMeta();
+      if (frame) return frame;
+    }
+
+  I3Frame::Stream next = NextStream();
+  if (next == I3Frame::Physics)
+    {
+      return SendEvent();
+    }
+  else if (next == I3Frame::Geometry)
+    {
+      return SendGeometry();
+    }
+  else if (next == I3Frame::Calibration)
+    {
+      return SendCalibration();
+    }
+  else if (next == I3Frame::DetectorStatus)
+    {
+      return SendDetectorStatus();
+    }
+  else
+    {
+      return I3FramePtr();
+    }
+}
 
 void I3Muxer::Process()
 {
   log_debug("Entering I3Muxer::Process()");
 
-  //
-  // first check for 'meta streams', like TrayInfo, send em if they
-  // exist.  These run at "speeds" unrelated to G/C/S/P
-  //
-  if (context_.Has<I3MetaService>())
-    {
-      I3FramePtr frame = context_.Get<I3MetaService>().PopMeta();
-      if (frame)
-        {
-          PushFrame(frame, "OutBox");
-          return;
-        }
-    }
-    
-  I3Frame::Stream next = NextStream();
-  if (next == I3Frame::Physics)
-    {
-      SendEvent();
-      return;
-    }
-  else if (next == I3Frame::Geometry)
-    {
-      SendGeometry();
-      return;
-    }
-  else if (next == I3Frame::Calibration)
-    {
-      SendCalibration();
-      return;
-    }
-  else if (next == I3Frame::DetectorStatus)
-    {
-      SendDetectorStatus();
-      return;
-    }
-  else
-    {
-      RequestSuspension();
-      return;
-    }
+  I3FramePtr frame = PopFrame();
+  if (frame) {
+    PushFrame(frame, "OutBox");
+    return;
+  } else {
+    RequestSuspension();
+    return;
+  }
+
   log_fatal("Something weird happened");
 }
 
 I3Frame::Stream 
 I3Muxer::NextStream()
 {
-  if(!currentEventQueued_ && !context_.Get<I3EventService>(eventServiceName_).MoreEvents())
+  if(!currentEventQueued_ && !eventService_->MoreEvents())
     return I3Frame::None;
 
   I3Time eventTime = NextEventTime();
@@ -129,7 +145,8 @@ I3Muxer::NextStream()
 }
 
 
-void I3Muxer::SendEvent()
+I3FramePtr
+I3Muxer::SendEvent()
 {
   log_debug("Entering I3Muxer::SendEvent()");
   QueueUpEvent();
@@ -153,15 +170,16 @@ void I3Muxer::SendEvent()
   currentEventQueued_ = false;
   currentEvent_.clear();
 
-  PushFrame(frame,"OutBox");
+  return frame;
 }
 
-void I3Muxer::SendCalibration()
+I3FramePtr
+I3Muxer::SendCalibration()
 {
   log_debug("Entering I3Muxer::SendCalibration()");
   I3Time nextEvent = NextEventTime();
   currentCalibration_ = 
-    context_.Get<I3CalibrationService>(calibrationServiceName_).GetCalibration(nextEvent);
+    calibrationService_->GetCalibration(nextEvent);
   if(!currentCalibration_)
     log_fatal("got null calibration from the calibration service");
   currentCalibrationRange_ 
@@ -189,15 +207,16 @@ void I3Muxer::SendCalibration()
   frame->Put("I3Geometry", currentGeometry_,  'G');
   frame->Put("I3Calibration", currentCalibration_,  'C');
 
-  PushFrame(frame,"OutBox");
+  return frame;
 }
 
-void I3Muxer::SendDetectorStatus()
+I3FramePtr
+I3Muxer::SendDetectorStatus()
 {
   log_debug("Entering I3Muxer::SendDetectorStatus()");
   I3Time nextEvent = NextEventTime();
   currentDetectorStatus_ = 
-    context_.Get<I3DetectorStatusService>(statusServiceName_).GetDetectorStatus(nextEvent);
+    statusService_->GetDetectorStatus(nextEvent);
   if(!currentDetectorStatus_)
     log_fatal("got null status from the status service");
   currentDetectorStatusRange_ 
@@ -229,14 +248,15 @@ void I3Muxer::SendDetectorStatus()
   frame->Put("I3Calibration", currentCalibration_,  'C');
   frame->Put("I3DetectorStatus", currentDetectorStatus_,  'D');
 
-  PushFrame(frame,"OutBox");
+  return frame;
 }
 
-void I3Muxer::SendGeometry()
+I3FramePtr
+I3Muxer::SendGeometry()
 {
   log_debug("Entering I3Muxer::SendGeometry()");
   I3Time nextEvent = NextEventTime();
-  currentGeometry_ = context_.Get<I3GeometryService>(geometryServiceName_).GetGeometry(nextEvent);
+  currentGeometry_ = geometryService_->GetGeometry(nextEvent);
   if(!currentGeometry_)
     log_fatal("got null geometry from the geometry service");
   currentGeometryRange_ = 
@@ -260,7 +280,8 @@ void I3Muxer::SendGeometry()
     }
   I3FramePtr frame(new I3Frame(I3Frame::Geometry));
   frame->Put("I3Geometry", currentGeometry_,  'G');
-  PushFrame(frame,"OutBox");
+  
+  return frame;
 }
 
 bool I3Muxer::IsGeometryCurrent(I3Time time)
@@ -321,10 +342,10 @@ I3Muxer::QueueUpEvent()
 {
   if(!currentEventQueued_)
     {
-      MUXER_ASSERT(context_.Get<I3EventService>(eventServiceName_).MoreEvents());
+      MUXER_ASSERT(eventService_->MoreEvents());
       I3TimePtr eventTimePtr;
       I3Time eventTime = 
-      context_.Get<I3EventService>(eventServiceName_).PopEvent(currentEvent_);
+      eventService_->PopEvent(currentEvent_);
       eventTimePtr = I3TimePtr(new I3Time(eventTime));
       currentEvent_.Put(DRIVING_TIME,eventTimePtr, 'P');
       currentEventQueued_ = true;

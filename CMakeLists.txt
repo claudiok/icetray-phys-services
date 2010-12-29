@@ -2,6 +2,8 @@
 # $Id$
 #
 i3_project(phys-services
+  PYTHON_DIR python
+  PYTHON_DEST icecube/phys_services
   DOCS_DIR resources/docs)
 
 
@@ -47,6 +49,7 @@ i3_add_library(phys-services
   private/phys-services/I3EventCounter.cxx
   private/phys-services/I3FileOMKey2MBID.cxx
   private/phys-services/I3FileOMKey2MBIDFactory.cxx
+  private/phys-services/I3FrameDiff.cxx
   private/phys-services/I3Functions.cxx
   private/phys-services/I3GSLRandomService.cxx
   private/phys-services/I3GSLRandomServiceFactory.cxx

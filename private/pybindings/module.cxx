@@ -36,7 +36,8 @@ namespace bp = boost::python;
 //  that does the boost.python registration for class Nick.
 //
 #define REGISTER_THESE_THINGS						\
-  (I3CutValues)(I3CascadeCutValues)(I3Calculator)(RandomServices)(I3Cuts)(Converter)
+  (I3CutValues)(I3CascadeCutValues)(I3Calculator)(RandomServices)(I3Cuts)\
+  (Converter)(I3Muxer)
 
 #define I3_REGISTRATION_FN_DECL(r, data, t) void BOOST_PP_CAT(register_,t)();
 #define I3_REGISTER(r, data, t) BOOST_PP_CAT(register_,t)();
