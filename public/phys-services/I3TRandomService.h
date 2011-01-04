@@ -79,7 +79,7 @@ class I3TRandomService : public I3RandomService{
    */
   virtual double Gaus(double mean, double stddev);
  private:
-  TRandom rand_;
+  TRandom3 rand_;
 
   SET_LOGGER("I3TRandomService")
 
