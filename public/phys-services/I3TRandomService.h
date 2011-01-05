@@ -2,7 +2,7 @@
 #define I3TRANDOMSERVICE_H
 
 #include "phys-services/I3RandomService.h"
-#include "TRandom.h"
+#include "TRandom3.h"
 
 /**
  * copyright  (C) 2004
