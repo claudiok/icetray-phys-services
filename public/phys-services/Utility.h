@@ -3,6 +3,7 @@
 
 #include "icetray/I3FrameObject.h"
 #include <string>
+#include <vector>
 using namespace std;
 
 // forward declaration
