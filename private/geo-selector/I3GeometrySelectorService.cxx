@@ -32,10 +32,11 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
   for(iter = old_geo->omgeo.begin();
       iter != old_geo->omgeo.end(); ++iter){
     OMKey omkey = iter->first;
+    I3OMGeo::OMType omtype = iter->second.omtype;
     if((geo_sel_utils::exists(omkey.GetString(),goodStrings_) &&
-	(omkey.GetOM() <= 60)) ||
+	(omtype == I3OMGeo::IceCube)) ||
        (geo_sel_utils::exists(omkey.GetString(),goodStations_) &&
-	(omkey.GetOM() > 60))){
+	(omtype == I3OMGeo::IceTop))){
       I3OMGeo om = iter->second;
       om.position.SetX(iter->second.position.GetX() + shiftX);
       om.position.SetY(iter->second.position.GetY() + shiftY);
