@@ -80,6 +80,7 @@ class I3Muxer : public I3Module
   static string toString(I3Time& time);
 
   I3Frame currentEvent_;
+  I3FramePtr currentDAQ_;
   bool currentEventQueued_;
   I3GeometryConstPtr currentGeometry_;
   I3TimeRange currentGeometryRange_;

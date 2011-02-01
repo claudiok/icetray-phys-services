@@ -80,12 +80,18 @@ I3Muxer::PopFrame()
 {
   //
   // first check for 'meta streams', like TrayInfo, send em if they
-  // exist.  These run at "speeds" unrelated to G/C/S/P
+  // exist.  These run at "speeds" unrelated to G/C/S/Q/P.
+  //
+  // If we see a DAQ frame, cache it for later merging.
   //  
   if (metaService_)
     {
       I3FramePtr frame = metaService_->PopMeta();
-      if (frame) return frame;
+      if (frame) {
+        if(frame->GetStop() == I3Frame::DAQ)
+          currentDAQ_ = frame;
+        return frame;
+      }
     }
 
   I3Frame::Stream next = NextStream();
@@ -166,6 +172,9 @@ I3Muxer::SendEvent()
   frame->Put("I3Calibration", currentCalibration_,  'C');
   MUXER_ASSERT(currentDetectorStatus_);
   frame->Put("I3DetectorStatus", currentDetectorStatus_,  'D');
+
+  if (currentDAQ_)
+    frame->merge(*currentDAQ_);
 
   currentEventQueued_ = false;
   currentEvent_.clear();
