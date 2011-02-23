@@ -57,6 +57,7 @@ i3_add_library(phys-services
   private/phys-services/I3MediumPropertiesFile.cxx
   private/phys-services/I3CutValues.cxx
   private/phys-services/I3ScaleCalculator.cxx
+  private/phys-services/I3Splitter.cxx
   private/phys-services/I3VEMCalManipulator.cxx
   private/phys-services/I3VEMCalManipulatorFactory.cxx
   private/phys-services/I3XMLOMKey2MBID.cxx
