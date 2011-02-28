@@ -6,7 +6,6 @@ i3_add_pybindings(phys_services
   Converter.cxx
   RandomServices.cxx
   I3Cuts.cxx
-  I3Muxer.cxx
   I3Splitter.cxx
   module.cxx
   USE_TOOLS boost python log4cplus root
