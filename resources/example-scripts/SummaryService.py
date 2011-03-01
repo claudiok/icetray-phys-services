@@ -18,15 +18,11 @@ load("libdataio")
 
 tray = I3Tray()
 
-tray.AddService("I3ReaderServiceFactory","read")(
-    ("FileName",infile),
-    ("SkipUnregistered",True))
-
 tray.AddService("I3XMLSummaryServiceFactory","summary") (
     ("OutputFileName","i3summary.xml"),
 	)
 
-tray.AddModule("I3Muxer","muxer")
+tray.AddModule("I3Reader","reader",FileName=infile)
 
 tray.AddModule("I3EventCounter","counter")(
     ("PhysicsCounterName","GeneratedEvents"),

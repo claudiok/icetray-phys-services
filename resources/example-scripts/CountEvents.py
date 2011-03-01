@@ -18,11 +18,7 @@ load("libdataio")
 
 tray = I3Tray()
 
-tray.AddService("I3ReaderServiceFactory","read")(
-    ("FileName",infile),
-    ("SkipUnregistered",True))
-
-tray.AddModule("I3Muxer","muxer")
+tray.AddModule("I3Reader","reader",FileName=infile)
 
 tray.AddModule("I3EventCounter","counter")(
     ("EventHeaderName","I3EventHeader"),
