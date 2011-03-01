@@ -114,6 +114,6 @@ i3_test_executable(test
   ${ROOT_TESTS}
   USE_PROJECTS phys-services dataio)
 
-i3_test_scripts(resources/scripts/*.py)
+i3_test_scripts(resources/test/*.py)
 
 add_subdirectory(private/pybindings)
