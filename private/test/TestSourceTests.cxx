@@ -37,11 +37,8 @@ TEST(multiple_MCHits){
 
   I3Tray tray;
 
-
-  tray.AddService("I3InfiniteSource","empty_streams")
-    ("Stream",I3Frame::Physics)
-    ("NFrames",1)
-  tray.AddModule("I3Muxer","muxer");
+  tray.AddModule("I3InfiniteSource","empty_streams")
+    ("Stream",I3Frame::Physics);
   tray.AddModule("I3TestSource<I3Vector<I3MCHit> >","test_source")
     ("OutputMap","ParticleMap")
     ("NObjects",NOBJECTS);
@@ -49,7 +46,7 @@ TEST(multiple_MCHits){
     ("MapName","ParticleMap");
   tray.AddModule("TrashCan","trash");
 
-  tray.Execute();
+  tray.Execute(1);
   tray.Finish();
 }
 

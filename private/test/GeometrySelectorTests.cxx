@@ -5,7 +5,6 @@
 #include "icetray/I3Tray.h"
 #include "phys-services/source/I3TextFileGeometryServiceFactory.h"
 #include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
-#include "phys-services/source/I3Muxer.h"
 #include "dataclasses/I3Units.h"
 
 using geo_sel_utils::make_good_strings;
@@ -156,8 +155,7 @@ TEST(icetray_test){
     ("StringsToUse",strings_to_use.c_str())
     ("StationsToUse",stations_to_use.c_str())
     ("GeoSelectorName","I3GeometrySelectorService");
-  tray.AddModule("I3InfiniteSource", Stream=icetray.I3Frame.Physics,
-    Nframes=1)
+  tray.AddModule("I3InfiniteSource", "source")("Stream",I3Frame::Physics);
   tray.AddModule("I3MetaSynth","muxer")
     ("GeometryService","I3GeometrySelectorService");
   //I3GeoSelTestModule contains ENSURE statements
@@ -166,7 +164,7 @@ TEST(icetray_test){
     ("StationsToUse",stations_to_use.c_str());
   tray.AddModule("TrashCan","trash");
 
-  tray.Execute();
+  tray.Execute(4);
   tray.Finish();
 }
 
@@ -188,9 +186,6 @@ TEST(icetray_test_shift){
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
     ("IceCubeGeoFile",icecube_geo.c_str())
     ("AmandaGeoFile",amanda_geo.c_str());
-  tray.AddService("I3EmptyStreamsFactory","empty_streams")
-    ("NFrames",4)
-    ("InstallGeometry",false);
   tray.AddService("I3GeometrySelectorServiceFactory","geo_selector")
     ("StringsToUse",strings_to_use.c_str())
     ("StationsToUse",stations_to_use.c_str())
@@ -199,8 +194,10 @@ TEST(icetray_test_shift){
     ("ShiftY",100*I3Units::m)
     ("ShiftZ",100*I3Units::m);
 
-  tray.AddModule("I3Muxer","muxer")
+  tray.AddModule("I3InfiniteSource", "source")("Stream",I3Frame::Physics);
+  tray.AddModule("I3MetaSynth","muxer")
     ("GeometryService","I3GeometrySelectorService");
+
   //I3GeoSelTestModule contains ENSURE statements
   tray.AddModule("I3GeoSelTestModule","geo_test") 
     ("StringsToUse",strings_to_use.c_str())
@@ -213,7 +210,7 @@ TEST(icetray_test_shift){
 
   tray.AddModule("TrashCan","trash");
 
-  tray.Execute();
+  tray.Execute(4);
   tray.Finish();
 }
 
@@ -276,16 +273,14 @@ TEST(icetray_test_center_shift){
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
     ("IceCubeGeoFile",icecube_geo.c_str())
     ("AmandaGeoFile",amanda_geo.c_str());
-  tray.AddService("I3EmptyStreamsFactory","empty_streams")
-    ("NFrames",4)
-    ("InstallGeometry",false);
   tray.AddService("I3GeometrySelectorServiceFactory","geo_selector")
     ("StringsToUse",strings_to_use.c_str())
     ("StationsToUse",stations_to_use.c_str())
     ("GeoSelectorName","I3GeometrySelectorService")
     ("ShiftToCenter",true);
 
-  tray.AddModule("I3Muxer","muxer")
+  tray.AddModule("I3InfiniteSource", "source")("Stream",I3Frame::Physics);
+  tray.AddModule("I3MetaSynth","muxer")
     ("GeometryService","I3GeometrySelectorService");
   //I3GeoSelTestModule contains ENSURE statements
   tray.AddModule("I3GeoSelTestModule","geo_test") 
@@ -297,6 +292,6 @@ TEST(icetray_test_center_shift){
 
   tray.AddModule("TrashCan","trash");
 
-  tray.Execute();
+  tray.Execute(4);
   tray.Finish();
 }

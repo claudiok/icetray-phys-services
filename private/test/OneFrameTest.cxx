@@ -39,14 +39,13 @@ TEST(oneframe)
 {
   I3Tray tray;
   tray.AddModule("I3InfiniteSource","empty_streams")
-    ("Stream",I3Frame::Physics) 
-    ("NFrames",1)
+    ("Stream",I3Frame::Physics);
 
   tray.AddModule("I3OneFrameTester","test");
 
   tray.AddModule("TrashCan","trash");
 
-  tray.Execute();
+  tray.Execute(1);
   tray.Finish();
   ENSURE(I3OneFrameTester::instance);
   ENSURE_EQUAL(I3OneFrameTester::instance->physicsCalls,1);
