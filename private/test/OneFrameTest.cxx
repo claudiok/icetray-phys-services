@@ -1,7 +1,5 @@
 #include <I3Test.h>
 #include <icetray/I3Module.h>
-#include "phys-services/source/I3Muxer.h"
-#include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
 #include <icetray/I3Tray.h>
 
 TEST_GROUP(OneFrameTest);
@@ -40,10 +38,9 @@ I3OneFrameTester* I3OneFrameTester::instance = 0;
 TEST(oneframe)
 {
   I3Tray tray;
-  tray.AddService("I3EmptyStreamsFactory","empty")
-    ("NFrames",1);
-
-  tray.AddModule("I3Muxer","muxer");
+  tray.AddModule("I3InfiniteSource","empty_streams")
+    ("Stream",I3Frame::Physics) 
+    ("NFrames",1)
 
   tray.AddModule("I3OneFrameTester","test");
 

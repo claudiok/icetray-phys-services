@@ -1,8 +1,6 @@
 #include <I3Test.h>
 #include "icetray/I3Tray.h"
 #include "phys-services/test-source/I3TestSourceTestModule.h"
-#include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
-#include "phys-services/source/I3Muxer.h"
 
 #include "boost/random.hpp"
 
@@ -40,8 +38,9 @@ TEST(multiple_MCHits){
   I3Tray tray;
 
 
-  tray.AddService("I3EmptyStreamsFactory","empty_streams")
-    ("NFrames",2);
+  tray.AddService("I3InfiniteSource","empty_streams")
+    ("Stream",I3Frame::Physics)
+    ("NFrames",1)
   tray.AddModule("I3Muxer","muxer");
   tray.AddModule("I3TestSource<I3Vector<I3MCHit> >","test_source")
     ("OutputMap","ParticleMap")

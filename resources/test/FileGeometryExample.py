@@ -12,16 +12,14 @@ icecubegeofile = expandvars("$I3_SRC/phys-services/resources/icecube.geo")
 
 tray = I3Tray()
 
-tray.AddService("I3EmptyStreamsFactory","streams")(
-              ("InstallGeometry",False)
-                )
+tray.AddModule("I3InfiniteSource","streams",stream=icetray.I3Frame.Physics)
 
 tray.AddService("I3TextFileGeometryServiceFactory","geometry")(
               ("AmandaGeoFile",amageofile),
               ("IceCubeGeoFile",icecubegeofile),
               )
 
-tray.AddModule("I3Muxer","muxme")
+tray.AddModule("I3MetaSynth","muxme")
 
 tray.AddModule("Dump","dump")
 

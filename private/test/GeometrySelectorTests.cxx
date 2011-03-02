@@ -152,14 +152,13 @@ TEST(icetray_test){
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
     ("IceCubeGeoFile",icecube_geo.c_str())
     ("AmandaGeoFile",amanda_geo.c_str());
-  tray.AddService("I3EmptyStreamsFactory","empty_streams")
-    ("NFrames",1)
-    ("InstallGeometry",false);
   tray.AddService("I3GeometrySelectorServiceFactory","geo_selector")
     ("StringsToUse",strings_to_use.c_str())
     ("StationsToUse",stations_to_use.c_str())
     ("GeoSelectorName","I3GeometrySelectorService");
-  tray.AddModule("I3Muxer","muxer")
+  tray.AddModule("I3InfiniteSource", Stream=icetray.I3Frame.Physics,
+    Nframes=1)
+  tray.AddModule("I3MetaSynth","muxer")
     ("GeometryService","I3GeometrySelectorService");
   //I3GeoSelTestModule contains ENSURE statements
   tray.AddModule("I3GeoSelTestModule","geo_test") 

@@ -26,7 +26,7 @@ print "Number of frames: ", nevent
 #**************************************************
 #                 Reader & Muxer 
 #**************************************************
-tray.AddService("I3ReaderServiceFactory","readerfactory")(
+tray.AddModule("I3Reader","reader")(
     ("Filename", infile)
     )
 
@@ -37,7 +37,7 @@ tray.AddService("I3VEMCalManipulatorFactory","vemcal")(
     ("UseDefaults", True), # If no directory or file are specified and "UseDefaults" is enabled default values will be used for all IceTop DOMs.
     )
 
-tray.AddModule("I3Muxer","muxme")(
+tray.AddModule("I3MetaSynth","muxme")(
     ("CalibrationService","CalibrationWithVEMCal")
     )
 

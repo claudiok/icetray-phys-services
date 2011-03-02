@@ -12,10 +12,6 @@ icecubegeofile = expandvars("$I3_SRC/phys-services/resources/icecube.geo")
 
 tray = I3Tray()
 
-tray.AddService("I3EmptyStreamsFactory","streams")(
-              ("InstallGeometry",False)
-                )
-
 tray.AddService("I3TextFileGeometryServiceFactory","geometry")(
               ("AmandaGeoFile",amageofile),
               ("IceCubeGeoFile",icecubegeofile),
@@ -27,9 +23,7 @@ tray.AddService("I3GeometrySelectorServiceFactory","geo_selector")(
     ("GeoSelectorName","I3GeometrySelectorService")
     )
 
-tray.AddModule("I3Muxer","muxme")(
-   ("GeometryService","I3GeometrySelectorService")
-   )
+tray.AddModule("I3InfiniteSource","muxme",Stream=icetray.I3Frame.Physics, Nframes=1)
 
 tray.AddModule("Dump","dump")
 

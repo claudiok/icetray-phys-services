@@ -2,9 +2,6 @@
 
 #include "icetray/I3Tray.h"
 
-#include "phys-services/source/I3Muxer.h"
-#include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
-
 #include "FrameChecking.h"
 
 #include "icetray/module-test/TestClientModule.h"
@@ -58,10 +55,9 @@ TEST(ev_stat_cal_geo)
 {
   RootI3Tray tray;
 
-  tray.AddService<I3EmptyStreamsFactory>("empty")
-    ("NFrames",5);
-  
-  tray.AddModule<I3Muxer>("muxme");
+  tray.AddModule("I3InfiniteSource","empty_streams")
+    ("Stream",I3Frame::Physics) 
+    ("NFrames",5)
 
   tray.AddModule<EvStatCalGeoClient>("client");
   
