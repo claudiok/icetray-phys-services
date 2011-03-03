@@ -13,6 +13,20 @@ using geo_sel_utils::exists_at;
 using geo_sel_utils::parse_string_list;
 using geo_sel_utils::good_input;
 
+class SetDrivingTime : public I3Module {
+public:
+	SetDrivingTime(const I3Context &ctx) : I3Module(ctx) {
+		AddOutBox("OutBox");
+	}
+	void Physics(I3FramePtr fr) {
+		I3TimePtr time(new I3Time(2006, 0));
+		fr->Put("DrivingTime", time);
+		PushFrame(fr);
+	}
+};
+
+I3_MODULE(SetDrivingTime);
+
 
 TEST_GROUP(GeometrySelector);
 
@@ -156,6 +170,7 @@ TEST(icetray_test){
     ("StationsToUse",stations_to_use.c_str())
     ("GeoSelectorName","I3GeometrySelectorService");
   tray.AddModule("I3InfiniteSource", "source")("Stream",I3Frame::Physics);
+  tray.AddModule("SetDrivingTime", "time");
   tray.AddModule("I3MetaSynth","muxer")
     ("GeometryService","I3GeometrySelectorService");
   //I3GeoSelTestModule contains ENSURE statements
@@ -195,6 +210,7 @@ TEST(icetray_test_shift){
     ("ShiftZ",100*I3Units::m);
 
   tray.AddModule("I3InfiniteSource", "source")("Stream",I3Frame::Physics);
+  tray.AddModule("SetDrivingTime", "time");
   tray.AddModule("I3MetaSynth","muxer")
     ("GeometryService","I3GeometrySelectorService");
 
@@ -280,6 +296,7 @@ TEST(icetray_test_center_shift){
     ("ShiftToCenter",true);
 
   tray.AddModule("I3InfiniteSource", "source")("Stream",I3Frame::Physics);
+  tray.AddModule("SetDrivingTime", "time");
   tray.AddModule("I3MetaSynth","muxer")
     ("GeometryService","I3GeometrySelectorService");
   //I3GeoSelTestModule contains ENSURE statements
