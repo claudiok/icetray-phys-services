@@ -52,3 +52,4 @@ I3CutValuesConverter::FillRows(const I3CutValues& cv, I3TableRowPtr rows)
 	
 	return 1;
 }
+
