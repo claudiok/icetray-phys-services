@@ -17,9 +17,6 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using namespace boost::python;
-namespace bp = boost::python;
-
 #ifdef I3_USE_ROOT
 #include <phys-services/I3TRandomService.h>
 #endif
@@ -27,6 +24,9 @@ namespace bp = boost::python;
 #include <phys-services/I3SPRNGRandomService.h>
 #endif
 #include <phys-services/I3GSLRandomService.h>
+
+using namespace boost::python;
+namespace bp = boost::python;
 
 struct I3RandomServiceWrapper : I3RandomService, wrapper<I3RandomService>
 {
