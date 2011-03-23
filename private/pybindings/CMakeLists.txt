@@ -1,3 +1,6 @@
+if(SPRNG_FOUND)
+  ADD_DEFINITIONS(-DI3_USE_SPRNG)
+endif(SPRNG_FOUND)
 
 i3_add_pybindings(phys_services
   I3Calculator.cxx

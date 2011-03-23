@@ -20,8 +20,12 @@
 using namespace boost::python;
 namespace bp = boost::python;
 
-// #include <phys-services/I3TRandomService.h>
+#ifdef I3_USE_ROOT
+#include <phys-services/I3TRandomService.h>
+#endif
+#ifdef I3_USE_SPRNG
 #include <phys-services/I3SPRNGRandomService.h>
+#endif
 #include <phys-services/I3GSLRandomService.h>
 
 struct I3RandomServiceWrapper : I3RandomService, wrapper<I3RandomService>
@@ -66,10 +70,17 @@ void register_RandomServices()
   register_randomservice<I3GSLRandomService>("I3GSLRandomService", "gsl random goodness",
 					     init<unsigned long int>(bp::arg("seed")));
 
+#ifdef I3_USE_ROOT
+  register_randomservice<I3TRandomService>("I3TRandomService", "ROOT random badness",
+					     init<unsigned long int>(bp::arg("seed")));
+#endif
+
+#ifdef I3_USE_SPRNG
   register_randomservice<I3SPRNGRandomService>("I3SPRNGRandomService", "sprng random goodness",
 					       init<int, int, int>((bp::arg("seed"), 
 								    bp::arg("nstreams"),
 								    bp::arg("streamnum"))));
+#endif
 
   register_randomservice<I3RandomServiceWrapper>("I3RandomService", "base class for python impls",
 						 init<>());
