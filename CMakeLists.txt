@@ -20,12 +20,14 @@ if (USE_ROOT)
 endif (USE_ROOT)
 
 if (SPRNG_FOUND)
-  message(STATUS "Sprng found, adding SPRNGRandomService")
+  colormsg(GREEN "+-- sprng found, adding SPRNGRandomService")
   set(SPRNG_SOURCES
     private/phys-services/I3SPRNGRandomService.cxx
     private/phys-services/I3SPRNGRandomServiceFactory.cxx)
   set(SPRNG_TOOL sprng)
-endif()
+else(SPRNG_FOUND)
+  colorlmsg(CYAN "+-- sprng *not* found, omitting optional SPRNGRandomService")
+endif(SPRNG_FOUND)
 
 i3_add_library(phys-services 
   private/converter/I3EventInfoConverter.cxx
