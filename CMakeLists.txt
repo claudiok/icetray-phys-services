@@ -26,7 +26,7 @@ if (SPRNG_FOUND)
     private/phys-services/I3SPRNGRandomServiceFactory.cxx)
   set(SPRNG_TOOL sprng)
 else(SPRNG_FOUND)
-  colorlmsg(CYAN "+-- sprng *not* found, omitting optional SPRNGRandomService")
+  colormsg(CYAN "+-- sprng *not* found, omitting optional SPRNGRandomService")
 endif(SPRNG_FOUND)
 
 i3_add_library(phys-services 
