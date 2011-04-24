@@ -75,21 +75,6 @@ void Copy(shared_ptr<const I3FrameObject> oldp, I3FrameObject* newp)
   bia >> make_nvp("obj", newp);
 }
 
-void ENSURE_DISTANCE(double left,double right,double precision,string message)
-{
-  bool test = abs(left-right) < precision;
-  if (!test) {
-    printf("       %s\n",message.c_str());
-    printf("  Found:   %f\n  Expected:  %f (+/-%f)\n\n",left,right,precision);
-    log_fatal("%s",message.c_str());
-  }
-}
-
-void ENSURE(bool expression, string message)
-{
-  if (!expression) log_fatal("%s",message.c_str());
-}
-
 // Functions to get charge from either RecoPulse or RecoHit or MCHit.
 double GetCharge(const I3RecoHit& hit)
 { 

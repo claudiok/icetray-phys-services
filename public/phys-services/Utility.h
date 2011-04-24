@@ -22,11 +22,6 @@ I3FrameObject* Clone(I3FrameObject* ptr);
 void Copy(shared_ptr<const I3FrameObject> oldp,
 	  shared_ptr<I3FrameObject>& newp);
 
-void ENSURE_DISTANCE(double left, double right, double precision, 
-		     string message = "Test FAILED");
-
-void ENSURE(bool expression, string message = "Test FAILED");
-
 // Functions to get charge from either RecoPulse or RecoHit.
 double GetCharge(const I3RecoHit&);
 double GetCharge(const I3MCHit&);
