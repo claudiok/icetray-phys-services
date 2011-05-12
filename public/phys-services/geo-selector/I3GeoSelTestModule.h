@@ -65,22 +65,22 @@ private:
   /**
    *Takes the form of "i,j,n:m" and this will use strings i,j,n,n+1,...,m-1,m
    */
-  string stringsToUse_;
+  std::string stringsToUse_;
 
   /**
    *Takes the form of "i,j,n:m" and this will exclude strings i,j,n,n+1,...,m-1,m
    */
-  string stringsToExclude_;
+  std::string stringsToExclude_;
 
   /**
    *Takes the form of "i,j,n:m" and this will use stations i,j,n,n+1,...,m-1,m
    */
-  string stationsToUse_;
+  std::string stationsToUse_;
 
   /**
    *Takes the form of "i,j,n:m" and this will exclude stations i,j,n,n+1,...,m-1,m
    */
-  string stationsToExclude_;
+  std::string stationsToExclude_;
 
   double shiftX_;
   double shiftY_;
@@ -90,8 +90,8 @@ private:
   /**
    *This is the list of strings to use
    */
-  vector<int> goodStrings_;
-  vector<int> goodStations_;
+  std::vector<int> goodStrings_;
+  std::vector<int> goodStations_;
 
   // Named stream for my logging messages.  Allows my messages to be
   // sent to a particular log file, to be set to a special threshold, etc.
