@@ -43,14 +43,14 @@ class I3EventCounter : public I3Module
   bool dump_;
 
   std::string path_,fmt_;
-  ostream *out;
+  std::ostream *out;
   char buffer[200];
 
- string eventHeaderName_;
- string physicsCounterName_;
- string geoCounterName_;
- string calibCounterName_;
- string statusCounterName_;
+  std::string eventHeaderName_;
+  std::string physicsCounterName_;
+  std::string geoCounterName_;
+  std::string calibCounterName_;
+  std::string statusCounterName_;
 
 
   SET_LOGGER("I3EventCounter");

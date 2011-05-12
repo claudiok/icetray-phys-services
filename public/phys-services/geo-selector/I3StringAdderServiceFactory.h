@@ -58,19 +58,19 @@ private:
    * List of top (i.e. OMNumber = 1) DOM positions.
    * This will be built from the rest of the parameters.
    */
-  vector<I3OMGeo> omGeoList_;
+  std::vector<I3OMGeo> omGeoList_;
 
   /**
    * Parameter - List of x positions 
    * Default value is 'empty'
    */
-  vector<double> xPositions_;
+  std::vector<double> xPositions_;
 
   /**
    * Parameter - List of y positions
    * Default value is 'empty'
    */
-  vector<double> yPositions_;
+  std::vector<double> yPositions_;
 
   /**
    * Parameter - Depth of the top DOMs

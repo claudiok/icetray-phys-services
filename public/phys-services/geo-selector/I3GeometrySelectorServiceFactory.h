@@ -56,25 +56,25 @@ private:
    * Parameter - The strings to use.
    * Default value is "-19:80".
    */
-  string stringsToUse_;
+  std::string stringsToUse_;
 
   /**
    * Parameter - The strings to exclude.
    * Default value is NULL.
    */
-  string stringsToExclude_;
+  std::string stringsToExclude_;
 
   /**
    * Parameter - The stations to use.
    * Default value is "-19:80".
    */
-  string stationsToUse_;
+  std::string stationsToUse_;
 
   /**
    * Parameter - The stations to exclude.
    * Default value is NULL.
    */
-  string stationsToExclude_;
+  std::string stationsToExclude_;
 
   /**
    * Distance in X to shift the detector
@@ -100,13 +100,13 @@ private:
    * A list of strings to use.  This vector is constructed from the input parameters
    * StringsToUse and StringsToExclude.
    */
-  vector<int> goodStrings_;
+  std::vector<int> goodStrings_;
 
   /**
    * A list of strings to use.  This vector is constructed from the input parameters
    * StringsToUse and StringsToExclude.
    */
-  vector<int> goodStations_;
+  std::vector<int> goodStations_;
 
   /**
    *Name of the new geometry service.  The muxer needs this name.
