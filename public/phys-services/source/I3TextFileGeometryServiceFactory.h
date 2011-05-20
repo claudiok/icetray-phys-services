@@ -20,7 +20,6 @@ class I3Context;
 #include "icetray/I3ServiceFactory.h"
 class I3TextFileGeometryService;
 
-using namespace std;
 
 class I3TextFileGeometryServiceFactory
 : public I3ServiceFactory
@@ -39,8 +38,8 @@ class I3TextFileGeometryServiceFactory
 
   shared_ptr<I3TextFileGeometryService> geometry_;
 
-  string amandaFile_;
-  string icecubeFile_;
+  std::string amandaFile_;
+  std::string icecubeFile_;
 
   I3TextFileGeometryServiceFactory
     (const I3TextFileGeometryServiceFactory& rhs); // stop default

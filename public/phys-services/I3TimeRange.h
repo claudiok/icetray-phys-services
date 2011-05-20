@@ -4,7 +4,6 @@
 #include <sstream>
 #include "dataclasses/I3Time.h"
 
-using namespace std;
 
 /**
  * @brief Currently 'Time' is just a double.  I think it'll have

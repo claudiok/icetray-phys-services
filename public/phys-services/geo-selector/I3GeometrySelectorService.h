@@ -12,13 +12,13 @@
 #ifndef I3GEOMETRYSELECTORSERVICE_H
 #define I3GEOMETRYSELECTORSERVICE_H
 
+#include <vector>
 #include <string>
 #include <fstream>
 #include <boost/shared_ptr.hpp>
 #include <interfaces/I3GeometryService.h>
 #include "icetray/I3Context.h"
 
-using namespace std;
 
 /**
  * @brief A I3GeometryOrigin which reads the default geometry and serves up a reduced geometry.
@@ -28,16 +28,16 @@ class I3GeometrySelectorService : public I3GeometryService
 
   SET_LOGGER("I3GeometrySelectorService");
   /**
-   * A list of strings to use.  This vector is constructed from the input parameters
+   * A list of std::strings to use.  This vector is constructed from the input parameters
    * StringsToUse and StringsToExclude.
    */
-  vector<int> goodStrings_;
+  std::vector<int> goodStrings_;
 
   /**
-   * A list of strings to use.  This vector is constructed from the input parameters
+   * A list of std::strings to use.  This vector is constructed from the input parameters
    * StringsToUse and StringsToExclude.
    */
-  vector<int> goodStations_;
+  std::vector<int> goodStations_;
 
   I3GeometryServicePtr geo_service_;
   double shiftX_;
@@ -59,8 +59,8 @@ class I3GeometrySelectorService : public I3GeometryService
   }
 
   void ShiftToCenter(bool s){shiftToCenter_ = s; };
-  void SetGoodStrings(vector<int>& v){goodStrings_ = v; };
-  void SetGoodStations(vector<int>& v){goodStations_ = v; };
+  void SetGoodStrings(std::vector<int>& v){goodStrings_ = v; };
+  void SetGoodStations(std::vector<int>& v){goodStations_ = v; };
 
   virtual ~I3GeometrySelectorService(){}
 

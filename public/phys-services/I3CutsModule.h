@@ -37,30 +37,30 @@ private:
    * Multiple names can be included, separated by ",".  If no name is set,
    * all of the I3Particles from the event will be written.
    */
-  string particleName_;
+  std::string particleName_;
 
   /**
    * Parameter: name of the hit series map to use in the calculation of the
    * cut parameters.
    */
-  string hitsName_;
+  std::string hitsName_;
 
   /**
    * Parameter: name of the pulse series map to use in the calculation of 
    * the cut parameters.
    */
-  string pulsesName_;
+  std::string pulsesName_;
 
   /**
    * Parameter: Optional tag for the name of the object inserted by this module 
    * into the frame.
    */
-  string nameTag_;
+  std::string nameTag_;
 
   /**
    * Parameter: time range for calculating direct hits.
    */
-  vector<double> timeRange_;
+  std::vector<double> timeRange_;
 
   /**
    * Named stream for my logging messages.  Allows my messages to be

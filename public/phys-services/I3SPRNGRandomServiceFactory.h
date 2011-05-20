@@ -72,7 +72,7 @@ class I3SPRNGRandomServiceFactory
 
   // instance member data
   int seed_, nstreams_, streamnum_;
-  string instatefile_,outstatefile_;
+  std::string instatefile_,outstatefile_;
   I3RandomServicePtr random_;
   std::string installServiceAs_;
 

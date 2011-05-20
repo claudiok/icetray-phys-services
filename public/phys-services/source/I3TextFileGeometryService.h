@@ -17,7 +17,6 @@
 #include <boost/shared_ptr.hpp>
 #include <interfaces/I3GeometryService.h>
 
-using namespace std;
 
 /**
  * @brief A I3GeometryOrigin which reads the geometry from two files,
@@ -25,10 +24,10 @@ using namespace std;
  */
 class I3TextFileGeometryService : public I3GeometryService
 {
-  string fAmaGeoInputFile;
-  string fI3GeoInputFile;
+  std::string fAmaGeoInputFile;
+  std::string fI3GeoInputFile;
  public:
-  I3TextFileGeometryService(const string& amafile,const string& icefile) :
+  I3TextFileGeometryService(const std::string& amafile,const std::string& icefile) :
     fAmaGeoInputFile(amafile),
     fI3GeoInputFile(icefile) 
     {}
@@ -36,7 +35,7 @@ class I3TextFileGeometryService : public I3GeometryService
 
   I3GeometryConstPtr GetGeometry(I3Time time);
  private:
-  void Fatal(const string& message);
+  void Fatal(const std::string& message);
 
   void FillGeometryFromFile(I3Geometry& geo);
 };

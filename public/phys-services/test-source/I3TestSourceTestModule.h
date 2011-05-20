@@ -13,6 +13,7 @@
 #define I3TESTSOURCETESTMODULE_H
 
 // header files
+#include <string>
 #include "icetray/I3Module.h"
 #include "icetray/I3Frame.h"
 #include "dataclasses/OMKey.h"
@@ -42,7 +43,7 @@ private:
   I3TestSourceTestModule(const I3TestSourceTestModule& source);
   I3TestSourceTestModule& operator=(const I3TestSourceTestModule& source);
 
-  string mapName_;
+  std::string mapName_;
 
   SET_LOGGER("I3TestSourceTestModule");
   

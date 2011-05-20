@@ -9,7 +9,6 @@
 #include <set>
 #include <vector>
 #include <string>
-using namespace std;
 
 namespace I3Functions
 {
@@ -17,13 +16,13 @@ namespace I3Functions
   /**
    * Function to parse a long string and divide it into its string constituents
    */
-  set<string> ParseString(const string &bigString); 
+  std::set<std::string> ParseString(const std::string &bigString); 
 
   /**
    * Function to parse a long string of file name patterns, divide it into its string constituents, 
    * and search for matching file names
    */
-  vector<string> ParseFilename(const string &bigFilename);
+  std::vector<std::string> ParseFilename(const std::string &bigFilename);
 }
 
 #endif

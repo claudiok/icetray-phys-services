@@ -12,6 +12,7 @@
 #ifndef I3STRINGADDER_H
 #define I3STRINGADDER_H
 
+#include <vector>
 #include <string>
 #include <fstream>
 #include <boost/shared_ptr.hpp>
@@ -20,7 +21,6 @@
 
 struct I3OMGeo;
 
-using namespace std;
 
 /**
  * @brief A I3GeometryOrigin which reads the default geometry and serves up a reduced geometry.
@@ -34,7 +34,7 @@ class I3StringAdderService : public I3GeometryService
 
   unsigned int domsPerString_;
 
-  vector<I3OMGeo> omGeoList_;
+  std::vector<I3OMGeo> omGeoList_;
 
   I3GeometryServicePtr geo_service_;
 
@@ -55,9 +55,9 @@ class I3StringAdderService : public I3GeometryService
 
   unsigned int GetNDOMsPerString(){ return domsPerString_; }
 
-  void SetOMGeoList(vector<I3OMGeo>& v){ omGeoList_ = v; }
+  void SetOMGeoList(std::vector<I3OMGeo>& v){ omGeoList_ = v; }
 
-  const vector<I3OMGeo>& GetOMGeoList() const { return omGeoList_; }
+  const std::vector<I3OMGeo>& GetOMGeoList() const { return omGeoList_; }
 };
 
 I3_POINTER_TYPEDEFS(I3StringAdderService);

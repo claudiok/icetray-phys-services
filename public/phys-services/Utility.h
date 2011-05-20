@@ -4,7 +4,6 @@
 #include "icetray/I3FrameObject.h"
 #include <string>
 #include <vector>
-using namespace std;
 
 // forward declaration
 class I3RecoHit;
@@ -13,8 +12,8 @@ class I3RecoPulse;
 class I3DOMLaunch;
 class I3Waveform;
 
-string ToString(shared_ptr<const I3FrameObject> obj);
-string ToString(I3FrameObject* obj);
+std::string ToString(shared_ptr<const I3FrameObject> obj);
+std::string ToString(I3FrameObject* obj);
 
 shared_ptr<I3FrameObject> Clone(shared_ptr<const I3FrameObject> ptr);
 I3FrameObject* Clone(I3FrameObject* ptr);
@@ -28,8 +27,8 @@ double GetCharge(const I3MCHit&);
 double GetCharge(const I3RecoPulse&);
 double GetCharge(const I3DOMLaunch&);
 double GetCharge(const I3Waveform&);
-double GetCharge(const vector<I3RecoHit>&);
-double GetCharge(const vector<I3RecoPulse>&);
+double GetCharge(const std::vector<I3RecoHit>&);
+double GetCharge(const std::vector<I3RecoPulse>&);
 
 double GetTime(const I3RecoHit&);
 double GetTime(const I3MCHit&);

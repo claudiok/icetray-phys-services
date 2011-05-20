@@ -64,7 +64,7 @@ class I3XMLSummaryService: public I3SummaryService {
   /**
    * Write an I3XMLSummaryService map to a stream
    */
-  void WriteXML(ostream& oss);
+  void WriteXML(std::ostream& oss);
 
   /**
    * Write an I3XMLSummaryService map to a file
@@ -79,7 +79,7 @@ class I3XMLSummaryService: public I3SummaryService {
   /**
    * Load an I3XMLSummaryService map from an iostream
    */
-  void ReadXML(istream& iss);
+  void ReadXML(std::istream& iss);
 
   /**
    * Load an I3XMLSummaryService map from a file

@@ -343,8 +343,8 @@ namespace I3Cuts
    * of points which define the corners of the shape.
    * (Could, for instance, find the CM of the IceTop-16 array.)
    */
-  void CMPolygon(vector<double> x, 
-		 vector<double> y, 
+  void CMPolygon(std::vector<double> x, 
+		 std::vector<double> y, 
 		 double *xresult,
 		 double *yresult);
 
@@ -352,8 +352,8 @@ namespace I3Cuts
    * A helper function which re-orders the "boundary" points of a polygon,
    * so that they are in order (either cw or ccw around a central point
    */
-  void PutPointsInOrder(vector<double> *xinput, 
-			vector<double> *yinput, 
+  void PutPointsInOrder(std::vector<double> *xinput, 
+			std::vector<double> *yinput, 
 			double xcenter, double ycenter,
 			bool justcheck);
 
@@ -384,8 +384,8 @@ namespace I3Cuts
    * limits of z in the vertical dimension
    */
   double ContainmentVolumeSize(const I3Particle& track, 
-			       vector<double> x, 
-			       vector<double> y, 
+			       std::vector<double> x, 
+			       std::vector<double> y, 
 			       double zhigh, 
 			       double zlow);
 
@@ -397,8 +397,8 @@ namespace I3Cuts
    * (Could, for instance, be the IceTop-16 array.)
    */
   double ContainmentAreaSize(const I3Particle& track, 
-			     vector<double> x, 
-			     vector<double> y, 
+			     std::vector<double> x, 
+			     std::vector<double> y, 
 			     double z);
 
 

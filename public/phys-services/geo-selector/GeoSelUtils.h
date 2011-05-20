@@ -25,20 +25,20 @@
 namespace geo_sel_utils{
 
   /**
-   *Takes in two strings. (strings to use and strings to include)
-   *The strings can take the form "i,j,n:m" (and any permutation) 
-   *which would ex/include strings i,j, and n through m.
+   *Takes in two std::strings. (strings to use and strings to include)
+   *The std::strings can take the form "i,j,n:m" (and any permutation) 
+   *which would ex/include std::strings i,j, and n through m.
    */
   std::vector<int> make_good_strings(const std::string, const std::string);
 
   /**
-   *checks whether an element (type T) exists in a vector
+   *checks whether an element (type T) exists in a std::vector
    *Returns true if it does, false otherwise
    */
   template <class T> bool exists(const T& , const std::vector<T>& );
 
   /**
-   *checks whether an element (type T) exists in a vector
+   *checks whether an element (type T) exists in a std::vector
    *Returns a const_iterator (i.e. postion), which is equal to
    *'end' if the element doesn't exist
    */
@@ -47,20 +47,20 @@ namespace geo_sel_utils{
 
 
   /**
-   *Takes in a string of the form "i,j,n:m" and returns a vector
+   *Takes in a std::string of the form "i,j,n:m" and returns a vector
    *of integers whose elements are "i,j,n,n+1,n+2,...,m-1,m"
    */
   std::vector<int> parse_string_list(const std::string&);
 
   /**
-   *Checks to see whether a string contains characters other than
+   *Checks to see whether a std::string contains characters other than
    *signed integers, and the two delimiters used ',' and ':' 
    */
   bool good_input(const std::string& );
 
   template<class T>
   shared_ptr<I3Map<OMKey,T> >
-    map_cleaner(shared_ptr<const I3Map<OMKey,T> >, vector<int>);
+    map_cleaner(shared_ptr<const I3Map<OMKey,T> >, std::vector<int>);
 
   /**
    * Calculates the center of the detector in X-Y.
@@ -68,7 +68,7 @@ namespace geo_sel_utils{
    * is x and second is y.
    */
   std::pair<double,double> detector_center(I3GeometryConstPtr , 
-					   const vector<int>& );
+					   const std::vector<int>& );
 }
 
 #endif

@@ -3,10 +3,10 @@
 
 class I3Context;
 
+#include <string>
 #include <icetray/I3ServiceFactory.h>
 #include <interfaces/I3OMKey2MBID.h>
 
-using namespace std;
 
 class I3FileOMKey2MBIDFactory
 : public I3ServiceFactory
@@ -22,7 +22,7 @@ class I3FileOMKey2MBIDFactory
   void Configure();
 
  private:
-  string infile_;
+  std::string infile_;
 
   I3OMKey2MBIDPtr service_;
 

@@ -2,11 +2,11 @@
 #include "icetray/I3TrayHeaders.h"
 #include <glob.h>
 
-set<string> I3Functions::ParseString(const string &bigString)
+std::set<std::string> I3Functions::ParseString(const std::string &bigString)
 {
-  string current;
-  set<string> stringSet;
-  string::const_iterator iter;
+  std::string current;
+  std::set<std::string> stringSet;
+  std::string::const_iterator iter;
   for(iter = bigString.begin(); iter != bigString.end(); iter++) {
     if(*iter==':' || *iter==',' || *iter==';') {
       stringSet.insert(current);
@@ -20,13 +20,13 @@ set<string> I3Functions::ParseString(const string &bigString)
   return stringSet;
 }
 
-vector<string> I3Functions::ParseFilename(const string &bigFilename)
+std::vector<std::string> I3Functions::ParseFilename(const std::string &bigFilename)
 {
   glob_t                      g;
   int                         globval;
   int                         globflag=0;
-  set<string>                 string_set=ParseString(bigFilename);
-  set<string>::const_iterator iter;
+  std::set<std::string>       string_set=ParseString(bigFilename);
+  std::set<std::string>::const_iterator iter;
  
   for(iter=string_set.begin(); iter!=string_set.end(); iter++)
   {
@@ -35,7 +35,7 @@ vector<string> I3Functions::ParseFilename(const string &bigFilename)
     if(globval!=0) log_fatal("glob() returned an error while checking %s",(*iter).c_str());
   }  
 
-  vector<string> to_return(g.gl_pathv, g.gl_pathv+g.gl_pathc);
+  std::vector<std::string> to_return(g.gl_pathv, g.gl_pathv+g.gl_pathc);
   globfree(&g);
   return(to_return);
 }
