@@ -5,7 +5,7 @@
 #include <dataclasses/I3Time.h>
 #include <dataclasses/geometry/I3Geometry.h>
 
-void I3TextFileGeometryService::Fatal(const string& message)
+void I3TextFileGeometryService::Fatal(const std::string& message)
 {
   log_fatal("%s", message.c_str());
 }
@@ -34,13 +34,13 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
   //
   
   //Create GeoInFile
-  ifstream AmaGeoInFile;	
-  ifstream I3GeoInFile;		
+  std::ifstream AmaGeoInFile;	
+  std::ifstream I3GeoInFile;		
   log_warn("Reading IceCube Geometry from file");
   
   //Open the files ama.geo and icecube.geo
-  AmaGeoInFile.open(fAmaGeoInputFile.c_str(), ifstream::in); 	
-  I3GeoInFile.open(fI3GeoInputFile.c_str(), ifstream::in); 
+  AmaGeoInFile.open(fAmaGeoInputFile.c_str(), std::ifstream::in); 	
+  I3GeoInFile.open(fI3GeoInputFile.c_str(), std::ifstream::in); 
   
   //Did the files open correctly?
   if (AmaGeoInFile.fail())

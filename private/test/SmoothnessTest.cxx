@@ -52,7 +52,7 @@ TEST(verysmooth)
   SmoothnessDirTest::AddHitAtDepth(90,geometry,hitsmap,10);
   SmoothnessDirTest::AddHitAtDepth(100,geometry,hitsmap,11);
 
-  cout<<SmoothAll(bt,geometry,hitsmap,-10,10)<<endl;//###
+  std::cout<<SmoothAll(bt,geometry,hitsmap,-10,10)<<std::endl;//###
   ENSURE_DISTANCE(0.0,
 		  SmoothAll(bt,geometry,hitsmap,-10,10),
 		  0.001,

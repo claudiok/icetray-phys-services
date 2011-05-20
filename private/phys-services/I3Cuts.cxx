@@ -3,6 +3,7 @@
 #include "phys-services/Utility.h"
 #include "phys-services/I3Calculator.h"
 
+#include <vector>
 #include <cassert>
 #include <cmath>
 #include <float.h>
@@ -43,7 +44,7 @@ rotate(double a[3], double delphi, int axis)
 //--------------------------------------------------------------
 template<class HitType>
 void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
-		  const I3Map<OMKey, vector<HitType> >& hitmap,
+		  const I3Map<OMKey, std::vector<HitType> >& hitmap,
 		  const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		  int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
@@ -51,13 +52,13 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
   Ndir = 0;
   Nhit = 0;
   Nstring = 0;
-  vector<double> lengthAll;
-  vector<double> lengthDir;
+  std::vector<double> lengthAll;
+  std::vector<double> lengthDir;
   double min = 999999;
   double max = -999999;
-  typename I3Map<OMKey, vector<HitType> >::const_iterator hits_i;
+  typename I3Map<OMKey, std::vector<HitType> >::const_iterator hits_i;
   for (hits_i=hitmap.begin(); hits_i!=hitmap.end(); hits_i++) {
-    const vector<HitType>& hits = hits_i->second;
+    const std::vector<HitType>& hits = hits_i->second;
     OMKey omkey = hits_i->first;
     I3OMGeoMap::const_iterator geom = geometry.omgeo.find(omkey);
     if (geom==geometry.omgeo.end()) {
@@ -65,10 +66,10 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
       continue;
     }
 
-    StringNumber[(int) 19+omkey.GetString()] = 1; // "19+" includes AMANDA strings
+    StringNumber[(int) 19+omkey.GetString()] = 1; // "19+" includes AMANDA std::strings
     const I3Position& ompos = geom->second.position;
 
-    typename vector<HitType>::const_iterator hit;
+    typename std::vector<HitType>::const_iterator hit;
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
       
       double Tres = TimeResidual(track, ompos, hit->GetTime());
@@ -158,7 +159,7 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
 //--------------------------------------------------------------
 template<class HitType>
 void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry, 
-		  const I3Map<OMKey, vector<HitType> >& hitmap,
+		  const I3Map<OMKey, std::vector<HitType> >& hitmap,
 		  const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
 		  int& Ndir, int& Nearly, int& Nlate)
 {
@@ -169,9 +170,9 @@ void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry,
   Nearly  = 0;
   Nlate   = 0;
   Nstring = 0;
-  typename I3Map<OMKey, vector<HitType> >::const_iterator hits_i;
+  typename I3Map<OMKey, std::vector<HitType> >::const_iterator hits_i;
   for (hits_i=hitmap.begin(); hits_i!=hitmap.end(); hits_i++) {
-    const vector<HitType>& hits = hits_i->second;
+    const std::vector<HitType>& hits = hits_i->second;
     OMKey omkey = hits_i->first;
 
     if(hits.size()==1){
@@ -185,10 +186,10 @@ void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry,
       continue;
     }
 
-    StringNumber[(int) 19+omkey.GetString()] = 1; // "19+" includes AMANDA strings
+    StringNumber[(int) 19+omkey.GetString()] = 1; // "19+" includes AMANDA std::strings
     const I3Position& ompos = geom->second.position;
 
-    typename vector<HitType>::const_iterator hit;
+    typename std::vector<HitType>::const_iterator hit;
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
       
       //TimeResidual function checks if the input particle is a cascade or track and then
@@ -240,7 +241,7 @@ void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry,
 //--------------------------------------------------------------
 template<class HitType>
 I3Position COGImpl(const I3Geometry& geometry,
-		   const I3Map<OMKey, vector<HitType> >& hitmap)
+		   const I3Map<OMKey, std::vector<HitType> >& hitmap)
 {
   double ampWeight=1;
   double cog[3];
@@ -252,11 +253,11 @@ I3Position COGImpl(const I3Geometry& geometry,
   // I need to loop over all hit OMs, first to calculate the center of 
   // gravity of the hits and then to get the tensor of inertia.  
  
-  typename I3Map<OMKey, vector<HitType> >::const_iterator iter;
+  typename I3Map<OMKey, std::vector<HitType> >::const_iterator iter;
   iter = hitmap.begin();
   while(iter != hitmap.end()) {
     
-    const vector<HitType>& pulsevect = iter->second;
+    const std::vector<HitType>& pulsevect = iter->second;
 
     if(pulsevect.empty()) {
       iter++;
@@ -267,7 +268,7 @@ I3Position COGImpl(const I3Geometry& geometry,
     for (unsigned i=0; i < pulsevect.size(); i++) {
       HitType pulse = pulsevect[i];
       double amp_tmp;
-      if(isnan(GetCharge(pulse)) > 0 || isinf(GetCharge(pulse))> 0) {
+      if(isnan(GetCharge(pulse)) > 0 || std::isinf(GetCharge(pulse))> 0) {
 	log_warn("Got a nan or inf pulse charge.  Setting it to 0 instead.  Something could be screwy with a DOM calibration!!");
   	amp_tmp=0;
       }
@@ -596,15 +597,15 @@ double I3Cuts::CylinderSize(const I3Particle& track,
 // Generalized version of "CylinderSize" for a general in-ice
 // array shape
 double I3Cuts::ContainmentVolumeSize(const I3Particle& track, 
-				     vector<double> x, 
-				     vector<double> y, 
+				     std::vector<double> x, 
+				     std::vector<double> y, 
 				     double zhigh, 
 				     double zlow) {
   double bestanswer = NAN;
 
-  // Error-checking... need at least three strings 
+  // Error-checking... need at least three std::strings 
   if (x.size()<3) { 
-  log_warn("ContainmentVolume of zero/1/2 strings: will be NAN"); 
+  log_warn("ContainmentVolume of zero/1/2 std::strings: will be NAN"); 
     return NAN;
   }
 
@@ -632,12 +633,12 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   // Set up pairs of points which make "walls"
   I3Position B;
   I3Position C;
-  vector<I3Position> highs1;
-  vector<I3Position> highs2;
-  vector<I3Position> lows1;
-  vector<I3Position> lows2;
-  vector<I3Position> verts1;
-  vector<I3Position> verts2;
+  std::vector<I3Position> highs1;
+  std::vector<I3Position> highs2;
+  std::vector<I3Position> lows1;
+  std::vector<I3Position> lows2;
+  std::vector<I3Position> verts1;
+  std::vector<I3Position> verts2;
   // The high pairs
   for (int i=0; i<n-1; i++) {
     B.SetPosition(x[i],y[i],zhigh);
@@ -679,8 +680,8 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   log_debug("Number of highs: %zu", highs1.size()); 
   log_debug("Number of lows: %zu", lows1.size()); 
   log_debug("Number of verts: %zu", verts1.size()); 
-  vector<vector<I3Position> > pairs1;
-  vector<vector<I3Position> > pairs2;
+  std::vector<std::vector<I3Position> > pairs1;
+  std::vector<std::vector<I3Position> > pairs2;
   pairs1.push_back(highs1);
   pairs1.push_back(lows1);
   pairs1.push_back(verts1);
@@ -696,7 +697,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   // Loop over the high series, low series, and vertical series
   for (unsigned int j=0; j<pairs1.size(); j++) {
 
-  vector<double> cvector;  // collection of odd number of segments intersected
+  std::vector<double> cvector;  // collection of odd number of segments intersected
 
   for (unsigned int i=0; i<pairs1[j].size(); i++) {
     //for (int i=0; i<n-1; i++) {
@@ -843,15 +844,15 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 // 2-dimensional version of containment size, for a general icetop
 // array shape
 double I3Cuts::ContainmentAreaSize(const I3Particle& track, 
-				   vector<double> x, 
-				   vector<double> y, 
+				   std::vector<double> x, 
+				   std::vector<double> y, 
 				   double z) 
 {
 
-  // Error-checking... need at least three strings to have an area 
+  // Error-checking... need at least three std::strings to have an area 
   unsigned xsize = x.size();
   if (x.size()<3) { 
-    log_warn("ContainmentArea of zero/1/2 strings: will be NAN"); 
+    log_warn("ContainmentArea of zero/1/2 std::strings: will be NAN"); 
     return NAN;
   }
 
@@ -1034,8 +1035,8 @@ I3Position I3Cuts::IntersectionOfLineAndPlane(const I3Particle& t,
 
 //------------------------------------
 // Put the border points in order around the center
-void I3Cuts::PutPointsInOrder(vector<double> *xinput, 
-			      vector<double> *yinput, 
+void I3Cuts::PutPointsInOrder(std::vector<double> *xinput, 
+			      std::vector<double> *yinput, 
 			      double xcenter, double ycenter,
 			      bool justcheck) {
   if (xinput->size() != yinput->size()) log_fatal("X and Y are not the same size");
@@ -1043,7 +1044,7 @@ void I3Cuts::PutPointsInOrder(vector<double> *xinput,
   int i;   // a looping variable
   
   // Make a hash table of angles... it's automatically sorted by angle
-  map<double,int> anglehash;
+  std::map<double,int> anglehash;
   double lastangle = -99999;
   for (i=0; i<n; i++) {
     I3Direction dd((*xinput)[i]-xcenter,(*yinput)[i]-ycenter,0);
@@ -1058,9 +1059,9 @@ void I3Cuts::PutPointsInOrder(vector<double> *xinput,
   if (!justcheck) {
     // Create new SORTED border points.
     // (May be the same as the original points, that's ok too)
-    vector<double> x;
-    vector<double> y;
-    map<double,int>::iterator imap;
+    std::vector<double> x;
+    std::vector<double> y;
+    std::map<double,int>::iterator imap;
     for (imap = anglehash.begin(); imap != anglehash.end(); imap++) {
       x.push_back((*xinput)[imap->second]);
       y.push_back((*yinput)[imap->second]);
@@ -1079,8 +1080,8 @@ void I3Cuts::PutPointsInOrder(vector<double> *xinput,
 
 //------------------------------------
 // Center of mass of an arbitrary polygon or n-gon
-void I3Cuts::CMPolygon(vector<double> x, 
-		       vector<double> y, 
+void I3Cuts::CMPolygon(std::vector<double> x, 
+		       std::vector<double> y, 
 		       double *xresult,
 		       double *yresult) {
   // Chop the n-gon into (n-2) triangles.

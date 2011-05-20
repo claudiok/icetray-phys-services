@@ -1,3 +1,4 @@
+#include <vector>
 #include "phys-services/geo-selector/I3StringAdderServiceFactory.h"
 #include "phys-services/geo-selector/I3StringAdderService.h"
 #include "dataclasses/geometry/I3OMGeo.h"
@@ -99,7 +100,7 @@ void I3StringAdderServiceFactory::Configure()
   omgeo.aziangle = aziangle_;
   omgeo.position.SetZ(depth_);
 
-  for(vector<double>::iterator x_iter = xPositions_.begin(), y_iter = yPositions_.begin();
+  for(std::vector<double>::iterator x_iter = xPositions_.begin(), y_iter = yPositions_.begin();
       x_iter != xPositions_.end() && y_iter != yPositions_.end();
       x_iter++, y_iter++){
     I3OMGeo g(omgeo);

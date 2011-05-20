@@ -11,7 +11,7 @@ using namespace I3Calculator;
 using namespace I3Cuts;
 using namespace I3Constants;
 
-I3Geometry CalcGeom(vector<I3Position> pos)
+I3Geometry CalcGeom(std::vector<I3Position> pos)
 {
   I3Geometry geometry;
   for (unsigned int i=0; i<pos.size(); i++) {
@@ -23,7 +23,7 @@ I3Geometry CalcGeom(vector<I3Position> pos)
   return geometry;
 }
 
-I3RecoHitSeriesMap CalcHits(vector<double> time)
+I3RecoHitSeriesMap CalcHits(std::vector<double> time)
 {
   I3RecoHitSeriesMap hitsmap;
   for (unsigned int i=0; i<time.size(); i++) {
@@ -75,9 +75,9 @@ TEST(Ndir_DownTrack)
   double off[] = {17, -19,  5,  -3,   78,  50};
 
   double ang = 180*I3Units::deg-theta_cherenkov;
-  vector<I3Position> pos;
+  std::vector<I3Position> pos;
   double A = 1./(c_ice*sin(theta_cherenkov));
-  vector<double> time;
+  std::vector<double> time;
   for (int i=0; i<size; i++) {
     I3Position p(r[i],ang,phi[i]*I3Units::deg,I3Position::sph); p.SetZ(p.GetZ()-z[i]);
     pos.push_back(p);
@@ -119,17 +119,17 @@ TEST(AllCuts_TiltedTrack)
   track.SetDir(180*I3Units::deg-ang,90*I3Units::deg);
   track.SetTime(15);
 
-  vector<I3Position> pos;
+  std::vector<I3Position> pos;
   I3Position p(10,10,20);  pos.push_back(p);
   p.SetPos(10,0,100);  pos.push_back(p);
   p.SetPos(10,50,0);  pos.push_back(p);
 
-  vector<double> time;
+  std::vector<double> time;
   double t = 20/c_ice + 15 + 17;  time.push_back(t);
   t = (10/sin(ang) + (100-10/tan(ang)))/c_ice + 15 - 9;  time.push_back(t);
   t = 40*(1/(c_ice*tan(ang)) - 1/(c*sin(ang))) + 15 + 3;  time.push_back(t);
 
-  string hitseries = "NdirTest";
+  std::string hitseries = "NdirTest";
   I3Geometry geometry = CalcGeom(pos);
   I3RecoHitSeriesMap hitsmap = CalcHits(time);
 
@@ -161,8 +161,8 @@ TEST(CylinderSize)
   // Circle, centered on zero
   double centerx = 0;
   double centery = 0;
-  vector<double> xcir;
-  vector<double> ycir;
+  std::vector<double> xcir;
+  std::vector<double> ycir;
   int npoints = 500;
   for (int i=0; i<npoints; i++) {
     double th = 360*I3Units::deg/(npoints+1)*i;
@@ -200,8 +200,8 @@ TEST(CylinderSize)
 TEST(Containment_Volume)
 {
   // Olga's simple cube and track
-  vector<double> x;
-  vector<double> y;
+  std::vector<double> x;
+  std::vector<double> y;
   x.push_back(1);
   x.push_back(1);
   x.push_back(-1);
@@ -276,8 +276,8 @@ TEST(LPIntersection)
 
 TEST(CMPolygon)
 {
-  vector<double> x;
-  vector<double> y;
+  std::vector<double> x;
+  std::vector<double> y;
   double xcm, ycm;
 
   // Simple case: rectangle
@@ -298,8 +298,8 @@ TEST(CMPolygon)
   double R = 200;
   double centerx = 36;
   double centery = 12;
-  vector<double> xcir;
-  vector<double> ycir;
+  std::vector<double> xcir;
+  std::vector<double> ycir;
   int npoints = 100;
   for (int i=0; i<npoints; i++) {
     double th = 360*I3Units::deg/npoints*i;
@@ -346,8 +346,8 @@ TEST(CMPolygon)
 TEST(IC40bug)
 {
 
-  vector<double> x;
-  vector<double> y;
+  std::vector<double> x;
+  std::vector<double> y;
   double xcm, ycm;
 
   // Sebastian's "simplified IC-40"
@@ -476,12 +476,12 @@ TEST(Containment_Square)
 {
 
   // Top square from Olga's test cube
-  vector<double> x;  
+  std::vector<double> x;  
   x.push_back(1);
   x.push_back(1);
   x.push_back(-1);
   x.push_back(-1);
-  vector<double> y;  
+  std::vector<double> y;  
   y.push_back(1);
   y.push_back(-1);
   y.push_back(-1);
@@ -513,12 +513,12 @@ TEST(Containment_Rectangle)
   //     x   x   x   x   x
   //   (0,0)             (4,2)
   // One-dimensional case
-  vector<double> x;  // = (0,4,4,0);
+  std::vector<double> x;  // = (0,4,4,0);
   x.push_back(0);
   x.push_back(4);
   x.push_back(4);
   x.push_back(0);
-  vector<double> y;  // = (0,0,2,2);
+  std::vector<double> y;  // = (0,0,2,2);
   y.push_back(0);
   y.push_back(0);
   y.push_back(2);
@@ -550,12 +550,12 @@ TEST(Containment_IceTopRhombus)
 {
 
   // This time, input the four "corners" of the rhombus of IceTop-16
-  vector<double> x;  // = (0,4,4,0);
+  std::vector<double> x;  // = (0,4,4,0);
   x.push_back(437.33);
   x.push_back(171.48);
   x.push_back(365.71);
   x.push_back(600.45);
-  vector<double> y;  // = (0,0,2,2);
+  std::vector<double> y;  // = (0,0,2,2);
   y.push_back(-209.85);
   y.push_back(119.39);
   y.push_back(428.2);
@@ -581,8 +581,8 @@ TEST(Containment_IceTopRhombus)
 TEST(Exactly_Vertical_Track)
 {
   // Olga's simple cube: -1 to 1 on all sides
-  vector<double> x;
-  vector<double> y;
+  std::vector<double> x;
+  std::vector<double> y;
   x.push_back(1);
   x.push_back(1);
   x.push_back(-1);

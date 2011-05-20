@@ -9,6 +9,8 @@
 
 #define Z_TOP 1950.
 
+using namespace std;
+
 I3ScaleCalculator::I3ScaleCalculator (I3GeometryConstPtr geo, 
                                       IceCubeConfig iceConf, 
                                       IceTopConfig topConf) :

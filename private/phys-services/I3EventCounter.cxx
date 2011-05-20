@@ -104,7 +104,7 @@ void I3EventCounter :: Configure()
 	  out = &std::cerr;
   }
   else {
-	  out = new ofstream(path_.c_str(), ios::out);
+	  out = new std::ofstream(path_.c_str(), std::ios::out);
   }
 }
 
@@ -199,7 +199,7 @@ void I3EventCounter :: Finish()
   else { // No summary service found
 	  log_warn("No I3SummaryService found.");
 	  // out put string to stream
-	  (*out) << buffer << endl;
+	  (*out) << buffer << std::endl;
   }
 
 

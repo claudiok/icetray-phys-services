@@ -1,3 +1,4 @@
+#include <string>
 #include "icetray/serialization.h"
 #include "dataclasses/Utility.h"
 #include "dataclasses/I3Units.h"
@@ -10,17 +11,17 @@
 #include "dataclasses/physics/I3Waveform.h"
 #include <boost/foreach.hpp>
 
-string ToString(shared_ptr<const I3FrameObject> obj)
+std::string ToString(shared_ptr<const I3FrameObject> obj)
 {
-  ostringstream outstring;
+  std::ostringstream outstring;
   boost::archive::xml_oarchive ar(outstring);
   ar << make_nvp(I3::name_of(typeid(*obj)).c_str(), obj);
   return outstring.str();
 }
 
-string ToString(I3FrameObject* obj)
+std::string ToString(I3FrameObject* obj)
 {
-  ostringstream outstring;
+  std::ostringstream outstring;
   boost::archive::xml_oarchive ar(outstring);
   shared_ptr<I3FrameObject> ptr = shared_ptr<I3FrameObject>(new I3FrameObject(*obj));
   ar << make_nvp(I3::name_of(typeid(*obj)).c_str(), ptr);
@@ -100,19 +101,19 @@ double GetCharge(const I3DOMLaunch& launch)
 double GetCharge(const I3Waveform& wf)
 {
   double charge = 0.;
-  vector<double>::const_iterator iter;
+  std::vector<double>::const_iterator iter;
   for (iter=wf.GetWaveform().begin(); iter!=wf.GetWaveform().end(); iter++) {
     charge += *iter;
   }
   return charge/I3Units::mV; 
 }
 
-double GetCharge(const vector<I3RecoHit>& hit_series)
+double GetCharge(const std::vector<I3RecoHit>& hit_series)
 {
   return hit_series.size();
 }
 
-double GetCharge(const vector<I3RecoPulse>& pulse_series)
+double GetCharge(const std::vector<I3RecoPulse>& pulse_series)
 {
   double charge(0);
   BOOST_FOREACH(I3RecoPulse pulse,pulse_series)

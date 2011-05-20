@@ -219,7 +219,7 @@ TEST(MinimumBall2point)
         OMKey omkey(stringnr,omnr);
         I3OMGeo omgeo;
         omgeo.position.SetPos(0.,0.,1.0*omnr);
-        geomap.insert(make_pair(OMKey(stringnr,omnr),omgeo));
+        geomap.insert(std::make_pair(OMKey(stringnr,omnr),omgeo));
     }
 
     // event data: two hits and some inbetween
@@ -274,7 +274,7 @@ TEST(MinimumBall3point)
                 OMKey omkey(stringnr,omnr);
                 I3OMGeo omgeo;
                 omgeo.position.SetPos(ix,iy,iz);
-                geomap.insert(make_pair(OMKey(stringnr,omnr),omgeo));
+                geomap.insert(std::make_pair(OMKey(stringnr,omnr),omgeo));
             }
         }
     }

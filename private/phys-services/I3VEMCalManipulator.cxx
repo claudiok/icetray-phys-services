@@ -218,7 +218,7 @@ void I3VEMCalManipulator::LoadFile(std::string filepath, bool forceIt)
 bool I3VEMCalManipulator::AddVEMCalibration(const std::string& filename)
 {
     // Open file	 
-    ifstream ifs(filename.c_str(), ifstream::in);
+    std::ifstream ifs(filename.c_str(), std::ifstream::in);
     if(!ifs.good())
     {
 	log_error("Could't open file \"%s\"!", filename.c_str());

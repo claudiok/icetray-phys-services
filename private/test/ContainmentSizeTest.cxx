@@ -17,8 +17,8 @@ std::vector<double > myYPos ();
 // a code copy for debugging
 // (is not in use for the test)
 double myScaleFunc (double px, double py,
-		    vector<double> x,
-		    vector<double> y);
+		    std::vector<double> x,
+		    std::vector<double> y);
 
 
 TEST(ContainmentAreaSize){
@@ -35,12 +35,12 @@ TEST(ContainmentAreaSize){
   std::cout << "x: " << std::endl; 
   for_each (x.begin (), x.end (),
 	    std::cout << _1 << ", " );
-  std::cout << endl;
+  std::cout << std::endl;
   
   std::cout << "y: " << std::endl; 
   for_each (y.begin (), y.end (),
 	    std::cout << _1 << ", " );
-  std::cout << endl;
+  std::cout << std::endl;
 
 
   // define the particle -------------------------
@@ -86,12 +86,12 @@ TEST(ContainmentVolumeSize){
   std::cout << "x: " << std::endl; 
   for_each (x.begin (), x.end (),
 	    std::cout << _1 << ", " );
-  std::cout << endl;
+  std::cout << std::endl;
   
   std::cout << "y: " << std::endl; 
   for_each (y.begin (), y.end (),
 	    std::cout << _1 << ", " );
-  std::cout << endl;
+  std::cout << std::endl;
 
 
   // define the particle -------------------------
@@ -161,8 +161,8 @@ std::vector<double > myYPos () {
 // the algorithm with some cout for debugging
 // this should be removed later
 double myScaleFunc (double px, double py,
-		    vector<double> x,
-		    vector<double> y)
+		    std::vector<double> x,
+		    std::vector<double> y)
 {
 
   using namespace I3Cuts;
@@ -170,7 +170,7 @@ double myScaleFunc (double px, double py,
   // Error-checking... need at least three strings to have an area
   if (x.size () < 3) {
     std::cout << "ContainmentArea of zero/1/2 strings: will be NAN"
-	      << endl;
+	      << std::endl;
     return NAN;
   }
 
@@ -200,7 +200,7 @@ double myScaleFunc (double px, double py,
   // Now, compute angles for each corner point,
   // and figure out which two bracket the point
   if (x.size() != y.size()) log_fatal("X and Y are not the same size");
-  vector<double> ang;
+  std::vector<double> ang;
   ang.resize(x.size());
 
   std::cout << "angle calc ------" << std::endl;

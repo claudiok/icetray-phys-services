@@ -33,7 +33,7 @@ TEST_GROUP(GeometrySelector);
 TEST(exists_function){
 
   int seed = time(0);
-  vector<int> vec;
+  std::vector<int> vec;
   {
     srand(seed);
     int n_to_find = rand();
@@ -60,17 +60,17 @@ TEST(exists_function){
 
 TEST(parse_string_list){
 
-  string string_list("1,2,3,4,9:11,-8");
-  vector<int> parsed_list = parse_string_list(string_list);
+  std::string string_list("1,2,3,4,9:11,-8");
+  std::vector<int> parsed_list = parse_string_list(string_list);
   ENSURE(parsed_list.size() == 8);
 
 }
 
 TEST(make_good_strings_simple){
 
-  vector<int> good_strings;
-  const string to_use("1,2,3,4");
-  const string to_exclude("");
+  std::vector<int> good_strings;
+  const std::string to_use("1,2,3,4");
+  const std::string to_exclude("");
 
   good_strings = make_good_strings(to_use,to_exclude);
   ENSURE(exists<int>(1,good_strings));
@@ -82,9 +82,9 @@ TEST(make_good_strings_simple){
 
 TEST(make_good_strings_more_complex){
 
-  vector<int> good_strings;
-  const string to_use("1,2,3,4,84,9:15");
-  const string to_exclude("");
+  std::vector<int> good_strings;
+  const std::string to_use("1,2,3,4,84,9:15");
+  const std::string to_exclude("");
 
   good_strings = make_good_strings(to_use,to_exclude);
   ENSURE(exists<int>(1,good_strings));
@@ -107,9 +107,9 @@ TEST(make_good_strings_more_complex){
 
 TEST(make_good_strings_with_excludes){
 
-  vector<int> good_strings;
-  const string to_use("1,2,3,4,84,9:15,-10");
-  const string to_exclude("3,11:13,99");
+  std::vector<int> good_strings;
+  const std::string to_use("1,2,3,4,84,9:15,-10");
+  const std::string to_exclude("3,11:13,99");
 
   good_strings = make_good_strings(to_use,to_exclude);
   ENSURE(exists<int>(1,good_strings));
@@ -135,12 +135,12 @@ TEST(make_good_strings_with_excludes){
 }
 
 TEST(good_input){
-  vector<int> good_strings;
-  const string to_use_good("1,2,3,4,84,9:15");
-  const string to_exclude_good("3,11:13,99");
+  std::vector<int> good_strings;
+  const std::string to_use_good("1,2,3,4,84,9:15");
+  const std::string to_exclude_good("3,11:13,99");
 
-  const string to_use_bad("1,2,3,4,#84,9:15");
-  const string to_exclude_bad("3,11:13,?99");
+  const std::string to_use_bad("1,2,3,4,#84,9:15");
+  const std::string to_exclude_bad("3,11:13,?99");
 
   ENSURE(good_input(to_use_good));
   ENSURE(good_input(to_exclude_good));
@@ -157,9 +157,9 @@ TEST(icetray_test){
   std::string strings_to_use("21,29,39,38,30,40,49");
   std::string stations_to_use("21,29,30,38,39,40,47,48,49,50,57,58,59,66,67,74");
 
-  string icecube_geo(getenv("I3_SRC"));
+  std::string icecube_geo(getenv("I3_SRC"));
   icecube_geo += "/phys-services/resources/icecube.geo";
-  string amanda_geo(getenv("I3_SRC"));
+  std::string amanda_geo(getenv("I3_SRC"));
   amanda_geo += "/phys-services/resources/amanda.geo";
 
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
@@ -193,9 +193,9 @@ TEST(icetray_test_shift){
   std::string strings_to_exclude("-1:20,22:28,31:37,41:48,50:80");
   std::string stations_to_exclude("-1:20,22:28,31:37,41:46,51:56,60:65,68:73,75:80");
 
-  string icecube_geo(getenv("I3_SRC"));
+  std::string icecube_geo(getenv("I3_SRC"));
   icecube_geo += "/phys-services/resources/icecube.geo";
-  string amanda_geo(getenv("I3_SRC"));
+  std::string amanda_geo(getenv("I3_SRC"));
   amanda_geo += "/phys-services/resources/amanda.geo";
 
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")
@@ -259,7 +259,7 @@ TEST(detector_shift){
   geo.omgeo[om3] = g3; 
   geo.omgeo[om4] = g4; 
 
-  vector<int> goodStrings;
+  std::vector<int> goodStrings;
   goodStrings.push_back(21);
   goodStrings.push_back(29);
 
@@ -281,9 +281,9 @@ TEST(icetray_test_center_shift){
   std::string strings_to_exclude("-1:20,22:28,31:37,41:48,50:80");
   std::string stations_to_exclude("-1:20,22:28,31:37,41:46,51:56,60:65,68:73,75:80");
 
-  string icecube_geo(getenv("I3_SRC"));
+  std::string icecube_geo(getenv("I3_SRC"));
   icecube_geo += "/phys-services/resources/icecube.geo";
-  string amanda_geo(getenv("I3_SRC"));
+  std::string amanda_geo(getenv("I3_SRC"));
   amanda_geo += "/phys-services/resources/amanda.geo";
 
   tray.AddService("I3TextFileGeometryServiceFactory","geoservice")

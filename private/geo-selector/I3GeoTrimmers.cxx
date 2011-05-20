@@ -11,6 +11,7 @@
 
 // for std::pair
 #include <utility>
+#include <vector>
 #include <map>
 
 #include "phys-services/geo-selector/I3GeoTrimmers.h"
@@ -108,7 +109,7 @@ I3OMGeoMapPtr I3GeoTrimmers::GetMinBallGeometry( const I3OMGeoMap &input_geo,
     double dy = pos.GetY() - center[1];
     double dz = pos.GetZ() - center[2];
     if ( dx*dx + dy*dy + dz*dz <= radius2 ){
-      ballmap->insert(make_pair(igeo->first,igeo->second));
+      ballmap->insert(std::make_pair(igeo->first,igeo->second));
     }
   }
   log_debug("ball geo has %zu entries", ballmap->size() );
@@ -232,13 +233,13 @@ I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, I3VectorOMKe
 }
 
 /// Create a reduced geometry in which Bad OM's have been removed.
-I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, vector<OMKey> badomlist) {
+I3OMGeoMapPtr I3GeoTrimmers::GeoWithoutBadOMs(I3OMGeoMap input_geo, std::vector<OMKey> badomlist) {
   
   // The output
   I3OMGeoMapPtr output_geoptr=I3OMGeoMapPtr(new I3OMGeoMap(input_geo));
   
   // Remove Bad OM's from the duplicate geometry which will be used.
-  vector<OMKey>::iterator ib;
+  std::vector<OMKey>::iterator ib;
   for(ib = badomlist.begin(); ib != badomlist.end(); ib++) {
     if (output_geoptr->find(*ib) != output_geoptr->end())
       output_geoptr->erase(*ib);
@@ -319,7 +320,7 @@ I3GeoTrimmers::GetMinBallGeometryFromData( const I3OMGeoMap &input_geo,
       log_warn( "OM %d/%d found in pulse series, but not in geometry!",
       ipulse->first.GetString(), ipulse->first.GetOM());
     } else {
-      geohit.insert( make_pair(igeo->first,igeo->second));
+      geohit.insert( std::make_pair(igeo->first,igeo->second));
     }
   }
 

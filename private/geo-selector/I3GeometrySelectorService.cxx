@@ -1,3 +1,4 @@
+#include <vector>
 #include "phys-services/geo-selector/I3GeometrySelectorService.h"
 #include "dataclasses/I3Units.h"
 #include "dataclasses/geometry/I3OMGeo.h"
@@ -63,7 +64,7 @@ I3GeometryConstPtr I3GeometrySelectorService::GetGeometry(I3Time time)
       log_trace ("Copying station %i, with %zu tanks",
 		 station, s.size ());
 	
-      vector<I3TankGeo>::iterator i = s.begin();
+      std::vector<I3TankGeo>::iterator i = s.begin();
       for(; i != s.end(); i++){
 	log_trace ("OLD STATION POSISTION x/y/z = %f/%f/%f",
 		   i->position.GetX (),
