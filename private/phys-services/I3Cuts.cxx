@@ -2,6 +2,11 @@
 #include "dataclasses/I3Constants.h"
 #include "phys-services/Utility.h"
 #include "phys-services/I3Calculator.h"
+#include "dataclasses/physics/I3Particle.h"
+#include "dataclasses/physics/I3RecoPulse.h"
+#include "dataclasses/physics/I3RecoHit.h"
+#include "dataclasses/geometry/I3Geometry.h"
+#include "dataclasses/I3Position.h"
 
 #include <vector>
 #include <cassert>

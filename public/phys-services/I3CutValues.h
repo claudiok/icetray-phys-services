@@ -8,14 +8,23 @@
 #ifndef I3CUTVALUES_H
 #define I3CUTVALUES_H
 
-#include "icetray/I3FrameObject.h"
-#include "dataclasses/Utility.h"
-#include "dataclasses/I3Units.h"
-#include "dataclasses/physics/I3Particle.h"
-#include "dataclasses/physics/I3RecoHit.h"
-#include "dataclasses/physics/I3RecoPulse.h"
-#include "dataclasses/geometry/I3Geometry.h"
-#include "phys-services/I3Cuts.h"
+#include <vector>
+#include <dataclasses/I3Constants.h> 
+ 
+class I3FrameObject;
+template <typename Key, typename Value> struct I3Map;
+class OMKey; 
+class I3Particle;
+class I3RecoPulse;
+class I3RecoHit;
+class I3Geometry;
+
+#ifdef I3_USE_CINT
+// cint needs this for dictionary generation
+#include "dataclasses/I3Position.h"
+#else
+class I3Position;
+#endif
 
 /**
  * @brief A class to store the basic hit information from the event
@@ -44,13 +53,13 @@ class I3CutValues : public I3FrameObject
 
   void Calculate(const I3Particle& track, 
 		 const I3Geometry& geometry, 
-		 const I3RecoHitSeriesMap& hitmap,
+		 const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap,
 		 const double& begTWindow = I3Constants::dt_window_l,
 		 const double& endTWindow = I3Constants::dt_window_h);
 
   void Calculate(const I3Particle& track, 
 		 const I3Geometry& geometry, 
-		 const I3RecoPulseSeriesMap& pulsemap,
+		 const I3Map< OMKey, std::vector< I3RecoPulse> >& pulsemap,
 		 const double& begTWindow = I3Constants::dt_window_l,
 		 const double& endTWindow = I3Constants::dt_window_h);
 
