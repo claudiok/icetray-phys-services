@@ -9,6 +9,7 @@
 #define I3CASCADECUTVALUES_H
 
 #include <dataclasses/I3Constants.h> 
+#include "dataclasses/I3Position.h"
 
 template <typename Key, typename Value> struct I3Map;
 class OMKey; 
@@ -17,12 +18,6 @@ class I3RecoPulse;
 class I3RecoHit;
 class I3Geometry;
 
-#ifdef I3_USE_CINT
-// cint needs this for dictionary generation
-#include "dataclasses/I3Position.h"
-#else
-class I3Position;
-#endif
 
 /**
  * @brief A class to store the basic hit information for cascades from the event
