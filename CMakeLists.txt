@@ -35,7 +35,6 @@ i3_add_library(phys-services
   private/converter/I3CutValuesConverter.cxx
   private/empty-streams/I3EmptyCalibrationService.cxx
   private/empty-streams/I3EmptyDetectorStatusService.cxx
-  private/empty-streams/I3EmptyEventService.cxx
   private/empty-streams/I3EmptyGeometryService.cxx
   private/empty-streams/I3EmptyStreamsFactory.cxx
   private/geo-selector/GeoSelUtils.cxx
@@ -78,10 +77,10 @@ i3_add_library(phys-services
 
   USE_TOOLS ${SPRNG_TOOL} gsl log4cplus boost root python
 
-  ROOTCINT public/phys-services/I3Calculator.h
-  public/phys-services/I3Cuts.h
-  public/phys-services/I3CutValues.h
-  public/phys-services/I3CascadeCutValues.h
+ ROOTCINT public/phys-services/I3Cuts.h
+ public/phys-services/I3Calculator.h
+ public/phys-services/I3CutValues.h
+ public/phys-services/I3CascadeCutValues.h
   )
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable

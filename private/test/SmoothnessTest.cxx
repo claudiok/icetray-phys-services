@@ -5,7 +5,7 @@
 #include "dataclasses/I3Position.h"
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/geometry/I3Geometry.h"
-//#include "dataclasses/geometry/I3OMGeo.h"
+#include "dataclasses/physics/I3RecoHit.h"
 
 using namespace I3Calculator;
 using namespace I3Cuts;

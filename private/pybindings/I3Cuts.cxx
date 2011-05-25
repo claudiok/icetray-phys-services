@@ -21,6 +21,12 @@ using namespace boost::python;
 namespace bp = boost::python;
 
 #include <phys-services/I3Cuts.h>
+#include "dataclasses/physics/I3Particle.h"
+//#include "dataclasses/physics/I3RecoPulse.h"
+//#include "dataclasses/physics/I3RecoHit.h"
+//#include "dataclasses/geometry/I3Geometry.h"
+//#include "dataclasses/I3Position.h"
+
 
 void register_I3Cuts()
 {

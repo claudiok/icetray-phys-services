@@ -1,6 +1,11 @@
 #include "icetray/serialization.h"
+#include "icetray/I3FrameObject.h"
 #include "phys-services/I3Cuts.h"
 #include "phys-services/I3CutValues.h"
+#include "dataclasses/physics/I3Particle.h"
+#include "dataclasses/physics/I3RecoHit.h"
+#include "dataclasses/physics/I3RecoPulse.h"
+#include "dataclasses/geometry/I3Geometry.h"
 
 void I3CutValues::Calculate(const I3Particle& track, 
 			    const I3Geometry& geometry, 
