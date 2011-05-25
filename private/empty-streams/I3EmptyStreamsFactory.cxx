@@ -1,6 +1,5 @@
 #include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
 
-#include "phys-services/empty-streams/I3EmptyEventService.h"
 #include "phys-services/empty-streams/I3EmptyGeometryService.h"
 #include "phys-services/empty-streams/I3EmptyDetectorStatusService.h"
 #include "phys-services/empty-streams/I3EmptyCalibrationService.h"
@@ -11,7 +10,6 @@ I3_SERVICE_FACTORY(I3EmptyStreamsFactory);
 I3EmptyStreamsFactory::I3EmptyStreamsFactory(const I3Context& context) : 
   I3ServiceFactory(context), 
   nframes_(10),
-  installEvents_(true),
   installCalibrations_(true),
   installStatus_(true),
   installGeometries_(true),
@@ -21,9 +19,6 @@ I3EmptyStreamsFactory::I3EmptyStreamsFactory(const I3Context& context) :
 {
   log_trace("constructing I3EmptyStreamsFactory");
   AddParameter("NFrames","Number of event frames to spit out",nframes_);
-  AddParameter("InstallEvent",
-	       "Whether or not to install the Event Service",
-	       installEvents_);
   AddParameter("InstallCalibration",
 	       "Whether or not to install the Calibration Service",
 	       installCalibrations_);
@@ -50,8 +45,6 @@ void I3EmptyStreamsFactory::Configure()
 
   GetParameter("NFrames",nframes_);
 
-  GetParameter("InstallEvent",
-	       installEvents_);
   GetParameter("InstallCalibration",
 	       installCalibrations_);
   GetParameter("InstallGeometry",
@@ -65,15 +58,6 @@ void I3EmptyStreamsFactory::Configure()
   GetParameter("EventRunNumber",
 	       eventRunNumber_);
 
-
-  if(installEvents_)
-    {
-      I3Time eventTime_(eventTimeYr_,eventTimeNs_);
-      events_ = 
-	shared_ptr<I3EventService>(new I3EmptyEventService(nframes_,
-							   eventTime_,
-							   eventRunNumber_));
-    }
   if(installCalibrations_)
     calibrations_ = 
       shared_ptr<I3CalibrationService>(new I3EmptyCalibrationService());
@@ -88,10 +72,6 @@ void I3EmptyStreamsFactory::Configure()
 bool I3EmptyStreamsFactory::InstallService(I3Context& services)
 {
   bool success = true;
-
-  if(installEvents_)
-    success *= 
-      services.Put<I3EventService>(events_);
 
   if(installCalibrations_)
     success *=

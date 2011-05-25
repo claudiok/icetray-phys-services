@@ -30,7 +30,7 @@ tray.AddModule("I3Reader","reader")(
     ("Filename", infile)
     )
 
-tray.AddService("I3EmptyStreamsFactory","empty",InstallEvent=False)
+tray.AddService("I3EmptyStreamsFactory","empty")
 
 tray.AddService("I3VEMCalManipulatorFactory","vemcal")(
     ("OutputCalibrationService","CalibrationWithVEMCal"),
