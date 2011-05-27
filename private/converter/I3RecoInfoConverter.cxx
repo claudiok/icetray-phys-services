@@ -176,7 +176,7 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
                 lateWindow.first,
                 lateWindow.second,
                 nChan, nHit, nString,
-                nEarly,             // <- calculate this
+                nLate,             // <- calculate this
                 lDir, sDir, sAll);
 
     }
