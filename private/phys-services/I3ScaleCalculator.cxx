@@ -337,7 +337,7 @@ double I3ScaleCalculator::ScaleInIce (I3Particle part) const {
   }
   else {
     log_error ("Unknown or empty IceCube Configuration.");
-    return numeric_limits<double >::signaling_NaN ();
+    return std::numeric_limits<double >::signaling_NaN ();
   }
 };  
 
@@ -351,7 +351,7 @@ double I3ScaleCalculator::ScaleIceTop (I3Particle part) const {
   }
   else {
     log_error ("Unknown or empty IceTop Configuration.");
-    return numeric_limits<double >::signaling_NaN ();
+    return std::numeric_limits<double >::signaling_NaN ();
   }
 }
 
@@ -391,7 +391,7 @@ double I3ScaleCalculator::ScaleInIceCascade (I3Particle part) const {
     / (zTop - zMiddle);
     
   // return the minimum of both
-  return max (zScale,  areaScale); 
+  return std::max (zScale,  areaScale); 
 }
 
 bool I3ScaleCalculator::VertexIsInside (const I3Particle &part) const {

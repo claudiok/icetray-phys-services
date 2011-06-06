@@ -80,10 +80,10 @@ void I3CutsModule::Physics(I3FramePtr frame)
   //if the user has specified the I3Particles to process, process them...
   if(particleName_!=""){
     //---Get all particle names......
-    set<string> particleNames = I3Functions::ParseString(particleName_);
+    std::set<std::string> particleNames = I3Functions::ParseString(particleName_);
     //iterate over the set of strings to see if the frame has an object by that name...
-    for (set<string>::const_iterator sit = particleNames.begin(); sit!=particleNames.end(); ++sit) {
-      string name = *sit;
+    for (std::set<std::string>::const_iterator sit = particleNames.begin(); sit!=particleNames.end(); ++sit) {
+      std::string name = *sit;
       if(frame->Has(name)){
 	
 	I3ParticleConstPtr particle = frame->Get<I3ParticleConstPtr>(name);
@@ -136,8 +136,8 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	 iter != frame->typename_end();
 	 iter++) {
 
-      string name = iter->first;
-      string type = iter->second;
+      std::string name = iter->first;
+      std::string type = iter->second;
       
       if(type=="I3Particle"){
       
