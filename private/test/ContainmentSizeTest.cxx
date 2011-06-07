@@ -224,7 +224,7 @@ double myScaleFunc (double px, double py,
 	      << " , angdiff = " << angdiff << std::endl;
 
     const double SMALLNUMBER = 1.0e-15;
-    if (abs(angdiff)<SMALLNUMBER) { // we found an exact match!
+    if (std::abs(angdiff)<SMALLNUMBER) { // we found an exact match!
       less = 0; n_less = i;
       more = 0; n_more = i;
       std::cout << "Match!" << std::endl;
