@@ -343,15 +343,15 @@ TEST(JAMS_time_residual)
   double DT = -35.4181;
   double PERC = 0.001;
 
-  ENSURE_DISTANCE(rho,  RHO, abs(RHO*PERC));
-  ENSURE_DISTANCE(rho_, RHO, abs(RHO*PERC));
-  ENSURE_DISTANCE(rho1, RHO, abs(RHO*PERC));
-  ENSURE_DISTANCE(rho2, RHO, abs(RHO*PERC));
+  ENSURE_DISTANCE(rho,  RHO, std::abs(RHO*PERC));
+  ENSURE_DISTANCE(rho_, RHO, std::abs(RHO*PERC));
+  ENSURE_DISTANCE(rho1, RHO, std::abs(RHO*PERC));
+  ENSURE_DISTANCE(rho2, RHO, std::abs(RHO*PERC));
 
-  ENSURE_DISTANCE(dt,  DT, abs(DT*PERC));
-  ENSURE_DISTANCE(dt_, DT, abs(DT*PERC));
-  ENSURE_DISTANCE(dt1, DT, abs(DT*PERC));
-  ENSURE_DISTANCE(dt2, DT, abs(DT*PERC));
+  ENSURE_DISTANCE(dt,  DT, std::abs(DT*PERC));
+  ENSURE_DISTANCE(dt_, DT, std::abs(DT*PERC));
+  ENSURE_DISTANCE(dt1, DT, std::abs(DT*PERC));
+  ENSURE_DISTANCE(dt2, DT, std::abs(DT*PERC));
 }
 
 
@@ -422,15 +422,15 @@ TEST(JAMS_time_residual_many)
 
       //--Compare the different ways of calculation
       double PREC = 0.0001;
-      ENSURE_DISTANCE(rho,  rho, abs(rho*PREC));
-      ENSURE_DISTANCE(rho_, rho, abs(rho*PREC));
-      ENSURE_DISTANCE(rho1, rho, abs(rho*PREC));
-      ENSURE_DISTANCE(rho2, rho, abs(rho*PREC));
+      ENSURE_DISTANCE(rho,  rho, std::abs(rho*PREC));
+      ENSURE_DISTANCE(rho_, rho, std::abs(rho*PREC));
+      ENSURE_DISTANCE(rho1, rho, std::abs(rho*PREC));
+      ENSURE_DISTANCE(rho2, rho, std::abs(rho*PREC));
       
-      ENSURE_DISTANCE(dt,  dt, abs(dt*PREC));
-      ENSURE_DISTANCE(dt_, dt, abs(dt*PREC));
-      ENSURE_DISTANCE(dt1, dt, abs(dt*PREC));
-      ENSURE_DISTANCE(dt2, dt, abs(dt*PREC));
+      ENSURE_DISTANCE(dt,  dt, std::abs(dt*PREC));
+      ENSURE_DISTANCE(dt_, dt, std::abs(dt*PREC));
+      ENSURE_DISTANCE(dt1, dt, std::abs(dt*PREC));
+      ENSURE_DISTANCE(dt2, dt, std::abs(dt*PREC));
 	}
       }
     }
