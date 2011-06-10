@@ -68,6 +68,8 @@ i3_add_library(phys-services
   private/phys-services/TWRTWRKey2ChannelID.cxx
   private/phys-services/Utility.cxx
   private/phys-source/I3MetaSynth.cxx
+  private/phys-source/I3GCDFileService.cxx
+  private/phys-source/I3GCDFileServiceFactory.cxx
   private/phys-source/I3TextFileGeometryService.cxx
   private/phys-source/I3TextFileGeometryServiceFactory.cxx
   ${ROOT_SOURCES}
