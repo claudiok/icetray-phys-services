@@ -31,17 +31,17 @@ get_status(I3GCDFileDetectorStatusService &service, I3Time &time)
 void
 register_I3GCDFileService()
 {
-  bp::class_<I3GCDFileGeometryService, boost::shared_ptr<I3GCDFileGeometryService>, boost::noncopyable>
+  bp::class_<I3GCDFileGeometryService, bp::bases<I3GeometryService>, boost::shared_ptr<I3GCDFileGeometryService>, boost::noncopyable>
     ("I3GCDFileGeometryService", bp::init<std::string>())
     .def("GetGeometry", &get_geometry, bp::arg("time"))
     ;
 
-  bp::class_<I3GCDFileCalibrationService, boost::shared_ptr<I3GCDFileCalibrationService>, boost::noncopyable>
+  bp::class_<I3GCDFileCalibrationService, bp::bases<I3CalibrationService>, boost::shared_ptr<I3GCDFileCalibrationService>, boost::noncopyable>
     ("I3GCDFileCalibrationService", bp::init<std::string>())
     .def("GetCalibration", &get_calibration, bp::arg("time"))
     ;
 
-  bp::class_<I3GCDFileDetectorStatusService, boost::shared_ptr<I3GCDFileDetectorStatusService>, boost::noncopyable>
+  bp::class_<I3GCDFileDetectorStatusService, bp::bases<I3DetectorStatusService>, boost::shared_ptr<I3GCDFileDetectorStatusService>, boost::noncopyable>
     ("I3GCDFileDetectorStatusService", bp::init<std::string>())
     .def("GetDetectorStatus", &get_status, bp::arg("time"))
     ;
