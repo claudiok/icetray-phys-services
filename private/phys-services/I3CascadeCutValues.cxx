@@ -1,23 +1,11 @@
 #include "icetray/serialization.h"
 #include "icetray/I3FrameObject.h"
 #include "dataclasses/physics/I3Particle.h"
-#include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
 
 #include "phys-services/I3CascadeCutValues.h"
 #include "phys-services/I3Cuts.h"
-
-void I3CascadeCutValues::Calculate(const I3Particle& vertex, 
-			    const I3Geometry& geometry, 
-			    const I3RecoHitSeriesMap& hitmap,
-			    const double& begTWindow,
-			    const double& endTWindow)
-{
-  I3Cuts::CascadeCutsCalc(vertex, geometry, hitmap, begTWindow, endTWindow,
-		   Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
-  cog = I3Cuts::COG(geometry, hitmap);
-}
 
 void I3CascadeCutValues::Calculate(const I3Particle& vertex, 
 			    const I3Geometry& geometry, 

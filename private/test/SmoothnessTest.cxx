@@ -5,7 +5,7 @@
 #include "dataclasses/I3Position.h"
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/geometry/I3Geometry.h"
-#include "dataclasses/physics/I3RecoHit.h"
+#include "dataclasses/physics/I3RecoPulse.h"
 
 using namespace I3Calculator;
 using namespace I3Cuts;
@@ -15,7 +15,7 @@ TEST_GROUP(SmoothnessTest);
 namespace SmoothnessDirTest{
   void AddHitAtDepth(double depth,
 		     I3Geometry& geometry,
-		     I3RecoHitSeriesMap& hitsmap,
+		     I3RecoPulseSeriesMap& hitsmap,
 		     unsigned position)
   {
     OMKey pos(1,position);
@@ -23,9 +23,10 @@ namespace SmoothnessDirTest{
     geo.position.SetPos(0,0,depth);
     geometry.omgeo[pos] = geo;
 
-    I3RecoHitSeries hits;
-    I3RecoHit h;
+    I3RecoPulseSeries hits;
+    I3RecoPulse h;
     //h.SetTime(time[i]);
+    h.SetCharge(1.0);
     hits.push_back(h);
     hitsmap[pos] = hits;
   } 
@@ -38,7 +39,7 @@ TEST(verysmooth)
   bt.SetDir(0,0);
 
   I3Geometry geometry;
-  I3RecoHitSeriesMap hitsmap;
+  I3RecoPulseSeriesMap hitsmap;
 
   SmoothnessDirTest::AddHitAtDepth(0,geometry,hitsmap,1);
   SmoothnessDirTest::AddHitAtDepth(10,geometry,hitsmap,2);
@@ -69,7 +70,7 @@ TEST(lesssmooth_positive)
   bt.SetDir(0,0);
 
   I3Geometry geometry;
-  I3RecoHitSeriesMap hitsmap;
+  I3RecoPulseSeriesMap hitsmap;
 
   SmoothnessDirTest::AddHitAtDepth(0,geometry,hitsmap,1);
   SmoothnessDirTest::AddHitAtDepth(10,geometry,hitsmap,2);
@@ -99,7 +100,7 @@ TEST(lesssmooth_negative)
   bt.SetDir(0,0);
 
   I3Geometry geometry;
-  I3RecoHitSeriesMap hitsmap;
+  I3RecoPulseSeriesMap hitsmap;
 
   SmoothnessDirTest::AddHitAtDepth(0,geometry,hitsmap,1);
   SmoothnessDirTest::AddHitAtDepth(10,geometry,hitsmap,2);
@@ -129,7 +130,7 @@ TEST(orderUnimportant)
   bt.SetDir(0,0);
 
   I3Geometry geometry;
-  I3RecoHitSeriesMap hitsmap;
+  I3RecoPulseSeriesMap hitsmap;
 
   SmoothnessDirTest::AddHitAtDepth(0,geometry,hitsmap,1);
   SmoothnessDirTest::AddHitAtDepth(10,geometry,hitsmap,6);
@@ -157,7 +158,7 @@ TEST(nohits)
   bt.SetDir(0,0);
 
   I3Geometry geometry;
-  I3RecoHitSeriesMap hitsmap;
+  I3RecoPulseSeriesMap hitsmap;
 
   ENSURE(isnan(SmoothAll(bt,geometry,hitsmap,-10,10)),
 	 "should get NAN if there are no hits");
@@ -173,7 +174,7 @@ TEST(onehits)
   bt.SetDir(0,0);
 
   I3Geometry geometry;
-  I3RecoHitSeriesMap hitsmap;
+  I3RecoPulseSeriesMap hitsmap;
 
   SmoothnessDirTest::AddHitAtDepth(0,geometry,hitsmap,1);
 
@@ -191,7 +192,7 @@ TEST(twohits)
   bt.SetDir(0,0);
 
   I3Geometry geometry;
-  I3RecoHitSeriesMap hitsmap;
+  I3RecoPulseSeriesMap hitsmap;
 
   SmoothnessDirTest::AddHitAtDepth(0,geometry,hitsmap,1);
   SmoothnessDirTest::AddHitAtDepth(10,geometry,hitsmap,2);

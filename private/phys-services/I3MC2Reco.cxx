@@ -10,6 +10,8 @@
     @todo
 
 */
+
+#include "icetray/I3Units.h"
 #include "phys-services/I3MC2Reco.h"
 
 using namespace std;
@@ -17,20 +19,21 @@ using namespace std;
 
 //--------------------------------------------------------------
 void I3MC2Reco::mc2reco(const I3MCHit& src, //input
-			I3RecoHit& dst)         //output
+			I3RecoPulse& dst)         //output
 {
   dst.SetTime( src.GetTime() );
-  dst.SetID( src.GetHitID() );
+  dst.SetCharge( src.GetWeight() );
+  dst.SetWidth( 3.3 * I3Units::ns /* ATWD bin width */ );
 
   return;
 }
 
 void I3MC2Reco::mc2reco(const I3MCHitSeries& src,
-			I3RecoHitSeries& dst)
+			I3RecoPulseSeries& dst)
 {
   dst.resize( src.size() );
   I3MCHitSeries::const_iterator MCiter = src.begin();
-  I3RecoHitSeries::iterator recoiter = dst.begin();
+  I3RecoPulseSeries::iterator recoiter = dst.begin();
   while(MCiter != src.end()) mc2reco(*MCiter++, *recoiter++);
 
 }

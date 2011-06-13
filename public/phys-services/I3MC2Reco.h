@@ -11,7 +11,7 @@
 #ifndef I3MCTORECO_H
 #define I3MCTORECO_H
 
-#include "dataclasses/physics/I3RecoHit.h"
+#include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/physics/I3MCHit.h"
 
 /**
@@ -23,13 +23,13 @@ namespace I3MC2Reco
 {
   /**
    * Copies the data members from the I3MCHit into the destination
-   * I3RecoHit.  Only the data memebers that are shared between the two
+   * I3RecoPulse.  Only the data memebers that are shared between the two
    * classes are copied.
    *
    */
-  void mc2reco(const I3MCHit& src, I3RecoHit& dst);
+  void mc2reco(const I3MCHit& src, I3RecoPulse& dst);
 
-  void mc2reco(const I3MCHitSeries& src, I3RecoHitSeries& dst);
+  void mc2reco(const I3MCHitSeries& src, I3RecoPulseSeries& dst);
 
 }
 

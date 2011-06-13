@@ -4,7 +4,6 @@
 #include "phys-services/I3Calculator.h"
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/physics/I3RecoPulse.h"
-#include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "dataclasses/I3Position.h"
 
@@ -266,7 +265,7 @@ I3Position COGImpl(const I3Geometry& geometry,
 
     if(pulsevect.empty()) {
       iter++;
-      log_debug("empty RecoHitSeries or RecoPulseSeries!");
+      log_debug("empty RecoPulseSeries!");
       continue;
     }
     
@@ -308,30 +307,10 @@ I3Position COGImpl(const I3Geometry& geometry,
 
 //--------------------------------------------------------------
 I3Position I3Cuts::COG(const I3Geometry& geometry,
-		       const I3RecoHitSeriesMap& hitmap)
-{
-  I3Position cog(COGImpl<I3RecoHit>(geometry, hitmap));
-  return cog;
-}
-
-
-//--------------------------------------------------------------
-I3Position I3Cuts::COG(const I3Geometry& geometry,
 		       const I3RecoPulseSeriesMap& pulsemap)
 {
   I3Position cog(COGImpl<I3RecoPulse>(geometry, pulsemap));
   return cog;
-}
-
-
-//--------------------------------------------------------------
-void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry, 
-		      const I3RecoHitSeriesMap& hitmap,
-		      const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
-		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
-{
-  CutsCalcImpl<I3RecoHit>
-    (track, geometry, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
 }
 
 
@@ -347,17 +326,6 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
 
 //--------------------------------------------------------------
 void I3Cuts::CascadeCutsCalc(const I3Particle& vertex, const I3Geometry& geometry, 
-		      const I3RecoHitSeriesMap& hitmap,
-		      const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
-		      int& Ndir, int& Nearly, int& Nlate)
-{
-  CascadeCutsCalcImpl<I3RecoHit>
-    (vertex, geometry, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
-}
-
-
-//--------------------------------------------------------------
-void I3Cuts::CascadeCutsCalc(const I3Particle& vertex, const I3Geometry& geometry, 
 		      const I3RecoPulseSeriesMap& pulsemap,
 		      const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
 		      int& Ndir, int& Nearly, int& Nlate)
@@ -369,12 +337,12 @@ void I3Cuts::CascadeCutsCalc(const I3Particle& vertex, const I3Geometry& geometr
 
 //--------------------------------------------------------------
 int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom, 
-		  const I3RecoHitSeriesMap& hitmap,
+		  const I3RecoPulseSeriesMap& hitmap,
 		  double t1, double t2)
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoPulse>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nchan;
 }
@@ -383,80 +351,80 @@ int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom,
 
 //--------------------------------------------------------------
 int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom, 
-		 const I3RecoHitSeriesMap& hitmap,
+		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoPulse>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nhit;
 }
 
 //--------------------------------------------------------------
 int I3Cuts::N_1hit(const I3Particle& vertex, const I3Geometry& geom, 
-		 const I3RecoHitSeriesMap& hitmap,
+		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
   int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
-  CascadeCutsCalcImpl<I3RecoHit>
+  CascadeCutsCalcImpl<I3RecoPulse>
     (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
   return N_1hit;
 }
 
 //--------------------------------------------------------------
 int I3Cuts::Nstring(const I3Particle& track, const I3Geometry& geom, 
-		 const I3RecoHitSeriesMap& hitmap,
+		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoPulse>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nstring;
 }
 
 //--------------------------------------------------------------
 int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom, 
-		 const I3RecoHitSeriesMap& hitmap,
+		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoPulse>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Ndir;
 }
 
 //--------------------------------------------------------------
 int I3Cuts::CascadeNdir(const I3Particle& vertex, const I3Geometry& geom, 
-		 const I3RecoHitSeriesMap& hitmap,
+		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
   int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
-  CascadeCutsCalcImpl<I3RecoHit>
+  CascadeCutsCalcImpl<I3RecoPulse>
     (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
   return Ndir;
 }
 
 //--------------------------------------------------------------
 int I3Cuts::Nearly(const I3Particle& vertex, const I3Geometry& geom, 
-		 const I3RecoHitSeriesMap& hitmap,
+		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
   int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
-  CascadeCutsCalcImpl<I3RecoHit>
+  CascadeCutsCalcImpl<I3RecoPulse>
     (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
   return Nearly;
 }
 
 //--------------------------------------------------------------
 int I3Cuts::Nlate(const I3Particle& vertex, const I3Geometry& geom, 
-		 const I3RecoHitSeriesMap& hitmap,
+		 const I3RecoPulseSeriesMap& hitmap,
 		 double t1, double t2)
 {
   int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
-  CascadeCutsCalcImpl<I3RecoHit>
+  CascadeCutsCalcImpl<I3RecoPulse>
     (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
   return Nlate;
 }
@@ -464,12 +432,12 @@ int I3Cuts::Nlate(const I3Particle& vertex, const I3Geometry& geom,
 
 //--------------------------------------------------------------
 double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom, 
-		    const I3RecoHitSeriesMap& hitmap,
+		    const I3RecoPulseSeriesMap& hitmap,
 		    double t1, double t2)
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoPulse>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Ldir;
 }
@@ -477,12 +445,12 @@ double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom,
 
 //--------------------------------------------------------------
 double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom, 
-			 const I3RecoHitSeriesMap& hitmap,
+			 const I3RecoPulseSeriesMap& hitmap,
 			 double t1, double t2)
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoPulse>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Sall;
 }
@@ -490,12 +458,12 @@ double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom,
 
 //--------------------------------------------------------------
 double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom, 
-			 const I3RecoHitSeriesMap& hitmap,
+			 const I3RecoPulseSeriesMap& hitmap,
 			 double t1, double t2)
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoHit>
+  CutsCalcImpl<I3RecoPulse>
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Sdir;
 }

@@ -8,7 +8,6 @@ template <typename Key, typename Value> struct I3Map;
 class OMKey; 
 class I3Particle;
 class I3RecoPulse;
-class I3RecoHit;
 class I3Geometry;
 
 #ifdef I3_USE_CINT
@@ -49,7 +48,7 @@ namespace I3Cuts
    * INPUT:
    * @param track --  Track used in calculation.
    * @param geometry -- Geometry object from the event.
-   * @param hitmap -- Map of I3RecoHitSeries used in calculation. 
+   * @param hitmap -- Map of I3RecoPulseSeries used in calculation. 
    * @param t1 -- Lower edge of the time residual window for direct hits.
    *              Generally, this value is -15ns.
    * @param t2 -- Upper edge of the time residual window for direct hits.
@@ -74,23 +73,7 @@ namespace I3Cuts
    * 
    * @todo Think about making the code more efficient...
    */
-  void CutsCalc(const I3Particle& track, 
-		const I3Geometry& geometry, 
-		const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap,
-		const double t1, 
-		const double t2, 
-		int& Nchan, 
- 		int& Nhit,
-		int& Nstring,
-		int& Ndir, 
-		double& Ldir,
-		double& Sdir,
-		double& Sall);
 
-  /**
-   * INPUT:
-   * @parameter pulsemap -- Map of I3RecoPulseSeries to be used.
-   */
   void CutsCalc(const I3Particle& track, 
 		const I3Geometry& geometry, 
 		const I3Map< OMKey, std::vector< I3RecoPulse > >& pulsemap,
@@ -112,7 +95,7 @@ namespace I3Cuts
    * INPUT:
    * @param vertex --  Vertex used in calculation.
    * @param geometry -- Geometry object from the event.
-   * @param hitmap -- Map of I3RecoHitSeries used in calculation. 
+   * @param hitmap -- Map of I3RecoPulseSeries used in calculation. 
    * @param t1 -- Lower edge of the time residual window for direct hits.
    *              Generally, this value is -15ns.
    * @param t2 -- Upper edge of the time residual window for direct hits.
@@ -130,23 +113,7 @@ namespace I3Cuts
    * 
    * @todo Think about making the code more efficient...
    */
-  void CascadeCutsCalc(const I3Particle& vertex, 
-		       const I3Geometry& geometry, 
-		       const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap,
-		       const double t1, 
-		       const double t2, 
-		       int& Nchan, 
-		       int& Nhit,
-		       int& N_1hit,
-		       int& Nstring,
-		       int& Ndir, 
-		       int& Nearly,
-		       int& Nlate);
 
-  /**
-   * INPUT:
-   * @parameter pulsemap -- Map of I3RecoPulseSeries to be used.
-   */
   void CascadeCutsCalc(const I3Particle& vertex, 
 		       const I3Geometry& geometry, 
 		       const I3Map< OMKey, std::vector< I3RecoPulse > >& pulsemap,
@@ -170,12 +137,6 @@ namespace I3Cuts
 		 const I3Map< OMKey, std::vector< I3RecoPulse > >& pulsemap);
 
   /**
-   * Use I3RecoHitSeries instead of I3RecoPulseSeries.
-   */
-  I3Position COG(const I3Geometry& geometry,
-		 const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap);
-
-  /**
    * A convenience function that calls CutsCalc() and returns the total 
    * number of channels (hit OMs) in the event.  If you are interested in
    * more than one quantity from CutsCalc(), use the CutsCalc() function 
@@ -183,7 +144,7 @@ namespace I3Cuts
    */
   int Nchan(const I3Particle& track, 
 	   const I3Geometry& geom, 
-	   const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+	   const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 	   double t1 = I3Constants::dt_window_l, 
 	   double t2 = I3Constants::dt_window_h);
 
@@ -195,7 +156,7 @@ namespace I3Cuts
    */
   int Nhit(const I3Particle& track, 
 	   const I3Geometry& geom, 
-	   const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+	   const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 	   double t1 = I3Constants::dt_window_l, 
 	   double t2 = I3Constants::dt_window_h);
 
@@ -207,7 +168,7 @@ namespace I3Cuts
    */
   int N_1hit(const I3Particle& vertex, 
 	     const I3Geometry& geom, 
-	     const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+	     const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 	     double t1 = I3Constants::dt_window_l, 
 	     double t2 = I3Constants::dt_window_h);
 
@@ -219,7 +180,7 @@ namespace I3Cuts
    */
   int Nstring(const I3Particle& track, 
 	   const I3Geometry& geom, 
-	   const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+	   const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 	   double t1 = I3Constants::dt_window_l, 
 	   double t2 = I3Constants::dt_window_h);
 
@@ -231,7 +192,7 @@ namespace I3Cuts
    */
   int Ndir(const I3Particle& track, 
 	   const I3Geometry& geom, 
-	   const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+	   const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 	   double t1 = I3Constants::dt_window_l, 
 	   double t2 = I3Constants::dt_window_h);
 
@@ -243,7 +204,7 @@ namespace I3Cuts
    */
   int CascadeNdir(const I3Particle& vertex, 
 		  const I3Geometry& geom, 
-		  const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+		  const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 		  double t1 = I3Constants::dt_window_l, 
 		  double t2 = I3Constants::dt_window_h);
 
@@ -255,7 +216,7 @@ namespace I3Cuts
    */
   int Nearly(const I3Particle& vertex, 
 	     const I3Geometry& geom, 
-	     const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+	     const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 	     double t1 = I3Constants::dt_window_l, 
 	     double t2 = I3Constants::dt_window_h);
 
@@ -267,7 +228,7 @@ namespace I3Cuts
    */
   int Nlate(const I3Particle& vertex, 
 	    const I3Geometry& geom, 
-	    const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+	    const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 	    double t1 = I3Constants::dt_window_l, 
 	    double t2 = I3Constants::dt_window_h);
 
@@ -279,7 +240,7 @@ namespace I3Cuts
    */
   double Ldir(const I3Particle& track, 
 	      const I3Geometry& geom, 
-	      const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+	      const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 	      double t1 = I3Constants::dt_window_l, 
 	      double t2 = I3Constants::dt_window_h);
 
@@ -291,7 +252,7 @@ namespace I3Cuts
    */
   double SmoothDir(const I3Particle& track, 
 		   const I3Geometry& geom, 
-		   const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+		   const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 		   double t1 = I3Constants::dt_window_l, 
 		   double t2 = I3Constants::dt_window_h);
 
@@ -303,7 +264,7 @@ namespace I3Cuts
    */
   double SmoothAll(const I3Particle& track, 
 		   const I3Geometry& geom, 
-		   const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap, 
+		   const I3Map< OMKey, std::vector<I3RecoPulse> >& hitmap, 
 		   double t1 = I3Constants::dt_window_l, 
 		   double t2 = I3Constants::dt_window_h);
 

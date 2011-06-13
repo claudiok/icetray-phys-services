@@ -4,7 +4,6 @@
  */
 
 #include "icetray/I3TrayHeaders.h"
-#include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "phys-services/Utility.h"
@@ -70,12 +69,10 @@ void I3CutsModule::Physics(I3FramePtr frame)
   const I3Geometry& geometry = frame->Get<I3Geometry>();
 
   //---Get hit map......
-  I3RecoHitSeriesMapConstPtr hitmap = 
-    frame->Get<I3RecoHitSeriesMapConstPtr>(hitsName_);
   I3RecoPulseSeriesMapConstPtr pulsemap = 
     frame->Get<I3RecoPulseSeriesMapConstPtr>(pulsesName_);
 
-  if (!hitmap && !pulsemap) log_fatal("The chosen reaodut is not present.");
+  if (!pulsemap) log_fatal("The chosen reaodut is not present.");
 
   //if the user has specified the I3Particles to process, process them...
   if(particleName_!=""){
@@ -97,9 +94,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	  log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", name.c_str());
 	  I3CutValuesPtr cuts(new I3CutValues());
 	  
-	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
-	  else if (pulsemap)
+	  if (pulsemap)
 	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
 	  
 	  frame->Put(name+"Cuts"+nameTag_, cuts);
@@ -110,9 +105,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	  log_debug(" ---> I3Particle '%s' is a cascade, so proceeding accordingly...", name.c_str());
 	  I3CascadeCutValuesPtr cuts(new I3CascadeCutValues());
 	  
-	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
-	  else if (pulsemap)
+	  if (pulsemap)
 	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
 	  
 	  frame->Put(name+"Cuts"+nameTag_, cuts);
@@ -149,9 +142,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	  log_debug(" ---> I3Particle '%s' is a track, so proceeding accordingly...", name.c_str());
 	  I3CutValuesPtr cuts(new I3CutValues());
 	  
-	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
-	  else if (pulsemap)
+	  if (pulsemap)
 	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
 	  
 	  frame->Put(name+"Cuts"+nameTag_, cuts);
@@ -162,9 +153,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
 	  log_debug(" ---> I3Particle '%s' is a cascade, so proceeding accordingly...", name.c_str());
 	  I3CascadeCutValuesPtr cuts(new I3CascadeCutValues());
 	  
-	  if (hitmap)
-	    cuts->Calculate(*particle,geometry,*hitmap,timeRange_[0],timeRange_[1]);
-	  else if (pulsemap)
+	  if (pulsemap)
 	    cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
 	  
 	  frame->Put(name+"Cuts"+nameTag_, cuts);

@@ -3,20 +3,8 @@
 #include "phys-services/I3Cuts.h"
 #include "phys-services/I3CutValues.h"
 #include "dataclasses/physics/I3Particle.h"
-#include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
-
-void I3CutValues::Calculate(const I3Particle& track, 
-			    const I3Geometry& geometry, 
-			    const I3RecoHitSeriesMap& hitmap,
-			    const double& begTWindow,
-			    const double& endTWindow)
-{
-  I3Cuts::CutsCalc(track, geometry, hitmap, begTWindow, endTWindow,
-		   Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
-  cog = I3Cuts::COG(geometry, hitmap);
-}
 
 void I3CutValues::Calculate(const I3Particle& track, 
 			    const I3Geometry& geometry, 

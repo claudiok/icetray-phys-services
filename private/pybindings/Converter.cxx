@@ -19,8 +19,6 @@ void register_Converter() {
 
     //typedef I3EventInfoConverter<I3RecoPulse> I3EventInfoConverterFromRecoPulses;
     I3CONVERTER_EXPORT(I3EventInfoConverterFromRecoPulses,"Dumps event information calculated from I3RecoPulses");
-    typedef I3EventInfoConverter<I3RecoHit> I3EventInfoConverterFromRecoHit;
-    I3CONVERTER_EXPORT(I3EventInfoConverterFromRecoHit,"Dumps event information calculated from I3RecoHit");
     typedef I3EventInfoConverter<I3MCHit> I3EventInfoConverterFromMCHit;
     I3CONVERTER_EXPORT(I3EventInfoConverterFromMCHit,"Dumps event information calculated from I3MCHit");
     typedef I3EventInfoConverter<I3DOMLaunch> I3EventInfoConverterFromDOMLaunch;

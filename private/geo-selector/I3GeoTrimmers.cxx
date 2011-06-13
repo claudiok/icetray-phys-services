@@ -158,10 +158,6 @@ I3OMGeoMapPtr I3GeoTrimmers::GeoFromPulseSeries(const I3OMGeoMap &input_geo,
                                  const I3RecoPulseSeriesMap &psm) {
     return I3GeoTrimmers::GeoFromEventData(input_geo,psm);
 }
-I3OMGeoMapPtr I3GeoTrimmers::GeoFromHitSeries(const I3OMGeoMap &input_geo,
-                                 const I3RecoHitSeriesMap &psm) {
-    return I3GeoTrimmers::GeoFromEventData(input_geo,psm);
-}
 I3OMGeoMapPtr I3GeoTrimmers::GeoFromDOMLaunchSeries(const I3OMGeoMap &input_geo,
                                      const I3DOMLaunchSeriesMap &dlsm) {
     return I3GeoTrimmers::GeoFromEventData(input_geo,dlsm);
@@ -332,10 +328,6 @@ I3GeoTrimmers::GetMinBallGeometryFromData( const I3OMGeoMap &input_geo,
 template I3OMGeoMapPtr I3GeoTrimmers::GetMinBallGeometryFromData<I3RecoPulseSeriesMap>(
         const I3OMGeoMap &input_geo,
         const I3RecoPulseSeriesMap &pulsemap,
-        double margin );
-template I3OMGeoMapPtr I3GeoTrimmers::GetMinBallGeometryFromData<I3RecoHitSeriesMap>(
-        const I3OMGeoMap &input_geo,
-        const I3RecoHitSeriesMap &hitmap,
         double margin );
 template I3OMGeoMapPtr I3GeoTrimmers::GetMinBallGeometryFromData<I3DOMLaunchSeriesMap>(
         const I3OMGeoMap &input_geo,

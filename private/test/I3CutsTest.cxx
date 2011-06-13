@@ -4,7 +4,7 @@
 #include "phys-services/I3Cuts.h"
 #include "dataclasses/I3Position.h"
 #include "dataclasses/physics/I3Particle.h"
-#include "dataclasses/physics/I3RecoHit.h"
+#include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
 
 using namespace I3Calculator;
@@ -23,14 +23,15 @@ I3Geometry CalcGeom(std::vector<I3Position> pos)
   return geometry;
 }
 
-I3RecoHitSeriesMap CalcHits(std::vector<double> time)
+I3RecoPulseSeriesMap CalcPulses(std::vector<double> time)
 {
-  I3RecoHitSeriesMap hitsmap;
+  I3RecoPulseSeriesMap hitsmap;
   for (unsigned int i=0; i<time.size(); i++) {
     OMKey om(1,i);
-    I3RecoHitSeries hits;
-    I3RecoHit h;
+    I3RecoPulseSeries hits;
+    I3RecoPulse h;
     h.SetTime(time[i]);
+    h.SetCharge(1);
     hits.push_back(h);
     hitsmap[om] = hits;
   }
@@ -90,7 +91,7 @@ TEST(Ndir_DownTrack)
   }
 
   I3Geometry geometry = CalcGeom(pos);
-  I3RecoHitSeriesMap hitsmap = CalcHits(time);
+  I3RecoPulseSeriesMap hitsmap = CalcPulses(time);
 
   double ndir;
   ndir = Ndir(track,geometry,hitsmap,-15.,25.);
@@ -131,7 +132,7 @@ TEST(AllCuts_TiltedTrack)
 
   std::string hitseries = "NdirTest";
   I3Geometry geometry = CalcGeom(pos);
-  I3RecoHitSeriesMap hitsmap = CalcHits(time);
+  I3RecoPulseSeriesMap hitsmap = CalcPulses(time);
 
   double ndir = Ndir(track,geometry,hitsmap,-15.,25.);
   ENSURE_DISTANCE(ndir,3.,0.0001,

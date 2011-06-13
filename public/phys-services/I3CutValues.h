@@ -17,7 +17,6 @@ template <typename Key, typename Value> struct I3Map;
 class OMKey; 
 class I3Particle;
 class I3RecoPulse;
-class I3RecoHit;
 class I3Geometry;
 
 /**
@@ -44,12 +43,6 @@ class I3CutValues : public I3FrameObject
     Sdir(NAN),
     Sall(NAN)
     { cog.NullPos(); };
-
-  void Calculate(const I3Particle& track, 
-		 const I3Geometry& geometry, 
-		 const I3Map< OMKey, std::vector<I3RecoHit> >& hitmap,
-		 const double& begTWindow = I3Constants::dt_window_l,
-		 const double& endTWindow = I3Constants::dt_window_h);
 
   void Calculate(const I3Particle& track, 
 		 const I3Geometry& geometry, 

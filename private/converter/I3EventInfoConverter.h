@@ -13,7 +13,6 @@
 
 #include "phys-services/Utility.h"
 
-#include <dataclasses/physics/I3RecoHit.h>
 #include <dataclasses/physics/I3MCHit.h>
 #include <dataclasses/physics/I3RecoPulse.h>
 #include <dataclasses/physics/I3DOMLaunch.h>

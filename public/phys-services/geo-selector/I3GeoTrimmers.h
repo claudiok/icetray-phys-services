@@ -15,7 +15,6 @@
 #include "dataclasses/I3Vector.h"
 #include "dataclasses/OMKey.h"
 #include "dataclasses/physics/I3RecoPulse.h"
-#include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/physics/I3DOMLaunch.h"
 #include "dataclasses/physics/I3Waveform.h"
 #include "dataclasses/physics/I3AMANDAAnalogReadout.h"
@@ -43,8 +42,6 @@ namespace I3GeoTrimmers
 
   I3OMGeoMapPtr GeoFromPulseSeries(const I3OMGeoMap &input_geo,
                                    const I3RecoPulseSeriesMap &psm);
-  I3OMGeoMapPtr GeoFromHitSeries(const I3OMGeoMap &input_geo,
-                                 const I3RecoHitSeriesMap &psm);
   I3OMGeoMapPtr GeoFromDOMLaunchSeries(const I3OMGeoMap &input_geo,
                                        const I3DOMLaunchSeriesMap &dlsm);
   I3OMGeoMapPtr GeoFromWFSeries(const I3OMGeoMap &input_geo,
