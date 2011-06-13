@@ -3,7 +3,7 @@
  * the icecube collaboration
  * $Id: I3GeometrySelector.cxx 2598 2005-02-04 17:18:56Z olivas $
  *
- * @file I3GeometrySelector.cxx
+ * @file I3GeoSelTestModule.cxx
  * @version $Revision: 1.8 $
  * @date $Date: 2005-02-04 18:18:56 +0100 (Fri, 04 Feb 2005) $
  * @author olivas

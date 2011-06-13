@@ -60,7 +60,7 @@
  * (depending on OS, hardware and compiler), but at this point we think
  * we cannot compromise on this.
  *
- * @seealso http://en.wikipedia.org/wiki/IEEE754
+ * @sa http://en.wikipedia.org/wiki/IEEE754
  */
 class FastLogSum {
 

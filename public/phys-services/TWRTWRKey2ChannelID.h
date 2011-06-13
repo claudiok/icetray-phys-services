@@ -78,7 +78,7 @@ class TWRTWRKey2ChannelID
    * 
    * @param twrID The TWR ID.
    * @param channel The channel no.
-   * @param time Time the check should be issued for.
+   * @param tm Time the check should be issued for.
    * @return True, if it exists in the table.
    */
   virtual bool TWRKeyExists(unsigned int twrID, unsigned int channel,

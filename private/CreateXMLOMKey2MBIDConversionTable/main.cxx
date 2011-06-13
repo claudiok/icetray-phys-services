@@ -3,7 +3,7 @@
  * the icecube collaboration
  * $Id: main.cxx 13154 2005-12-01 21:45:55Z tschmidt $
  *
- * @file main.cxx
+ * @file CreateXMLOMKey2MBIDConversionTable/main.cxx
  * @version $Revision: 1.10 $
  * @date $Date: 2005-12-01 16:45:55 -0500 (Thu, 01 Dec 2005) $
  */

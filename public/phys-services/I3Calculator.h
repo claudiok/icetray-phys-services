@@ -56,17 +56,6 @@ namespace I3Calculator
    *
    *
    * OUTPUT:
-   * @param appos -- Position of the point of closest 
-   * approach of the track to the input OM position ('position').  This is 
-   * simply the position on the track which is closest to the input position.  
-   * In case of a finite track, if this theoretical position is beyond the 
-   * end of the track, then either the start or stop position of the track
-   * is returned, which ever one is closer to 'position'.
-   *
-   * @param apdist -- Closest approach distance.  This is 
-   * the distance between the input OM ('position') and the calculated point 
-   * of closest approach ('appos').
-   *
    * @param chpos -- Position on the track, which is the
    * origin of Cherenkov light that arrives at the input OM position
    * ('position').  If no Cherenkov light originating from the input track

@@ -41,7 +41,7 @@
  * 
  * After header comes list of layers. Each layer starts with:
  * - LAYER <VAR>lower edge</VAR> and <VAR>upper edge</VAR> where distances are
- * wrt to some arbitrary origin</VAR>
+ * wrt to some arbitrary <VAR>origin</VAR>
  * 
  * In layer section accepted commands are:
  * - ABS <VAR>list of absorption coefficients per wavelength bin</VAR>

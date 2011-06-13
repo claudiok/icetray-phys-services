@@ -59,7 +59,7 @@ class I3MediumProperties
      /**
       * @brief Sets the lowest wavelength, for which the property is known.
       * 
-      * @param The lowest wavelength.
+      * @param lowestWavelength The lowest wavelength.
       */
      void SetLowestWavelength(double lowestWavelength)
      {
@@ -74,7 +74,7 @@ class I3MediumProperties
      /**
       * @brief Sets the highest wavelength, for which the property is known.
       * 
-      * @param The highest wavelength.
+      * @param highestWavelength The highest wavelength.
       */
      void SetHighestWavelength(double highestWavelength)
      {

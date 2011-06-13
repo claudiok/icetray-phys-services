@@ -3,7 +3,7 @@
  * the icecube collaboration
  * $Id: I3XMLOMKey2MBID.cxx 7629 2005-05-15 15:35:25Z tschmidt $
  *
- * @file I3XMLOMKey2MBID.cxx
+ * @file phys-services/I3XMLOMKey2MBID.cxx
  * @brief implementation of the I3XMLOMKey2MBID class
  * @version $Revision:  $
  * @date $Date: 2005-05-15 17:35:25 +0200 (Sun, 15 May 2005) $

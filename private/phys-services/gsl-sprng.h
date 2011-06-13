@@ -141,7 +141,7 @@ inline int gsl_sprng_pack(gsl_rng* rng, char **state)
 
 /**
  * Free memory for RNG
- * @param rng gsl_rng struct
+ * @param r gsl_rng struct
  */
 inline void gsl_sprng_free (gsl_rng * r)
 {
