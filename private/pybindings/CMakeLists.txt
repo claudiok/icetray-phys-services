@@ -14,5 +14,5 @@ i3_add_pybindings(phys_services
   I3GCDFileService.cxx
   module.cxx
   USE_TOOLS boost python log4cplus root
-  USE_PROJECTS phys-services
+  USE_PROJECTS phys-services interfaces
   )
