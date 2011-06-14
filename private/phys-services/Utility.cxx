@@ -5,6 +5,7 @@
 #include "phys-services/Utility.h"
 #include "icetray/I3TrayHeaders.h"
 #include "dataclasses/physics/I3MCHit.h"
+#include "dataclasses/physics/I3RecoHit.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/physics/I3DOMLaunch.h"
 #include "dataclasses/physics/I3Waveform.h"
@@ -75,6 +76,11 @@ void Copy(shared_ptr<const I3FrameObject> oldp, I3FrameObject* newp)
   bia >> make_nvp("obj", newp);
 }
 
+double GetCharge(const I3RecoHit& mchit)
+{ 
+  return 1.; 
+}
+
 double GetCharge(const I3MCHit& mchit)
 { 
   return 1.; 
@@ -99,6 +105,11 @@ double GetCharge(const I3Waveform& wf)
     charge += *iter;
   }
   return charge/I3Units::mV; 
+}
+
+double GetCharge(const std::vector<I3RecoHit>& hit_series)
+{
+  return hit_series.size();
 }
 
 double GetCharge(const std::vector<I3RecoPulse>& pulse_series)

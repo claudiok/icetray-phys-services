@@ -7,6 +7,7 @@
 
 // forward declaration
 class I3MCHit;
+class I3RecoHit;
 class I3RecoPulse;
 class I3DOMLaunch;
 class I3Waveform;
@@ -22,6 +23,7 @@ void Copy(shared_ptr<const I3FrameObject> oldp,
 
 // Functions to get charge from various objects
 double GetCharge(const I3MCHit&);
+double GetCharge(const I3RecoHit&);
 double GetCharge(const I3RecoPulse&);
 double GetCharge(const I3DOMLaunch&);
 double GetCharge(const I3Waveform&);
