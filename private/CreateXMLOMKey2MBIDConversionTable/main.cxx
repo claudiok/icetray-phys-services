@@ -30,7 +30,7 @@ int main(int argc, char **argv)
      boost::program_options::value<std::string>(&source),
      "get conversion table from TXT file \"source\" and")
     ("dest,d",
-     boost::program_options::value<std::string>(&dest)->default_value("./mainboard_ids.xml"),
+     boost::program_options::value<std::string>(&dest)->default_value("./mainboard_ids.xml.gz"),
      "place output in XML file \"dest\".")
     ;
   boost::program_options::positional_options_description p;
