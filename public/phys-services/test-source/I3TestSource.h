@@ -8,7 +8,7 @@
 #include "icetray/I3TrayHeaders.h"
 #include "icetray/I3Module.h"
 #include "dataclasses/I3Map.h"
-#include "dataclasses/OMKey.h"
+#include "icetray/OMKey.h"
 #include <string>
 
 #include "boost/random.hpp"

@@ -16,7 +16,7 @@
 #include <string>
 #include "icetray/I3Module.h"
 #include "icetray/I3Frame.h"
-#include "dataclasses/OMKey.h"
+#include "icetray/OMKey.h"
 #include "dataclasses/I3Map.h"
 
 template <class T> 

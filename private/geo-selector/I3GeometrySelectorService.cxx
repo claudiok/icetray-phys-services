@@ -1,6 +1,6 @@
 #include <vector>
 #include "phys-services/geo-selector/I3GeometrySelectorService.h"
-#include "dataclasses/I3Units.h"
+#include "icetray/I3Units.h"
 #include "dataclasses/geometry/I3OMGeo.h"
 #include "icetray/I3TrayHeaders.h"
 #include "phys-services/geo-selector/GeoSelUtils.h"

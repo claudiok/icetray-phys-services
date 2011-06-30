@@ -24,7 +24,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <dataclasses/I3Constants.h>
-#include <dataclasses/I3Units.h>
+#include <icetray/I3Units.h>
 
 // namespace declarations
 

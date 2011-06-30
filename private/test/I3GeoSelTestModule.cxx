@@ -22,8 +22,8 @@
 #include "icetray/I3TrayHeaders.h"
 /* headers for the dataclasses stuff */
 #include "dataclasses/geometry/I3Geometry.h"
-#include "dataclasses/OMKey.h"
-#include "dataclasses/I3Units.h"
+#include "icetray/OMKey.h"
+#include "icetray/I3Units.h"
 #include <iostream>
 #include <sstream>
 

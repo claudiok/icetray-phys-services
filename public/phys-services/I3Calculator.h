@@ -14,7 +14,7 @@
 #include <cmath>
 #include <utility>
 #include "dataclasses/physics/I3Particle.h"
-#include "dataclasses/I3Units.h"
+#include "icetray/I3Units.h"
 #include "dataclasses/I3Constants.h"
 #include "dataclasses/geometry/I3OMGeo.h"
 #include "dataclasses/I3Direction.h"

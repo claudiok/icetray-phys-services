@@ -17,7 +17,7 @@
 #include "phys-services/geo-selector/I3GeoTrimmers.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "dataclasses/I3Vector.h"
-#include "dataclasses/OMKey.h"
+#include "icetray/OMKey.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/physics/I3DOMLaunch.h"
 #include "dataclasses/physics/I3Waveform.h"

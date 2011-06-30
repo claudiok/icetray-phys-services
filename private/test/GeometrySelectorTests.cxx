@@ -5,7 +5,7 @@
 #include "icetray/I3Tray.h"
 #include "phys-services/source/I3TextFileGeometryServiceFactory.h"
 #include "phys-services/empty-streams/I3EmptyStreamsFactory.h"
-#include "dataclasses/I3Units.h"
+#include "icetray/I3Units.h"
 
 using geo_sel_utils::make_good_strings;
 using geo_sel_utils::exists;

@@ -1,5 +1,5 @@
 #include "phys-services/source/I3TextFileGeometryService.h"
-#include "dataclasses/I3Units.h"
+#include "icetray/I3Units.h"
 #include "dataclasses/geometry/I3OMGeo.h"
 #include "icetray/I3TrayHeaders.h"
 #include <dataclasses/I3Time.h>

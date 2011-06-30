@@ -1,7 +1,7 @@
 #include <string>
 #include "icetray/serialization.h"
 #include "dataclasses/Utility.h"
-#include "dataclasses/I3Units.h"
+#include "icetray/I3Units.h"
 #include "phys-services/Utility.h"
 #include "icetray/I3TrayHeaders.h"
 #include "dataclasses/physics/I3MCHit.h"
