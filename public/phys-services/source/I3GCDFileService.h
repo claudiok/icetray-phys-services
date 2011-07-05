@@ -3,7 +3,7 @@
  * the icecube collaboration
  * $Id: I3GCDFileGeometryService.h 15038 2006-01-30 22:47:23Z pretz $
  *
- * @file I3GCDFileGeometryService.h
+ * @file I3GCDFileService.h
  * @version $Revision:$
  * @date $Date: 2006-01-30 17:47:23 -0500 (Mon, 30 Jan 2006) $
  * @author pretz

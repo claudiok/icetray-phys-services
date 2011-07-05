@@ -48,7 +48,7 @@ namespace I3Cuts
    * INPUT:
    * @param track --  Track used in calculation.
    * @param geometry -- Geometry object from the event.
-   * @param hitmap -- Map of I3RecoPulseSeries used in calculation. 
+   * @param pulsemap -- Map of I3RecoPulseSeries used in calculation. 
    * @param t1 -- Lower edge of the time residual window for direct hits.
    *              Generally, this value is -15ns.
    * @param t2 -- Upper edge of the time residual window for direct hits.
@@ -95,7 +95,7 @@ namespace I3Cuts
    * INPUT:
    * @param vertex --  Vertex used in calculation.
    * @param geometry -- Geometry object from the event.
-   * @param hitmap -- Map of I3RecoPulseSeries used in calculation. 
+   * @param pulsemap -- Map of I3RecoPulseSeries used in calculation. 
    * @param t1 -- Lower edge of the time residual window for direct hits.
    *              Generally, this value is -15ns.
    * @param t2 -- Upper edge of the time residual window for direct hits.

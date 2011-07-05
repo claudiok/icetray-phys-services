@@ -3,7 +3,7 @@
  * the IceCube collaboration
  *  $Id: I3Selection.h 2601 2005-02-08 20:05:42Z olivas $
   *
- * @file I3Selection.h
+ * @file I3GeoSelTestModule.h
  * @version $Revision: 1.3 $
  * @date $Date: 2005-02-08 21:05:42 +0100 (Tue, 08 Feb 2005) $
  * @author olivas
