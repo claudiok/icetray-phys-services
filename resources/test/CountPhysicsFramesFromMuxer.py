@@ -18,9 +18,17 @@ load("libdataio")
 
 tray = I3Tray()
 
+def test(frame):
+    print "this is only a test"
+    return True
+
+#dir(test)
+
 tray.AddModule("I3Reader","reader",Filename=expandvars("$I3_PORTS/test-data/string-21/MacOSX-libstdc++6-ppc.i3.gz"))
 
 tray.AddModule("Dump","dump")
+
+tray.AddModule(test,"test")
 
 tray.AddModule("CountFrames", "countem")(
     ("physics", 10),
