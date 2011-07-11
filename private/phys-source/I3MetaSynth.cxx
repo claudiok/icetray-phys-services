@@ -75,7 +75,8 @@ void I3MetaSynth::Process()
 
 	I3FramePtr frame = PopFrame();
 	if (!frame)
-		return;
+		log_fatal("I3MetaSynth is not a driving module. Please add "
+		    "one (e.g. I3Reader or I3InfiniteSource)");
 
 	// Allow G/C/D frames in the stream to set our GCD info
 	if (frame->GetStop() == I3Frame::Geometry) {
