@@ -16,7 +16,6 @@
 #include <dataclasses/physics/I3MCHit.h>
 #include <dataclasses/physics/I3RecoPulse.h>
 #include <dataclasses/physics/I3DOMLaunch.h>
-#include <dataclasses/physics/I3TWRLaunch.h>
 #include <dataclasses/physics/I3Waveform.h>
 
 template<class HitType>
