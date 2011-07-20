@@ -18,10 +18,10 @@ class DAQFrameSplitting(unittest.TestCase):
 		self.assert_(len(self.frame["InIceRawData"]) == 1)
 		self.assert_("DrivingTime" in self.frame)
 		self.assert_("I3EventHeader" in self.frame)
-		self.assertEquals(self.frame["I3EventHeader"].SubEventID, phys_frames)
-		self.assertEquals(self.frame["I3EventHeader"].SubEventID, self.frame["TriggerID"].value)
-		self.assertEquals(self.frame["I3EventHeader"].EventID, frame["I3EventHeader"].EventID)
-		self.assertEquals(self.frame["I3EventHeader"].RunID, frame["I3EventHeader"].RunID)
+		self.assertEquals(self.frame["I3EventHeader"].sub_event_id, phys_frames)
+		self.assertEquals(self.frame["I3EventHeader"].sub_event_id, self.frame["TriggerID"].value)
+		self.assertEquals(self.frame["I3EventHeader"].event_id, frame["I3EventHeader"].event_id)
+		self.assertEquals(self.frame["I3EventHeader"].run_id, frame["I3EventHeader"].run_id)
 		phys_frames += 1
 	def Finish(self):
 		self.assertEquals(phys_frames, max_phys_frames)
@@ -59,11 +59,11 @@ t = dataclasses.I3Time()
 t.set_utc_cal_date(1919, 1, 15, 0, 0, 0, 0)
 frame['DrivingTime'] = t
 header = dataclasses.I3EventHeader()
-header.RunID = 7
-header.EventID = 42
-header.SubEventID = 0
-header.StartTime = t
-header.EndTime = t+10*I3Units.microsecond
+header.run_id = 7
+header.event_id = 42
+header.sub_event_id = 0
+header.start_time = t
+header.end_time = t+10*I3Units.microsecond
 frame['I3EventHeader'] = header
 f.push(frame)
 f.close()
