@@ -37,6 +37,7 @@ void register_I3Cuts()
   // set the current scope to the new sub-module  
   bp::scope I3Cuts_scope = I3CutsModule;  
   // export stuff in the I3Cuts namespace  
-  def("ContainmentAreaSize", I3Cuts::ContainmentAreaSize);
-  def("ContainmentVolumeSize", I3Cuts::ContainmentVolumeSize);
+  def("containment_area_size", I3Cuts::ContainmentAreaSize);
+  def("containment_volume_size", I3Cuts::ContainmentVolumeSize);
+
 }

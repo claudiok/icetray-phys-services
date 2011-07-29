@@ -51,14 +51,14 @@ register_randomservice(const char* name, const char* doc, const Init& init)
   return class_<T, boost::shared_ptr<T>, boost::noncopyable>(name,
 							     doc,
 							     init)
-    .def("Binomial", &T::Binomial)
-    .def("Exp", &T::Exp)
-    .def("Integer", &T::Integer)
-    .def("Poisson", &T::Poisson)
-    .def("PoissonD", &T::PoissonD)
-    .def("Uniform", (double (T::*)(double)) &T::Uniform)
-    .def("Uniform", (double (T::*)(double, double)) &T::Uniform)
-    .def("Gaus", &T::Gaus)
+    .def("binomial", &T::Binomial)
+    .def("exp", &T::Exp)
+    .def("integer", &T::Integer)
+    .def("poisson", &T::Poisson)
+    .def("poisson_d", &T::PoissonD)
+    .def("uniform", (double (T::*)(double)) &T::Uniform)
+    .def("uniform", (double (T::*)(double, double)) &T::Uniform)
+    .def("gaus", &T::Gaus)
     ;
   
 }

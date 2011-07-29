@@ -33,16 +33,16 @@ register_I3GCDFileService()
 {
   bp::class_<I3GCDFileGeometryService, bp::bases<I3GeometryService>, boost::shared_ptr<I3GCDFileGeometryService>, boost::noncopyable>
     ("I3GCDFileGeometryService", bp::init<std::string>())
-    .def("GetGeometry", &get_geometry, bp::arg("time"))
+    .def("get_geometry", &get_geometry, bp::arg("time"))
     ;
 
   bp::class_<I3GCDFileCalibrationService, bp::bases<I3CalibrationService>, boost::shared_ptr<I3GCDFileCalibrationService>, boost::noncopyable>
     ("I3GCDFileCalibrationService", bp::init<std::string>())
-    .def("GetCalibration", &get_calibration, bp::arg("time"))
+    .def("get_calibration", &get_calibration, bp::arg("time"))
     ;
 
   bp::class_<I3GCDFileDetectorStatusService, bp::bases<I3DetectorStatusService>, boost::shared_ptr<I3GCDFileDetectorStatusService>, boost::noncopyable>
     ("I3GCDFileDetectorStatusService", bp::init<std::string>())
-    .def("GetDetectorStatus", &get_status, bp::arg("time"))
+    .def("get_detector_status", &get_status, bp::arg("time"))
     ;
 }

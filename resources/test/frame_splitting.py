@@ -79,7 +79,7 @@ class FrameSplitter(icetray.I3Module,phys_services.I3Splitter):
 		print 'DAQ Frame'
 		self.PushFrame(frame)
 		for i in range(0, max_phys_frames):
-			subframe = self.GetNextSubEvent(frame)
+			subframe = self.get_next_sub_event(frame)
 			subframe['TriggerID'] = icetray.I3Int(i)
 			self.PushFrame(subframe)
 		return True

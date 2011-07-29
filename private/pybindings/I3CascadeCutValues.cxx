@@ -24,10 +24,12 @@ namespace bp = boost::python;
 
 void register_I3CascadeCutValues()
 {
-#define MEMBERS (Nchan)(Nhit)(N_1hit)(Nstring)(Ndir)(Nearly)(Nlate)(cog)
+#define MEMBERS (Nchan)(Nhit)(Nstring)(Ndir)(Nearly)(Nlate)(cog)
 
   class_<I3CascadeCutValues, bases<I3FrameObject>, I3CascadeCutValuesPtr>("I3CascadeCutValues")
-    BOOST_PP_SEQ_FOR_EACH(WRAP_RO, I3CascadeCutValues, MEMBERS)
+    BOOST_PP_SEQ_FOR_EACH(WRAP_RW_RECASE, I3CascadeCutValues, MEMBERS)
+    #undef MEMBERS
+    .def_readwrite("n_1hit", &I3CascadeCutValues::N_1hit)
     ;
 
   register_pointer_conversions<I3CascadeCutValues>();
