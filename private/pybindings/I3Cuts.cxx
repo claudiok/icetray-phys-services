@@ -37,7 +37,14 @@ void register_I3Cuts()
   // set the current scope to the new sub-module  
   bp::scope I3Cuts_scope = I3CutsModule;  
   // export stuff in the I3Cuts namespace  
-  def("containment_area_size", I3Cuts::ContainmentAreaSize);
-  def("containment_volume_size", I3Cuts::ContainmentVolumeSize);
+  def("containment_area_size", I3Cuts::ContainmentAreaSize,
+      "I3Cuts::ContainmentAreaSize(const I3Particle &track, std::vector< double > x, std::vector< double > y, double z)");
+  def("containment_volume_size", I3Cuts::ContainmentVolumeSize,
+      "I3Cuts::ContainmentVolumeSize(const I3Particle &track, std::vector< double > x, std::vector< double > y, double zhigh, double zlow)");
+  def("cynlinder_size", I3Cuts::CylinderSize,
+      "I3Cuts::CylinderSize(const I3Particle &track, double H0, double R0, double center)");
+  // Given the heavy weight of I3Cuts/I3CutsCalc and the current impl,
+  //   wrapping more of this namespace is not practical.  New tools are
+  //   better idea.
 
 }

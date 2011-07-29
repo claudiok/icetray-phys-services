@@ -32,14 +32,22 @@ void register_I3Calculator()
   // set the current scope to the new sub-module  
   bp::scope I3Calculator_scope = I3CalculatorModule;  
   // export stuff in the I3Calculator namespace  
-  def("closest_approach_distance", I3Calculator::ClosestApproachDistance);
-  def("closesqt_approach_position", I3Calculator::ClosestApproachPosition);
-  def("distance_along_track", I3Calculator::DistanceAlongTrack);
-  def("is_on_track", I3Calculator::IsOnTrack);
-  def("time_residual", (double (*)( const I3Particle&, const I3Position&,  double, const double, const double)) &I3Calculator::TimeResidual);
-  def("angle", I3Calculator::Angle);
-  def("distance", I3Calculator::Distance);
-  def("four_distance", I3Calculator::FourDistance);
+  def("closest_approach_distance", I3Calculator::ClosestApproachDistance,
+      "I3Calculator::ClosestApproachDistance(const I3Particle &particle, const I3Position &position)");
+  def("closesqt_approach_position", I3Calculator::ClosestApproachPosition,
+      "I3Calculator::ClosestApproachPosition(const I3Particle &particle, const I3Position &position)");
+  def("distance_along_track", I3Calculator::DistanceAlongTrack,
+      "I3Calculator::DistanceAlongTrack(const I3Particle &track, const I3Position &ompos)");
+  def("is_on_track", I3Calculator::IsOnTrack,
+      "I3Calculator::DistanceAlongTrack(const I3Particle &track, const I3Position &ompos)");
+  def("time_residual", (double (*)( const I3Particle&, const I3Position&,  double, const double, const double)) &I3Calculator::TimeResidual,
+      "I3Calculator::DistanceAlongTrack(const I3Particle &track, const I3Position &ompos)");
+  def("angle", I3Calculator::Angle,
+      "I3Calculator::Angle(const I3Particle &p1, const I3Particle &p2)");
+  def("distance", I3Calculator::Distance,
+      "I3Calculator::Distance (const I3Particle &p1, const I3Particle &p2)");
+  def("four_distance", I3Calculator::FourDistance,
+      "I3Calculator::FourDistance(const I3Particle &p1, const I3Particle &p2)");
 
 
 }
