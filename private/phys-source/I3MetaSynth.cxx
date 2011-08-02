@@ -27,7 +27,6 @@ class I3MetaSynth : public I3Module
   private:
 	void CheckGCDUpdate(I3Time event_time);
 
-	I3FramePtr cache_;
 	I3GeometryConstPtr geometry_;
 	I3CalibrationConstPtr calibration_;
 	I3DetectorStatusConstPtr detectorstatus_;
@@ -40,7 +39,7 @@ class I3MetaSynth : public I3Module
 I3_MODULE(I3MetaSynth);
 
 I3MetaSynth::I3MetaSynth(const I3Context& context)
-    : I3Module(context), cache_(new I3Frame)
+    : I3Module(context)
 {
 	AddParameter("GeometryService",
 	    "Name of the geometry service to use",
@@ -79,22 +78,12 @@ void I3MetaSynth::Process()
 		    "one (e.g. I3Reader or I3InfiniteSource)");
 
 	// Allow G/C/D frames in the stream to set our GCD info
-	if (frame->GetStop() == I3Frame::Geometry) {
+	if (frame->GetStop() == I3Frame::Geometry)
 		geometry_ = frame->Get<I3GeometryConstPtr>();
-		cache_->purge(I3Frame::Geometry);
-		frame->purge();
-		cache_->merge(*frame);
-	} else if (frame->GetStop() == I3Frame::Calibration) {
+	else if (frame->GetStop() == I3Frame::Calibration)
 		calibration_ = frame->Get<I3CalibrationConstPtr>();
-		cache_->purge(I3Frame::Calibration);
-		frame->purge();
-		cache_->merge(*frame);
-	} else if (frame->GetStop() == I3Frame::DetectorStatus) {
+	else if (frame->GetStop() == I3Frame::DetectorStatus)
 		detectorstatus_ = frame->Get<I3DetectorStatusConstPtr>();
-		cache_->purge(I3Frame::DetectorStatus);
-		frame->purge();
-		cache_->merge(*frame);
-	}
 
 	if (frame->Has("I3EventHeader")) {
 		I3Time event_time = frame->Get<I3EventHeaderConstPtr>()->
@@ -103,11 +92,6 @@ void I3MetaSynth::Process()
 	} else if (frame->Has("DrivingTime")) {
 		CheckGCDUpdate(*frame->Get<I3TimeConstPtr>("DrivingTime"));
 	}
-
-	frame->purge(I3Frame::Geometry);
-	frame->purge(I3Frame::Calibration);
-	frame->purge(I3Frame::DetectorStatus);
-	frame->merge(*cache_);
 
 	PushFrame(frame);
 }
@@ -119,9 +103,7 @@ void I3MetaSynth::CheckGCDUpdate(I3Time event_time)
 	    geometry_->endTime < event_time))) {
 		geometry_ = geometryService_->GetGeometry(event_time);
 		I3FramePtr gframe(new I3Frame(I3Frame::Geometry));
-		cache_->purge(I3Frame::Geometry);
-		cache_->Put("I3Geometry", geometry_, I3Frame::Geometry);
-		gframe->merge(*cache_);
+		gframe->Put("I3Geometry", geometry_);
 		PushFrame(gframe);
 	}
 	if (calibrationService_ &&
@@ -129,10 +111,7 @@ void I3MetaSynth::CheckGCDUpdate(I3Time event_time)
 	    calibration_->endTime < event_time))) {
 		calibration_ = calibrationService_->GetCalibration(event_time);
 		I3FramePtr cframe(new I3Frame(I3Frame::Calibration));
-		cache_->purge(I3Frame::Calibration);
-		cache_->Put("I3Calibration", calibration_,
-		    I3Frame::Calibration);
-		cframe->merge(*cache_);
+		cframe->Put("I3Calibration", calibration_);
 		PushFrame(cframe);
 	}
 	if (detectorStatusService_ &&
@@ -141,10 +120,7 @@ void I3MetaSynth::CheckGCDUpdate(I3Time event_time)
 		detectorstatus_ =
 		    detectorStatusService_->GetDetectorStatus(event_time);
 		I3FramePtr dframe(new I3Frame(I3Frame::DetectorStatus));
-		cache_->purge(I3Frame::DetectorStatus);
-		cache_->Put("I3DetectorStatus", detectorstatus_,
-		    I3Frame::DetectorStatus);
-		dframe->merge(*cache_);
+		dframe->Put("I3DetectorStatus", detectorstatus_);
 		PushFrame(dframe);
 	}
 }
