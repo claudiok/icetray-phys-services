@@ -31,6 +31,7 @@ I3Splitter::GetNextSubEvent(I3FramePtr daq) {
 	last_subevent_id++;
 
 	I3FramePtr frame(new I3Frame(*daq));
+	frame->purge(I3Frame::Physics); // Kill mixed-in P keys from earlier
 	frame->SetStop(I3Frame::Physics);
 
 	// Rewrite event header
