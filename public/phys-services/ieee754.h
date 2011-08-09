@@ -9,7 +9,7 @@
 
 // if we're not on an apple and we're not leopard or later, 
 // we should not be using this header.
-#if !defined(__APPLE_CC__)
+#if !defined(__APPLE_CC__) && !defined(__FreeBSD__)
 #error This header should not be included on non-apple/leopard machines
 #endif
 
@@ -31,10 +31,17 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-#ifndef I3_DARWIN_IEEE754_H 1
+#ifndef I3_DARWIN_IEEE754_H
 #define I3_DARWIN_IEEE754_H 1
 
 #include <machine/endian.h>
+#ifdef __FreeBSD__
+#warning FreeBSD support is a hack of a hack.
+#define __DARWIN_BYTE_ORDER _BYTE_ORDER
+#define __DARWIN_BIG_ENDIAN _BIG_ENDIAN
+#define __DARWIN_LITTLE_ENDIAN _LITTLE_ENDIAN
+#endif
+
 #if __DARWIN_BYTE_ORDER == __DARWIN_BIG_ENDIAN
 #define __FLOAT_WORD_ORDER __DARWIN_BIG_ENDIAN
 #endif
