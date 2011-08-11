@@ -72,7 +72,11 @@ void I3CutsModule::Physics(I3FramePtr frame)
   I3RecoPulseSeriesMapConstPtr pulsemap = 
     frame->Get<I3RecoPulseSeriesMapConstPtr>(pulsesName_);
 
-  if (!pulsemap) log_fatal("The chosen reaodut is not present.");
+  if (!pulsemap) {
+    log_warn("The chosen reaodut is not present.");
+    PushFrame(frame);
+    return;
+  }
 
   //if the user has specified the I3Particles to process, process them...
   if(particleName_!=""){
