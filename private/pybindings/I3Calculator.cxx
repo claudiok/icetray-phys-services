@@ -34,7 +34,7 @@ void register_I3Calculator()
   // export stuff in the I3Calculator namespace  
   def("closest_approach_distance", I3Calculator::ClosestApproachDistance,
       "I3Calculator::ClosestApproachDistance(const I3Particle &particle, const I3Position &position)");
-  def("closesqt_approach_position", I3Calculator::ClosestApproachPosition,
+  def("closest_approach_position", I3Calculator::ClosestApproachPosition,
       "I3Calculator::ClosestApproachPosition(const I3Particle &particle, const I3Position &position)");
   def("distance_along_track", I3Calculator::DistanceAlongTrack,
       "I3Calculator::DistanceAlongTrack(const I3Particle &track, const I3Position &ompos)");
