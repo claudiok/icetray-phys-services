@@ -19,14 +19,27 @@
 #include <icetray/I3PointerTypedefs.h>
 #include <interfaces/I3OMKey2MBID.h>
 
+#include <boost/iterator/transform_iterator.hpp>
+#include <boost/type_traits/remove_const.hpp>
+
 /**
  * @brief An implementation of I3OMKey2MBID that reads the conversions from a file.
  */
 class I3FileOMKey2MBID : public I3OMKey2MBID
 {
  private:
-  std::map<OMKey,long long int> omkey2mbid_;
-  std::map<long long int,OMKey> mbid2omkey_;
+  typedef std::map<OMKey,long long int> map_omkey2mbid;
+  typedef std::map<long long int,OMKey> map_mbid2omkey;
+  
+  map_omkey2mbid omkey2mbid_;
+  map_mbid2omkey mbid2omkey_;
+  
+  template<typename PairType>
+  class pair_first_t { 
+  public: 
+    typedef typename boost::remove_const<typename PairType::first_type>::type result_type; 
+    result_type operator()(const PairType& p) const{ return p.first; } 
+  };
   
  public:
   /** Constructor takes the name of the input file.
@@ -46,6 +59,17 @@ class I3FileOMKey2MBID : public I3OMKey2MBID
    * @param outfile The filename.
    */
   virtual void DumpAsXML(const std::string& outfile) const;
+  
+  typedef boost::transform_iterator<pair_first_t<map_omkey2mbid::value_type>,map_omkey2mbid::const_iterator> omkey_iterator;
+  typedef boost::transform_iterator<pair_first_t<map_mbid2omkey::value_type>,map_mbid2omkey::const_iterator>  mbid_iterator;
+  
+  std::pair<omkey_iterator,omkey_iterator> AllOMKeys() const{
+    return(std::make_pair(omkey2mbid_.begin(),omkey2mbid_.end()));
+  }
+  
+  std::pair<mbid_iterator,mbid_iterator> AllMBIDs() const{
+    return(std::make_pair(mbid2omkey_.begin(),mbid2omkey_.end()));
+  }
 
  private:
   OMKey OMKeyize(const std::string& key);
