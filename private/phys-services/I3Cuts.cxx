@@ -578,7 +578,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 
   // Error-checking... need at least three std::strings 
   if (x.size()<3) { 
-  log_warn("ContainmentVolume of zero/1/2 std::strings: will be NAN"); 
+  log_warn("ContainmentVolume of zero/1/2 strings: will be NAN"); 
     return NAN;
   }
 
@@ -825,7 +825,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   // Error-checking... need at least three std::strings to have an area 
   unsigned xsize = x.size();
   if (x.size()<3) { 
-    log_warn("ContainmentArea of zero/1/2 std::strings: will be NAN"); 
+    log_warn("ContainmentArea of zero/1/2 strings: will be NAN"); 
     return NAN;
   }
 
