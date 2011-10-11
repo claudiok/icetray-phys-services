@@ -171,6 +171,7 @@ std::vector<int > I3ScaleCalculator::GetOuterStrings () const {
     outerStrings.push_back(41);
     break;
   case IC80:
+  case IC86:
     outerStrings.push_back(1);
     outerStrings.push_back(6);
     outerStrings.push_back(50);
@@ -254,6 +255,7 @@ std::vector<int > I3ScaleCalculator::GetOuterStations () const {
     outerStations.push_back(41);
     break;
   case IT80:
+  case IT81:
     outerStations.push_back(1);
     outerStations.push_back(6);
     outerStations.push_back(50);
