@@ -13,6 +13,9 @@
 #include "../converter/I3EventInfoConverter.h"
 #include "../converter/I3RecoInfoConverter.h"
 #include "../converter/I3CutValuesConverter.h"
+#include "phys-services/I3ScaleCalculator.h"
+
+
 
 void register_Converter() {
     I3CONVERTER_NAMESPACE(phys_services);
@@ -35,7 +38,8 @@ void register_Converter() {
     bp::bases<I3Converter>,                      
     boost::noncopyable >("I3RecoInfoConverter", 
                          "calculates number of direct hits and icecube scale cut variables", 
-                         bp::init<std::string>(bp::args("pulse_map_name")))
-      .def(bp::init<std::string, int, int>(bp::args("pulse_map_name", "icecube_config", "icetop_config")))
+                         bp::init<std::string, int, int>((bp::arg("pulse_map_name"),
+					    bp::arg("icecube_config")=(int)I3ScaleCalculator::IC_GUESS,
+					    bp::arg("icetop_config")=(int)I3ScaleCalculator::IT_GUESS)))
     ;
 };
