@@ -22,6 +22,7 @@
 #include <string>
 #include <TH1D.h>
 #include <TH2D.h>
+#include <TString.h>
 
 #include <icetray/I3Logging.h>
 #include <icetray/I3FrameObject.h>
@@ -281,6 +282,8 @@ class I3MediumService
   const static double MEAN_SCATT_COSINE;
   const static double MIN_WAVELENGTH_PRICE;
   const static double FP_CMP_TOLERANCE;
+  const static TString HISTOPREFIX;
+  static unsigned int instanceNumber_;
 
 
   // private copy constructors and assignment
@@ -317,6 +320,10 @@ class I3MediumService
   double minz_, maxz_, binw_;
   double minwl_, maxwl_, wlstep_;
   int recobinwl_;
+  TString nameAbsHisto_;
+  TString nameInvScatLenHisto_;
+  TString nameIntAbsHisto_;
+  TString nameIntInvScatLenHisto_;
 
   ////////////////////////////////////////////////////////////////
   // That's Amanda framework stuff
