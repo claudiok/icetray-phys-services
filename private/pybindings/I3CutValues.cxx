@@ -21,10 +21,14 @@ using namespace boost::python;
 namespace bp = boost::python;
 
 #include <phys-services/I3CutValues.h>
+#include <dataclasses/physics/I3Particle.h>
+#include <dataclasses/geometry/I3Geometry.h>
+#include <dataclasses/physics/I3RecoPulse.h>
 
 void register_I3CutValues()
 {
   class_<I3CutValues, bases<I3FrameObject>, boost::shared_ptr<I3CutValues> >("I3CutValues")
+    .def("calculate", &I3CutValues::Calculate)
     .def_readwrite("nchan", &I3CutValues::Nchan)
     .def_readwrite("nhit", &I3CutValues::Nhit)
     .def_readwrite("nString", &I3CutValues::Nstring)

@@ -48,6 +48,8 @@ const double I3MediumService::MEAN_SCATT_COSINE = 0.8;
 const double I3MediumService::MIN_WAVELENGTH_PRICE = 300.;
 const double I3MediumService::RECO_WAVELENGTH = 380.;
 const double I3MediumService::FP_CMP_TOLERANCE = 1e-6;
+const TString I3MediumService::HISTOPREFIX = "I3Medium";
+unsigned int I3MediumService::instanceNumber_ = 0;
 
 
 I3MediumService::I3MediumService()
@@ -56,6 +58,13 @@ I3MediumService::I3MediumService()
 		hIntAbsLen_(0), hIntEffScattLen_(0),
 		hIceLayerAbsorptivity_(0), hIceLayerInvEffScattLen_(0),
 		isBulkice_(true), meanScatCosine_(MEAN_SCATT_COSINE){
+  TString suffix="";
+  suffix+=instanceNumber_;
+  nameAbsHisto_ = HISTOPREFIX+"_Absorptivity_"+suffix;
+  nameInvScatLenHisto_ = HISTOPREFIX+"_InvScatteringLength_"+suffix;
+  nameIntAbsHisto_ = HISTOPREFIX+"_IntAbsorptivity_"+suffix;
+  nameIntInvScatLenHisto_ = HISTOPREFIX+"_IntInvScatteringLength_"+suffix;
+  ++instanceNumber_;
 }
 
 
@@ -67,6 +76,13 @@ I3MediumService
 		hIntAbsLen_(0), hIntEffScattLen_(0),
 		hIceLayerAbsorptivity_(0), hIceLayerInvEffScattLen_(0),
 		isBulkice_(false), meanScatCosine_(MEAN_SCATT_COSINE){
+  TString suffix="";
+  suffix+=instanceNumber_;
+  nameAbsHisto_ = HISTOPREFIX+"_Absorptivity_"+suffix;
+  nameInvScatLenHisto_ = HISTOPREFIX+"_InvScatteringLength_"+suffix;
+  nameIntAbsHisto_ = HISTOPREFIX+"_IntAbsorptivity_"+suffix;
+  nameIntInvScatLenHisto_ = HISTOPREFIX+"_IntInvScatteringLength_"+suffix;
+  ++instanceNumber_;
 	try{
 		Configure(properties, histoOutFilename);
 	}catch(...){
@@ -123,18 +139,17 @@ I3MediumService
      || (RECO_WAVELENGTH > maxwl_)
      || (minwl_ == maxwl_))
 		log_fatal("wavelength interval to small");
-		
   hIceLayerAbsorptivity_ =
-  	  new TH2D("hIceLayerAbsorptivity_", "absorptivity",
+      new TH2D(nameAbsHisto_, "absorptivity",
              nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
   hIceLayerInvEffScattLen_ =
-  	  new TH2D("hIceLayerInvEffScattLen_", "inverse eff. scatt. length",
+      new TH2D(nameInvScatLenHisto_, "inverse eff. scatt. length",
              nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
   recobinwl_ = hIceLayerAbsorptivity_->GetYaxis()->FindBin(RECO_WAVELENGTH);
-	
+
 	//////////////////////////////////////////////////////////////
-	
-  // fill the scatt. and abs. histo, including unfl/ovfl bins 
+
+  // fill the scatt. and abs. histo, including unfl/ovfl bins
 	for(unsigned int i = 1; i <= nlayer_; ++i){
     CheckProperties(properties.Layers()[i-1]);
 		for(unsigned int j = 1; j <= nwl_; ++j){
@@ -143,7 +158,7 @@ I3MediumService
 			hIceLayerInvEffScattLen_->SetBinContent(i, j,
 				properties.Layers()[i - 1].ScatteringCoefficents().Get()[j - 1]);
 		}
-	}	
+	}
   for(unsigned int i = 1; i <= nlayer_; ++i){
     hIceLayerInvEffScattLen_->SetBinContent(i, 0,
     	hIceLayerInvEffScattLen_->GetBinContent(i, 1));
@@ -201,10 +216,10 @@ void I3MediumService::InitLookupTable(){
   // with fast computation.
 
   hIntAbsLen_ =
-  	new TH2D("hintabslen","integrated abs. length",
+  	new TH2D(nameIntAbsHisto_,"integrated abs. length",
   		nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
   hIntEffScattLen_ =
-  	new TH2D("hIntEffScattLen_","integrated eff. scatt. length",
+  	new TH2D(nameIntInvScatLenHisto_,"integrated eff. scatt. length",
   		nlayer_, minz_, maxz_, nwl_, minwl_, maxwl_);
 
   for(unsigned int j = 1; j <= nwl_; ++j){ // set to 0 integration the depth unfl bin
