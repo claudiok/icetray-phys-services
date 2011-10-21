@@ -92,7 +92,7 @@ I3MediumService
 
 
 I3MediumService::~I3MediumService(){
-	Release();
+	// Release();
 }
 
 
@@ -273,6 +273,10 @@ void I3MediumService::Release(){
 	delete hIceLayerAbsorptivity_;
 	delete hIntEffScattLen_;
 	delete hIntAbsLen_;
+	hIceLayerInvEffScattLen_=0;
+	hIceLayerAbsorptivity_=0;
+	hIntEffScattLen_=0;
+	hIntAbsLen_=0;
 }
 
 
