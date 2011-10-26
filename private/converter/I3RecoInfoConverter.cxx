@@ -127,7 +127,7 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
         currentFrame_->Get<I3RecoPulseSeriesMapConstPtr>(pulseMapName_);
 
     if (!pulsemap) {
-        log_warn("%s: couldn't find pulsemap with name %s in current frame!",
+        log_warn("%s: couldn't find pulsemap with name %s in current frame! NDir will be 0 and LDir will be NAN.",
                  __PRETTY_FUNCTION__, pulseMapName_.c_str());
     }
 
@@ -142,8 +142,8 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
     typedef std::pair<std::string, std::pair<double, double > > TimeWindowPair;
 
     // call different functions for cascades and muons
-
-    if (reco.IsCascade()){
+    if (pulsemap) {
+      if (reco.IsCascade()){
         // cascades ------------------------------------------------------
         BOOST_FOREACH (TimeWindowPair win, timeWindows_) {
             int nDir;
@@ -163,8 +163,7 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
             nDirs[win.first] = nDir;
             lDirs[win.first] = 0;  // no ldir for cascades
         }
-    }
-    else {
+      } else {
         // track ---------------------------------------------------------
         int nChan;  // not used (for output)
         int nHit;   // not used
@@ -205,6 +204,10 @@ size_t I3RecoInfoConverter::FillRows(const I3Particle& reco, I3TableRowPtr rows)
                 nLate,             // <- calculate this
                 lDir, sDir, sAll);
 
+      }
+    } else {
+      nDirs["A"] = nDirs["B"] = nDirs["C"] = nDirs["D"] = nDirs["E"] = 0;
+      lDirs["A"] = lDirs["B"] = lDirs["C"] = lDirs["D"] = lDirs["E"] = NAN;
     }
 
     // init scaleCalculator
