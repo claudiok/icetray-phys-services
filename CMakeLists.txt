@@ -51,6 +51,7 @@ i3_add_library(phys-services
   private/phys-services/I3FileOMKey2MBID.cxx
   private/phys-services/I3FileOMKey2MBIDFactory.cxx
   private/phys-services/I3Functions.cxx
+  private/phys-services/I3RandomService.cxx
   private/phys-services/I3GSLRandomService.cxx
   private/phys-services/I3GSLRandomServiceFactory.cxx
   private/phys-services/I3MC2Reco.cxx
