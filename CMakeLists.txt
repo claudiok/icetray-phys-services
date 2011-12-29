@@ -17,6 +17,7 @@ if (USE_ROOT)
 	private/phys-services/I3TRandomService.cxx
 	private/phys-services/I3TRandomServiceFactory.cxx
   )
+  set(OPTIONAL_TOOLS ${OPTIONAL_TOOLS} root)
 endif (USE_ROOT)
 
 if (SPRNG_FOUND)
@@ -24,7 +25,7 @@ if (SPRNG_FOUND)
   set(SPRNG_SOURCES
     private/phys-services/I3SPRNGRandomService.cxx
     private/phys-services/I3SPRNGRandomServiceFactory.cxx)
-  set(SPRNG_TOOL sprng)
+  set(OPTIONAL_TOOLS ${OPTIONAL_TOOLS} sprng)
 else(SPRNG_FOUND)
   colormsg(CYAN "+-- sprng *not* found, omitting optional SPRNGRandomService")
 endif(SPRNG_FOUND)
@@ -78,7 +79,7 @@ i3_add_library(phys-services
 
   USE_PROJECTS icetray dataclasses interfaces tableio
 
-  USE_TOOLS ${SPRNG_TOOL} gsl log4cplus boost root python
+  USE_TOOLS ${OPTIONAL_TOOLS} gsl log4cplus boost python
 
  ROOTCINT public/phys-services/I3Cuts.h
  public/phys-services/I3Calculator.h
