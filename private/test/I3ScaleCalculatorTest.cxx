@@ -6,7 +6,7 @@
 #include <phys-services/I3Cuts.h>
 
 #include <algorithm>
-#include <boost/lambda/lambda.hpp>
+#include <boost/foreach.hpp>
 #include <iostream>
 
 TEST_GROUP(scaleCalculatorTest);
@@ -38,13 +38,14 @@ TEST(ic40configuration){
 
   std::cout << "IC40 outer strings: ";
 
-  using namespace boost::lambda;
-  for_each (ic40Outer.begin (), ic40Outer.end (),
-	    std::cout << _1 << " " );
+  BOOST_FOREACH(const double &val, ic40Outer) {
+    std::cout << val << " ";
+  }
 
   std::cout << "IC40 I3Scale outer: " << std::endl; 
-  for_each (stringNo.begin (), stringNo.end (),
-	    std::cout << _1 << " " );
+  BOOST_FOREACH(const double &val, stringNo) {
+    std::cout << val << " ";
+  }
 
 
   std::cout << std::endl;
@@ -82,14 +83,16 @@ TEST(ic40configuration){
 
   // output
   std::cout << "IC40 x positions: " << std::endl; 
-  for_each (ic40X.begin (), ic40X.end (),
-	    std::cout << _1 << " " );
+  BOOST_FOREACH(const double &val, ic40X) {
+    std::cout << val << " ";
+  }
 
   std::cout << std::endl;
 
   std::cout << "IC40 I3Scale pos: " << std::endl; 
-  for_each (x.begin (), x.end (),
-	    std::cout << _1 << " " );
+  BOOST_FOREACH(const double &val, x) {
+    std::cout << val << " ";
+  }
   
   std::cout << std::endl;
  
@@ -100,14 +103,16 @@ TEST(ic40configuration){
 	  "y-coordinates are wrong.");
 
   std::cout << "IC40 x positions: " << std::endl; 
-  for_each (ic40Y.begin (), ic40Y.end (),
-	    std::cout << _1 << " " );
+  BOOST_FOREACH(const double &val, ic40Y) {
+    std::cout << val << " ";
+  }
 
   std::cout << std::endl;
 
   std::cout << "IC40 I3Scale pos: " << std::endl; 
-  for_each (y.begin (), y.end (),
-	    std::cout << _1 << " " );
+  BOOST_FOREACH(const double &val, y) {
+    std::cout << val << " ";
+  }
 
   std::cout << std::endl;
 

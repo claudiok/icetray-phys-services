@@ -4,7 +4,7 @@
 #include "dataclasses/physics/I3Particle.h"
 
 #include <algorithm>
-#include <boost/lambda/lambda.hpp>
+#include <boost/foreach.hpp>
 #include <iostream>
 
 TEST_GROUP(ContainmentSizeTest);
@@ -22,8 +22,6 @@ double myScaleFunc (double px, double py,
 
 
 TEST(ContainmentAreaSize){
-  using namespace boost::lambda;
-
   // make a first linebreak
   std::cout << std::endl;
 
@@ -33,13 +31,15 @@ TEST(ContainmentAreaSize){
 
   // print the cornerpoints
   std::cout << "x: " << std::endl; 
-  for_each (x.begin (), x.end (),
-	    std::cout << _1 << ", " );
+  BOOST_FOREACH(const double &val, x) {
+            std::cout << val << ", ";
+  }
   std::cout << std::endl;
-  
+
   std::cout << "y: " << std::endl; 
-  for_each (y.begin (), y.end (),
-	    std::cout << _1 << ", " );
+  BOOST_FOREACH(const double &val, y) {
+            std::cout << val << ", ";
+  }
   std::cout << std::endl;
 
 
@@ -73,8 +73,6 @@ TEST(ContainmentAreaSize){
 
 
 TEST(ContainmentVolumeSize){
-  using namespace boost::lambda;
-
   // make a first linebreak
   std::cout << std::endl;
 
@@ -84,13 +82,15 @@ TEST(ContainmentVolumeSize){
 
   // print the cornerpoints
   std::cout << "x: " << std::endl; 
-  for_each (x.begin (), x.end (),
-	    std::cout << _1 << ", " );
+  BOOST_FOREACH(const double &val, x) {
+            std::cout << val << ", ";
+  }
   std::cout << std::endl;
-  
+
   std::cout << "y: " << std::endl; 
-  for_each (y.begin (), y.end (),
-	    std::cout << _1 << ", " );
+  BOOST_FOREACH(const double &val, y) {
+            std::cout << val << ", ";
+  }
   std::cout << std::endl;
 
 
