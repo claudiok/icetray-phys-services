@@ -27,8 +27,8 @@ using boost::test_tools::check_is_close;
 using boost::test_tools::check_is_small;
 
 #define PERCENTAGE 0.000001
-#define STD_ICE_PROPERTIES "/phys-services/resources/iceProperties.dat"
-#define AHA_ICE_PROPERTIES "/phys-services/resources/Ice_table.aha.i3coords.cos080.17may2007.txt"
+#define STD_ICE_PROPERTIES "/phys-services/resources/ice_tables/iceProperties.dat"
+#define AHA_ICE_PROPERTIES "/phys-services/resources/ice_tables/Ice_table.aha.i3coords.cos080.17may2007.txt"
 
 TEST_GROUP(I3MediumServiceTest);
 
