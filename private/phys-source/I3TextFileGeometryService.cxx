@@ -72,8 +72,8 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
 				  y_F * I3Units::m,
 				  z_F * I3Units::m,
 				  I3Position::car);
-      if (orientation_F == -1) amanda.orientation = (I3OMGeo::Down);
-      else if (orientation_F == 1) amanda.orientation = (I3OMGeo::Up);
+      if (orientation_F == -1) amanda.orientation = I3Orientation(0.,0.,-1., 1.,0.,0.); // down
+      else if (orientation_F == 1) amanda.orientation = I3Orientation(0.,0.,1., 1.,0.,0.); // up
       amanda.area = (0.0284 * I3Units::m2);
       amanda.omtype = I3OMGeo::AMANDA;
       Geometry.omgeo[OMKey(string_F, tube_F)] = amanda;
@@ -88,7 +88,7 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
 				     y_F * I3Units::m,
 				     z_F * I3Units::m,
 				     I3Position::car);
-        icecube.orientation = (I3OMGeo::Down); 
+        icecube.orientation = I3Orientation(0.,0.,-1., 1.,0.,0.); // down 
         icecube.area = (0.0444 * I3Units::m2);
 	icecube.omtype = I3OMGeo::IceCube;
 	Geometry.omgeo[OMKey(string_F, tube_F)] = icecube;
@@ -109,7 +109,7 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
 				      y_F * I3Units::m,
 				      z_F * I3Units::m,
 				      I3Position::car);
-        icecube.orientation = (I3OMGeo::Down); 
+        icecube.orientation = I3Orientation(0.,0.,-1., 1.,0.,0.); // down 
         icecube.area = (0.0444 * I3Units::m2);
 	icecube.omtype = I3OMGeo::IceTop;
 	Geometry.omgeo[OMKey(string_F, tube_F)] = icecube;

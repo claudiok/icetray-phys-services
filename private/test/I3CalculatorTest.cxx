@@ -182,7 +182,7 @@ TEST(CherenkovAngle)
   a1.SetPosition(0,0,1);
   ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/I3Units::deg,49.2761,0.0001);
 
-  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),p,I3OMGeo::Up)/I3Units::deg,117.47272,0.0001);
+  ENSURE_DISTANCE(CherenkovApproachAngle(muon(),p,I3Direction(0.,0.,1.))/I3Units::deg,117.47272,0.0001);
 }
 
 TEST(CascadeDistance)

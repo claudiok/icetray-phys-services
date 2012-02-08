@@ -24,7 +24,7 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
 				 double& chapangle,           // output
 				 const double IndexRefG,      // input
 				 const double IndexRefP,      // input
-				 const I3OMGeo::Orientation orient) // input
+				 const I3Direction& direction) // input
 {
   I3Position appos;     // output 
   double apdist;        // output
@@ -47,12 +47,14 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
     double pos1_z = particle.GetZ() + a*particle.GetDir().GetZ();
     chpos.SetPosition(pos1_x, pos1_y, pos1_z);
 
-    double chdist_z = position.GetZ() - particle.GetZ() - a*particle.GetDir().GetZ();  //z component of vector between cherenkov position and OM
+    double chdist_x = position.GetX() - pos1_x;  //x component of vector between cherenkov position and OM
+    double chdist_y = position.GetY() - pos1_y;  //y component of vector between cherenkov position and OM
+    double chdist_z = position.GetZ() - pos1_z;  //z component of vector between cherenkov position and OM
 
-    //angle between (vector between cherenkov position and OM) 
-    //and (OM axis - can be seen as a vector with (0, 0, +/-1))
-    if(orient==I3OMGeo::Up) {chapangle = I3Constants::pi-acos(chdist_z/chdist);}  
-    if(orient==I3OMGeo::Down) {chapangle = I3Constants::pi-acos(-chdist_z/chdist);}
+    //angle between (vector between cherenkov position and OM).
+    //and (OM axis as given by the direction argument)
+    //direction is already normalized, chdist_* is not
+    chapangle = std::acos(-(direction.GetX()*chdist_x + direction.GetY()*chdist_y + direction.GetZ()*chdist_z)/chdist);
 
     if((particle.GetShape()==I3Particle::StartingTrack && a<0) || 
              //track starts after pos1 (cherenkov point)
@@ -221,12 +223,12 @@ double I3Calculator::DistanceAlongTrack(const I3Particle& track, const I3Positio
 }
 
 //--------------------------------------------------------------
-I3Position I3Calculator::CherenkovPosition(const I3Particle& particle, const I3Position& position)
+I3Position I3Calculator::CherenkovPosition(const I3Particle& particle, const I3Position& position, const double IndexRefG, const double IndexRefP)
 {
   if (particle.IsTrack()) {
     I3Position chpos;
     double chtime,chdist,chapangle;
-    CherenkovCalc(particle,position,chpos,chtime,chdist,chapangle);
+    CherenkovCalc(particle,position,chpos,chtime,chdist,chapangle,IndexRefG,IndexRefP);
     return chpos;
   }
   else if (particle.IsCascade()) {
@@ -262,13 +264,13 @@ double I3Calculator::CherenkovTime(const I3Particle& particle, const I3Position&
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovDistance(const I3Particle& particle, const I3Position& position)
+double I3Calculator::CherenkovDistance(const I3Particle& particle, const I3Position& position, const double IndexRefG, const double IndexRefP)
 {
   if (particle.IsTrack()) {
     I3Position chpos;
     double chtime,chdist,chapangle;
     CherenkovCalc(particle, position, chpos, chtime, chdist,
-		  chapangle);
+		  chapangle, IndexRefG, IndexRefP);
     return chdist;
   }
   else if (particle.IsCascade()) {
@@ -282,13 +284,13 @@ double I3Calculator::CherenkovDistance(const I3Particle& particle, const I3Posit
 
 
 //--------------------------------------------------------------
-double I3Calculator::CherenkovApproachAngle(const I3Particle& track, const I3Position& position, const I3OMGeo::Orientation orient)
+double I3Calculator::CherenkovApproachAngle(const I3Particle& track, const I3Position& position, const I3Direction& direction, const double IndexRefG, const double IndexRefP)
 {
   if (track.IsTrack()) {
     I3Position chpos;
     double chtime,chdist,chapangle;
     CherenkovCalc(track,position,chpos,chtime,chdist,chapangle,
-		  I3Constants::n_ice_group,I3Constants::n_ice_phase,orient);
+		  IndexRefG,IndexRefP,direction);
     return chapangle;
   }
   else {
