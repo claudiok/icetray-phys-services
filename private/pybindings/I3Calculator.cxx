@@ -48,6 +48,7 @@ void register_I3Calculator()
       "I3Calculator::Distance (const I3Particle &p1, const I3Particle &p2)");
   def("four_distance", I3Calculator::FourDistance,
       "I3Calculator::FourDistance(const I3Particle &p1, const I3Particle &p2)");
-
+  def("rotate", I3Calculator::Rotate,
+	  "I3Calculator::Rotate(const I3Direction &axis, I3Direction &dir, double angle)");
 
 }
