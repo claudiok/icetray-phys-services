@@ -185,8 +185,8 @@ void I3GeoSelTestModule::Physics(I3FramePtr frame) {
   if(detectorCentered_){
     std::pair<double,double> center = 
       geo_sel_utils::detector_center(new_geo,goodStrings_);
-    ENSURE_DISTANCE(center.first, 0., 0.00000000001*I3Units::m);
-    ENSURE_DISTANCE(center.second, 0., 0.00000000001*I3Units::m);
+    ENSURE_DISTANCE(center.first, 0., 0.001*I3Units::mm);
+    ENSURE_DISTANCE(center.second, 0., 0.001*I3Units::mm);
   }
 
 }
