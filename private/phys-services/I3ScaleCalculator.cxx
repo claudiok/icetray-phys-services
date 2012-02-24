@@ -47,10 +47,7 @@ I3ScaleCalculator::GuessIceCubeConfig () const {
 
   // guess different configs
   int stringNo = stringSet.size ();
-  if (stringNo >= 80) {
-    return IC80;
-  }
-  else switch (stringNo) {
+  switch (stringNo) {
     case 9:
     case 16: // + IceTop ?         
  // case 28: // + AMANDA           
@@ -68,6 +65,10 @@ I3ScaleCalculator::GuessIceCubeConfig () const {
       return IC59;
     case 79:
       return IC79;
+    case 80:
+      return IC80;
+    case 86:
+      return IC86;
     default:
       return IC_UNKNOWN;
     }
@@ -80,10 +81,7 @@ I3ScaleCalculator::GuessIceTopConfig () const {
   int stationNo = stationMap.size();
 
   // guess config
-  if (stationNo >= 80) {
-    return IT80;
-  }
-  else switch (stationNo) {
+  switch (stationNo) {
     case 16:
       return IT16;
     case 26:
@@ -94,7 +92,10 @@ I3ScaleCalculator::GuessIceTopConfig () const {
       return IT59;
     case 73:
       return IT73;
-
+    case 80:
+      return IT80;
+    case 81:
+      return IT81;
     default:
       return IT_UNKNOWN;
     }
@@ -171,11 +172,20 @@ std::vector<int > I3ScaleCalculator::GetOuterStrings () const {
     outerStrings.push_back(41);
     break;
   case IC80:
-  case IC86:
     outerStrings.push_back(1);
     outerStrings.push_back(6);
     outerStrings.push_back(50);
     outerStrings.push_back(80);
+    outerStrings.push_back(75);
+    outerStrings.push_back(31);
+    break;
+  case IC86:
+    outerStrings.push_back(1);
+    outerStrings.push_back(6);
+    outerStrings.push_back(50);
+    outerStrings.push_back(74);
+    outerStrings.push_back(72);
+    outerStrings.push_back(78);
     outerStrings.push_back(75);
     outerStrings.push_back(31);
     break;
@@ -255,11 +265,20 @@ std::vector<int > I3ScaleCalculator::GetOuterStations () const {
     outerStations.push_back(41);
     break;
   case IT80:
-  case IT81:
     outerStations.push_back(1);
     outerStations.push_back(6);
     outerStations.push_back(50);
     outerStations.push_back(80);
+    outerStations.push_back(75);
+    outerStations.push_back(31);
+    break;
+  case IT81:
+    outerStations.push_back(1);
+    outerStations.push_back(6);
+    outerStations.push_back(50);
+    outerStations.push_back(74);
+    outerStations.push_back(72);
+    outerStations.push_back(78);
     outerStations.push_back(75);
     outerStations.push_back(31);
     break;
