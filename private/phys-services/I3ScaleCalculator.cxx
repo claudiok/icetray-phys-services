@@ -184,7 +184,7 @@ std::vector<int > I3ScaleCalculator::GetOuterStrings () const {
     outerStrings.push_back(6);
     outerStrings.push_back(50);
     outerStrings.push_back(74);
-    outerStrings.push_back(72);
+    outerStrings.push_back(73);
     outerStrings.push_back(78);
     outerStrings.push_back(75);
     outerStrings.push_back(31);
@@ -277,7 +277,7 @@ std::vector<int > I3ScaleCalculator::GetOuterStations () const {
     outerStations.push_back(6);
     outerStations.push_back(50);
     outerStations.push_back(74);
-    outerStations.push_back(72);
+    outerStations.push_back(73);
     outerStations.push_back(78);
     outerStations.push_back(75);
     outerStations.push_back(31);
