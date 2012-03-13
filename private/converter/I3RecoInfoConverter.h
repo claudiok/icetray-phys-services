@@ -31,4 +31,6 @@ private:
     int icetopConf_; 
     std::map<std::string, std::pair<double, double > > timeWindows_;
     std::map<std::string, std::pair<double, double > > muonTimeWindows_;
+
+    SET_LOGGER("I3RecoInfoConverter");
 };
