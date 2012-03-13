@@ -95,9 +95,8 @@ void I3StringAdderServiceFactory::Configure()
    */
   I3OMGeo omgeo;
   omgeo.omtype = static_cast<I3OMGeo::OMType>(domType_);
-  omgeo.orientation = static_cast<I3OMGeo::Orientation>(domOrientation_);
+  omgeo.orientation = ((domOrientation_==1)?I3Orientation(0.,0.,1., std::cos(aziangle_),std::sin(aziangle_),0.):I3Orientation(0.,0.,-1., std::cos(aziangle_),std::sin(aziangle_),0.));
   omgeo.area = area_;
-  omgeo.aziangle = aziangle_;
   omgeo.position.SetZ(depth_);
 
   for(std::vector<double>::iterator x_iter = xPositions_.begin(), y_iter = yPositions_.begin();

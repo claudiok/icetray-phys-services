@@ -52,7 +52,7 @@ namespace I3Calculator
    *                     This is used to define the angle (w.r.t. the track)
    *                     under which Cherenkov photons are emitted in ice.
    *
-   * @param orient -- Orientation of the OM.
+   * @param direction -- Orientation of the OM.
    *
    *
    * OUTPUT:
@@ -95,7 +95,7 @@ namespace I3Calculator
 		     double& changle,
 		     const double IndexRefG=I3Constants::n_ice_group,
 		     const double IndexRefP=I3Constants::n_ice_phase,
-		     const I3OMGeo::Orientation orient=I3OMGeo::Down);
+		     const I3Direction& direction=I3Direction(0.,0.,-1.));
 
   /**
    * Check if the input position ('position') lies on the input track 
@@ -164,7 +164,9 @@ namespace I3Calculator
    * calls to the function.
    */
   I3Position CherenkovPosition(const I3Particle& particle,
-			       const I3Position& position);
+			       const I3Position& position,
+			       const double IndexRefG=I3Constants::n_ice_group,
+			       const double IndexRefP=I3Constants::n_ice_phase);
 
  /**
    * A convenience function that calls CherenkovCalc() and returns the time
@@ -188,19 +190,23 @@ namespace I3Calculator
    * order to save multiple calls to the function.
    */
   double CherenkovDistance(const I3Particle& particle,
-			   const I3Position& position);
+			   const I3Position& position,
+			   const double IndexRefG=I3Constants::n_ice_group,
+			   const double IndexRefP=I3Constants::n_ice_phase);
 
  /**
    * A convenience function that calls CherenkovCalc() and returns the
    * angle between the path of Cherenkov light from the input track and the 
-   * z-axis of the input OM position.  An optional input is the orientation 
+   * z-axis of the input OM position.  An optional input is the direction 
    * of the OM (default = Down).  If you are interested in more than one 
    * quantity from CherenkovCalc(), use the CherenkovCalc() function 
    * directly, in order to save multiple calls to the function.
    */
   double CherenkovApproachAngle(const I3Particle& particle,
 			      const I3Position& position,
-			      const I3OMGeo::Orientation orient=I3OMGeo::Down);
+			      const I3Direction& direction=I3Direction(0.,0.,-1.),
+			      const double IndexRefG=I3Constants::n_ice_group,
+			      const double IndexRefP=I3Constants::n_ice_phase);
 
   /**
    * A convenience function that calls CherenkovTime() and calculates the time 
