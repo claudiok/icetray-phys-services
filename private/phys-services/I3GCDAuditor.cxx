@@ -118,7 +118,8 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 			bad_dom("Invalid ATWD gain for OM%s channel %d (%e)",
 			    om.str().c_str(), chan, cal.GetATWDGain(chan));
 	if (!std::isfinite(cal.GetFADCGain()) || cal.GetFADCGain() <= 0)
-		bad_dom("Invalid FADC gain for OM%s", om.str().c_str());
+		bad_dom("Invalid FADC gain for OM%s (%e)", om.str().c_str(),
+		    cal.GetFADCGain());
 	for (int chip = 0; chip < 2; chip++)
 	    for (int chan = 0; chan < 3; chan++)
 		for (int bin = 0; bin < 128; bin++) {
