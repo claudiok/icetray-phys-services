@@ -44,6 +44,7 @@ i3_add_library(phys-services
   private/geo-selector/I3GeometrySelectorServiceFactory.cxx
   private/geo-selector/I3StringAdderService.cxx
   private/geo-selector/I3StringAdderServiceFactory.cxx
+  private/phys-services/I3BadDOMAuditor.cxx
   private/phys-services/I3Calculator.cxx
   private/phys-services/I3CascadeCutValues.cxx
   private/phys-services/I3Cuts.cxx
@@ -52,6 +53,7 @@ i3_add_library(phys-services
   private/phys-services/I3FileOMKey2MBID.cxx
   private/phys-services/I3FileOMKey2MBIDFactory.cxx
   private/phys-services/I3Functions.cxx
+  private/phys-services/I3GCDAuditor.cxx
   private/phys-services/I3RandomService.cxx
   private/phys-services/I3GSLRandomService.cxx
   private/phys-services/I3GSLRandomServiceFactory.cxx
