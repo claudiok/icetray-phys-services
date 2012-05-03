@@ -1,5 +1,5 @@
 /**
- *  $Id: I3GCDAuditor.cxx 87860 2012-05-02 16:53:51Z nwhitehorn $
+ *  $Id: I3GCDAuditor.cxx 87920 2012-05-03 20:30:02Z nwhitehorn $
  *  
  *  Copyright (C) 2011
  *  Nathan Whitehorn <nwhitehorn@icecube.wisc.edu>
@@ -25,6 +25,7 @@ class I3GCDAuditor : public I3Module
 		    const I3DOMCalibration &cal, const I3DOMStatus &status);
 		std::string bad_dom_list_;
 		bool AMANDA_is_error_;
+		bool fail_on_sim_quantities_;
 };
 
 I3_MODULE(I3GCDAuditor);
@@ -34,6 +35,9 @@ I3GCDAuditor::I3GCDAuditor(const I3Context& context) : I3Module(context)
 	AddParameter("BadDOMList", "List of DOMs not to check", "BadDomsList");
 	AddParameter("AMANDAIsAnError", "Fail if geometry contains TWR OMs",
 	    true);
+	AddParameter("MaximumParanoia", "Fail for nonsense quantities that "
+	    "are mostly only relevant for simulation (e.g. PMT discriminator "
+	    "thresholds)", true);
 	AddOutBox("OutBox");
 }
 
@@ -42,6 +46,7 @@ I3GCDAuditor::Configure()
 {
 	GetParameter("BadDOMList", bad_dom_list_);
 	GetParameter("AMANDAIsAnError", AMANDA_is_error_);
+	GetParameter("MaximumParanoia", fail_on_sim_quantities_);
 }
 
 void
@@ -96,6 +101,12 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
     const I3DOMCalibration &cal, const I3DOMStatus &status)
 {
 	#define bad_dom(...) { log_error(__VA_ARGS__); return false; }
+	#define sim_bad_dom(...) { log_error(__VA_ARGS__); \
+	    if (fail_on_sim_quantities_) return false; \
+	    else \
+	    log_error("WARNING! The above error indicates a serious problem, " \
+	     "which has been ignored due to the setting of MaximumParanoia. " \
+	     "It will likely cause simulation to fail!");}
 
 	// Check geometry
 	if (!std::isfinite(omgeo.position.GetX()) ||
@@ -182,11 +193,12 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 	}
 	if (!std::isfinite(SPEPMTThreshold(status, cal)) ||
 	    SPEPMTThreshold(status, cal) <= 0)
-		bad_dom("Invalid SPE threshold for OM%s (%f mV)",
+		sim_bad_dom("Invalid SPE threshold for OM%s (%f mV)",
 		    om.str().c_str(), SPEPMTThreshold(status, cal)/I3Units::mV);
 
 	return true;
 
 	#undef bad_dom
+	#undef sim_bad_dom
 }
 
