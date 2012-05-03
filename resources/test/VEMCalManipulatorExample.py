@@ -3,10 +3,10 @@ from I3Tray import *
 
 from os.path import expandvars
 
-load("libicetray")
-load("libdataclasses")
-load("libdataio")
-load("libphys-services")
+from icecube import icetray 
+from icecube import dataclasses 
+from icecube import dataio 
+from icecube import phys_services 
 
 
 tray = I3Tray()

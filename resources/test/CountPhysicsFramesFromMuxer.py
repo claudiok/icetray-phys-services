@@ -12,9 +12,9 @@ import sys
 #warning the semantics of I3Tray::Execute have changed from N-events
 #to n-frames.  
 
-load("libdataclasses")
-load("libphys-services")
-load("libdataio")
+from icecube import dataclasses 
+from icecube import phys_services 
+from icecube import dataio 
 
 tray = I3Tray()
 

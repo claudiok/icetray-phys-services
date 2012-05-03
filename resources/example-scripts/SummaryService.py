@@ -11,10 +11,10 @@ else:
         print 'Usage: %s <filename>' % sys.argv[0]
         sys.exit(1)
         
-load("libicetray")
-load("libdataclasses")
-load("libphys-services")
-load("libdataio")
+from icecube import icetray 
+from icecube import dataclasses 
+from icecube import phys_services 
+from icecube import dataio 
 
 tray = I3Tray()
 
