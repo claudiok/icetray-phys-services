@@ -96,6 +96,14 @@ I3BadDOMAuditor::CheckResults()
 		}
 	}
 
+	// Not strictly bad-DOM-list-related, but we have the data...
+	for (std::map<OMKey, int>::const_iterator i = pulse_counts_.begin();
+	    i != pulse_counts_.end(); i++) {
+		if (geo_->omgeo.find(i->first) == geo_->omgeo.end())
+			bad_dom("OM%s triggered but not present in "
+			    "geometry.", i->first.str().c_str());
+	}
+
 	#undef bad_dom
 
 	if (err)
