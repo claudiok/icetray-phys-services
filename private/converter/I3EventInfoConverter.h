@@ -9,7 +9,7 @@
  * @author Eike Middell <eike.middell@desy.de> $LastChangedBy$
  */
 
-#include <tableio/I3ConverterFactory.h>
+#include <tableio/I3Converter.h>
 
 #include "phys-services/Utility.h"
 

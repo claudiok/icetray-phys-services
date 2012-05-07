@@ -9,7 +9,7 @@
  * @author Jakob van Santen <vansanten@wisc.edu> $LastChangedBy$
  */
 
-#include <tableio/I3ConverterFactory.h>
+#include <tableio/I3Converter.h>
 #include <phys-services/I3CutValues.h>
 
 class I3CutValuesConverter : public I3ConverterImplementation<I3CutValues > {

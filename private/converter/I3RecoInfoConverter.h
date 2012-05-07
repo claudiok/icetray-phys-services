@@ -9,7 +9,7 @@
  * @author Eike Middell <eike.middell@desy.de> $LastChangedBy$
  */
 
-#include <tableio/I3ConverterFactory.h>
+#include <tableio/I3Converter.h>
 #include <dataclasses/physics/I3Particle.h>
 
 class I3RecoInfoConverter : public I3ConverterImplementation<I3Particle > {
