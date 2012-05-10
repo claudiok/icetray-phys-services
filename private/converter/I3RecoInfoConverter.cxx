@@ -69,6 +69,7 @@ std::string I3RecoInfoConverter::generateDocString(std::string prefix,
            timeWindows_[identifier];
         result << prefix << " (" << interval.first << ", " << interval.second << ")";
     }
+    result << " from " << pulseMapName_;
     return result.str();
 }
 
