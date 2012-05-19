@@ -3,9 +3,7 @@
 
 #include "phys-services/I3RandomService.h"
 
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_test.h>
+struct i3_gsl_rng;
 
 /**
  * copyright  (C) 2004
@@ -89,20 +87,12 @@ class I3GSLRandomService : public I3RandomService{
   I3GSLRandomService(const I3GSLRandomService& );
   I3GSLRandomService operator=(const I3GSLRandomService& );
 
-	void construct();
-
-  gsl_rng* r;
+  i3_gsl_rng* r;
 
   SET_LOGGER("I3GSLRandomService");
 
 };
 
 I3_POINTER_TYPEDEFS(I3GSLRandomService);
-
-inline void I3GSLRandomService::construct()
-{
-  gsl_rng_env_setup();
-  r = gsl_rng_alloc(gsl_rng_default);
-}
 
 #endif //I3GSLRANDOMSERVICE_H

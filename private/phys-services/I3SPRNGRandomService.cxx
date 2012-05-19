@@ -11,6 +11,13 @@
 // Class header files
 #include "phys-services/I3SPRNGRandomService.h"
 #include "phys-services/gsl-sprng.h" 
+
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_test.h>
+
+#include <gsl/gsl_rng.h>
+struct i3_gsl_rng : public gsl_rng{};
+
 #include <string>
 #include <fstream>
 #include <cassert>
@@ -21,7 +28,7 @@ using namespace std;
 I3SPRNGRandomService::I3SPRNGRandomService()
 {
   gsl_rng_env_setup();
-  rng_ = gsl_sprng_init(0, 1, 0);
+  rng_ = static_cast<i3_gsl_rng*>(gsl_sprng_init(0, 1, 0));
 }
 
 
@@ -52,14 +59,15 @@ I3SPRNGRandomService::I3SPRNGRandomService(
     if (stat(instatefile_.c_str(), &istat)) { 
        log_fatal("SPRNG: Input RNG state file '%s' cannot be read!!!", instatefile_.c_str());
     }
-  	ifstream in(instatefile_.c_str()); 
-  	in.read((char*) &size,sizeof(int));  // read size of array
-  	in.read(buffer,size);		// read array
-  	in.close();
 
-  	rng_ = gsl_sprng_init(seed, nstreams, streamnum, buffer);
+    ifstream in(instatefile_.c_str()); 
+    in.read((char*) &size,sizeof(int));  // read size of array
+    in.read(buffer,size);		// read array
+    in.close();
+
+    rng_ = static_cast<i3_gsl_rng*>(gsl_sprng_init(seed, nstreams, streamnum, buffer));
   } else {
-  	rng_ = gsl_sprng_init(seed, nstreams, streamnum);
+    rng_ = static_cast<i3_gsl_rng*>(gsl_sprng_init(seed, nstreams, streamnum));
   }
 }
 
