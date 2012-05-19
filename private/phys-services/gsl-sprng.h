@@ -2,6 +2,9 @@
 #define PHYS_SERVICES_GSL_SPRNG_H_INCLUDED
 
 #include <sprng/sprng.h>
+//#include <gsl/gsl_randist.h>
+#include <gsl/gsl_rng.h>
+//#include <gsl/gsl_test.h>
 /**
  * gsl-sprng.h
  * copyright  (C) 2004

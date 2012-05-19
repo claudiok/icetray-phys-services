@@ -1,15 +1,22 @@
 #include "phys-services/I3GSLRandomService.h"
 
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_test.h>
+struct i3_gsl_rng : public gsl_rng{};
+
 I3GSLRandomService::I3GSLRandomService()
 {
   // needed call to gsl
-  construct();
+  gsl_rng_env_setup();
+  r = static_cast<i3_gsl_rng*>(gsl_rng_alloc(gsl_rng_default));
 }
 
 I3GSLRandomService::I3GSLRandomService(unsigned long int seed)
 {
   // needed call to gsl.  Then set the seed.
-  construct();
+  gsl_rng_env_setup();
+  r = static_cast<i3_gsl_rng*>(gsl_rng_alloc(gsl_rng_default));
   gsl_rng_set(r, seed);
 }
 

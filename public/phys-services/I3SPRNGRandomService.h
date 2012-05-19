@@ -2,13 +2,9 @@
 #define I3SPRNGRANDOMSERVICE_H
 
 #include "phys-services/I3RandomService.h"
-
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_test.h>
-
 #include <string>
 
+struct i3_gsl_rng;
 
 /**
  * copyright  (C) 2004
@@ -47,7 +43,8 @@ class I3SPRNGRandomService : public I3RandomService{
    * constructors
    */
   I3SPRNGRandomService(int seed, int nstreams, int streamnum, 
-		       std::string instatefile=std::string(), std::string outstatefile=std::string());
+		       std::string instatefile=std::string(), 
+		       std::string outstatefile=std::string());
 
   /**
    * destructor
@@ -103,7 +100,7 @@ class I3SPRNGRandomService : public I3RandomService{
   I3SPRNGRandomService(const I3SPRNGRandomService& );
   I3SPRNGRandomService operator=(const I3SPRNGRandomService& );
 
-  gsl_rng* rng_;
+  i3_gsl_rng* rng_;
   std::string instatefile_;
   std::string outstatefile_;
 
