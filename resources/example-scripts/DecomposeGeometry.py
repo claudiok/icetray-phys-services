@@ -10,7 +10,7 @@ if len(sys.argv) != 3:
 
 tray = I3Tray()
 tray.AddModule('I3Reader', 'reader', Filename=sys.argv[1])
-tray.AddModule('I3GeometryDecomposer', 'decompose')
+tray.AddModule('I3GeometryDecomposer', 'decompose', DeleteI3Geometry=False)
 tray.AddModule('I3Writer', 'writer', Filename=sys.argv[2])
 tray.AddModule('TrashCan', 'can')
 
