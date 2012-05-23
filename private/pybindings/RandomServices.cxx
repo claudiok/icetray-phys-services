@@ -43,7 +43,7 @@ struct I3RandomServiceWrapper : I3RandomService, wrapper<I3RandomService>
 };
 
 template <typename T, typename Init>
-scope
+class_<T, boost::shared_ptr<T>, boost::noncopyable>
 register_randomservice(const char* name, const char* doc, const Init& init)
 {
   implicitly_convertible<shared_ptr<T>, shared_ptr<const I3RandomService> >();
