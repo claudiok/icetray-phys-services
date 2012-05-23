@@ -17,6 +17,8 @@
 //   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#include <icetray/python/context_suite.hpp>
+
 #ifdef I3_USE_ROOT
 #include <phys-services/I3TRandomService.h>
 #endif
@@ -83,5 +85,6 @@ void register_RandomServices()
 #endif
 
   register_randomservice<I3RandomServiceWrapper>("I3RandomService", "base class for python impls",
-						 init<>());
+						 init<>())
+    .def(icetray::python::context_suite<I3RandomService>());
 }
