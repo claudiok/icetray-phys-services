@@ -53,6 +53,7 @@ register_randomservice(const char* name, const char* doc, const Init& init)
   return class_<T, boost::shared_ptr<T>, boost::noncopyable>(name,
 							     doc,
 							     init)
+    .def(icetray::python::context_suite<I3RandomService>())
     .def("binomial", &T::Binomial)
     .def("exp", &T::Exp)
     .def("integer", &T::Integer)
@@ -85,6 +86,5 @@ void register_RandomServices()
 #endif
 
   register_randomservice<I3RandomServiceWrapper>("I3RandomService", "base class for python impls",
-						 init<>())
-    .def(icetray::python::context_suite<I3RandomService>());
+						 init<>());
 }
