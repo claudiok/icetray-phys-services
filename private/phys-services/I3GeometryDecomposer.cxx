@@ -14,6 +14,7 @@
 #include <dataclasses/geometry/I3TankGeo.h>
 #include <dataclasses/geometry/I3ModuleGeo.h>
 #include <dataclasses/I3Time.h>
+#include <dataclasses/I3Double.h>
 
 #include <boost/foreach.hpp>
 
@@ -37,7 +38,10 @@ private:
     bool deleteI3Geometry_;
     
     I3ModuleGeoMapPtr
-    GenerateI3ModuleGeo(const I3OMGeoMap &omgeo);
+    GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const;
+
+    I3MapModuleKeyStringPtr
+    GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const;
 };
 
 I3_MODULE(I3GeometryDecomposer);
@@ -67,11 +71,21 @@ I3GeometryDecomposer::Geometry(I3FramePtr frame)
     if (!geometry)
         log_fatal("There is no I3Geometry object in the Geometry frame!");
 
-    frame->Put("I3OMGeoMap",      I3OMGeoMapPtr     (new I3OMGeoMap     (geometry->omgeo     )));
-    frame->Put("I3ModuleGeoMap",  GenerateI3ModuleGeo(geometry->omgeo));
-    frame->Put("I3StationGeoMap", I3StationGeoMapPtr(new I3StationGeoMap(geometry->stationgeo)));
-    frame->Put("StartTime",       I3TimePtr         (new I3Time         (geometry->startTime )));
-    frame->Put("EndTime",         I3TimePtr         (new I3Time         (geometry->endTime   )));
+    frame->Put("OMGeoMap",      I3OMGeoMapPtr     (new I3OMGeoMap     (geometry->omgeo     )));
+    frame->Put("ModuleGeoMap",  GenerateI3ModuleGeo(geometry->omgeo));
+    frame->Put("StationGeoMap", I3StationGeoMapPtr(new I3StationGeoMap(geometry->stationgeo)));
+    frame->Put("StartTime",     I3TimePtr         (new I3Time         (geometry->startTime )));
+    frame->Put("EndTime",       I3TimePtr         (new I3Time         (geometry->endTime   )));
+
+    frame->Put("Subdetectors",  GenerateSubdetectorMap(geometry->omgeo));
+
+    
+    const double bedrockDepth = 2810.*I3Units::m;
+    const double icecubeCenterDepth = 1948.07*I3Units::m;
+    
+    // assume this is IceCube
+    frame->Put("BedrockZ",        I3DoublePtr       (new I3Double       (icecubeCenterDepth-bedrockDepth)));
+    frame->Put("DepthAtZ0",       I3DoublePtr       (new I3Double       (icecubeCenterDepth   )));
 
     if (deleteI3Geometry_) {
         frame->Delete(I3DefaultName<I3Geometry>::value());
@@ -81,11 +95,53 @@ I3GeometryDecomposer::Geometry(I3FramePtr frame)
 }
 
 /**
+ * distinguish between IceCube, IceTop and DeepCore by string number only
+ */
+I3MapModuleKeyStringPtr
+I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
+{
+    I3MapModuleKeyStringPtr output(new I3MapModuleKeyString());
+    
+    BOOST_FOREACH(const I3OMGeoMap::value_type &pair, omgeo)
+    {
+        const OMKey &input_key = pair.first;
+        if (input_key.GetPMT() != 0) {
+            log_fatal("You seem to be using a non-IceCube I3Geometry object with non-zero PMT ids (pmtid=%u). Cannot convert this.",
+                      static_cast<unsigned int>(input_key.GetPMT()));
+        }
+
+        const ModuleKey key(input_key.GetString(), input_key.GetOM());
+        
+        if (key.GetString() < 0) {
+            (*output)[key] = "AMANDA";
+            continue;
+        }
+
+        if (key.GetString() == 0)
+            log_fatal("This module assumes an IceCube geometry as input. It may not contain string number 0!");
+        
+        if (key.GetOM() > 60) {
+            (*output)[key] = "IceTop";
+            continue;
+        }
+
+        if (key.GetString() >= 79) {
+            (*output)[key] = "DeepCore";
+            continue;
+        }
+        
+        (*output)[key] = "IceCube";
+    }
+    
+    return output;
+}
+
+/**
  * @brief Generates an I3ModuleGeoMap from a I3OMGeoMap,
  * assuming this is an IceCube-DOM-only geometry.
  */
 I3ModuleGeoMapPtr
-I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo)
+I3GeometryDecomposer::GenerateI3ModuleGeo(const I3OMGeoMap &omgeo) const
 {
     I3ModuleGeoMapPtr output(new I3ModuleGeoMap());
                        
