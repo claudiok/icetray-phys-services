@@ -7,7 +7,7 @@
  *  
  */
 
-#include <icetray/I3Module.h>
+#include <icetray/I3ConditionalModule.h>
 #include <icetray/I3Units.h>
 #include <dataclasses/geometry/I3Geometry.h>
 #include <dataclasses/geometry/I3OMGeo.h>
@@ -27,7 +27,7 @@
  * assuming that all existing DOMs are IceCube
  * single-PMT DOMs.
  */
-class I3GeometryDecomposer : public I3Module
+class I3GeometryDecomposer : public I3ConditionalModule
 {
 public:
     I3GeometryDecomposer(const I3Context& context);
@@ -48,7 +48,7 @@ I3_MODULE(I3GeometryDecomposer);
 
 I3GeometryDecomposer::I3GeometryDecomposer(const I3Context& context)
 :
-I3Module(context),
+I3ConditionalModule(context),
 deleteI3Geometry_(false)
 {
     AddParameter("DeleteI3Geometry",
