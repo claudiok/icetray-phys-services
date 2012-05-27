@@ -71,9 +71,9 @@ I3GeometryDecomposer::Geometry(I3FramePtr frame)
     if (!geometry)
         log_fatal("There is no I3Geometry object in the Geometry frame!");
 
-    frame->Put("OMGeoMap",      I3OMGeoMapPtr     (new I3OMGeoMap     (geometry->omgeo     )));
-    frame->Put("ModuleGeoMap",  GenerateI3ModuleGeo(geometry->omgeo));
-    frame->Put("StationGeoMap", I3StationGeoMapPtr(new I3StationGeoMap(geometry->stationgeo)));
+    frame->Put("I3OMGeoMap",      I3OMGeoMapPtr     (new I3OMGeoMap     (geometry->omgeo     )));
+    frame->Put("I3ModuleGeoMap",  GenerateI3ModuleGeo(geometry->omgeo));
+    frame->Put("I3StationGeoMap", I3StationGeoMapPtr(new I3StationGeoMap(geometry->stationgeo)));
     frame->Put("StartTime",     I3TimePtr         (new I3Time         (geometry->startTime )));
     frame->Put("EndTime",       I3TimePtr         (new I3Time         (geometry->endTime   )));
 
