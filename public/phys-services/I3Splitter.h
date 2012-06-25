@@ -7,7 +7,7 @@
 #ifndef ICETRAY_I3SPLITTERMODULE_H_INCLUDED
 #define ICETRAY_I3SPLITTERMODULE_H_INCLUDED
 
-#include <icetray/I3Context.h>
+#include <icetray/I3Configuration.h>
 #include <icetray/I3Frame.h>
 #include <string>
 
@@ -20,14 +20,14 @@
 class I3Splitter
 {
 	public:
-		I3Splitter(const I3Context& context);
+		I3Splitter(const I3Configuration& config);
 		~I3Splitter();
 
 		I3FramePtr GetNextSubEvent(I3FramePtr daq);
 
 	private:
 		I3FramePtr last_daq;
-		std::string subevent_stream;
+		const I3Configuration& config_;
 		int last_subevent_id;
 };
 

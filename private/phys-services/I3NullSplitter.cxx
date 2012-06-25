@@ -26,7 +26,7 @@ class I3NullSplitter : public I3ConditionalModule, public I3Splitter
 I3_MODULE(I3NullSplitter);
 
 I3NullSplitter::I3NullSplitter(const I3Context& context) :
-  I3ConditionalModule(context), I3Splitter(context)
+  I3ConditionalModule(context), I3Splitter(configuration_)
 {
 	AddParameter("InputPulseSeries", "The name of the pulse series to mask "
 	    "(optional)", "");

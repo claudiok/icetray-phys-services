@@ -18,6 +18,7 @@ class DAQFrameSplitting(unittest.TestCase):
 		self.assert_(len(self.frame["InIceRawData"]) == 1)
 		self.assert_("DrivingTime" in self.frame)
 		self.assert_("I3EventHeader" in self.frame)
+		self.assertEquals(self.frame["I3EventHeader"].sub_event_stream, 'splitter')
 		self.assertEquals(self.frame["I3EventHeader"].sub_event_id, phys_frames)
 		self.assertEquals(self.frame["I3EventHeader"].sub_event_id, self.frame["TriggerID"].value)
 		self.assertEquals(self.frame["I3EventHeader"].event_id, frame["I3EventHeader"].event_id)
@@ -71,7 +72,7 @@ f.close()
 class FrameSplitter(icetray.I3Module,phys_services.I3Splitter):
 	def __init__(self, context):
 		icetray.I3Module.__init__(self, context)
-		phys_services.I3Splitter.__init__(self, context)
+		phys_services.I3Splitter.__init__(self, self.configuration)
 		self.AddOutBox('OutBox')
 	def Configure(self):
 		pass

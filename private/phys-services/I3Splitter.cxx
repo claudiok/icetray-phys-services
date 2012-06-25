@@ -13,10 +13,9 @@
 
 #include "phys-services/I3Splitter.h"
 
-I3Splitter::I3Splitter(const I3Context& context) :
-  last_daq(I3FramePtr((I3Frame *)(NULL)))
+I3Splitter::I3Splitter(const I3Configuration& config) :
+  last_daq(I3FramePtr((I3Frame *)(NULL))), config_(config)
 {
-	subevent_stream = context.Get<I3Configuration>().InstanceName();
 }
 
 I3Splitter::~I3Splitter() { }
@@ -36,7 +35,7 @@ I3Splitter::GetNextSubEvent(I3FramePtr daq) {
 
 	// Rewrite event header
 	I3EventHeaderPtr header(new I3EventHeader(frame->Get<I3EventHeader>()));
-	header->SetSubEventStream(subevent_stream);
+	header->SetSubEventStream(config_.InstanceName());
 	header->SetSubEventID(last_subevent_id);
 	frame->Delete("I3EventHeader");
 	frame->Put("I3EventHeader", header);
