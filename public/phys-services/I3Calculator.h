@@ -45,10 +45,10 @@ namespace I3Calculator
    *
    * @param position -- Position of an OM.
    *
-   * @param IndexRefG -- Index of refraction (group), default=1.3195.
+   * @param IndexRefG -- Index of refraction (group), default=1.35634 (from I3Constants)
    *                     This is used to define the speed of light through ice.
    *
-   * @param IndexRefP -- Index of refraction (phase), default=1.35634.
+   * @param IndexRefP -- Index of refraction (phase), default=1.3195 (from I3Constants)
    *                     This is used to define the angle (w.r.t. the track)
    *                     under which Cherenkov photons are emitted in ice.
    *
