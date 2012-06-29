@@ -464,7 +464,7 @@ I3Calculator::GetTransverseDirections(const I3Direction &dir){
   double px = dircos[imin];
   double py = dircos[(imin+1)%3];
   double pz = dircos[(imin+2)%3];
-#ifndef I3_OPTIMIZE
+#ifndef NDEBUG
   double d[3] = {px,py,pz};
 #endif
   log_trace("px=%f py=%f pz=%f", px, py, pz );
@@ -483,7 +483,7 @@ I3Calculator::GetTransverseDirections(const I3Direction &dir){
 
   log_trace( "dircos[0]=%f dircos[1]=%f dircos[2]=%f",
              dircos[0], dircos[1], dircos[2] );
-#ifndef I3_OPTIMIZE
+#ifndef NDEBUG
   log_trace( "dorcos[0]=%f dorcos[1]=%f dorcos[2]=%f",
              d[(3-imin)%3], d[(4-imin)%3], d[(5-imin)%3] );
 #endif
