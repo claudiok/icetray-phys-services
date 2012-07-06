@@ -87,4 +87,5 @@ void register_RandomServices()
 
   register_randomservice<I3RandomServiceWrapper>("I3RandomService", "base class for python impls",
 						 init<>());
+  register_randomservice<I3RandomService>("I3RandomServiceBase", "abstract base class for random services", bp::no_init);
 }
