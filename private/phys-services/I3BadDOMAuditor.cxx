@@ -29,7 +29,7 @@ class I3BadDOMAuditor : public I3Module
 		std::vector<std::string> pulses_;
 		std::string bad_dom_list_;
 		std::map<OMKey, int> pulse_counts_;
-		bool bad_doms_dont_trigger_;
+		bool bad_doms_dont_trigger_, icetop_always_triggers_;
 };
 
 I3_MODULE(I3BadDOMAuditor);
@@ -41,6 +41,8 @@ I3BadDOMAuditor::I3BadDOMAuditor(const I3Context& context) : I3Module(context)
 	    "OfflinePulses");
 	AddParameter("BadDOMsDontTrigger", "Fail if any DOM on the bad DOM "
 	    "produces any pulses", true);
+	AddParameter("IceTopAlwaysTriggers", "Fail if any good IceTop DOM "
+	    "fails to produce any pulses", true);
 	AddOutBox("OutBox");
 }
 
@@ -49,6 +51,7 @@ I3BadDOMAuditor::Configure()
 {
 	GetParameter("BadDOMList", bad_dom_list_);
 	GetParameter("BadDOMsDontTrigger", bad_doms_dont_trigger_);
+	GetParameter("IceTopAlwaysTriggers", icetop_always_triggers_);
 
 	try {
 		std::string simple_name;
@@ -80,6 +83,11 @@ I3BadDOMAuditor::CheckResults()
 	    i != geo_->omgeo.end(); i++) {
 		if (std::find(bad_doms_->begin(), bad_doms_->end(), i->first)
 		    == bad_doms_->end()) {
+			// Don't check for unhit IceTop DOMs if asked not to
+			if (i->second.omtype == I3OMGeo::IceTop &&
+			    !icetop_always_triggers_)
+				continue;
+
 			// DOM is not marked bad -- make sure it triggered
 			if (pulse_counts_.find(i->first) == pulse_counts_.end())
 				bad_dom("OM%s not marked bad but not present "
