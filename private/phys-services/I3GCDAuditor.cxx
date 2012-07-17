@@ -114,12 +114,25 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 	    !std::isfinite(omgeo.position.GetZ()))
 		bad_dom("OM%s has invalid position", om.str().c_str());
 
+	// Check that at least one digitizer is on
+	if (!(status.statusATWDa == I3DOMStatus::On ||
+	    status.statusATWDb == I3DOMStatus::On ||
+	    status.statusFADC == I3DOMStatus::On))
+		bad_dom("OM%s has all digitizers disabled but is marked good",
+		    om.str().c_str());
+
+
 	// Check calibration
-	for (int chip = 0; chip < 2; chip++)
+	for (int chip = 0; chip < 2; chip++) {
+	    if (chip == 0 && status.statusATWDa == I3DOMStatus::Off)
+		continue;
+	    if (chip == 1 && status.statusATWDb == I3DOMStatus::Off)
+		continue;
 	    for (int chan = 0; chan < 3; chan++)
 		if (!std::isfinite(cal.GetATWDBeaconBaseline(chip, chan)))
 			bad_dom("Invalid baselines for OM%s ATWD chip %d, "
 			    "channel %d", om.str().c_str(), chip, chan);
+	}
 	if (!std::isfinite(cal.GetFADCBeaconBaseline()))
 		bad_dom("Invalid baselines for OM%s FADC", om.str().c_str());
 
@@ -131,7 +144,11 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 	if (!std::isfinite(cal.GetFADCGain()) || cal.GetFADCGain() <= 0)
 		bad_dom("Invalid FADC gain for OM%s (%e)", om.str().c_str(),
 		    cal.GetFADCGain());
-	for (int chip = 0; chip < 2; chip++)
+	for (int chip = 0; chip < 2; chip++) {
+	    if (chip == 0 && status.statusATWDa == I3DOMStatus::Off)
+		continue;
+	    if (chip == 1 && status.statusATWDb == I3DOMStatus::Off)
+		continue;
 	    for (int chan = 0; chan < 3; chan++)
 		for (int bin = 0; bin < 128; bin++) {
 			if (!std::isfinite(cal.GetATWDBinCalibFit(chip, chan,
@@ -142,6 +159,7 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 				    om.str().c_str(), chip, chan, bin,
 				    cal.GetATWDBinCalibFit(chip, chan,
 				    bin).slope);
+		}
 	}
 
 	if (!std::isfinite(cal.GetRelativeDomEff()))
@@ -182,6 +200,10 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 		bad_dom("Invalid PMT gain for OM%s (%e)",
 		    om.str().c_str(), PMTGain(status, cal));
 	for (int chip = 0; chip < 2; chip++) {
+		if (chip == 0 && status.statusATWDa == I3DOMStatus::Off)
+			continue;
+		if (chip == 1 && status.statusATWDb == I3DOMStatus::Off)
+			continue;
 		if (!std::isfinite(ATWDSamplingRate(chip, status, cal)) || 
 		    ATWDSamplingRate(chip, status, cal) <= 0 ||
 		    ATWDSamplingRate(chip, status, cal) >
