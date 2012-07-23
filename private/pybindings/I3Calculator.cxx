@@ -22,6 +22,14 @@ namespace bp = boost::python;
 
 #include <phys-services/I3Calculator.h>
 
+static bp::tuple
+GetTransverseDirections(const I3Direction &dir)
+{
+    std::pair<I3Direction,I3Direction> perp =
+        I3Calculator::GetTransverseDirections(dir);
+    return bp::make_tuple(perp.first, perp.second);
+}
+
 void register_I3Calculator()
 {
   // map the I3Calculator namespace to a sub-module  
@@ -33,22 +41,34 @@ void register_I3Calculator()
   bp::scope I3Calculator_scope = I3CalculatorModule;  
   // export stuff in the I3Calculator namespace  
   def("closest_approach_distance", I3Calculator::ClosestApproachDistance,
-      "I3Calculator::ClosestApproachDistance(const I3Particle &particle, const I3Position &position)");
+      "Calculate the minimum perpendicular distance between a track and a point",
+      (bp::arg("particle"), bp::arg("position")));
   def("closest_approach_position", I3Calculator::ClosestApproachPosition,
-      "I3Calculator::ClosestApproachPosition(const I3Particle &particle, const I3Position &position)");
+      "Calculate the position along a track with the minimum perpendicular distance to a point",
+      (bp::arg("particle"), bp::arg("position")));
   def("distance_along_track", I3Calculator::DistanceAlongTrack,
-      "I3Calculator::DistanceAlongTrack(const I3Particle &track, const I3Position &ompos)");
+      "Calculate the distance (projected onto the track) between the track start position and a point",
+      (bp::arg("particle"), bp::arg("position")));
   def("is_on_track", I3Calculator::IsOnTrack,
-      "I3Calculator::DistanceAlongTrack(const I3Particle &track, const I3Position &ompos)");
+      "Check if the given point is on the given track to within a tolerance",
+      (bp::arg("particle"), bp::arg("position"), bp::arg("tol")=10*I3Units::cm));
   def("time_residual", (double (*)( const I3Particle&, const I3Position&,  double, const double, const double)) &I3Calculator::TimeResidual,
-      "I3Calculator::DistanceAlongTrack(const I3Particle &track, const I3Position &ompos)");
+      "Calculate the difference between the given time and the earliest possible Cherenkov photon arrival time for a given track at a given position",
+      (bp::arg("particle"), bp::arg("position"), bp::arg("time"),
+       bp::arg("n_group")=I3Constants::n_ice_group, bp::arg("n_phase")=I3Constants::n_ice_phase));
   def("angle", I3Calculator::Angle,
-      "I3Calculator::Angle(const I3Particle &p1, const I3Particle &p2)");
+      "Calculate the opening angle between two particle directions");
   def("distance", I3Calculator::Distance,
-      "I3Calculator::Distance (const I3Particle &p1, const I3Particle &p2)");
+      "Calculate the minimum 3-distance between two particles");
   def("four_distance", I3Calculator::FourDistance,
-      "I3Calculator::FourDistance(const I3Particle &p1, const I3Particle &p2)");
+      "Calculate the minimum 4-distance between two particles");
   def("rotate", I3Calculator::Rotate,
-	  "I3Calculator::Rotate(const I3Direction &axis, I3Direction &dir, double angle)");
+      "Rotate a direction around the given axis",
+      (bp::arg("axis"), bp::arg("direction"), bp::arg("angle")));
+  def("reverse_direction", I3Calculator::GetReverseDirection,
+      "Rotate a direction around the given axis");
+  def("transverse_directions", GetTransverseDirections,
+      "Return the directions transverse to the given direction");
+  
 
 }
