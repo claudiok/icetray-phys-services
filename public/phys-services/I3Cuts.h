@@ -90,7 +90,8 @@ namespace I3Cuts
 
   /**
    * Main function that does the actual calculation of all of the cut 
-   * parameters.  First, it loops over all hits 
+   * parameters.  It loops over all hitseries it finds in the
+   * hitseriesmap, calculating the cut parameters.
    * 
    * INPUT:
    * @param vertex --  Vertex used in calculation.
