@@ -26,7 +26,7 @@ I3RecoInfoConverter::I3RecoInfoConverter(std::string pulseMapName) :
     I3ConverterImplementation<I3Particle>(),
     pulseMapName_(pulseMapName),
     icecubeConf_(I3ScaleCalculator::IC_GUESS),
-    icetopConf_(I3ScaleCalculator::IC_GUESS),
+    icetopConf_(I3ScaleCalculator::IT_GUESS),
     timeWindows_(),
     muonTimeWindows_()
 {
