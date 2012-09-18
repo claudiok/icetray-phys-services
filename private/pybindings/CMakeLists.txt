@@ -4,6 +4,7 @@ endif(SPRNG_FOUND)
 
 i3_add_pybindings(phys_services
   I3Calculator.cxx
+  I3ScaleCalculator.cxx
   I3CutValues.cxx
   I3CascadeCutValues.cxx
   Converter.cxx
