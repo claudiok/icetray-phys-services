@@ -60,10 +60,10 @@ void register_I3ScaleCalculator()
      ;
   
   def("scale_inice", &I3ScaleCalculator::ScaleInIce,
-      "Calculate how contained a track/vertex is by IceTop area",
+      "Calculate the factor by which the border polygon of the IceCube volume needs to be scaled to exactly contain the track/vertex",
       arg("particle"));
   def("scale_icetop", &I3ScaleCalculator::ScaleIceTop,
-      "Calculate how contained a track/vertex is by the IceCube volume",
+      "Calculate the factor by which the border polygon of the IceTop surface are needs to be scaled to exactly contain the track/vertex",
       arg("particle"));
   def("vertex_is_inside", &I3ScaleCalculator::VertexIsInside,
       "Is the vertex position inside the IceCube volume?",
