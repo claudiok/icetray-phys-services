@@ -58,7 +58,6 @@ i3_add_library(phys-services
   private/phys-services/I3GSLRandomService.cxx
   private/phys-services/I3GSLRandomServiceFactory.cxx
   private/phys-services/I3GeometryDecomposer.cxx
-  private/phys-services/I3MC2Reco.cxx
   private/phys-services/I3MediumPropertiesFile.cxx
   private/phys-services/I3CutValues.cxx
   private/phys-services/I3ScaleCalculator.cxx
