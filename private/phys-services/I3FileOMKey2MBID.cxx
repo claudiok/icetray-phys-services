@@ -71,32 +71,33 @@ OMKey I3FileOMKey2MBID::OMKeyize(const string& key)
   int om_num= -1;
   if(key.size() == 4)
     {
-      if(key[2] == 'A')
-	if(key[3] == '1')
-	  {
-	    om_num = 61;
-	  }
-	else if(key[3] == '2')
-	  {
-	    om_num = 62;
-	  }
-	else
-	  {
-	    log_fatal("bad om key");
-	  }
-      else if(key[2] == 'B')
-	if(key[3] == '1')
-	  {
-	    om_num = 63;
-	  }
-	else if(key[3] == '2')
-	  {
-	    om_num = 64;
-	  }
-	else
-	  {
-	    log_fatal("bad om key");
-	  }
+      if(key[2] == 'A') {
+        if(key[3] == '1')
+          {
+            om_num = 61;
+          }
+        else if(key[3] == '2')
+          {
+            om_num = 62;
+          }
+        else
+          {
+            log_fatal("bad om key");
+          }
+      } else if(key[2] == 'B') {
+        if(key[3] == '1')
+          {
+            om_num = 63;
+          }
+        else if(key[3] == '2')
+          {
+            om_num = 64;
+          }
+        else
+          {
+            log_fatal("bad om key");
+          }
+      }
     }
   else
     {
