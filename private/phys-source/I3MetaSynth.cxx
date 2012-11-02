@@ -56,16 +56,10 @@ I3MetaSynth::I3MetaSynth(const I3Context& context)
 
 void I3MetaSynth::Configure()
 {
-	std::string service_name;
 
-	GetParameter("GeometryService", service_name);
-	geometryService_ = context_.Get<I3GeometryServicePtr>(service_name);
-	GetParameter("CalibrationService", service_name);
-	calibrationService_ =
-	    context_.Get<I3CalibrationServicePtr>(service_name);
-	GetParameter("DetectorStatusService", service_name);
-	detectorStatusService_ =
-	    context_.Get<I3DetectorStatusServicePtr>(service_name);
+	GetParameter("GeometryService", geometryService_);
+	GetParameter("CalibrationService", calibrationService_);
+	GetParameter("DetectorStatusService", detectorStatusService_);
 }
 
 void I3MetaSynth::Process()
