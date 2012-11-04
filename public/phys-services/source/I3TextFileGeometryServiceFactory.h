@@ -3,7 +3,7 @@
 /*
  * class: I3TextFileGeometryServiceFactory
  *
- * Version $Id: I3TextFileGeometryServiceFactory.h 11148 2005-10-03 21:55:04Z pretz $
+ * Version $Id$
  *
  * Date: 17 Feb 2004
  *

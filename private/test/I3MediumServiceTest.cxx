@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2005
  * the icecube collaboration
- * $Id:  $
+ * $Id$
  * 
  * @file I3MediumService.cxx
- * @version $Revision:  $
- * @date $Date:  $
+ * @version $Revision$
+ * @date $Date$
  * @author tschmidt
 */
 

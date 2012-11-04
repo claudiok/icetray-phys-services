@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3CalculatorTest.cxx 9161 2005-06-14 16:44:58Z pretz $
+    $Id$
 
-    @version $Revision: 1.2 $
-    @date $Date: 2005-06-14 12:44:58 -0400 (Tue, 14 Jun 2005) $
+    @version $Revision$
+    @date $Date$
     @author dule
 
     @todo

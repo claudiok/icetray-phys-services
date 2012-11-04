@@ -1,5 +1,5 @@
 /**
- * $Id: I3CutsModule.h$
+ * $Id$
  * (c) 2005 IceCube Collaboration
  * @author D.Turcan
  */

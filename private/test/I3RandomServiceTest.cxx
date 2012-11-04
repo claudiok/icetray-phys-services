@@ -3,7 +3,7 @@
     the icecube collaboration
     $Id$
 
-    @version $Revision: 1.3 $
+    @version $Revision$
     @date $Date$
     @author pretz
 

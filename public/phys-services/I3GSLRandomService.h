@@ -16,7 +16,7 @@
  * 
  * Uses the gsl library for the random numbers
  *
- * @version $Revision: 1.5 $
+ * @version $Revision$
  * @date $Date$
  * @author pretz
  *

@@ -1,7 +1,7 @@
 /**
     copyright  (C) 2005
     the icecube collaboration
-    $Id: I3CutValues.h 10512 2005-08-03 19:04:51Z dule $
+    $Id$
     @author dule
 */
 

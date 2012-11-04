@@ -1,7 +1,7 @@
 
 // LinkDef.h
-// $Id: LinkDef.h 15229 2006-02-02 20:58:21Z pretz $
-// $Date: 2006-02-02 15:58:21 -0500 (Thu, 02 Feb 2006) $
+// $Id$
+// $Date$
 
 #ifdef __CINT__
 

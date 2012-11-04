@@ -1,7 +1,7 @@
 /**
     copyright  (C) 2005
     the icecube collaboration
-    $Id: I3CascadeCutValues.h 10512 2008-03-16 15:02:51 mdagost $
+    $Id$
     @author mdagost
 */
 

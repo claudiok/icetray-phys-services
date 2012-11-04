@@ -1,5 +1,5 @@
 /**
- * $Id: $
+ * $Id$
  * (c) 2005 IceCube Collaboration
  */
 

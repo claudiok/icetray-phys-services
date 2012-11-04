@@ -14,7 +14,7 @@
  * Just uses
  * a private TRandom to implement the methods of I3RandomService.
  *
- * @version $Revision: 1.6 $
+ * @version $Revision$
  * @date $Date$
  * @author pretz
  */

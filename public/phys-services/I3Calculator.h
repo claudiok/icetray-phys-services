@@ -4,7 +4,7 @@
  * $Id$
  *
  * @file I3Calculator.h
- * @version $Revision: 1.16 $
+ * @version $Revision$
  * @date $Date$
  * @author pretz, dule, ehrlich
  */

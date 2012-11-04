@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the IceCube collaboration
- *  $Id: I3TestSourceTestModule.h 2601 2005-02-08 20:05:42Z olivas $
+ *  $Id$
   *
  * @file I3TestSourceTestModule.h
- * @version $Revision: 1.3 $
- * @date $Date: 2005-02-08 21:05:42 +0100 (Tue, 08 Feb 2005) $
+ * @version $Revision$
+ * @date $Date$
  * @author olivas
  */
 

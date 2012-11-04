@@ -8,7 +8,7 @@
  * reflect ROOT's TRandom interface.  Indeed TRandom could be used to 
  * trivially fill this interface
  *
- * @version $Revision: 1.10 $
+ * @version $Revision$
  * @date $Date$
  * @author pretz
  *

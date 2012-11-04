@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3XMLOMKey2MBIDFactory.h 13154 2005-12-01 21:45:55Z tschmidt $
+ * $Id$
  *
  * @file I3XMLOMKey2MBIDFactory.h
- * @version $Revision: 1.10 $
- * @date $Date: 2005-12-01 16:45:55 -0500 (Thu, 01 Dec 2005) $
+ * @version $Revision$
+ * @date $Date$
  * @author tschmidt
  */
 #ifndef I3XMLOMKEY2MBIDFACTORY_H_INCLUDED

@@ -1,10 +1,10 @@
 /**
  * copyright  (C) 2007
  * the icecube collaboration
- * $Id: $
+ * $Id$
  *
- * @version $Revision: $
- * @date $Date: $
+ * @version $Revision$
+ * @date $Date$
  * @author juancarlos@icecube.wisc.edu
  *
  */

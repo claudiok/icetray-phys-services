@@ -1,7 +1,7 @@
 /*
  * class: I3XMLSummaryServiceFactory
  *
- * Version $Id: I3XMLSummaryServiceFactory.cxx $
+ * Version $Id$
  *
  * Date: 2 Apr 2005
  *

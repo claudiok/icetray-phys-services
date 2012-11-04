@@ -4,8 +4,8 @@
  * class: I3XMLSummaryServiceFactory
  *
  * (c) 2007 IceCube Collaboration
- * @version $Revision: $
- * @date $Date: $
+ * @version $Revision$
+ * @date $Date$
  * @author juancarlos@icecube.wisc.edu
  */
 

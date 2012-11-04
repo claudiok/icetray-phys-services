@@ -1,12 +1,12 @@
 /**
  * (c) 2005
  * the IceCube Collaboration
- * $Id:  $
+ * $Id$
  *
  * @file I3XMLOMKey2MBIDFactory.cxx
  * @brief implementation of the I3XMLOMKey2MBIDFactory class
- * @version $Revision:  $
- * @date $Date:  $
+ * @version $Revision$
+ * @date $Date$
  * @author tschmidt
  */
  

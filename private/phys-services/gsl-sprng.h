@@ -6,7 +6,7 @@
  * gsl-sprng.h
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: gsl-sprng.h 11800 2005-10-24 21:17:04Z juancarlos $
+ * $Id$
  *
  * @brief SPRNG Implementation of the I3RandomService interface.  
  * This implementation uses a combination of SPRNG and GSL to generate
@@ -22,8 +22,8 @@
  * http://www.staff.ncl.ac.uk/d.j.wilkinson/ who wrote an MPI simple interface
  * that doesn't make use of streams.
  *
- * @version $Revision: 1.1 $
- * @date $Date: 2005-10-24 17:17:04 -0400 (Mon, 24 Oct 2005) $
+ * @version $Revision$
+ * @date $Date$
  * @author juancarlos
  *
  * @todo 

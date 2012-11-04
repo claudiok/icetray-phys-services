@@ -1,10 +1,10 @@
 /**
     copyright  (C) 2004
     the icecube collaboration
-    $Id: I3XMLOMKey2MBIDTest.cxx 9281 2005-06-19 17:06:10Z tschmidt $
+    $Id$
 
-    @version $Revision: 1.3 $
-    @date $Date: 2005-06-19 19:06:10 +0200 (Sun, 19 Jun 2005) $
+    @version $Revision$
+    @date $Date$
     @author tschmidt
 */
 

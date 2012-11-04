@@ -3,11 +3,11 @@
  *
  * (c) 2005
  * the IceCube Collaboration
- * $Id:  $
+ * $Id$
  *
  * @file I3MediumPropertiesFile.cxx
- * @version $Revision:  $
- * @date $Date:  $
+ * @version $Revision$
+ * @date $Date$
  * @author tschmidt
  */
  

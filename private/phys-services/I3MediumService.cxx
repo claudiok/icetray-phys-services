@@ -3,11 +3,11 @@
  *
  * (c) 2005
  * the IceCube Collaboration
- * $Id:  $
+ * $Id$
  *
  * @file I3MediumService.cxx
- * @version $Revision:  $
- * @date $Date:  $
+ * @version $Revision$
+ * @date $Date$
  * @author mribordy (original code of I3Medium)
  * @author tschmidt
  */

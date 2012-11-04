@@ -1,11 +1,11 @@
 /**
  * copyright  (C) 2004
  * the icecube collaboration
- * $Id: I3GeometrySelector.cxx 2598 2005-02-04 17:18:56Z olivas $
+ * $Id$
  *
  * @file GeoSelUtils.cxx
- * @version $Revision: 1.8 $
- * @date $Date: 2005-02-04 18:18:56 +0100 (Fri, 04 Feb 2005) $
+ * @version $Revision$
+ * @date $Date$
  * @author olivas
  *
  * This class shows how to add a Selection to the event.

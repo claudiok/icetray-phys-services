@@ -5,11 +5,11 @@
  * copyright  (C) 2007
  * the icecube collaboration
  *
- * $Id: I3HDFWriter.h 49247 2008-09-23 09:49:15Z bvoigt $
+ * $Id$
  *
- * @version $Revision: 49247 $
- * @date $LastChangedDate: 2008-09-23 11:49:15 +0200 (Tue, 23 Sep 2008) $
- * @author Sebastian Panknin <sebastian.panknin@desy.de>   Last changed by: $LastChangedBy: bvoigt $
+ * @version $Revision$
+ * @date $LastChangedDate$
+ * @author Sebastian Panknin <sebastian.panknin@desy.de>   Last changed by: $LastChangedBy$
  */
 
 #ifndef I3_SCALE_CALCULATOR_H_INCLUDED

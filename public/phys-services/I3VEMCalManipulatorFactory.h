@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2008
  * The IceCube collaboration
- * ID: $Id: I3VEMCalManipulatorFactory.h 45149 2008-05-07 05:35:44Z tilo $
+ * ID: $Id$
  *
  * @file I3VEMCalManipulatorFactory.h
- * @version $Revision: $
- * @date $Date: 2008-05-07 01:35:44 -0400 (Mi, 07 Mai 2008) $
- * @author $Author: tilo $
+ * @version $Revision$
+ * @date $Date$
+ * @author $Author$
  */
 
 

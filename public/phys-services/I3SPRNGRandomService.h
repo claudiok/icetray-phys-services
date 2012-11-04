@@ -23,7 +23,7 @@
  * The code for this class is based on John Pretz's implementation of
  * I3GSLRandomService.
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision$
  * @date $Date$
  * @author juancarlos
  *

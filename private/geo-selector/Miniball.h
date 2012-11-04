@@ -1,6 +1,6 @@
 //    Copright (C) 1999-2006, Bernd Gaertner
-//    $Revision: 1.3 $
-//    $Date: 2006/11/16 08:01:52 $
+//    $Revision$
+//    $Date$
 //
 //    This program is free software; you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by

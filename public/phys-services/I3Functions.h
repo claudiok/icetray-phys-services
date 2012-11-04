@@ -1,5 +1,5 @@
 /*
- * $Id: I3Functions.cxx 4595 2005-04-13 16:29:34Z dule $
+ * $Id$
  * (c) 2005 IceCube Collaboration
  */
 
