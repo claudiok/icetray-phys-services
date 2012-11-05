@@ -1,5 +1,5 @@
 /**
- * $Id: I3CutsModule.h$
+ * $Id
  * (c) 2005 IceCube Collaboration
  * @author D.Turcan
  */
@@ -9,13 +9,12 @@
 
 #include <icetray/I3ConditionalModule.h>
 #include "icetray/I3Tray.h"
-#include "phys-services/I3Functions.h"
 #include "dataclasses/physics/I3Particle.h"
 
 
 /**
  * @brief
- * 
+ *
  */
 class I3CutsModule : public I3ConditionalModule
 {
@@ -25,9 +24,9 @@ public:
   ~I3CutsModule() { }
   void Configure();
   void Physics(I3FramePtr frame);
-  
+
 private:
-  
+
   I3CutsModule();
   I3CutsModule(const I3CutsModule& source);
   I3CutsModule& operator=(const I3CutsModule& source);
@@ -40,19 +39,24 @@ private:
   std::string particleName_;
 
   /**
+   * List of I3Particle names that the module writes to trees.
+   */
+  std::vector<std::string> particleNameList_;
+
+  /**
    * Parameter: name of the hit series map to use in the calculation of the
    * cut parameters.
    */
   std::string hitsName_;
 
   /**
-   * Parameter: name of the pulse series map to use in the calculation of 
+   * Parameter: name of the pulse series map to use in the calculation of
    * the cut parameters.
    */
   std::string pulsesName_;
 
   /**
-   * Parameter: Optional tag for the name of the object inserted by this module 
+   * Parameter: Optional tag for the name of the object inserted by this module
    * into the frame.
    */
   std::string nameTag_;

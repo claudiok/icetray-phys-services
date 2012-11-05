@@ -52,7 +52,6 @@ i3_add_library(phys-services
   private/phys-services/I3EventCounter.cxx
   private/phys-services/I3FileOMKey2MBID.cxx
   private/phys-services/I3FileOMKey2MBIDFactory.cxx
-  private/phys-services/I3Functions.cxx
   private/phys-services/I3GCDAuditor.cxx
   private/phys-services/I3RandomService.cxx
   private/phys-services/I3GSLRandomService.cxx
@@ -108,7 +107,6 @@ i3_test_executable(test
   private/test/ContainmentSizeTest.cxx
   private/test/GeometrySelectorTests.cxx
   private/test/I3CutsTest.cxx
-  private/test/I3FunctionTest.cxx
   private/test/I3GeoSelTestModule.cxx
   private/test/I3ScaleCalculatorTest.cxx
   private/test/I3XMLOMKey2MBIDTest.cxx

@@ -1,3 +1,6 @@
+/**
+ * $Id
+ */
 #ifndef PHYS_SERVICES_UTILITY_H
 #define PHYS_SERVICES_UTILITY_H
 
@@ -11,15 +14,6 @@ class I3RecoHit;
 class I3RecoPulse;
 class I3DOMLaunch;
 class I3Waveform;
-
-std::string ToString(shared_ptr<const I3FrameObject> obj);
-std::string ToString(I3FrameObject* obj);
-
-shared_ptr<I3FrameObject> Clone(shared_ptr<const I3FrameObject> ptr);
-I3FrameObject* Clone(I3FrameObject* ptr);
-
-void Copy(shared_ptr<const I3FrameObject> oldp,
-	  shared_ptr<I3FrameObject>& newp);
 
 // Functions to get charge from various objects
 double GetCharge(const I3MCHit&);
