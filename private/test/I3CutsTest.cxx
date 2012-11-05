@@ -7,20 +7,9 @@
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
 
-using I3Calculator::CherenkovTime;
-using I3Cuts::ContainmentVolumeSize;
-using I3Cuts::CylinderSize;
-using I3Cuts::ContainmentAreaSize;
-using I3Cuts::CMPolygon;
-using I3Cuts::PutPointsInOrder;
-using I3Cuts::IntersectionOfLineAndPlane;
-using I3Cuts::SmoothDir;
-using I3Cuts::SmoothAll;
-using I3Cuts::Ldir;
-using I3Cuts::Ndir;
-using I3Constants::theta_cherenkov;
-using I3Constants::c_ice;
-using I3Constants::c;
+using namespace I3Calculator;
+using namespace I3Cuts;
+using namespace I3Constants;
 
 I3Geometry CalcGeom(std::vector<I3Position> pos)
 {

@@ -16,25 +16,90 @@
 #include "dataclasses/physics/I3Waveform.h"
 #include <boost/foreach.hpp>
 
-double GetCharge(const I3RecoHit& mchit)
+std::string ToString(shared_ptr<const I3FrameObject> obj)
 {
-  return 1.;
+  std::ostringstream outstring;
+  boost::archive::xml_oarchive ar(outstring);
+  ar << make_nvp(I3::name_of(typeid(*obj)).c_str(), obj);
+  return outstring.str();
+}
+
+std::string ToString(I3FrameObject* obj)
+{
+  std::ostringstream outstring;
+  boost::archive::xml_oarchive ar(outstring);
+  shared_ptr<I3FrameObject> ptr = shared_ptr<I3FrameObject>(new I3FrameObject(*obj));
+  ar << make_nvp(I3::name_of(typeid(*obj)).c_str(), ptr);
+  return outstring.str();
+}
+
+shared_ptr<I3FrameObject> Clone(shared_ptr<const I3FrameObject> ptr)
+{
+  std::ostringstream oss;
+  boost::archive::portable_binary_oarchive boa(oss);
+  boa << make_nvp("obj", ptr);
+  shared_ptr<I3FrameObject> newptr;
+  std::istringstream iss;
+  iss.str(oss.str());
+  boost::archive::portable_binary_iarchive bia(iss);
+  bia >> make_nvp("obj", newptr);
+  return newptr;
+}
+
+I3FrameObject* Clone(I3FrameObject* ptr)
+{
+  std::ostringstream oss;
+  boost::archive::portable_binary_oarchive boa(oss);
+  boa << make_nvp("obj", ptr);
+  shared_ptr<I3FrameObject> newptr;
+  std::istringstream iss;
+  iss.str(oss.str());
+  boost::archive::portable_binary_iarchive bia(iss);
+  bia >> make_nvp("obj", newptr);
+  return newptr.get();
+}
+
+void Copy(shared_ptr<const I3FrameObject> oldp,shared_ptr<I3FrameObject>& newp)
+{
+  std::ostringstream oss;
+  boost::archive::portable_binary_oarchive boa(oss);
+  boa << make_nvp("obj", oldp);
+  std::istringstream iss;
+  iss.str(oss.str());
+  boost::archive::portable_binary_iarchive bia(iss);
+  bia >> make_nvp("obj", newp);
+}
+
+void Copy(shared_ptr<const I3FrameObject> oldp, I3FrameObject* newp)
+{
+  std::ostringstream oss;
+  boost::archive::portable_binary_oarchive boa(oss);
+  boa << make_nvp("obj", oldp);
+  std::istringstream iss;
+  iss.str(oss.str());
+  boost::archive::portable_binary_iarchive bia(iss);
+  bia >> make_nvp("obj", newp);
+}
+
+double GetCharge(const I3RecoHit& mchit)
+{ 
+  return 1.; 
 }
 
 double GetCharge(const I3MCHit& mchit)
-{
-  double w(mchit.GetWeight());
-  return isnan(w) ? 1. : mchit.GetWeight();
+{ 
+  return 1.; 
 }
 
 double GetCharge(const I3RecoPulse& pulse)
 {
-  return pulse.GetCharge();
+  //return (pulse.GetCharge() >= 2.0) ? pulse.GetCharge() : 1; 
+  return pulse.GetCharge(); 
 }
 
 double GetCharge(const I3DOMLaunch& launch)
-{
-  return NAN;
+{ 
+  return NAN; 
 }
 
 double GetCharge(const I3Waveform& wf)
@@ -44,7 +109,7 @@ double GetCharge(const I3Waveform& wf)
   for (iter=wf.GetWaveform().begin(); iter!=wf.GetWaveform().end(); iter++) {
     charge += *iter;
   }
-  return charge/I3Units::mV;
+  return charge/I3Units::mV; 
 }
 
 double GetCharge(const std::vector<I3RecoHit>& hit_series)
@@ -64,21 +129,21 @@ double GetCharge(const std::vector<I3RecoPulse>& pulse_series)
 
 // Functions to get time from either RecoPulse or MCHit.
 double GetTime(const I3MCHit& mchit)
-{
-  return mchit.GetTime();
+{ 
+  return mchit.GetTime(); 
 }
 
 double GetTime(const I3RecoPulse& pulse)
 {
-  return pulse.GetTime();
+  return pulse.GetTime(); 
 }
 
 double GetTime(const I3DOMLaunch& launch)
-{
-  return launch.GetStartTime();
+{ 
+  return launch.GetStartTime(); 
 }
 
 double GetTime(const I3Waveform& wf)
-{
-  return wf.GetStartTime();
+{ 
+  return wf.GetStartTime(); 
 }

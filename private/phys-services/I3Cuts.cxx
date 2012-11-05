@@ -81,6 +81,13 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
 
       // calculate projections of hits onto track...
       Nhit++; // keep track of total hits
+      /*
+      I3Position pos(ompos);
+      pos.ShiftCoordSystem(track.GetPos());
+      pos.RotateZ(-track.GetDir().CalcPhi());
+      pos.RotateY(-track.GetDir().CalcTheta());
+      double dist = pos.GetZ();
+      */
       // Replace this with the function version
       double dist = DistanceAlongTrack(track, ompos);
       log_trace("dist: %f",dist);
