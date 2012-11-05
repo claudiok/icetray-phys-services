@@ -1,36 +1,27 @@
 /**
-    $Id$
     copyright  (C) 2005
     the icecube collaboration
+    $Id: I3CascadeCutValues.h 10512 2008-03-16 15:02:51 mdagost $
+    @author mdagost
 */
 
 #ifndef I3CASCADECUTVALUES_H
 #define I3CASCADECUTVALUES_H
 
-#include <phys-services/I3CutValuesBase.h>
-#include <dataclasses/I3Constants.h>
-#include <dataclasses/I3Position.h>
+#include <dataclasses/I3Constants.h> 
+#include "dataclasses/I3Position.h"
 
-class I3CutValuesBase;
 template <typename Key, typename Value> struct I3Map;
-class OMKey;
+class OMKey; 
 class I3Particle;
 class I3RecoPulse;
 class I3Geometry;
 
-class I3CutValueBase : public I3CutValuesBase {
-
-  virtual void Calculate(const I3Particle& vertex,
-                         const I3Geometry& geometry,
-                         const I3Map< OMKey, std::vector< I3RecoPulse> >& pulsemap,
-                         const double& begTWindow = I3Constants::dt_window_l,
-                         const double& endTWindow = I3Constants::dt_window_h) = 0;
-};
 
 /**
  * @brief A class to store the basic hit information for cascades from the event
  */
-class I3CascadeCutValues : public I3CutValuesBase
+class I3CascadeCutValues : public I3FrameObject
 {
  public:
   int Nchan;

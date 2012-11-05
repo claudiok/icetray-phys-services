@@ -1,8 +1,3 @@
-/**
- * $Id$
- * (c) 2005 IceCube Collaboration
- */
-
 #include <string>
 #include "icetray/serialization.h"
 #include "dataclasses/Utility.h"
