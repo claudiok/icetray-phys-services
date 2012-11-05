@@ -8,11 +8,12 @@
 #ifndef I3CASCADECUTVALUES_H
 #define I3CASCADECUTVALUES_H
 
-#include <dataclasses/I3Constants.h> 
-#include "dataclasses/I3Position.h"
+#include <phys-services/I3CutValuesBase.h>
+#include <dataclasses/I3Constants.h>
+#include <dataclasses/I3Position.h>
 
 template <typename Key, typename Value> struct I3Map;
-class OMKey; 
+class OMKey;
 class I3Particle;
 class I3RecoPulse;
 class I3Geometry;
@@ -21,7 +22,7 @@ class I3Geometry;
 /**
  * @brief A class to store the basic hit information for cascades from the event
  */
-class I3CascadeCutValues : public I3FrameObject
+class I3CascadeCutValues : public I3CutValuesBase
 {
  public:
   int Nchan;
@@ -43,11 +44,11 @@ class I3CascadeCutValues : public I3FrameObject
     Nlate(-1)
     { cog.NullPos(); };
 
-  void Calculate(const I3Particle& vertex, 
-		 const I3Geometry& geometry, 
-		 const I3Map< OMKey, std::vector< I3RecoPulse> >& pulsemap,
-		 const double& begTWindow = I3Constants::dt_window_l,
-		 const double& endTWindow = I3Constants::dt_window_h);
+    void Calculate(const I3Particle& vertex,
+                   const I3Geometry& geometry,
+                   const I3Map< OMKey, std::vector< I3RecoPulse> >& pulsemap,
+                   const double& begTWindow = I3Constants::dt_window_l,
+                   const double& endTWindow = I3Constants::dt_window_h);
 
   virtual ~I3CascadeCutValues();
 
