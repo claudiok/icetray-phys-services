@@ -114,7 +114,6 @@ i3_test_executable(test
   private/test/OneFrameTest.cxx
   private/test/SmoothnessTest.cxx
   private/test/TestGeoTrimmers.cxx
-  private/test/TestSourceTests.cxx
   private/test/main.cxx
   ${ROOT_TESTS}
   USE_PROJECTS phys-services dataio)
