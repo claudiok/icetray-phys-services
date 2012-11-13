@@ -1,6 +1,5 @@
 #include "phys-services/I3Cuts.h"
 #include "dataclasses/I3Constants.h"
-#include "phys-services/Utility.h"
 #include "phys-services/I3Calculator.h"
 #include "dataclasses/physics/I3Particle.h"
 #include "dataclasses/physics/I3RecoPulse.h"
@@ -46,9 +45,8 @@ rotate(double a[3], double delphi, int axis)
 }
 
 //--------------------------------------------------------------
-template<class HitType>
 void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry, 
-		  const I3Map<OMKey, std::vector<HitType> >& hitmap,
+		  const I3RecoPulseSeriesMap& hitmap,
 		  const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		  int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
@@ -60,9 +58,9 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
   std::vector<double> lengthDir;
   double min = 999999;
   double max = -999999;
-  typename I3Map<OMKey, std::vector<HitType> >::const_iterator hits_i;
+  I3RecoPulseSeriesMap::const_iterator hits_i;
   for (hits_i=hitmap.begin(); hits_i!=hitmap.end(); hits_i++) {
-    const std::vector<HitType>& hits = hits_i->second;
+    const I3RecoPulseSeries& hits = hits_i->second;
     OMKey omkey = hits_i->first;
     I3OMGeoMap::const_iterator geom = geometry.omgeo.find(omkey);
     if (geom==geometry.omgeo.end()) {
@@ -73,7 +71,7 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
     StringNumber[(int) 19+omkey.GetString()] = 1; // "19+" includes AMANDA std::strings
     const I3Position& ompos = geom->second.position;
 
-    typename std::vector<HitType>::const_iterator hit;
+    I3RecoPulseSeries::const_iterator hit;
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
       
       double Tres = TimeResidual(track, ompos, hit->GetTime());
@@ -154,9 +152,8 @@ void CutsCalcImpl(const I3Particle& track, const I3Geometry& geometry,
 }
 
 //--------------------------------------------------------------
-template<class HitType>
 void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry, 
-		  const I3Map<OMKey, std::vector<HitType> >& hitmap,
+		  const I3RecoPulseSeriesMap& hitmap,
 		  const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
 		  int& Ndir, int& Nearly, int& Nlate)
 {
@@ -167,9 +164,9 @@ void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry,
   Nearly  = 0;
   Nlate   = 0;
   Nstring = 0;
-  typename I3Map<OMKey, std::vector<HitType> >::const_iterator hits_i;
+  I3RecoPulseSeriesMap::const_iterator hits_i;
   for (hits_i=hitmap.begin(); hits_i!=hitmap.end(); hits_i++) {
-    const std::vector<HitType>& hits = hits_i->second;
+    const I3RecoPulseSeries& hits = hits_i->second;
     OMKey omkey = hits_i->first;
 
     if(hits.size()==1){
@@ -186,7 +183,7 @@ void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry,
     StringNumber[(int) 19+omkey.GetString()] = 1; // "19+" includes AMANDA std::strings
     const I3Position& ompos = geom->second.position;
 
-    typename std::vector<HitType>::const_iterator hit;
+    I3RecoPulseSeries::const_iterator hit;
     for (hit=hits.begin(); hit!=hits.end(); hit++) {
       
       //TimeResidual function checks if the input particle is a cascade or track and then
@@ -236,9 +233,8 @@ void CascadeCutsCalcImpl(const I3Particle& vertex, const I3Geometry& geometry,
 
 
 //--------------------------------------------------------------
-template<class HitType>
 I3Position COGImpl(const I3Geometry& geometry,
-		   const I3Map<OMKey, std::vector<HitType> >& hitmap)
+		   const I3RecoPulseSeriesMap& hitmap)
 {
   double ampWeight=1;
   double cog[3];
@@ -250,11 +246,11 @@ I3Position COGImpl(const I3Geometry& geometry,
   // I need to loop over all hit OMs, first to calculate the center of 
   // gravity of the hits and then to get the tensor of inertia.  
  
-  typename I3Map<OMKey, std::vector<HitType> >::const_iterator iter;
+  I3RecoPulseSeriesMap::const_iterator iter;
   iter = hitmap.begin();
   while(iter != hitmap.end()) {
     
-    const std::vector<HitType>& pulsevect = iter->second;
+    const I3RecoPulseSeries& pulsevect = iter->second;
 
     if(pulsevect.empty()) {
       iter++;
@@ -263,14 +259,14 @@ I3Position COGImpl(const I3Geometry& geometry,
     }
     
     for (unsigned i=0; i < pulsevect.size(); i++) {
-      HitType pulse = pulsevect[i];
+      I3RecoPulse pulse = pulsevect[i];
       double amp_tmp;
-      if(isnan(GetCharge(pulse)) > 0 || std::isinf(GetCharge(pulse))> 0) {
+      if(isnan(pulse.GetCharge()) > 0 || std::isinf(pulse.GetCharge())> 0) {
 	log_warn("Got a nan or inf pulse charge.  Setting it to 0 instead.  Something could be screwy with a DOM calibration!!");
   	amp_tmp=0;
       }
       else {
-	amp_tmp = GetCharge(pulse);
+	amp_tmp = pulse.GetCharge();
       }
 
       double amp = pow(amp_tmp,ampWeight);
@@ -302,7 +298,7 @@ I3Position COGImpl(const I3Geometry& geometry,
 I3Position I3Cuts::COG(const I3Geometry& geometry,
 		       const I3RecoPulseSeriesMap& pulsemap)
 {
-  I3Position cog(COGImpl<I3RecoPulse>(geometry, pulsemap));
+  I3Position cog(COGImpl(geometry, pulsemap));
   return cog;
 }
 
@@ -313,7 +309,7 @@ void I3Cuts::CutsCalc(const I3Particle& track, const I3Geometry& geometry,
 		      const double t1, const double t2,int& Nchan, int& Nhit, int& Nstring,
 		      int& Ndir, double& Ldir, double& Sdir, double& Sall)
 {
-  CutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl
     (track, geometry, pulsemap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
 }
 
@@ -323,7 +319,7 @@ void I3Cuts::CascadeCutsCalc(const I3Particle& vertex, const I3Geometry& geometr
 		      const double t1, const double t2,int& Nchan, int& Nhit, int& N_1hit, int& Nstring,
 		      int& Ndir, int& Nearly, int& Nlate)
 {
-  CascadeCutsCalcImpl<I3RecoPulse>
+  CascadeCutsCalcImpl
     (vertex, geometry, pulsemap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
 }
 
@@ -335,7 +331,7 @@ int I3Cuts::Nchan(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nchan;
 }
@@ -349,7 +345,7 @@ int I3Cuts::Nhit(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nhit;
 }
@@ -360,7 +356,7 @@ int I3Cuts::N_1hit(const I3Particle& vertex, const I3Geometry& geom,
 		 double t1, double t2)
 {
   int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
-  CascadeCutsCalcImpl<I3RecoPulse>
+  CascadeCutsCalcImpl
     (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
   return N_1hit;
 }
@@ -372,7 +368,7 @@ int I3Cuts::Nstring(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Nstring;
 }
@@ -384,7 +380,7 @@ int I3Cuts::Ndir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Ndir;
 }
@@ -395,7 +391,7 @@ int I3Cuts::CascadeNdir(const I3Particle& vertex, const I3Geometry& geom,
 		 double t1, double t2)
 {
   int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
-  CascadeCutsCalcImpl<I3RecoPulse>
+  CascadeCutsCalcImpl
     (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
   return Ndir;
 }
@@ -406,7 +402,7 @@ int I3Cuts::Nearly(const I3Particle& vertex, const I3Geometry& geom,
 		 double t1, double t2)
 {
   int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
-  CascadeCutsCalcImpl<I3RecoPulse>
+  CascadeCutsCalcImpl
     (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
   return Nearly;
 }
@@ -417,7 +413,7 @@ int I3Cuts::Nlate(const I3Particle& vertex, const I3Geometry& geom,
 		 double t1, double t2)
 {
   int Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate;
-  CascadeCutsCalcImpl<I3RecoPulse>
+  CascadeCutsCalcImpl
     (vertex, geom, hitmap, t1, t2, Nchan, Nhit, N_1hit, Nstring, Ndir, Nearly, Nlate);
   return Nlate;
 }
@@ -430,7 +426,7 @@ double I3Cuts::Ldir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Ldir;
 }
@@ -443,7 +439,7 @@ double I3Cuts::SmoothAll(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Sall;
 }
@@ -456,7 +452,7 @@ double I3Cuts::SmoothDir(const I3Particle& track, const I3Geometry& geom,
 {
   int Nchan, Nhit, Nstring, Ndir;
   double Ldir, Sdir, Sall;
-  CutsCalcImpl<I3RecoPulse>
+  CutsCalcImpl
     (track, geom, hitmap, t1, t2, Nchan, Nhit, Nstring, Ndir, Ldir, Sdir, Sall);
   return Sdir;
 }

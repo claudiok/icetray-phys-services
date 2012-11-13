@@ -11,8 +11,6 @@
 
 #include <tableio/I3Converter.h>
 
-#include "phys-services/Utility.h"
-
 #include <dataclasses/physics/I3MCHit.h>
 #include <dataclasses/physics/I3RecoPulse.h>
 #include <dataclasses/physics/I3DOMLaunch.h>

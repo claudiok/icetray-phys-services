@@ -6,7 +6,6 @@
 #include "icetray/I3TrayHeaders.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
-#include "phys-services/Utility.h"
 #include "phys-services/I3CutsModule.h"
 #include "phys-services/I3CutValues.h"
 #include "phys-services/I3CascadeCutValues.h"

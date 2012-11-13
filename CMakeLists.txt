@@ -70,7 +70,6 @@ i3_add_library(phys-services
   private/phys-services/I3XMLSummaryService.cxx
   private/phys-services/I3XMLSummaryServiceFactory.cxx
   private/phys-services/I3SplitTriggerSelector.cxx
-  private/phys-services/Utility.cxx
   private/phys-source/I3MetaSynth.cxx
   private/phys-source/I3GCDFileService.cxx
   private/phys-source/I3GCDFileServiceFactory.cxx
