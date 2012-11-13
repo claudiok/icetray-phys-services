@@ -23,6 +23,7 @@
 #include <boost/iostreams/filter/gzip.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/utility.hpp>
+#include "boost/algorithm/string.hpp"
 
 // definitions
 
@@ -30,6 +31,7 @@
 // namespace declarations
 
 using namespace std;
+namespace ba = boost::algorithm;
 
 // implementation
 
@@ -43,7 +45,7 @@ void I3XMLOMKey2MBID::Dump(const string& outfile,
   ofs.push(boost::iostreams::file_sink(outfile));
   if(!ofs.good()) log_fatal("cannot open file \"%s\"", outfile.c_str());
 
-  if(outfile.rfind(".gz") == (outfile.length() - 3))
+  if(ba::ends_with(outfile, ".gz"))
   {
     ofs.push(boost::iostreams::gzip_compressor());
     log_info("file \"%s\" ends in .gz - using gzip compressor", outfile.c_str());
@@ -63,7 +65,7 @@ I3XMLOMKey2MBID::I3XMLOMKey2MBID(const string& infile)
     log_fatal("cannot find file \"%s\"", infile.c_str());
   
   boost::iostreams::filtering_istream ifs;
-  if(infile.rfind(".gz") == (infile.length() - 3))
+  if(ba::ends_with(infile, ".gz"))
   {
     ifs.push(boost::iostreams::gzip_decompressor());
     log_info("file \"%s\" ends in .gz - using gzip decompressor", infile.c_str());
