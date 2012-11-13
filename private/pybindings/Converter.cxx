@@ -24,10 +24,6 @@ void register_Converter() {
     I3CONVERTER_EXPORT(I3EventInfoConverterFromRecoPulses,"Dumps event information calculated from I3RecoPulses");
     typedef I3EventInfoConverter<I3MCHit> I3EventInfoConverterFromMCHit;
     I3CONVERTER_EXPORT(I3EventInfoConverterFromMCHit,"Dumps event information calculated from I3MCHit");
-    typedef I3EventInfoConverter<I3DOMLaunch> I3EventInfoConverterFromDOMLaunch;
-    I3CONVERTER_EXPORT(I3EventInfoConverterFromDOMLaunch,"Dumps event information calculated from I3DOMLaunch");
-    typedef I3EventInfoConverter<I3Waveform> I3EventInfoConverterFromWaveform;
-    I3CONVERTER_EXPORT(I3EventInfoConverterFromWaveform,"Dumps event information calculated from I3Waveform");
     
     I3CONVERTER_EXPORT_DEFAULT(I3CutValuesConverter, "Dumps I3CutValues verbatim");
 

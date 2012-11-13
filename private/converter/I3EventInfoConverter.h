@@ -56,8 +56,8 @@ private:
             nhit += vect.size();
 
             for (i_vec = vect.begin(); i_vec != vect.end(); ++i_vec) {
-                tot_charge += GetCharge(*i_vec);
-                double time = GetTime(*i_vec);
+                tot_charge += i_vec->GetCharge();
+                double time = i_vec->GetTime();
                 if (time < first_time)
                     first_time = time;
                 if (time > last_time)
