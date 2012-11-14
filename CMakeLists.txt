@@ -80,7 +80,7 @@ i3_add_library(phys-services
 
   USE_PROJECTS icetray dataclasses interfaces tableio
 
-  USE_TOOLS ${OPTIONAL_TOOLS} gsl log4cplus boost python
+  USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python
 
  ROOTCINT public/phys-services/I3Cuts.h
  public/phys-services/I3Calculator.h

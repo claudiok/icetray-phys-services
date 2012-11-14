@@ -14,6 +14,6 @@ i3_add_pybindings(phys_services
   I3XMLOMKey2MBID.cxx
   I3GCDFileService.cxx
   module.cxx
-  USE_TOOLS boost python log4cplus 
+  USE_TOOLS boost python 
   USE_PROJECTS phys-services interfaces
   )
