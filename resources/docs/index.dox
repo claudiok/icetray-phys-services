@@ -15,8 +15,6 @@ and implementations offered by the phys-services project
 
 @li @ref omkey2mbid
 
-@li @ref i3medium
-
 <hr>
 
 These docs are about two namespaces full of useful functions.  They are not

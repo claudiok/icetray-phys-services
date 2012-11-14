@@ -12,8 +12,6 @@ if (USE_ROOT)
   # For TRandomService, this is intrinsic to being related to TRandom.
   # I3MediumService could perhaps be moved out of this section.
   set(ROOT_SOURCES 
-	private/phys-services/I3MediumService.cxx
-	private/phys-services/I3MediumServiceFactory.cxx
 	private/phys-services/I3TRandomService.cxx
 	private/phys-services/I3TRandomServiceFactory.cxx
   )
@@ -57,7 +55,6 @@ i3_add_library(phys-services
   private/phys-services/I3GSLRandomService.cxx
   private/phys-services/I3GSLRandomServiceFactory.cxx
   private/phys-services/I3GeometryDecomposer.cxx
-  private/phys-services/I3MediumPropertiesFile.cxx
   private/phys-services/I3CutValues.cxx
   private/phys-services/I3ScaleCalculator.cxx
   private/phys-services/I3Splitter.cxx
@@ -95,9 +92,7 @@ i3_executable(CreateXMLOMKey2MBIDConversionTable
 if (USE_ROOT)
   # These tests require ROOT to run, so conditionally build them
   set(ROOT_TESTS
-	private/test/FastLogSumTest.cxx
-	private/test/I3CalculatorTest.cxx
-	private/test/I3MediumServiceTest.cxx
+  	private/test/I3CalculatorTest.cxx
 	private/test/I3RandomServiceTest.cxx
   )
 endif (USE_ROOT)
