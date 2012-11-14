@@ -209,8 +209,9 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 		    ATWDSamplingRate(chip, status, cal) >
 		    400*I3Units::megahertz) {
 			bad_dom("Invalid ATWD sampling rate for OM%s chip %d "
-			    "(%f MHz)", om.str().c_str(), ATWDSamplingRate(
-			    chip, status, cal)/I3Units::megahertz);
+			    "(%f MHz)", om.str().c_str(), chip,
+			    ATWDSamplingRate(chip, status, cal)/
+			    I3Units::megahertz);
 		}
 	}
 	if (!std::isfinite(SPEPMTThreshold(status, cal)) ||
