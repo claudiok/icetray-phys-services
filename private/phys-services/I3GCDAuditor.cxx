@@ -59,6 +59,29 @@ I3GCDAuditor::DetectorStatus(I3FramePtr frame)
 	const I3DetectorStatus &status = frame->Get<I3DetectorStatus>();
 
 	bool err = false;
+	
+	int fakeConfigYear = 2038;
+	
+	// checks for extreme/obviously wrong start/end times in GCD file
+	if (status.startTime >= status.endTime)
+		{log_error("GCD StartTime: %d,%llu is greater of equal to EndTime: %d,%llu",\
+				    status.startTime.GetUTCYear(),status.startTime.GetUTCDaqTime(),status.endTime.GetUTCYear(),status.endTime.GetUTCDaqTime());
+		err = true;
+		}
+		
+	if (status.endTime.GetUTCYear() == fakeConfigYear)
+		{log_error("GCD EndTime year: %d is same as default used for latest valid config in DB: 2038 .... quite likely wrong",\
+				   status.endTime.GetUTCYear());
+		err = true;
+		}
+
+	if (((status.endTime - status.startTime)/1e9/60/60/24/360)>=1.0)
+		{log_error("difference between GCD EndTime: %d,%llu and StartTime: %d,%llu is (%f yrs) greater than 1yr .... quite likely wrong",\
+				    status.endTime.GetUTCYear(),status.endTime.GetUTCDaqTime(),status.startTime.GetUTCYear(),status.startTime.GetUTCDaqTime(),(status.endTime - status.startTime)/1e9/60/60/24/360);
+		err = true;
+		}
+	// end: checks for extreme/obviously wrong start/end times in GCD file
+	
 
 	for (I3OMGeoMap::const_iterator i = geo.omgeo.begin();
 	   i != geo.omgeo.end(); i++) {
