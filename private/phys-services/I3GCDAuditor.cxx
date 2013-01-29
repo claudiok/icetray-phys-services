@@ -62,11 +62,11 @@ I3GCDAuditor::DetectorStatus(I3FramePtr frame)
 	
 	// checks for extreme/obviously wrong start/end times in GCD file
 	if (status.startTime >= status.endTime) {
-		log_error("GCD StartTime: %d,%llu is greater or equal to "
-		    "EndTime: %d,%llu", status.startTime.GetUTCYear(),
-		    status.startTime.GetUTCDaqTime(),
+		log_error("GCD StartTime: %d,%ju is greater or equal to "
+		    "EndTime: %d,%ju", status.startTime.GetUTCYear(),
+		    (uintmax_t)status.startTime.GetUTCDaqTime(),
 		    status.endTime.GetUTCYear(),
-		    status.endTime.GetUTCDaqTime());
+		    (uintmax_t)status.endTime.GetUTCDaqTime());
 		err = true;
 	}
 	
@@ -80,13 +80,13 @@ I3GCDAuditor::DetectorStatus(I3FramePtr frame)
 	}
 
 	if ((status.endTime - status.startTime)/I3Units::gregorianyear >= 1) {
-		log_error("difference between GCD EndTime: %d,%llu and "
-		    "StartTime: %d,%llu is (%f yrs) greater than 1yr, which "
+		log_error("difference between GCD EndTime: %d,%ju and "
+		    "StartTime: %d,%ju is (%f yrs) greater than 1yr, which "
 		    "is likely wrong", status.endTime.GetUTCYear(),
-		    status.endTime.GetUTCDaqTime(),
+		    (uintmax_t)status.endTime.GetUTCDaqTime(),
 		    status.startTime.GetUTCYear(),
-		    status.startTime.GetUTCDaqTime(),
-		    (status.endTime - status.startTime)/I3Units::gregorianyear)
+		    (uintmax_t)status.startTime.GetUTCDaqTime(),
+		    (status.endTime - status.startTime)/I3Units::gregorianyear);
 		err = true;
 	}
 
