@@ -152,7 +152,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
       }
     }
 
-    if(!cuts){
+    if(cuts){
       cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
 
       frame->Put(name+"Cuts"+nameTag_, cuts);

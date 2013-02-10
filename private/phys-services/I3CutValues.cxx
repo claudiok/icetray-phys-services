@@ -19,10 +19,18 @@ void I3CutValues::Calculate(const I3Particle& track,
 
 I3CutValues::~I3CutValues() { }
 
+static const unsigned int current_i3cutvalues_version=2;
+
 template <class Archive>
 void I3CutValues::serialize(Archive& ar, unsigned version)
 {
-  ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
+  if (version>current_i3cutvalues_version)
+    log_fatal("Attempting to read version %u from file but running version %u of I3CutValues class.",
+              version,current_i3cutvalues_version);
+  if (version<2)
+    ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
+  else
+    ar & make_nvp("I3CutValuesBase", base_object<I3CutValuesBase>(*this));
   ar & make_nvp("Nchan",Nchan);
   ar & make_nvp("Nhit",Nhit);
   if (version > 0) 
@@ -35,5 +43,14 @@ void I3CutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("cog",cog);
 }
   
-BOOST_CLASS_VERSION(I3CutValues, 1);
+BOOST_CLASS_VERSION(I3CutValues, current_i3cutvalues_version);
 I3_SERIALIZABLE(I3CutValues);
+
+template <class Archive>
+void I3CutValuesBase::serialize(Archive& ar, unsigned version)
+{
+	ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
+}
+
+BOOST_CLASS_VERSION(I3CutValuesBase, 0);
+I3_SERIALIZABLE(I3CutValuesBase);
