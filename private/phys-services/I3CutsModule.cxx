@@ -4,9 +4,10 @@
  */
 
 #include "icetray/I3TrayHeaders.h"
+#include "icetray/I3Deprecation.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
-#include "phys-services/I3CutsModule.h"
+#include "I3CutsModule.h"
 #include "phys-services/I3CutValues.h"
 #include "phys-services/I3CascadeCutValues.h"
 
@@ -21,7 +22,7 @@ using boost::algorithm::is_any_of;
 using namespace std;
 using namespace I3Units;
 
-I3_MODULE(I3CutsModule);
+I3_DEPRECATED_MODULE(I3CutsModule);
 
 //--------------------------------------------------------------
 I3CutsModule::I3CutsModule(const I3Context& ctx) : I3ConditionalModule(ctx)
@@ -151,7 +152,7 @@ void I3CutsModule::Physics(I3FramePtr frame)
       }
     }
 
-    if(!cuts){
+    if(cuts){
       cuts->Calculate(*particle,geometry,*pulsemap,timeRange_[0],timeRange_[1]);
 
       frame->Put(name+"Cuts"+nameTag_, cuts);

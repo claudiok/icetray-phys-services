@@ -20,10 +20,18 @@ void I3CascadeCutValues::Calculate(const I3Particle& vertex,
 
 I3CascadeCutValues::~I3CascadeCutValues() { }
 
+static const unsigned int current_i3cascadecutvalues_version=1;
+
 template <class Archive>
 void I3CascadeCutValues::serialize(Archive& ar, unsigned version)
 {
-  ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
+  if (version>current_i3cascadecutvalues_version)
+    log_fatal("Attempting to read version %u from file but running version %u of I3CascadeCutValues class.",
+              version,current_i3cascadecutvalues_version);
+  if (version<1)
+    ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
+  else
+    ar & make_nvp("I3CutValuesBase", base_object<I3CutValuesBase>(*this));
   ar & make_nvp("Nchan",Nchan);
   ar & make_nvp("Nhit",Nhit);
   ar & make_nvp("N_1hit",N_1hit);
@@ -34,5 +42,5 @@ void I3CascadeCutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("cog",cog);
 }
   
-BOOST_CLASS_VERSION(I3CascadeCutValues, 0);
+BOOST_CLASS_VERSION(I3CascadeCutValues, current_i3cascadecutvalues_version);
 I3_SERIALIZABLE(I3CascadeCutValues);

@@ -25,7 +25,7 @@ class I3GCDAuditor : public I3Module
 		    const I3DOMCalibration &cal, const I3DOMStatus &status);
 		std::string bad_dom_list_;
 		bool AMANDA_is_error_;
-		bool fail_on_sim_quantities_;
+		bool max_paranoia_;
 };
 
 I3_MODULE(I3GCDAuditor);
@@ -37,7 +37,8 @@ I3GCDAuditor::I3GCDAuditor(const I3Context& context) : I3Module(context)
 	    true);
 	AddParameter("MaximumParanoia", "Fail for nonsense quantities that "
 	    "are mostly only relevant for simulation (e.g. PMT discriminator "
-	    "thresholds)", true);
+	    "thresholds) as well as things that are unreasonable but not "
+	    "universally fatal", true);
 	AddOutBox("OutBox");
 }
 
@@ -46,7 +47,7 @@ I3GCDAuditor::Configure()
 {
 	GetParameter("BadDOMList", bad_dom_list_);
 	GetParameter("AMANDAIsAnError", AMANDA_is_error_);
-	GetParameter("MaximumParanoia", fail_on_sim_quantities_);
+	GetParameter("MaximumParanoia", max_paranoia_);
 }
 
 void
@@ -59,6 +60,55 @@ I3GCDAuditor::DetectorStatus(I3FramePtr frame)
 	const I3DetectorStatus &status = frame->Get<I3DetectorStatus>();
 
 	bool err = false;
+	
+	// checks for acausal G/C/D frames
+	if (geo.startTime >= geo.endTime) {
+		log_error("Geometry start time %d,%ju is after end time %d,%ju",
+		    geo.startTime.GetUTCYear(),
+		    (uintmax_t)geo.startTime.GetUTCDaqTime(),
+		    geo.endTime.GetUTCYear(),
+		    (uintmax_t)geo.endTime.GetUTCDaqTime());
+		err = true;
+	}
+	if (calib.startTime >= calib.endTime) {
+		log_error("Calibration start time %d,%ju is after "
+		    "end time %d,%ju", calib.startTime.GetUTCYear(),
+		    (uintmax_t)calib.startTime.GetUTCDaqTime(),
+		    calib.endTime.GetUTCYear(),
+		    (uintmax_t)calib.endTime.GetUTCDaqTime());
+		err = true;
+	}
+	if (status.startTime >= status.endTime) {
+		log_error("Detector status start time %d,%ju is after "
+		    "end time: %d,%ju", status.startTime.GetUTCYear(),
+		    (uintmax_t)status.startTime.GetUTCDaqTime(),
+		    status.endTime.GetUTCYear(),
+		    (uintmax_t)status.endTime.GetUTCDaqTime());
+		err = true;
+	}
+
+	#define paranoia(...) if (max_paranoia_) { \
+			log_error(__VA_ARGS__); err = true; \
+		} else { \
+			log_warn(__VA_ARGS__); err = true; \
+		}
+	
+	// Check that various times are reasonable
+	if (status.endTime.GetUTCYear() == 2038 /* 32-bit UNIX end of days */)
+		paranoia("Detector status validity ends in 2038, the UNIX "
+		    "end of days, which is usually wrong");
+
+	if ((status.endTime - status.startTime)/I3Units::gregorianyear >= 1) {
+		paranoia("difference between D end time %d,%ju and "
+		    "start time: %d,%ju is (%f yrs) greater than 1yr, which "
+		    "is likely wrong", status.endTime.GetUTCYear(),
+		    (uintmax_t)status.endTime.GetUTCDaqTime(),
+		    status.startTime.GetUTCYear(),
+		    (uintmax_t)status.startTime.GetUTCDaqTime(),
+		    (status.endTime - status.startTime)/I3Units::gregorianyear);
+	}
+
+	#undef paranoia
 
 	for (I3OMGeoMap::const_iterator i = geo.omgeo.begin();
 	   i != geo.omgeo.end(); i++) {
@@ -102,7 +152,7 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 {
 	#define bad_dom(...) { log_error(__VA_ARGS__); return false; }
 	#define sim_bad_dom(...) { log_error(__VA_ARGS__); \
-	    if (fail_on_sim_quantities_) return false; \
+	    if (max_paranoia_) return false; \
 	    else \
 	    log_error("WARNING! The above error indicates a serious problem, " \
 	     "which has been ignored due to the setting of MaximumParanoia. " \

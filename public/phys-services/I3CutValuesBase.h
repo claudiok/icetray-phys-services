@@ -11,6 +11,7 @@
 
 #include <icetray/I3FrameObject.h>
 #include <dataclasses/I3Constants.h>
+#include <dataclasses/Utility.h>
 
 class I3FrameObject;
 template <typename Key, typename Value> struct I3Map;
@@ -27,6 +28,10 @@ class I3CutValuesBase : public I3FrameObject {
                          const I3Map< OMKey, std::vector< I3RecoPulse> >& pulsemap,
                          const double& begTWindow = I3Constants::dt_window_l,
                          const double& endTWindow = I3Constants::dt_window_h) = 0;
+
+ private:
+  friend class boost::serialization::access;
+  template <class Archive> void serialize(Archive & ar, unsigned version);
 };
 
 I3_POINTER_TYPEDEFS(I3CutValuesBase);
