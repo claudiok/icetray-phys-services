@@ -35,6 +35,9 @@ struct I3SPRNGRandomServiceState : public I3FrameObject {
 	}
 };
 
+BOOST_CLASS_VERSION(I3SPRNGRandomServiceState, 0);
+I3_SERIALIZABLE(I3SPRNGRandomServiceState);
+
 I3SPRNGRandomService::I3SPRNGRandomService() : seed_(0), streamnum_(1), nstreams_(0)
 {
   gsl_rng_env_setup();
@@ -165,8 +168,10 @@ I3FrameObjectPtr I3SPRNGRandomService::GetState() const
 
 void I3SPRNGRandomService::RestoreState(I3FrameObjectConstPtr vstate)
 {
-	boost::shared_ptr<const I3SPRNGRandomServiceState> state =
-	    boost::dynamic_pointer_cast<const I3SPRNGRandomServiceState>(vstate);
+	boost::shared_ptr<const I3SPRNGRandomServiceState> state;
+	if (!(state = boost::dynamic_pointer_cast<const I3SPRNGRandomServiceState>(vstate)))
+		log_fatal("The provided state is not an I3SPRNGRandomServiceState!");
+	
 	gsl_sprng_stream *stream = (gsl_sprng_stream*)(rng_->state);
 	
 	// If the current configuration is from a different stream or our sequence
