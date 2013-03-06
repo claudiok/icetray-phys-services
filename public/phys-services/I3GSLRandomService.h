@@ -82,7 +82,7 @@ class I3GSLRandomService : public I3RandomService{
    * mean and standard deviation
    */
   virtual double Gaus(double mean, double stddev);
-
+  
  private:
 
   // private copy constructors and assignment
@@ -92,6 +92,7 @@ class I3GSLRandomService : public I3RandomService{
 	void construct();
 
   gsl_rng* r;
+  unsigned long int seed_;
 
   SET_LOGGER("I3GSLRandomService");
 

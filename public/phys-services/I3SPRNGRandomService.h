@@ -96,6 +96,9 @@ class I3SPRNGRandomService : public I3RandomService{
    * double Gaussian distribution given mean and StdD
    */
   virtual double Gaus(double mean, double stddev);
+   
+  virtual I3FrameObjectPtr GetState() const;
+  virtual void RestoreState(I3FrameObjectConstPtr state);
 
  private:
 
@@ -106,6 +109,10 @@ class I3SPRNGRandomService : public I3RandomService{
   gsl_rng* rng_;
   std::string instatefile_;
   std::string outstatefile_;
+  
+  int seed_;
+  int streamnum_;
+  int nstreams_;
 
   SET_LOGGER("I3SPRNGRandomService");
 

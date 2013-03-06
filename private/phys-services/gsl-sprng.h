@@ -37,6 +37,8 @@ typedef struct
    int nstreams;
    int *streamptr;
    char *savedstate; // saved rng state (from previous run).
+   uint64_t icalls; // number of calls to isprng()
+   uint64_t dcalls; // number of calls to sprng()
 } gsl_sprng_stream;
 
 
@@ -60,12 +62,14 @@ static void sprng_set(void * vstate,unsigned long int s)
 static unsigned long sprng_get(void * vstate)
 {
   gsl_sprng_stream *stream = (gsl_sprng_stream*) vstate;
+  stream->icalls++;
   return( (long) isprng(stream->streamptr) );
 }
 
 static double sprng_get_double(void * vstate)
 {
   gsl_sprng_stream *stream = (gsl_sprng_stream*) vstate;
+  stream->dcalls++;
   return( (double) sprng(stream->streamptr));
 }
 
@@ -82,7 +86,8 @@ static const gsl_rng_type gsl_rng_sprng20 =
 };
 #endif
 
-inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum, char *state=NULL)
+inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum, char *state=NULL,
+    uint64_t icalls=0, uint64_t dcalls=0)
 {
    gsl_sprng_stream* s = 
    	  (gsl_sprng_stream*)  malloc( sizeof( gsl_sprng_stream ) );
@@ -98,6 +103,8 @@ inline gsl_rng *gsl_sprng_init(int seed, int nstreams, int streamnum, char *stat
    s->streamnum = streamnum;
    s->nstreams 	= nstreams;
    s->savedstate = state;
+   s->icalls = icalls;
+   s->dcalls = dcalls;
 
    /*Initialize stream*/
    if (state) {

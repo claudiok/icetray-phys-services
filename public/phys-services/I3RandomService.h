@@ -94,6 +94,24 @@ class I3RandomService {
    * mean and standard deviation
    */
   virtual double Gaus(double mean,double stddev);
+   
+  /**
+   * get all information necessary to restore the internal
+   * state of the generator
+   */
+  virtual I3FrameObjectPtr GetState() const
+  {
+  	log_fatal("This generator cannot save state.");
+  	return I3FrameObjectPtr();
+  }
+   
+  /**
+   * restore the internal state of the generator
+   */
+  virtual void RestoreState(I3FrameObjectConstPtr state)
+  {
+  	log_fatal("This generator cannot restore state.");
+  }
 
   /**
    * a gsl_rng that wraps this random service, for use with
