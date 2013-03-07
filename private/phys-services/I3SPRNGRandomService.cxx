@@ -52,7 +52,7 @@ I3SPRNGRandomService::I3SPRNGRandomService(
 				string infile, // where state from prev. run is stored
 				string outfile // where state for next run will be stored
 				): instatefile_(infile),outstatefile_(outfile),
-				   seed_(seed), streamnum_(streamnum), nstreams_(seed)
+				   seed_(seed), streamnum_(streamnum), nstreams_(nstreams)
 {
   char buffer[MAX_PACKED_LENGTH];
   int size;
