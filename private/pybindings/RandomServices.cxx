@@ -80,9 +80,11 @@ void register_RandomServices()
 
 #ifdef I3_USE_SPRNG
   register_randomservice<I3SPRNGRandomService>("I3SPRNGRandomService", "sprng random goodness",
-					       init<int, int, int>((bp::arg("seed"), 
+					       init<int, int, int,std::string,std::string>((bp::arg("seed"), 
 								    bp::arg("nstreams"),
-								    bp::arg("streamnum"))));
+								    bp::arg("streamnum"),
+								    bp::arg("instatefile")=std::string(),
+								    bp::arg("outstatefile")=std::string())));
 #endif
 
   register_randomservice<I3RandomServiceWrapper>("I3RandomService", "base class for python impls",
