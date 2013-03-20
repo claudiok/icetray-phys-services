@@ -26,20 +26,53 @@
 #include <phys-services/I3SPRNGRandomService.h>
 #endif
 #include <phys-services/I3GSLRandomService.h>
+#include <icetray/python/gil_holder.hpp>
 
 using namespace boost::python;
 namespace bp = boost::python;
 
 struct I3RandomServiceWrapper : I3RandomService, wrapper<I3RandomService>
 {
-  int Binomial(int ntot, double prob) { return this->get_override("Binomial")(ntot, prob); }
-  double Exp(double tau) { return this->get_override("Exp")(tau); }
-  unsigned int Integer(unsigned int imax) { return this->get_override("Integer")(imax); }
-  int Poisson(double mean) { return this->get_override("Poisson")(mean); }
-  double PoissonD(double mean) { return this->get_override("PoissonD")(mean); }
-  double Uniform(double x1) { return this->get_override("Uniform")(x1); }
-  double Uniform(double x1, double x2) { return this->get_override("Uniform")(x1, x2 ); }
-  double Gaus(double mean, double stddev) { return this->get_override("Gaus")(mean, stddev); }
+  int Binomial(int ntot, double prob)
+  {
+    bp::detail::gil_holder lock;
+    return this->get_override("Binomial")(ntot, prob);
+  }
+  double Exp(double tau)
+  {
+    bp::detail::gil_holder lock;
+    return this->get_override("Exp")(tau);
+  }
+  unsigned int Integer(unsigned int imax)
+  {
+    bp::detail::gil_holder lock;
+    return this->get_override("Integer")(imax);
+  }
+  int Poisson(double mean)
+  {
+    bp::detail::gil_holder lock;
+    return this->get_override("Poisson")(mean);
+  }
+  double PoissonD(double mean)
+  {
+    bp::detail::gil_holder lock;
+    return this->get_override("PoissonD")(mean);
+  }
+  double Uniform(double x1)
+  {
+    bp::detail::gil_holder lock;
+    return this->get_override("Uniform")(x1);
+  }
+  double Uniform(double x1, double x2)
+  {
+    bp::detail::gil_holder lock;
+    return this->get_override("Uniform")(x1, x2 );
+  }
+  double Gaus(double mean, double stddev)
+  {
+    bp::detail::gil_holder lock;
+    return this->get_override("Gaus")(mean, stddev);
+  }
 };
 
 template <typename T, typename Init>
