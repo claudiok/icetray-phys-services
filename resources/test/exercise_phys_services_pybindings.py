@@ -23,7 +23,7 @@ anglediff = phys_services.I3Calculator.angle(part1,part2)
 
 print("Particle 1: %s" % part1.dir)
 print("Particle 2: %s" % part2.dir)
-print("Angle diff: %.2f degrees" % anglediff/icetray.I3Units.deg)
+print("Angle diff: %.2f degrees" % (anglediff/icetray.I3Units.deg))
 
 print("Working out CutValues")
 
