@@ -8,7 +8,7 @@ import sys
 if len(sys.argv) == 2:
         infile = sys.argv[1]
 else:
-        print 'Usage: CountEvents <filename>'
+        print('Usage: CountEvents <filename>')
         sys.exit(1)
         
 from icecube import icetray 

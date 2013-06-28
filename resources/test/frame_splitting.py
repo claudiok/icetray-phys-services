@@ -77,7 +77,7 @@ class FrameSplitter(icetray.I3Module,phys_services.I3Splitter):
 	def Configure(self):
 		pass
 	def DAQ(self, frame):
-		print 'DAQ Frame'
+		print('DAQ Frame')
 		self.PushFrame(frame)
 		for i in range(0, max_phys_frames):
 			subframe = self.get_next_sub_event(frame)

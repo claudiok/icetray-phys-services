@@ -19,8 +19,8 @@ if(len(sys.argv)>=2):
     infile=sys.argv[1]
     nevent=int(sys.argv[2])
     
-print "Input file:       ", infile
-print "Number of frames: ", nevent
+print("Input file:       %s" % infile)
+print("Number of frames: %s" % nevent)
 
 
 #**************************************************

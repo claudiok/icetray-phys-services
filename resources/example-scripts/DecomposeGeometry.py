@@ -5,7 +5,7 @@ from icecube import icetray, dataio, phys_services
 import sys
 
 if len(sys.argv) != 3: 
-    print "usage: DecomposeGeometry.py input_file output_file"
+    print("usage: DecomposeGeometry.py input_file output_file")
     sys.exit(-1)
 
 tray = I3Tray()
