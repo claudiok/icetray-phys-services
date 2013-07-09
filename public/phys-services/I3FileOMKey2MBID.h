@@ -34,13 +34,6 @@ class I3FileOMKey2MBID : public I3OMKey2MBID
   map_omkey2mbid omkey2mbid_;
   map_mbid2omkey mbid2omkey_;
   
-  template<typename PairType>
-  class pair_first_t { 
-  public: 
-    typedef typename boost::remove_const<typename PairType::first_type>::type result_type; 
-    result_type operator()(const PairType& p) const{ return p.first; } 
-  };
-  
  public:
   /** Constructor takes the name of the input file.
    */
@@ -59,17 +52,6 @@ class I3FileOMKey2MBID : public I3OMKey2MBID
    * @param outfile The filename.
    */
   virtual void DumpAsXML(const std::string& outfile) const;
-  
-  typedef boost::transform_iterator<pair_first_t<map_omkey2mbid::value_type>,map_omkey2mbid::const_iterator> omkey_iterator;
-  typedef boost::transform_iterator<pair_first_t<map_mbid2omkey::value_type>,map_mbid2omkey::const_iterator>  mbid_iterator;
-  
-  std::pair<omkey_iterator,omkey_iterator> AllOMKeys() const{
-    return(std::make_pair(omkey2mbid_.begin(),omkey2mbid_.end()));
-  }
-  
-  std::pair<mbid_iterator,mbid_iterator> AllMBIDs() const{
-    return(std::make_pair(mbid2omkey_.begin(),mbid2omkey_.end()));
-  }
 
  private:
   OMKey OMKeyize(const std::string& key);
