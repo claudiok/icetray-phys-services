@@ -107,7 +107,7 @@ void I3GeoSelTestModule::Geometry(I3FramePtr frame) {
   log_debug("Entering Geometry method.");
   
   I3GeometryConstPtr geoPtr = frame->Get<I3GeometryConstPtr>();
-  ENSURE(geoPtr,"Couldn't get geometry");
+  ENSURE((bool)geoPtr,"Couldn't get geometry");
 
   //loop through the in ice geometry and make sure that
   //1) All the DOMs that exist in the geometry are in goodStrings_
@@ -159,10 +159,10 @@ void I3GeoSelTestModule::Physics(I3FramePtr frame) {
 
   I3GeometryServicePtr old_geo_service = context_.Get<I3GeometryServicePtr>("I3GeometryService");
   I3GeometryConstPtr old_geo = old_geo_service->GetGeometry(dt);
-  ENSURE(old_geo,"Couldn't get OLD geometry");
+  ENSURE((bool)old_geo,"Couldn't get OLD geometry");
 
   I3GeometryConstPtr new_geo = frame->Get<I3GeometryConstPtr>();
-  ENSURE(new_geo,"Couldn't get NEW geometry");
+  ENSURE((bool)new_geo,"Couldn't get NEW geometry");
 
   I3OMGeoMap::const_iterator iter;
   for(iter = new_geo->omgeo.begin();

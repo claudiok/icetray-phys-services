@@ -29,7 +29,7 @@ void initI3XMLOMKey2MBIDTest(I3OMKey2MBIDPtr& omkey2mbid,
   infile.append("/phys-services/resources/");
   infile.append(omkey2mbidFile);
   omkey2mbid = I3OMKey2MBIDPtr(new I3XMLOMKey2MBID(infile));
-  ENSURE(omkey2mbid);
+  ENSURE((bool)omkey2mbid);
 }
 
 
