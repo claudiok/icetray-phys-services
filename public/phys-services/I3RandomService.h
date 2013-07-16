@@ -118,6 +118,49 @@ class I3RandomService {
    * GSL random samplers and C APIs
    */
   const gsl_rng_wrap *GSLRng() const;
+  
+  //The following several members enable this class to meet the requirements
+  //of a C++ uniform random number generator ([rand.req.urng]) compatible
+  //with the standard random number distributions (and therefore also
+  //compatible with the boost random distributions). 
+
+  /**
+   * The unsigned integer type produced when this class is used 
+   * as a uniform random number generator
+   */
+  typedef unsigned int result_type;
+
+  /**
+   * The minimum value produced when this object is used as a source of 
+   * random integers
+   */
+  result_type min() const{ return(0); }
+
+  /**
+   * The maximum value produced when this object is used as a source of 
+   * random integers
+   */
+  result_type max() const{
+    //note that due to the half-open range used by Integer(unsigned int)
+	//we need to subtract 1
+    return(std::numeric_limits<result_type>::max()-1);
+  }
+
+  /**
+   * Returns a value in the closed interval [min(), max()]
+   */
+  result_type operator()(){
+    return(Integer(std::numeric_limits<result_type>::max()));
+  }
+
+#if BOOST_VERSION<104700
+  /**
+   * Only necessary for compatibility with old versions of boost; this flag 
+   * indicates that optional parts of the old boost interface for uniform 
+   * random number generators have been omitted. 
+   */
+  static const bool has_fixed_range;
+#endif
 
  private:
   // copy and assignment private

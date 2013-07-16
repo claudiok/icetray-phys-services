@@ -22,6 +22,11 @@ i3random_get_double(void *state)
         return (((I3RandomService*)(state))->Uniform());
 }
 
+#if BOOST_VERSION<104700
+//Although this urng does have a fixed range, old versions of boost will go
+//looking for things that we don't support if this flag isn't false
+const bool I3RandomService::has_fixed_range=false;
+#endif
 
 I3RandomService::I3RandomService()
 {

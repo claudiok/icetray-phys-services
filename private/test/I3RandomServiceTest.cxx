@@ -17,6 +17,9 @@
 #include "phys-services/I3GSLRandomService.h"
 #include "phys-services/I3SPRNGRandomService.h"
 
+#include "boost/random/uniform_real.hpp"
+#include "boost/random/lognormal_distribution.hpp"
+
 #include <string>
 #include <vector>
 using std::string;
@@ -165,3 +168,26 @@ TEST(I3SPRNGRandomService)
   /*randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random2);*/
 }
 
+TEST(BoostDistributionCompatibility)
+{
+  const unsigned int samples=10000000;
+  vector<double> values(samples);
+  
+  I3GSLRandomService random1;
+  
+  boost::uniform_real<double> unidist(0.0,1.0);
+  for(unsigned int i = 0 ; i< samples ; i++)
+    values[i] = unidist(random1);
+  // mean 0.5 and stdev = sqrt( <x^2> - <x> ^ 2);
+  randomServiceTest::testMeanStddev(values,0.5,sqrt(0.3333 - 0.5 * 0.5));
+  
+#if BOOST_VERSION>=104300
+  //problems in boost 1.38 definitely make this test fail, and while the
+  //documentation is unclear, it appears that 1.43 may be the first version
+  //which works correctly
+  boost::lognormal_distribution<double> lndist(/*mean*/5.8,/*stddev*/7.9);
+  for(unsigned int i = 0 ; i< samples ; i++)
+    values[i] = lndist(random1);
+  randomServiceTest::testMeanStddev(values,5.8,7.9);
+#endif
+}
