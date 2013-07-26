@@ -28,7 +28,7 @@ I3Geometry CalcGeom(std::vector<I3Position> pos)
   for (unsigned int i=0; i<pos.size(); i++) {
     OMKey om(1,i);
     I3OMGeo geo;
-    geo.position.SetPos(pos[i]);
+    geo.position = pos[i];
     geometry.omgeo[om] = geo;
   }
   return geometry;
@@ -55,7 +55,7 @@ TEST_GROUP(I3Cuts)
 TEST(FakeTrack)
 {
   I3Particle track(I3Particle::InfiniteTrack);
-  track.SetPos(0,0,0);
+  track.SetPos(0,0,0,I3Position::car);
   track.SetDir(0,0);
   double ang = 180*I3Units::deg-theta_cherenkov;
   I3Position aa(10,ang,45*I3Units::deg,I3Position::sph);
@@ -76,7 +76,7 @@ TEST(FakeTrack)
 TEST(Ndir_DownTrack)
 {
   I3Particle track(I3Particle::InfiniteTrack);
-  track.SetPos(0,0,0);
+  track.SetPos(0,0,0,I3Position::car);
   track.SetDir(0,0);
   track.SetTime(103.5);
 
@@ -127,14 +127,14 @@ TEST(AllCuts_TiltedTrack)
   double ang = theta_cherenkov; // Cherenkov angle
 
   I3Particle track(I3Particle::InfiniteTrack);
-  track.SetPos(10,10,0);
+  track.SetPos(10,10,0,I3Position::car);
   track.SetDir(180*I3Units::deg-ang,90*I3Units::deg);
   track.SetTime(15);
 
   std::vector<I3Position> pos;
-  I3Position p(10,10,20);  pos.push_back(p);
-  p.SetPos(10,0,100);  pos.push_back(p);
-  p.SetPos(10,50,0);  pos.push_back(p);
+  pos.push_back(I3Position(10,10,20));
+  pos.push_back(I3Position(10,0,100));
+  pos.push_back(I3Position(10,50,0));
 
   std::vector<double> time;
   double t = 20/c_ice + 15 + 17;  time.push_back(t);
@@ -188,7 +188,7 @@ TEST(CylinderSize)
   // Check the "cylindersize" parameter
   // -----------------------------------
   // Corner-clipper:
-  t.SetPos(100,100,2000);
+  t.SetPos(100,100,2000,I3Position::car);
   t.SetDir(0.005,0);
   cylsiz = CylinderSize(t, H0, R0, center);
   ENSURE_DISTANCE(cylsiz, 1.339, 0.001, "CylinderSize corner-clipper not working");
@@ -198,7 +198,7 @@ TEST(CylinderSize)
   ENSURE_DISTANCE(cylsiz2, cylsiz, 0.001, "CylinderSize corner-clipper not working");
 
   // Edge-grazer:
-  t.SetPos(50,1000,1000);
+  t.SetPos(50,1000,1000,I3Position::car);
   t.SetDir(45*I3Units::deg,90*I3Units::deg);
   cylsiz = CylinderSize(t, H0, R0, center);
   ENSURE_DISTANCE(cylsiz, 0.500, 0.001, "CylinderSize edge-grazer not working");

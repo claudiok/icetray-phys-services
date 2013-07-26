@@ -17,15 +17,15 @@ static I3OMGeoMapPtr geo() {
   OMKey dom7(2,61);
   OMKey dom8(2,62);
   OMKey dom9(2,63);
-  (*g)[dom1].position.SetPosition(0,0,0);
-  (*g)[dom2].position.SetPosition(0,0,50);
-  (*g)[dom3].position.SetPosition(0,0,100);
-  (*g)[dom4].position.SetPosition(0,0,500);
-  (*g)[dom5].position.SetPosition(0,50,500);
-  (*g)[dom6].position.SetPosition(20,50,500);
-  (*g)[dom7].position.SetPosition(20,50,400);
-  (*g)[dom8].position.SetPosition(20,50,300);
-  (*g)[dom9].position.SetPosition(20,50,200);
+  (*g)[dom1].position.SetPosition(0,0,0,I3Position::car);
+  (*g)[dom2].position.SetPosition(0,0,50,I3Position::car);
+  (*g)[dom3].position.SetPosition(0,0,100,I3Position::car);
+  (*g)[dom4].position.SetPosition(0,0,500,I3Position::car);
+  (*g)[dom5].position.SetPosition(0,50,500,I3Position::car);
+  (*g)[dom6].position.SetPosition(20,50,500,I3Position::car);
+  (*g)[dom7].position.SetPosition(20,50,400,I3Position::car);
+  (*g)[dom8].position.SetPosition(20,50,300,I3Position::car);
+  (*g)[dom9].position.SetPosition(20,50,200,I3Position::car);
   return g;
 }
 
@@ -218,7 +218,7 @@ TEST(MinimumBall2point)
     for ( int omnr = 1; omnr<101; ++omnr ){
         OMKey omkey(stringnr,omnr);
         I3OMGeo omgeo;
-        omgeo.position.SetPos(0.,0.,1.0*omnr);
+        omgeo.position.SetPos(0.,0.,1.0*omnr,I3Position::car);
         geomap.insert(std::make_pair(OMKey(stringnr,omnr),omgeo));
     }
 
@@ -273,7 +273,7 @@ TEST(MinimumBall3point)
                 int omnr = iz + 1;
                 OMKey omkey(stringnr,omnr);
                 I3OMGeo omgeo;
-                omgeo.position.SetPos(ix,iy,iz);
+                omgeo.position.SetPos(ix,iy,iz,I3Position::car);
                 geomap.insert(std::make_pair(OMKey(stringnr,omnr),omgeo));
             }
         }
