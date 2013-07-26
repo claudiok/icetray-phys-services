@@ -603,38 +603,38 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
   std::vector<I3Position> verts2;
   // The high pairs
   for (int i=0; i<n-1; i++) {
-    B.SetPosition(x[i],y[i],zhigh,I3Position::car);
-    C.SetPosition(x[i+1],y[i+1],zhigh,I3Position::car);
+    B=I3Position(x[i],y[i],zhigh,I3Position::car);
+    C=I3Position(x[i+1],y[i+1],zhigh,I3Position::car);
     highs1.push_back(B);
     highs2.push_back(C);
   }
   // The last-to-first pair which was left out (upper and lower) 
-  B.SetPosition(x[n-1],y[n-1],zhigh,I3Position::car); 
-  C.SetPosition(x[0],y[0],zhigh,I3Position::car); 
+  B=I3Position(x[n-1],y[n-1],zhigh,I3Position::car);
+  C=I3Position(x[0],y[0],zhigh,I3Position::car); 
   highs1.push_back(B); 
   highs2.push_back(C); 
   // The low pairs
   for (int i=0; i<n-1; i++) {
-    B.SetPosition(x[i],y[i],zlow,I3Position::car);
-    C.SetPosition(x[i+1],y[i+1],zlow,I3Position::car);
+    B=I3Position(x[i],y[i],zlow,I3Position::car);
+    C=I3Position(x[i+1],y[i+1],zlow,I3Position::car);
     lows1.push_back(B);
     lows2.push_back(C);
   }
   // The last-to-first pair which was left out (upper and lower) 
-  B.SetPosition(x[n-1],y[n-1],zlow,I3Position::car); 
-  C.SetPosition(x[0],y[0],zlow,I3Position::car); 
+  B=I3Position(x[n-1],y[n-1],zlow,I3Position::car);
+  C=I3Position(x[0],y[0],zlow,I3Position::car); 
   lows1.push_back(B); 
   lows2.push_back(C); 
   // The vertical pairs
   for (int i=0; i<n-1; i++) {
-    B.SetPosition(x[i],y[i],zhigh,I3Position::car);
-    C.SetPosition(x[i],y[i],zlow,I3Position::car);
+    B=I3Position(x[i],y[i],zhigh,I3Position::car);
+    C=I3Position(x[i],y[i],zlow,I3Position::car);
     verts1.push_back(B);
     verts2.push_back(C);
   }
   // The last vertical pair which was left out
-  B.SetPosition(x[n-1],y[n-1],zhigh,I3Position::car);
-  C.SetPosition(x[n-1],y[n-1],zlow,I3Position::car);
+  B=I3Position(x[n-1],y[n-1],zhigh,I3Position::car);
+  C=I3Position(x[n-1],y[n-1],zlow,I3Position::car);
   verts1.push_back(B);
   verts2.push_back(C);
   

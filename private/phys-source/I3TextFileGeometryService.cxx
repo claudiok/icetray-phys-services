@@ -68,7 +68,7 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
   while(AmaGeoInFile>>string_F>>tube_F>>x_F>>y_F>>z_F>>orientation_F)
     {    
       I3OMGeo amanda;
-      amanda.position.SetPosition(x_F * I3Units::m,
+      amanda.position=I3Position(x_F * I3Units::m,
 				  y_F * I3Units::m,
 				  z_F * I3Units::m,
 				  I3Position::car);
@@ -84,7 +84,7 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
       if(tube_F<61)  //InIce
       {
         I3OMGeo icecube;
-        icecube.position.SetPosition(x_F * I3Units::m,
+        icecube.position=I3Position(x_F * I3Units::m,
 				     y_F * I3Units::m,
 				     z_F * I3Units::m,
 				     I3Position::car);
@@ -105,7 +105,7 @@ void I3TextFileGeometryService::FillGeometryFromFile(I3Geometry& Geometry)
         }
 
         I3OMGeo icecube;
-        icecube.position.SetPosition(x_F * I3Units::m,
+        icecube.position=I3Position(x_F * I3Units::m,
 				      y_F * I3Units::m,
 				      z_F * I3Units::m,
 				      I3Position::car);

@@ -45,7 +45,7 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
     double pos1_x = particle.GetX() + a*particle.GetDir().GetX(); //cher pos
     double pos1_y = particle.GetY() + a*particle.GetDir().GetY();
     double pos1_z = particle.GetZ() + a*particle.GetDir().GetZ();
-    chpos.SetPosition(pos1_x, pos1_y, pos1_z, I3Position::car);
+    chpos=I3Position(pos1_x, pos1_y, pos1_z, I3Position::car);
 
     double chdist_x = position.GetX() - pos1_x;  //x component of vector between cherenkov position and OM
     double chdist_y = position.GetY() - pos1_y;  //y component of vector between cherenkov position and OM
@@ -130,7 +130,7 @@ void I3Calculator::ClosestApproachCalc(const I3Particle& particle,
     double pos2_y = pos0_y + s*e_y;
     double pos2_z = pos0_z + s*e_z;
     
-    appos_inf.SetPosition(pos2_x, pos2_y, pos2_z, I3Position::car); //closest approach position
+    appos_inf=I3Position(pos2_x, pos2_y, pos2_z, I3Position::car); //closest approach position
     apdist_inf = (position-appos_inf).Magnitude();  //closest approach distance
     
     // Adjustment for contained/stopping/starting tracks
