@@ -45,7 +45,7 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
     double pos1_x = particle.GetX() + a*particle.GetDir().GetX(); //cher pos
     double pos1_y = particle.GetY() + a*particle.GetDir().GetY();
     double pos1_z = particle.GetZ() + a*particle.GetDir().GetZ();
-    chpos.SetPosition(pos1_x, pos1_y, pos1_z);
+    chpos.SetPosition(pos1_x, pos1_y, pos1_z, I3Position::car);
 
     double chdist_x = position.GetX() - pos1_x;  //x component of vector between cherenkov position and OM
     double chdist_y = position.GetY() - pos1_y;  //y component of vector between cherenkov position and OM
@@ -64,7 +64,7 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
          (a<0 || particle.GetLength()<a)))  
              //track starts after or stops before pos1 (cherenkov point)
     { 
-      chpos.NullPosition();
+      chpos = I3Position(); // NullPos()
       chtime = NAN;
       chdist = NAN;
       chapangle = NAN;
@@ -75,7 +75,7 @@ void I3Calculator::CherenkovCalc(const I3Particle& particle,  // input
   {
     //--Don't calculate if track does not have direction
     log_debug("CherenkovCalc() - particle is not a track. Not calculating.");
-    chpos.NullPosition();
+    chpos = I3Position(); // NullPos()
     chtime = NAN;
     chdist = NAN;
     chapangle = NAN;
@@ -130,11 +130,11 @@ void I3Calculator::ClosestApproachCalc(const I3Particle& particle,
     double pos2_y = pos0_y + s*e_y;
     double pos2_z = pos0_z + s*e_z;
     
-    appos_inf.SetPosition(pos2_x, pos2_y, pos2_z); //closest approach position
-    apdist_inf = position.CalcDistance(appos_inf);  //closest approach distance
+    appos_inf.SetPosition(pos2_x, pos2_y, pos2_z, I3Position::car); //closest approach position
+    apdist_inf = (position-appos_inf).Magnitude();  //closest approach distance
     
     // Adjustment for contained/stopping/starting tracks
-    appos_stopstart.SetPosition(appos_inf);
+    appos_stopstart = appos_inf;
     apdist_stopstart = apdist_inf;
     if((particle.GetShape()==I3Particle::StartingTrack && s<0) || 
        //track starts after pos2 (closest approach position)
@@ -144,13 +144,13 @@ void I3Calculator::ClosestApproachCalc(const I3Particle& particle,
       //track starts after pos2 (closest approach position)
       { 
 	appos_stopstart = particle.GetPos();
-	apdist_stopstart = position.CalcDistance(appos_stopstart);
+	apdist_stopstart = (position-appos_stopstart).Magnitude();
       }
     if(particle.GetShape()==I3Particle::ContainedTrack && particle.GetLength()<s)
       //track stops before pos2 (closest approach position)
       {
 	appos_stopstart = particle.GetStopPos();
-	apdist_stopstart = position.CalcDistance(appos_stopstart);
+	apdist_stopstart = (position-appos_stopstart).Magnitude();
       }
   } // if it has direction
   else
@@ -158,9 +158,9 @@ void I3Calculator::ClosestApproachCalc(const I3Particle& particle,
     //--Don't calculate if particle does not have direction
     log_debug("ClosestApproachCalc() - particle has no direction. "
 	     "Not calculating.");
-    appos_inf.NullPosition();
+    appos_inf = I3Position(); // NullPosition();
     apdist_inf = NAN;
-    appos_stopstart.NullPosition();
+    appos_stopstart = I3Position(); // NullPosition();
     apdist_stopstart = NAN;
   }
   return;
@@ -198,7 +198,7 @@ double I3Calculator::ClosestApproachDistance(const I3Particle& particle, const I
       return apdist;
     }
     else if (particle.IsCascade()) {
-      return position.CalcDistance(particle.GetPos());
+      return (position-particle.GetPos()).Magnitude();
     }
   }
   log_debug("ClosestApproachDistance() - particle has no position, "
@@ -211,7 +211,7 @@ double I3Calculator::ClosestApproachDistance(const I3Particle& particle, const I
 double I3Calculator::DistanceAlongTrack(const I3Particle& track, const I3Position& ompos) {
   if (track.IsTrack()) {
     I3Position pos(ompos);
-    pos.ShiftCoordSystem(track.GetPos());
+    pos -= track.GetPos();
     pos.RotateZ(-track.GetDir().CalcPhi());
     pos.RotateY(-track.GetDir().CalcTheta());
     return pos.GetZ();
@@ -254,7 +254,7 @@ double I3Calculator::CherenkovTime(const I3Particle& particle, const I3Position&
   }
   else if (particle.IsCascade()) {
     double speed = I3Constants::c/IndexRefG;
-    return position.CalcDistance(particle.GetPos()) / speed;
+    return (position-particle.GetPos()).Magnitude() / speed;
   }
   else {
     log_debug("CherenkovTime() - particle is neither a track nor a cascade.");
@@ -274,7 +274,7 @@ double I3Calculator::CherenkovDistance(const I3Particle& particle, const I3Posit
     return chdist;
   }
   else if (particle.IsCascade()) {
-    return position.CalcDistance(particle.GetPos());
+    return (position-particle.GetPos()).Magnitude();
   }
   else {
     log_debug("CherenkovDistance() - particle is neither track nor cascade.");
@@ -328,7 +328,7 @@ double I3Calculator::Angle(const I3Particle& p1, const I3Particle& p2)
 double I3Calculator::Distance(const I3Particle& p1, const I3Particle& p2)
 {
   if (p1.HasPosition() && p2.HasPosition()) {
-    return p1.GetPos().CalcDistance(p2.GetPos());
+    return (p1.GetPos()-p2.GetPos()).Magnitude();
   }
   else {
     log_debug("Distance() - one of particles has no position.");
@@ -464,7 +464,7 @@ I3Calculator::GetTransverseDirections(const I3Direction &dir){
   double px = dircos[imin];
   double py = dircos[(imin+1)%3];
   double pz = dircos[(imin+2)%3];
-#ifndef NDEBUG
+#ifndef I3_COMPILE_OUT_VERBOSE_LOGGING
   double d[3] = {px,py,pz};
 #endif
   log_trace("px=%f py=%f pz=%f", px, py, pz );
@@ -474,19 +474,17 @@ I3Calculator::GetTransverseDirections(const I3Direction &dir){
   log_trace("q1x=%f q1y=%f q1z=%f", q1[0], q1[1], q1[2] );
   log_trace("q2x=%f q2y=%f q2z=%f", q2[0], q2[1], q2[2] );
   std::pair<I3Direction,I3Direction> q1q2;
-  q1q2.first.SetDir( q1[(3-imin)%3],
-                     q1[(4-imin)%3],
-                     q1[(5-imin)%3] );
-  q1q2.second.SetDir( q2[(3-imin)%3],
-                      q2[(4-imin)%3],
-                      q2[(5-imin)%3] );
+  q1q2.first = I3Direction( q1[(3-imin)%3],
+                            q1[(4-imin)%3],
+                            q1[(5-imin)%3] );
+  q1q2.second = I3Direction( q2[(3-imin)%3],
+                             q2[(4-imin)%3],
+                             q2[(5-imin)%3] );
 
   log_trace( "dircos[0]=%f dircos[1]=%f dircos[2]=%f",
              dircos[0], dircos[1], dircos[2] );
-#ifndef NDEBUG
   log_trace( "dorcos[0]=%f dorcos[1]=%f dorcos[2]=%f",
              d[(3-imin)%3], d[(4-imin)%3], d[(5-imin)%3] );
-#endif
   return q1q2;
 }
 
@@ -519,6 +517,6 @@ void I3Calculator::Rotate(const I3Direction &axis, I3Direction &dir, double angl
   double newX = (ca+(1-ca)*dx*dx      )*X + (   (1-ca)*dx*dy-sa*dz)*Y + (   (1-ca)*dx*dz+sa*dy)*Z;
   double newY = (   (1-ca)*dy*dx+sa*dz)*X + (ca+(1-ca)*dy*dy      )*Y + (   (1-ca)*dy*dz-sa*dx)*Z;
   double newZ = (   (1-ca)*dz*dx-sa*dy)*X + (   (1-ca)*dz*dy+sa*dx)*Y + (ca+(1-ca)*dz*dz      )*Z;
-  dir.SetDir(newX,newY,newZ);
+  dir = I3Direction(newX,newY,newZ);
 
 }

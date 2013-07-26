@@ -41,8 +41,7 @@ class I3CascadeCutValues : public I3CutValuesBase
     Nstring(-1),
     Ndir(-1),
     Nearly(-1),
-    Nlate(-1)
-    { cog.NullPos(); };
+    Nlate(-1){}
 
     void Calculate(const I3Particle& vertex,
                    const I3Geometry& geometry,

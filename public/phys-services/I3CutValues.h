@@ -41,8 +41,7 @@ class I3CutValues : public I3CutValuesBase
     Ndir(-1),
     Ldir(NAN),
     Sdir(NAN),
-    Sall(NAN)
-    { cog.NullPos(); };
+    Sall(NAN){}
 
   void Calculate(const I3Particle& track,
                  const I3Geometry& geometry,
