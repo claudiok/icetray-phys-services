@@ -132,7 +132,7 @@ TEST(particleInCscd){
   // the following point gets a wrong scale 
   // (should be smaller 1, but is not) due to a
   // bug in the I3Cuts! 
-  //  p.SetPos (450, 0, 0); // favorite poit ;-)
+  //  p=I3Position(450, 0, 0); // favorite poit ;-)
   
   double s = scale.ScaleInIce (p);
 
@@ -235,44 +235,44 @@ const I3Geometry myGeoService () {
 
   // put the middle strings
     
-  geo.omgeo[OMKey (21, 30)].position.SetPosition( 400, -200, 0, I3Position::car);
-  geo.omgeo[OMKey (50, 30)].position.SetPosition( 550,  150, 0, I3Position::car);
-  geo.omgeo[OMKey (74, 30)].position.SetPosition( 350,  400, 0, I3Position::car);
-  geo.omgeo[OMKey (73, 30)].position.SetPosition( 200,  400, 0, I3Position::car);
-  geo.omgeo[OMKey (78, 30)].position.SetPosition(   0,  500, 0, I3Position::car);
-  geo.omgeo[OMKey (75, 30)].position.SetPosition(-350,  450, 0, I3Position::car);
-  geo.omgeo[OMKey (60, 30)].position.SetPosition(-400,  200, 0, I3Position::car);
-  geo.omgeo[OMKey (52, 30)].position.SetPosition(-380,  100, 0, I3Position::car);
-  geo.omgeo[OMKey (53, 30)].position.SetPosition(-220,  100, 0, I3Position::car);
-  geo.omgeo[OMKey (44, 30)].position.SetPosition(-200,   50, 0, I3Position::car);
-  geo.omgeo[OMKey (46, 30)].position.SetPosition(  50,  100, 0, I3Position::car);
-  geo.omgeo[OMKey (38, 30)].position.SetPosition( 300,    0, 0, I3Position::car);
+  geo.omgeo[OMKey (21, 30)].position=I3Position( 400, -200, 0, I3Position::car);
+  geo.omgeo[OMKey (50, 30)].position=I3Position( 550,  150, 0, I3Position::car);
+  geo.omgeo[OMKey (74, 30)].position=I3Position( 350,  400, 0, I3Position::car);
+  geo.omgeo[OMKey (73, 30)].position=I3Position( 200,  400, 0, I3Position::car);
+  geo.omgeo[OMKey (78, 30)].position=I3Position(   0,  500, 0, I3Position::car);
+  geo.omgeo[OMKey (75, 30)].position=I3Position(-350,  450, 0, I3Position::car);
+  geo.omgeo[OMKey (60, 30)].position=I3Position(-400,  200, 0, I3Position::car);
+  geo.omgeo[OMKey (52, 30)].position=I3Position(-380,  100, 0, I3Position::car);
+  geo.omgeo[OMKey (53, 30)].position=I3Position(-220,  100, 0, I3Position::car);
+  geo.omgeo[OMKey (44, 30)].position=I3Position(-200,   50, 0, I3Position::car);
+  geo.omgeo[OMKey (46, 30)].position=I3Position(  50,  100, 0, I3Position::car);
+  geo.omgeo[OMKey (38, 30)].position=I3Position( 300,    0, 0, I3Position::car);
 
-  geo.omgeo[OMKey (21,  1)].position.SetPosition( 400, -200, 500, I3Position::car);
-  geo.omgeo[OMKey (50,  1)].position.SetPosition( 550,  150, 500, I3Position::car);
-  geo.omgeo[OMKey (74,  1)].position.SetPosition( 350,  400, 500, I3Position::car);
-  geo.omgeo[OMKey (73,  1)].position.SetPosition( 200,  400, 500, I3Position::car);
-  geo.omgeo[OMKey (78,  1)].position.SetPosition(   0,  500, 500, I3Position::car);
-  geo.omgeo[OMKey (75,  1)].position.SetPosition(-350,  450, 500, I3Position::car);
-  geo.omgeo[OMKey (60,  1)].position.SetPosition(-400,  200, 500, I3Position::car);
-  geo.omgeo[OMKey (52,  1)].position.SetPosition(-380,  100, 500, I3Position::car);
-  geo.omgeo[OMKey (53,  1)].position.SetPosition(-220,  100, 500, I3Position::car);
-  geo.omgeo[OMKey (44,  1)].position.SetPosition(-200,   50, 500, I3Position::car);
-  geo.omgeo[OMKey (46,  1)].position.SetPosition(  50,  100, 500, I3Position::car);
-  geo.omgeo[OMKey (38,  1)].position.SetPosition( 300,    0, 500, I3Position::car);
+  geo.omgeo[OMKey (21,  1)].position=I3Position( 400, -200, 500, I3Position::car);
+  geo.omgeo[OMKey (50,  1)].position=I3Position( 550,  150, 500, I3Position::car);
+  geo.omgeo[OMKey (74,  1)].position=I3Position( 350,  400, 500, I3Position::car);
+  geo.omgeo[OMKey (73,  1)].position=I3Position( 200,  400, 500, I3Position::car);
+  geo.omgeo[OMKey (78,  1)].position=I3Position(   0,  500, 500, I3Position::car);
+  geo.omgeo[OMKey (75,  1)].position=I3Position(-350,  450, 500, I3Position::car);
+  geo.omgeo[OMKey (60,  1)].position=I3Position(-400,  200, 500, I3Position::car);
+  geo.omgeo[OMKey (52,  1)].position=I3Position(-380,  100, 500, I3Position::car);
+  geo.omgeo[OMKey (53,  1)].position=I3Position(-220,  100, 500, I3Position::car);
+  geo.omgeo[OMKey (44,  1)].position=I3Position(-200,   50, 500, I3Position::car);
+  geo.omgeo[OMKey (46,  1)].position=I3Position(  50,  100, 500, I3Position::car);
+  geo.omgeo[OMKey (38,  1)].position=I3Position( 300,    0, 500, I3Position::car);
 
-  geo.omgeo[OMKey (21, 60)].position.SetPosition( 400, -200, -500, I3Position::car);
-  geo.omgeo[OMKey (50, 60)].position.SetPosition( 550,  150, -500, I3Position::car);
-  geo.omgeo[OMKey (74, 60)].position.SetPosition( 350,  400, -500, I3Position::car);
-  geo.omgeo[OMKey (73, 60)].position.SetPosition( 200,  400, -500, I3Position::car);
-  geo.omgeo[OMKey (78, 60)].position.SetPosition(   0,  500, -500, I3Position::car);
-  geo.omgeo[OMKey (75, 60)].position.SetPosition(-350,  450, -500, I3Position::car);
-  geo.omgeo[OMKey (60, 60)].position.SetPosition(-400,  200, -500, I3Position::car);
-  geo.omgeo[OMKey (52, 60)].position.SetPosition(-380,  100, -500, I3Position::car);
-  geo.omgeo[OMKey (53, 60)].position.SetPosition(-220,  100, -500, I3Position::car);
-  geo.omgeo[OMKey (44, 60)].position.SetPosition(-200,   50, -500, I3Position::car);
-  geo.omgeo[OMKey (46, 60)].position.SetPosition(  50,  100, -500, I3Position::car);
-  geo.omgeo[OMKey (38, 60)].position.SetPosition( 300,    0, -500, I3Position::car);
+  geo.omgeo[OMKey (21, 60)].position=I3Position( 400, -200, -500, I3Position::car);
+  geo.omgeo[OMKey (50, 60)].position=I3Position( 550,  150, -500, I3Position::car);
+  geo.omgeo[OMKey (74, 60)].position=I3Position( 350,  400, -500, I3Position::car);
+  geo.omgeo[OMKey (73, 60)].position=I3Position( 200,  400, -500, I3Position::car);
+  geo.omgeo[OMKey (78, 60)].position=I3Position(   0,  500, -500, I3Position::car);
+  geo.omgeo[OMKey (75, 60)].position=I3Position(-350,  450, -500, I3Position::car);
+  geo.omgeo[OMKey (60, 60)].position=I3Position(-400,  200, -500, I3Position::car);
+  geo.omgeo[OMKey (52, 60)].position=I3Position(-380,  100, -500, I3Position::car);
+  geo.omgeo[OMKey (53, 60)].position=I3Position(-220,  100, -500, I3Position::car);
+  geo.omgeo[OMKey (44, 60)].position=I3Position(-200,   50, -500, I3Position::car);
+  geo.omgeo[OMKey (46, 60)].position=I3Position(  50,  100, -500, I3Position::car);
+  geo.omgeo[OMKey (38, 60)].position=I3Position( 300,    0, -500, I3Position::car);
 
 
   return geo;

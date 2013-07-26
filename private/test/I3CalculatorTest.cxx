@@ -108,7 +108,7 @@ TEST(IsOnTrack)
 
   ENSURE(!IsOnTrack(starttrack(),on,0.1*I3Units::m));
 
-  on.SetPosition(1,1,1.1,I3Position::car);
+  on=I3Position(1,1,1.1,I3Position::car);
   ENSURE(!IsOnTrack(starttrack(),on,0.1*I3Units::m));
 }
 
@@ -118,57 +118,57 @@ TEST(ClosestApproachDistance)
 
   ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),q),sqrt(3.),0.0001);
 
-  a1.SetPosition(1,0,-7,I3Position::car);
+  a1=I3Position(1,0,-7,I3Position::car);
   ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),a1),1.,0.0001);
 
-  a1.SetPosition(1,1,0,I3Position::car);
+  a1=I3Position(1,1,0,I3Position::car);
   ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),a1),0.,0.0001);
 
-  a1.SetPosition(1,1,2,I3Position::car);
+  a1=I3Position(1,1,2,I3Position::car);
   ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),a1),1.,0.0001);
 
-  a1.SetPosition(1,0,2,I3Position::car);
+  a1=I3Position(1,0,2,I3Position::car);
   ENSURE_DISTANCE(ClosestApproachDistance(starttrack(),a1),sqrt(2.0),0.0001);
 }
 
 TEST(CherenkovPosition)
 { 
-  a1.SetPosition(1,0,-1,I3Position::car);
+  a1=I3Position(1,0,-1,I3Position::car);
   I3Position pos = CherenkovPosition(starttrack(),a1);
   ENSURE_DISTANCE(pos.GetZ(),0.1616288,0.0001);
 
-  a1.SetPosition(-2,1,0,I3Position::car);
+  a1=I3Position(-2,1,0,I3Position::car);
   pos = CherenkovPosition(muon(),a1);
   ENSURE_DISTANCE(pos.GetX(),-0.838371,0.0001);
 }
 
 TEST(CherenkovTime)
 { 
-  a1.SetPosition(0,0,0,I3Position::car);
+  a1=I3Position(0,0,0,I3Position::car);
   ENSURE(isnan(CherenkovTime(starttrack(),a1)));
 
-  a1.SetPosition(1,0,-1,I3Position::car);
+  a1=I3Position(1,0,-1,I3Position::car);
   ENSURE_DISTANCE(CherenkovTime(starttrack(),a1)/I3Units::ns,9.731156,0.0001);
 
-  a1.SetPosition(1,0,-11,I3Position::car);
+  a1=I3Position(1,0,-11,I3Position::car);
   ENSURE_DISTANCE(CherenkovTime(starttrack(),a1)/I3Units::ns,43.08756,0.0001);
 
-  a1.SetPosition(-2,1,0,I3Position::car);
+  a1=I3Position(-2,1,0,I3Position::car);
   ENSURE_DISTANCE(CherenkovTime(muon(),a1)/I3Units::ns,43.08756,0.0001);
 }
 
 TEST(CherenkovDistance)
 {
-  a1.SetPosition(1,0,0,I3Position::car);
+  a1=I3Position(1,0,0,I3Position::car);
   ENSURE(isnan(CherenkovDistance(starttrack(),a1)));
 
-  a1.SetPosition(1,0,-1,I3Position::car);
+  a1=I3Position(1,0,-1,I3Position::car);
   ENSURE_DISTANCE(CherenkovDistance(starttrack(),a1),1.532769,0.0001);
 
-  a1.SetPosition(1,0,-11,I3Position::car);
+  a1=I3Position(1,0,-11,I3Position::car);
   ENSURE_DISTANCE(CherenkovDistance(starttrack(),a1),1.532769,0.0001);
 
-  a1.SetPosition(-2,1,0,I3Position::car);
+  a1=I3Position(-2,1,0,I3Position::car);
   ENSURE_DISTANCE(CherenkovDistance(muon(),a1),1.532769,0.0001);
 
   ENSURE_DISTANCE(CherenkovDistance(muon(),q),4.33532,0.0001);
@@ -176,10 +176,10 @@ TEST(CherenkovDistance)
 
 TEST(CherenkovAngle)
 { 
-  a1.SetPosition(0,1,0,I3Position::car);
+  a1=I3Position(0,1,0,I3Position::car);
   ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/I3Units::deg,90.0,0.0001);
 
-  a1.SetPosition(0,0,1,I3Position::car);
+  a1=I3Position(0,0,1,I3Position::car);
   ENSURE_DISTANCE(CherenkovApproachAngle(muon(),a1)/I3Units::deg,49.2761,0.0001);
 
   ENSURE_DISTANCE(CherenkovApproachAngle(muon(),p,I3Direction(0.,0.,1.))/I3Units::deg,117.47272,0.0001);
@@ -197,7 +197,7 @@ TEST(CascadeTime)
 
 TEST(TimeResidual_track)
 {
-  a1.SetPosition(0,0,-4,I3Position::car);
+  a1=I3Position(0,0,-4,I3Position::car);
   ENSURE_DISTANCE(TimeResidual(starttrack(),a1,120), -1.0055, 0.0001);
 }
 
@@ -255,7 +255,7 @@ TEST(garbage)
 
       particle.SetPos(0,0,0);
       particle.SetDir(0,0,1);
-      position.SetPos(2,2,2,I3Position::car);
+      position=I3Position(2,2,2,I3Position::car);
       CherenkovCalc(particle, position, chpos, chtime, chdist, changle);
 
       ENSURE(isnan(chpos.GetX()));
