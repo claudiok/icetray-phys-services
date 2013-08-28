@@ -155,7 +155,10 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
         if (key.GetString() == 0)
             log_fatal("This module assumes an IceCube geometry as input. It may not contain string number 0!");
         
-        if ((key.GetOM() > 60) && (key.GetString() <= 78)) {
+        if ((key.GetOM() > 60) && (key.GetString() <= 86)) {
+            // note: string 79 is a DeepCore string, but *does* have IceTop DOMs!
+            // to be sage, just assign everything in the IceCube string number
+            // range and DOM index > 60 to IceTop
             (*output)[key] = "IceTop";
             continue;
         }
