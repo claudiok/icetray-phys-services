@@ -155,17 +155,22 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
         if (key.GetString() == 0)
             log_fatal("This module assumes an IceCube geometry as input. It may not contain string number 0!");
         
-        if (key.GetOM() > 60) {
+        if ((key.GetOM() > 60) && (key.GetString() <= 78)) {
             (*output)[key] = "IceTop";
             continue;
         }
 
-        if (key.GetString() >= 79) {
+        if ((key.GetString() >= 79) && (key.GetString() <= 86)) {
             (*output)[key] = "DeepCore";
             continue;
         }
         
-        (*output)[key] = "IceCube";
+        if (key.GetString() <= 78) {
+            (*output)[key] = "IceCube";
+            continue;
+        }
+
+        (*output)[key] = "PINGU";
     }
     
     return output;
