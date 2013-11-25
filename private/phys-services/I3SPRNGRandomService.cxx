@@ -89,6 +89,9 @@ I3SPRNGRandomService::I3SPRNGRandomService(
   } else {
   	rng_ = gsl_sprng_init(seed_, nstreams_, streamnum_);
   }
+  
+  if (!rng_)
+      log_fatal("Failed to allocate random number generator!");
 }
 
 I3SPRNGRandomService::~I3SPRNGRandomService()
