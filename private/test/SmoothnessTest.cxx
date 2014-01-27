@@ -20,7 +20,7 @@ namespace SmoothnessDirTest{
   {
     OMKey pos(1,position);
     I3OMGeo geo;
-    geo.position.SetPos(0,0,depth,I3Position::car);
+    geo.position=I3Position(0,0,depth,I3Position::car);
     geometry.omgeo[pos] = geo;
 
     I3RecoPulseSeries hits;
