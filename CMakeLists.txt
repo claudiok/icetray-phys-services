@@ -87,7 +87,8 @@ i3_add_library(phys-services
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable
   private/CreateXMLOMKey2MBIDConversionTable/*.cxx
-  USE_PROJECTS phys-services)
+  USE_PROJECTS phys-services
+  USE_TOOLS gsl)
 
 if (USE_ROOT)
   # These tests require ROOT to run, so conditionally build them
