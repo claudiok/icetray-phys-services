@@ -24,6 +24,7 @@ if (SPRNG_FOUND)
     private/phys-services/I3SPRNGRandomService.cxx
     private/phys-services/I3SPRNGRandomServiceFactory.cxx)
   set(OPTIONAL_TOOLS ${OPTIONAL_TOOLS} sprng)
+  ADD_DEFINITIONS(-DI3_USE_SPRNG)
 else(SPRNG_FOUND)
   colormsg(CYAN "+-- sprng *not* found, omitting optional SPRNGRandomService")
 endif(SPRNG_FOUND)
@@ -120,4 +121,18 @@ i3_test_executable(test
 
 i3_test_scripts(resources/test/*.py)
 
-add_subdirectory(private/pybindings)
+i3_add_pybindings(phys_services
+  private/pybindings/I3Calculator.cxx
+  private/pybindings/I3ScaleCalculator.cxx
+  private/pybindings/I3CutValues.cxx
+  private/pybindings/I3CascadeCutValues.cxx
+  private/pybindings/Converter.cxx
+  private/pybindings/RandomServices.cxx
+  private/pybindings/I3Cuts.cxx
+  private/pybindings/I3Splitter.cxx
+  private/pybindings/I3XMLOMKey2MBID.cxx
+  private/pybindings/I3GCDFileService.cxx
+  private/pybindings/module.cxx
+  USE_TOOLS boost python 
+  USE_PROJECTS phys-services interfaces
+  )
