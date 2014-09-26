@@ -1,3 +1,8 @@
+# $Id$
+# $Revision$
+# $LastChangedDate$
+# $LastChangedBy$
+
 from icecube.icetray import pypick, I3Frame, logging
 
 def which_split(split_name=''):
