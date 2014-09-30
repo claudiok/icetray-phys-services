@@ -1,0 +1,12 @@
+# $Id: $
+# $Author: $
+# $Date: $
+#
+
+September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+Release V14-09-00
+
+Feature:
+  - which_split was added and should be considered the standard now.
+
