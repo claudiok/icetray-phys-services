@@ -135,6 +135,7 @@ void testIndependence(Random& r1, Random& r2)
 }
 }
 
+#ifdef I3_USE_ROOT
 TEST(TRandomServiceTest)
 {
   I3TRandomService random1;
@@ -142,6 +143,7 @@ TEST(TRandomServiceTest)
   randomServiceTest::testRandomService<100000,I3TRandomService>(random1);
   randomServiceTest::testRandomService<100000,I3TRandomService>(random2);
 }
+#endif
 
 TEST(I3GSLRandomService)
 {
@@ -151,6 +153,7 @@ TEST(I3GSLRandomService)
   randomServiceTest::testRandomService<100000,I3GSLRandomService>(random2);
 }
 
+#ifdef I3_USE_SPRNG
 TEST(I3SPRNGRandomService)
 {
   int nstreams = 2;
@@ -167,6 +170,7 @@ TEST(I3SPRNGRandomService)
   randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random3);
   /*randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random2);*/
 }
+#endif
 
 TEST(BoostDistributionCompatibility)
 {
