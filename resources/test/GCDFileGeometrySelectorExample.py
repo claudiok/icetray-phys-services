@@ -3,7 +3,7 @@ from I3Tray import *
 from os.path import expandvars
 from icecube import icetray,dataclasses,dataio,phys_services
 
-filename = expandvars("$I3_PORTS/test-data/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz")
+filename = expandvars("$I3_TESTDATA/sim/GeoCalibDetectorStatus_IC86.55380_corrected.i3.gz")
 
 tray = I3Tray()
 

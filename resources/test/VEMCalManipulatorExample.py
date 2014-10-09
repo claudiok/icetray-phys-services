@@ -11,8 +11,8 @@ from icecube import phys_services
 
 tray = I3Tray()
 
-tools  = expandvars("$I3_PORTS")
-infile = tools + "/test-data/2006data/Run00089508.i3.gz"
+testdata  = expandvars("$I3_TESTDATA")
+infile = testdata + "/2006data/Run00089508.i3.gz"
 nevent = -1
 
 if(len(sys.argv)>=2):

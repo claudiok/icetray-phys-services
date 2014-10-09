@@ -20,11 +20,11 @@ TEST_GROUP(I3Functions)
 
 TEST(ParseFilename)
 {
-  string searchpattern(getenv("I3_PORTS"));
-  searchpattern.append("/test-data/amanda/*.f2k");  //4
+  string searchpattern(getenv("I3_TESTDATA"));
+  searchpattern.append("/amanda/*.f2k");  //4
   searchpattern.append(";");
-  searchpattern.append(getenv("I3_PORTS"));
-  searchpattern.append("/test-data/ama-*.*"); // 4
+  searchpattern.append(getenv("I3_TESTDATA"));
+  searchpattern.append("/ama-*.*"); // 4
 
   vector<string> v = I3Functions::ParseFilename(searchpattern);
   for(vector<string>::iterator iter=v.begin(); iter!=v.end(); iter++)
