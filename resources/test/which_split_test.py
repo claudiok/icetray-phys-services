@@ -8,7 +8,6 @@
 from I3Tray import *
 from icecube import icetray, dataclasses, dataio
 from icecube.icetray import pypick, I3Frame
-import numpy
 
 # this is the thing we want to test in this script:
 from icecube.phys_services.which_split import which_split
