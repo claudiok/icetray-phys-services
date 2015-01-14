@@ -15,14 +15,19 @@
  * the icecube collaboration
  * $Id$
  *
- * @brief SPRNG Implementation of the I3RandomService interface.  
+ * @brief SPRNG Implementation of the I3RandomService interface.
  * This implementation uses a combination of SPRNG and GSL to generate
  * statistically independent streams of pseudo-random number distributions.
  * See gsl-sprng.h for more details.
  *
+ * NB : It's important that you use the same seed for different jobs.  Set
+ * nstreams to the number of jobs and use a different streamnum for each job.
+ * Otherwise you'll get correlations between the RNG streams.  I know this is
+ * counterintuitive, but this is how SPRNG works.
+ * 
  * The code for this class is based on John Pretz's implementation of
  * I3GSLRandomService.
- * 
+ *
  * @version $Revision$
  * @date $Date$
  * @author juancarlos
@@ -30,8 +35,8 @@
  * @todo Add ability to save state of rng after run is complete
  *  SPRNG has the functions:
  *
- *		int pack_sprng(char *bytes); // returns size of bytes
- *      void unpack_sprng(char bytes[MAX_PACKED_LENGTH]);	
+ *      int pack_sprng(char *bytes); // returns size of bytes
+ *      void unpack_sprng(char bytes[MAX_PACKED_LENGTH]);
  *
  *  which can be used to save and retrieve the state of an rng
  */
@@ -46,8 +51,9 @@ class I3SPRNGRandomService : public I3RandomService{
   /**
    * constructors
    */
-  I3SPRNGRandomService(int seed, int nstreams, int streamnum, 
-		       std::string instatefile=std::string(), std::string outstatefile=std::string());
+  I3SPRNGRandomService(int seed, int nstreams, int streamnum,
+		       std::string instatefile=std::string(),
+		       std::string outstatefile=std::string());
 
   /**
    * destructor

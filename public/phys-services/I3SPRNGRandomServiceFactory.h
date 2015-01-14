@@ -14,15 +14,9 @@
  * (c) IceCube Collaboration
  */
 
-// Header files
-
 #include <string>
 
-// Forward declarations
-
 class I3Context;
-
-// Superclasses
 
 #include "icetray/I3ServiceFactory.h"
 #include "phys-services/I3RandomService.h"
@@ -40,13 +34,9 @@ class I3SPRNGRandomServiceFactory
 {
  public:
 
-  // Constructors and destructor
-
   I3SPRNGRandomServiceFactory(const I3Context& context);
 
   virtual ~I3SPRNGRandomServiceFactory();
-
-  // public member functions
 
   /**
    * Installed this objects service into the specified services object.

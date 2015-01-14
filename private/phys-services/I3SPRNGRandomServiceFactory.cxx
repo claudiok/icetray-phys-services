@@ -8,17 +8,11 @@
  * (c) IceCube Collaboration
  */
 
-// Class header files
-
 #include "phys-services/I3SPRNGRandomServiceFactory.h"
 I3_SERVICE_FACTORY(I3SPRNGRandomServiceFactory);
 
-// Other header files
-
 #include "phys-services/I3SPRNGRandomService.h"
 #include <sys/stat.h>
-
-// Constructors
 
 I3SPRNGRandomServiceFactory::I3SPRNGRandomServiceFactory(const I3Context& context)
   : I3ServiceFactory(context),
@@ -28,11 +22,11 @@ I3SPRNGRandomServiceFactory::I3SPRNGRandomServiceFactory(const I3Context& contex
   instatefile_(),
   outstatefile_()
 {
-  AddParameter("Seed","Seed for random number generator",seed_);
+  AddParameter("Seed","Seed for random number generator.  NB : Use the same seed for different jobs. ",seed_);
 
-  AddParameter("NStreams","Number of streams used in cluster",nstreams_);
+  AddParameter("NStreams","Number of streams (i.e. N jobs) used in cluster",nstreams_);
 
-  AddParameter("StreamNum","Thread number for this generator",streamnum_);
+  AddParameter("StreamNum","Thread number for this generator (i.e. job number)",streamnum_);
 
   AddParameter("inStateFile","If set, load saved state from file",instatefile_);
 
@@ -44,13 +38,9 @@ I3SPRNGRandomServiceFactory::I3SPRNGRandomServiceFactory(const I3Context& contex
                installServiceAs_);
 }
 
-// Destructors
-
 I3SPRNGRandomServiceFactory::~I3SPRNGRandomServiceFactory()
 {
 }
-
-// Member functions
 
 bool
 I3SPRNGRandomServiceFactory::InstallService(I3Context& services)
