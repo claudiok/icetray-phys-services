@@ -35,26 +35,12 @@
 
  @section configuration Configuring the I3SPRNGRandomService
 
- As of 10 Mar 2005, IceTray services are configurable thanks to John Pretz.
- To be accurate, it is the ServiceFactory which is configured.
- The process is similar to that of configuring an I3Module.  The method 
- @code 
- I3Tray::AddService(const char* classname) 
- @endcode 
- has been replaced with 
- @code 
- I3Tray::AddService(const char* classname,const char* name) 
- @endcode
-
- Service parameters can be configured using
- @code 
- bool I3Tray::SetParameter(const char* module, const char* parameter, <int> value)
- @endcode
-
  For reproducibility SPRNG requires that for each generator to be given in
  addition to the <b>seed</b> two other parameters which are used for
- determining the stream of random numbers and their state. The following are
- the parameters used to configure I3SPRNGRandomService:
+ determining the stream of random numbers and their state. It's important that
+ you use the *same* seed for different jobs of the same type.  Each job sets a 
+ different stream number.  The following are the parameters used to configure 
+ I3SPRNGRandomService:
 
  @li Seed: this determines the initial state of the rng.
  @li NStreams: the total number of streams used throughout the the entire computing environment. 
