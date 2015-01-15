@@ -350,10 +350,26 @@ void I3ScaleCalculator::CalcOuterStationPositions (std::vector<double > &x,
 double I3ScaleCalculator::ScaleInIce (I3Particle part) const {
   if (iceConf_ > IC_EMPTY) {
     if (part.IsCascade ()) {
-      return ScaleInIceCascade (part);
+      return ScaleInIceCascade (part,false);
     }
     else {
       return ScaleInIceMuon (part);
+    }
+  }
+  else {
+    log_error ("Unknown or empty IceCube Configuration.");
+    return std::numeric_limits<double >::signaling_NaN ();
+  }
+};  
+
+double I3ScaleCalculator::ScaleIceCubeDetectorPolygon (I3Particle part) const {
+  if (iceConf_ > IC_EMPTY) {
+    if (part.IsCascade ()) {
+      return ScaleInIceCascade (part,true);
+    }
+    else {
+      log_error ("Particle must be of shape Cascade to calculate IceCube detector polygon scaling factor");
+      return std::numeric_limits<double >::signaling_NaN ();
     }
   }
   else {
@@ -386,7 +402,7 @@ double I3ScaleCalculator::ScaleInIceMuon (I3Particle part) const {
     return I3Cuts::ContainmentVolumeSize (part, x, y, ztop, zbot);
 }
 
-double I3ScaleCalculator::ScaleInIceCascade (I3Particle part) const {
+double I3ScaleCalculator::ScaleInIceCascade (I3Particle part,bool areaonly) const {
 
   // get detector info
   std::vector<double > x;
@@ -410,7 +426,11 @@ double I3ScaleCalculator::ScaleInIceCascade (I3Particle part) const {
   // calculate the z-Scale
   double zScale = abs (referenceTrack.GetZ () - zMiddle)
     / (zTop - zMiddle);
-    
+  
+  if (areaonly) {
+  // return only the scaled area
+  return areaScale;
+  }  
   // return the minimum of both
   return std::max (zScale,  areaScale); 
 }

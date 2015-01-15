@@ -62,6 +62,9 @@ void register_I3ScaleCalculator()
   def("scale_inice", &I3ScaleCalculator::ScaleInIce,
       "Calculate the factor by which the border polygon of the IceCube volume needs to be scaled to exactly contain the track/vertex",
       arg("particle"));
+  def("scale_xy", &I3ScaleCalculator::ScaleIceCubeDetectorPolygon,
+      "Calculate the factor by which the area of the border polygon of the IceCube volume needs to be scaled to exactly contain a cascade vertex",
+      arg("particle"));
   def("scale_icetop", &I3ScaleCalculator::ScaleIceTop,
       "Calculate the factor by which the border polygon of the IceTop surface are needs to be scaled to exactly contain the track/vertex",
       arg("particle"));

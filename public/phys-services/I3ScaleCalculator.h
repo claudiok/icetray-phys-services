@@ -56,6 +56,7 @@ class I3ScaleCalculator {
                                  double &z) const;
 
   double ScaleInIce (I3Particle part) const;  
+  double ScaleIceCubeDetectorPolygon(I3Particle part) const;  
   double ScaleIceTop (I3Particle part) const;
   
   bool VertexIsInside (const I3Particle &part) const;
@@ -63,7 +64,7 @@ class I3ScaleCalculator {
  private:
 
   double ScaleInIceMuon (I3Particle part) const;
-  double ScaleInIceCascade (I3Particle part) const;
+  double ScaleInIceCascade (I3Particle part, bool areaonly) const;
   
   bool IsInside (double xp, double yp,
                 const std::vector<double > &x, 
