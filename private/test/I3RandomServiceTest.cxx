@@ -133,6 +133,22 @@ void testIndependence(Random& r1, Random& r2)
   correlation = covariance/sqrt(sigma1*sigma2);
   ENSURE_DISTANCE(correlation, 0.0, 0.01, "testing correlation");
 }
+  
+void testStateRestoration(I3RandomService& random, unsigned int samples=4096)
+{
+  for(unsigned int i=0; i<samples; i++)
+    random.Integer(65536);
+  boost::shared_ptr<I3FrameObject> state=random.GetState();
+  std::vector<unsigned int> saved;
+  for(unsigned int i=0; i<samples; i++)
+    saved.push_back(random.Integer(65536));
+  //----
+  random.RestoreState(state);
+  for(unsigned int i=0; i<samples; i++){
+    unsigned int next=random.Integer(65536);
+    ENSURE(next==saved[i],"Random stream after state restoration must match");
+  }
+}
 }
 
 #ifdef I3_USE_ROOT
@@ -151,6 +167,8 @@ TEST(I3GSLRandomService)
   I3GSLRandomService random2(666);
   randomServiceTest::testRandomService<100000,I3GSLRandomService>(random1);
   randomServiceTest::testRandomService<100000,I3GSLRandomService>(random2);
+  randomServiceTest::testStateRestoration(random1);
+  randomServiceTest::testStateRestoration(random2);
 }
 
 #ifdef I3_USE_SPRNG
@@ -169,6 +187,9 @@ TEST(I3SPRNGRandomService)
 
   randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random3);
   /*randomServiceTest::testIndependence<1000000,I3SPRNGRandomService>(random1,random2);*/
+  
+  randomServiceTest::testStateRestoration(random1);
+  randomServiceTest::testStateRestoration(random3);
 }
 #endif
 
