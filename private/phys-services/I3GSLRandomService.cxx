@@ -19,6 +19,9 @@ track_state(track_state)
   else
     construct(r);
   gsl_rng_set(r, seed);
+  if(track_state)
+    gsl_rng_set(((gsl_rng_wrapper_state*)r->state)->rng,
+                ((gsl_rng_wrapper_state*)r->state)->seed);
 }
 
 I3GSLRandomService::~I3GSLRandomService(){
@@ -131,11 +134,12 @@ void I3GSLRandomService::RestoreState(I3FrameObjectConstPtr vstate)
   
   if(state->seed_!=rstate->seed || rstate->icalls>state->icalls_
      || rstate->dcalls>state->dcalls_){
-    gsl_rng_free(((gsl_rng_wrapper_state*)r->state)->rng);
+    gsl_rng_free(rstate->rng);
     gsl_rng_free(r);
     construct_counted(r);
-    gsl_rng_set(r, state->seed_);
     rstate=(gsl_rng_wrapper_state*)r->state; //need to refresh this pointer!
+    gsl_rng_set(r, state->seed_);
+    gsl_rng_set(rstate->rng, rstate->seed);
   }
   
   while(rstate->icalls<state->icalls_)
@@ -154,6 +158,11 @@ inline void I3GSLRandomService::construct_counted(gsl_rng*& r)
 {
   gsl_rng_env_setup();
   r = gsl_rng_alloc(&gsl_rng_counting_wrapper);
+  //finish setting up the rng state since GSL bugs make it unsafe for
+  //gsl_wrapper_set to do so.
+  gsl_rng*& inner_r=((gsl_rng_wrapper_state*)r->state)->rng;
+  construct(inner_r);
+  gsl_rng_set(inner_r, ((gsl_rng_wrapper_state*)r->state)->seed);
 }
 
 //initializes the RNG with a seed
@@ -163,9 +172,14 @@ void gsl_wrapper_set(void* vstate, unsigned long int s)
   state->seed=s;
   state->icalls=0;
   state->dcalls=0;
-  if(!state->rng)
+  
+  //This is the obvious thing to do, but a bug in GSL versions <1.16 causes it
+  //to fail horribly. Instead, as long as those versions must be supported we
+  //just leave the seed in state->seed and wait patiently for I3GSLRandomService
+  //to allocate the interior rng if necessary and set the seed on it directly.
+  /*if(!state->rng)
     I3GSLRandomService::construct(state->rng);
-  gsl_rng_set(state->rng, s);
+  gsl_rng_set(state->rng, s);*/
 }
 
 //gets one random integer
