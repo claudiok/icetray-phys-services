@@ -67,7 +67,8 @@ class I3GSLRandomServiceFactory
     (const I3GSLRandomServiceFactory& rhs); // stop default
 
   // instance member data
-  int seed_;
+  unsigned long seed_;
+  bool track_state_;
   I3RandomServicePtr random_;
   std::string installServiceAs_;
 

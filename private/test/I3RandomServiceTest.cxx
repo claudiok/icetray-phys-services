@@ -134,7 +134,7 @@ void testIndependence(Random& r1, Random& r2)
   ENSURE_DISTANCE(correlation, 0.0, 0.01, "testing correlation");
 }
   
-void testStateRestoration(I3RandomService& random, unsigned int samples=4096)
+void testStateRestoration(I3RandomService& random, unsigned int samples=16384)
 {
   for(unsigned int i=0; i<samples; i++)
     random.Integer(65536);

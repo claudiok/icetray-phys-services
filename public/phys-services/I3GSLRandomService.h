@@ -1,3 +1,17 @@
+/**
+ * copyright  (C) 2004
+ * the icecube collaboration
+ * $Id$
+ *
+ * @brief An implementation of the I3RandomService interface.
+ *
+ * Uses the gsl library for the random numbers
+ *
+ * @version $Revision$
+ * @date $Date$
+ * @author pretz
+ */
+
 #ifndef I3GSLRANDOMSERVICE_H
 #define I3GSLRANDOMSERVICE_H
 
@@ -8,20 +22,19 @@
 #include <gsl/gsl_test.h>
 
 /**
- * copyright  (C) 2004
- * the icecube collaboration
- * $Id$
- *
- * @brief An implementation of the I3RandomService interface.  
- * 
- * Uses the gsl library for the random numbers
- *
- * @version $Revision$
- * @date $Date$
- * @author pretz
- *
- * @todo 
+ * This is (the state for) a shim which allows us to count the calls to the
+ * RNG, but otherwise hands all work off to the real GSL implmentations.
  */
+typedef struct
+{
+  unsigned long int seed;
+  uint64_t icalls;
+  uint64_t dcalls;
+  gsl_rng* rng;
+} gsl_rng_wrapper_state;
+
+extern const gsl_rng_type gsl_rng_counting_wrapper;
+
 class I3GSLRandomService : public I3RandomService{
  public:
   /**
@@ -32,12 +45,12 @@ class I3GSLRandomService : public I3RandomService{
   /**
    * constructor
    */
-	I3GSLRandomService(unsigned long int seed);
+  explicit I3GSLRandomService(unsigned long int seed, bool track_state=true);
 
   /**
    * destructor
    */
-  virtual ~I3GSLRandomService(){};
+  virtual ~I3GSLRandomService();
 
   /**
    * a number drawn from a binomial distribution
@@ -101,21 +114,24 @@ class I3GSLRandomService : public I3RandomService{
   I3GSLRandomService(const I3GSLRandomService& );
   I3GSLRandomService operator=(const I3GSLRandomService& );
 
-	void construct();
+  /**
+   * Helper function which constructs our preferred GSL RNG.
+   */
+  static void construct(gsl_rng*& r);
+  /**
+   * Helper function which constructs a GSL RNG wrapped with the counting shim
+   */
+  static void construct_counted(gsl_rng*& r);
 
   gsl_rng* r;
-  unsigned long int seed_;
+  bool track_state;
 
   SET_LOGGER("I3GSLRandomService");
 
+  //let gsl_wrapper_set use construct()
+  friend void gsl_wrapper_set(void* vstate, unsigned long int s);
 };
 
 I3_POINTER_TYPEDEFS(I3GSLRandomService);
-
-inline void I3GSLRandomService::construct()
-{
-  gsl_rng_env_setup();
-  r = gsl_rng_alloc(gsl_rng_default);
-}
 
 #endif //I3GSLRANDOMSERVICE_H

@@ -71,7 +71,7 @@ namespace bp = boost::python;
 void register_RandomServices()
 {
   register_randomservice<I3GSLRandomService>("I3GSLRandomService", "gsl random goodness",
-					     init<unsigned long int>(bp::arg("seed")));
+					     init<unsigned long int,bool>((bp::arg("seed"),bp::arg("track_state")=true)));
 
 #ifdef I3_USE_ROOT
   register_randomservice<I3TRandomService>("I3TRandomService", "ROOT random badness",

@@ -2,17 +2,29 @@
 #include <cstring>
 #include <gsl/gsl_version.h>
 
-I3GSLRandomService::I3GSLRandomService()
+I3GSLRandomService::I3GSLRandomService():
+track_state(true)
 {
-  // needed call to gsl
-  construct();
+  if(track_state)
+    construct_counted(r);
+  else
+    construct(r);
 }
 
-I3GSLRandomService::I3GSLRandomService(unsigned long int seed)
+I3GSLRandomService::I3GSLRandomService(unsigned long int seed, bool track_state):
+track_state(track_state)
 {
-  // needed call to gsl.  Then set the seed.
-  construct();
+  if(track_state)
+    construct_counted(r);
+  else
+    construct(r);
   gsl_rng_set(r, seed);
+}
+
+I3GSLRandomService::~I3GSLRandomService(){
+  if(track_state)
+    gsl_rng_free(((gsl_rng_wrapper_state*)r->state)->rng);
+  gsl_rng_free(r);
 }
 
 int I3GSLRandomService::Binomial(int ntot, double prob)
@@ -58,7 +70,9 @@ double I3GSLRandomService::Gaus(double mean,double stddev)
 struct I3GSLRandomServiceState : public I3FrameObject {
   std::string gsl_version_;
   std::string rng_type_;
-  std::vector<unsigned char> state_blob_;
+  unsigned long int seed_;
+  uint64_t icalls_;
+  uint64_t dcalls_;
   
   friend class boost::serialization::access;
   template <typename Archive>
@@ -67,7 +81,9 @@ struct I3GSLRandomServiceState : public I3FrameObject {
     ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
     ar & make_nvp("GSLversion", gsl_version_);
     ar & make_nvp("RNGtype", rng_type_);
-    ar & make_nvp("State", state_blob_);
+    ar & make_nvp("Seed", seed_);
+    ar & make_nvp("IntegerCalls", icalls_);
+    ar & make_nvp("DoubleCalls", dcalls_);
   }
 };
 
@@ -76,16 +92,25 @@ I3_SERIALIZABLE(I3GSLRandomServiceState);
 
 I3FrameObjectPtr I3GSLRandomService::GetState() const
 {
+  if(!track_state)
+    log_fatal("Call to I3GSLRandomService::GetState() on a random service which"
+              " was not told to track RNG state");
   boost::shared_ptr<I3GSLRandomServiceState> state(new I3GSLRandomServiceState);
   state->gsl_version_=GSL_VERSION;
-  state->rng_type_=gsl_rng_name(r);
-  state->state_blob_.resize(gsl_rng_size(r));
-  memcpy(&state->state_blob_.front(),gsl_rng_state(r),state->state_blob_.size());
+  gsl_rng_wrapper_state* rstate=(gsl_rng_wrapper_state*)r->state;
+  state->rng_type_=gsl_rng_name(rstate->rng);
+  state->seed_=rstate->seed;
+  state->icalls_=rstate->icalls;
+  state->dcalls_=rstate->dcalls;
   return state;
 }
 
 void I3GSLRandomService::RestoreState(I3FrameObjectConstPtr vstate)
 {
+  if(!track_state)
+    log_fatal("Call to I3GSLRandomService::RestoreState() on a random service "
+              "which was not told to track RNG state");
+  
   boost::shared_ptr<const I3GSLRandomServiceState> state;
   if (!(state = boost::dynamic_pointer_cast<const I3GSLRandomServiceState>(vstate)))
     log_fatal("The provided state is not an I3GSLRandomServiceState!");
@@ -96,15 +121,77 @@ void I3GSLRandomService::RestoreState(I3FrameObjectConstPtr vstate)
                      << "    Current version: " << current_gsl_version << '\n'
                      << "    Stored state version: " << state->gsl_version_);
   
-  if(gsl_rng_name(r)!=state->rng_type_)
+  gsl_rng_wrapper_state* rstate=(gsl_rng_wrapper_state*)r->state;
+  
+  std::string current_rng_type=gsl_rng_name(rstate->rng);
+  if(current_rng_type!=state->rng_type_)
     log_fatal_stream("Cannot restore state from an RNG of a different type\n"
-                     << "    Current RNG type: " << gsl_rng_name(r) << '\n'
+                     << "    Current RNG type: " << current_rng_type << '\n'
                      << "    Stored state type: " << state->rng_type_);
   
-  //final paranoid check: is there really as much space as there should be?
-  if(gsl_rng_size(r)!=state->state_blob_.size())
-    log_fatal("GSL state sizes do not match; something is horribly wrong!");
+  if(state->seed_!=rstate->seed || rstate->icalls>state->icalls_
+     || rstate->dcalls>state->dcalls_){
+    gsl_rng_free(((gsl_rng_wrapper_state*)r->state)->rng);
+    gsl_rng_free(r);
+    construct_counted(r);
+    gsl_rng_set(r, state->seed_);
+    rstate=(gsl_rng_wrapper_state*)r->state; //need to refresh this pointer!
+  }
   
-  //checks seem okay, so nuke and pave
-  memcpy(gsl_rng_state(r),&state->state_blob_.front(),state->state_blob_.size());
+  while(rstate->icalls<state->icalls_)
+    gsl_rng_get(r);
+  while(rstate->dcalls<state->dcalls_)
+    gsl_rng_uniform(r);
 }
+
+inline void I3GSLRandomService::construct(gsl_rng*& r)
+{
+  gsl_rng_env_setup();
+  r = gsl_rng_alloc(gsl_rng_default);
+}
+
+inline void I3GSLRandomService::construct_counted(gsl_rng*& r)
+{
+  gsl_rng_env_setup();
+  r = gsl_rng_alloc(&gsl_rng_counting_wrapper);
+}
+
+//initializes the RNG with a seed
+void gsl_wrapper_set(void* vstate, unsigned long int s)
+{
+  gsl_rng_wrapper_state* state = (gsl_rng_wrapper_state*) vstate;
+  state->seed=s;
+  state->icalls=0;
+  state->dcalls=0;
+  if(!state->rng)
+    I3GSLRandomService::construct(state->rng);
+  gsl_rng_set(state->rng, s);
+}
+
+//gets one random integer
+unsigned long gsl_wrapper_get(void* vstate)
+{
+  gsl_rng_wrapper_state* state = (gsl_rng_wrapper_state*) vstate;
+  state->icalls++;
+  return(gsl_rng_get(state->rng));
+}
+
+//gets one random double
+double gsl_wrapper_get_double(void* vstate)
+{
+  gsl_rng_wrapper_state* state = (gsl_rng_wrapper_state*) vstate;
+  state->dcalls++;
+  return(gsl_rng_uniform(state->rng));
+}
+
+//register our shim with the GSL infrastructure
+const gsl_rng_type gsl_rng_counting_wrapper =
+{
+  "counting_wrapper",            /* name */
+  0xffffffffUL,     	         /* RAND_MAX */
+  0,                	         /* RAND_MIN */
+  sizeof(gsl_rng_wrapper_state), /* size of state */
+  &gsl_wrapper_set,              /* initialisation */
+  &gsl_wrapper_get,              /* get integer RN */
+  &gsl_wrapper_get_double        /* get double RN */
+};

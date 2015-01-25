@@ -21,17 +21,19 @@ I3_SERVICE_FACTORY(I3GSLRandomServiceFactory);
 
 I3GSLRandomServiceFactory::I3GSLRandomServiceFactory(const I3Context& context) 
   : I3ServiceFactory(context),
-  seed_(-1), 
+  seed_(gsl_rng_default_seed),
+  track_state_(true),
   random_()
 {
-	// unfortunatelly we can not support a seed of unsigned long int since
-	// AddParameter only supports int
-	AddParameter("Seed","Seed for random number generator", seed_);	
+	AddParameter("Seed","Seed for random number generator", seed_);
+	AddParameter("TrackState","If true, count calls to the random number generator"
+	             " so that its state can be saved and restored. This imposes a "
+	             "small run-time overhead.", track_state_);
 
 	installServiceAs_ = I3DefaultName<I3RandomService>::value();
 	AddParameter("InstallServiceAs",
-				"Install the random service at the following location",
-				installServiceAs_);
+	             "Install the random service at the following location",
+	             installServiceAs_);
 }
 
 // Destructors
@@ -46,10 +48,7 @@ bool
 I3GSLRandomServiceFactory::InstallService(I3Context& services)
 {
   if(!random_)
-    {
-      if(seed_ < 0) random_ = I3RandomServicePtr(new I3GSLRandomService());
-      else  random_ = I3RandomServicePtr(new I3GSLRandomService(seed_));
-    }		
+    random_ = I3RandomServicePtr(new I3GSLRandomService(seed_));
   return services.Put<I3RandomService>(installServiceAs_, random_);
 }
 
