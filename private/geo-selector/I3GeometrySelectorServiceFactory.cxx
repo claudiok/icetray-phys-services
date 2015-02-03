@@ -4,11 +4,6 @@
 
 I3_SERVICE_FACTORY(I3GeometrySelectorServiceFactory);
 
-/**
- * Minimum distance you can shift the detector
- */
-const double MIN_SHIFT = 1.;
-
 I3GeometrySelectorServiceFactory::
 I3GeometrySelectorServiceFactory(const I3Context& context) : 
   I3ServiceFactory(context),
