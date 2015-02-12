@@ -94,9 +94,10 @@ I3GCDAuditor::DetectorStatus(I3FramePtr frame)
 		}
 	
 	// Check that various times are reasonable
-	if (status.endTime.GetUTCYear() == 2038 /* 32-bit UNIX end of days */)
+	if (status.endTime.GetUTCYear() == 2038 /* 32-bit UNIX end of days */) {
 		paranoia("Detector status validity ends in 2038, the UNIX "
 		    "end of days, which is usually wrong");
+	}
 
 	if ((status.endTime - status.startTime)/I3Units::gregorianyear >= 1) {
 		paranoia("difference between D end time %d,%ju and "
