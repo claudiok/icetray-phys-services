@@ -43,25 +43,12 @@ struct I3RandomServiceWrapper : I3RandomService, wrapper<I3RandomService>
 };
 
 template <typename T, typename Init>
-class_<T, boost::shared_ptr<T>, boost::noncopyable>
+class_<T, boost::shared_ptr<T>, boost::python::bases<I3RandomService>, boost::noncopyable>
 register_randomservice(const char* name, const char* doc, const Init& init)
 {
-  implicitly_convertible<shared_ptr<T>, shared_ptr<const I3RandomService> >();
-  implicitly_convertible<shared_ptr<T>, shared_ptr<I3RandomService> >();
-  implicitly_convertible<shared_ptr<T>, shared_ptr<const T> >();
-
-  return class_<T, boost::shared_ptr<T>, boost::noncopyable>(name,
+  return class_<T, boost::shared_ptr<T>, boost::python::bases<I3RandomService>, boost::noncopyable>(name,
 							     doc,
 							     init)
-    .def(icetray::python::context_suite<I3RandomService>())
-    .def("binomial", &T::Binomial)
-    .def("exp", &T::Exp)
-    .def("integer", &T::Integer)
-    .def("poisson", &T::Poisson)
-    .def("poisson_d", &T::PoissonD)
-    .def("uniform", (double (T::*)(double)) &T::Uniform)
-    .def("uniform", (double (T::*)(double, double)) &T::Uniform)
-    .def("gaus", &T::Gaus)
     ;
   
 }
@@ -70,6 +57,19 @@ namespace bp = boost::python;
 
 void register_RandomServices()
 {
+	bp::class_<I3RandomServiceWrapper, boost::shared_ptr<I3RandomServiceWrapper>, boost::noncopyable>(
+	    "I3RandomService", "Base class for random number generators", init<>())
+	        .def("binomial", pure_virtual(&I3RandomService::Binomial))
+	        .def("exp", pure_virtual(&I3RandomService::Exp))
+	        .def("integer", pure_virtual(&I3RandomService::Integer))
+	        .def("poisson", pure_virtual(&I3RandomService::Poisson))
+	        .def("poisson_d", pure_virtual(&I3RandomService::PoissonD))
+	        .def("uniform", pure_virtual((double (I3RandomService::*)(double)) &I3RandomService::Uniform))
+	        .def("uniform", pure_virtual((double (I3RandomService::*)(double, double)) &I3RandomService::Uniform))
+	        .def("gaus", pure_virtual(&I3RandomService::Gaus))
+	;
+	
+
   register_randomservice<I3GSLRandomService>("I3GSLRandomService", "gsl random goodness",
 					     init<unsigned long int,bool>((bp::arg("seed"),bp::arg("track_state")=true)));
 
@@ -86,8 +86,4 @@ void register_RandomServices()
 								    bp::arg("instatefile")=std::string(),
 								    bp::arg("outstatefile")=std::string())));
 #endif
-
-  register_randomservice<I3RandomServiceWrapper>("I3RandomService", "base class for python impls",
-						 init<>());
-  register_randomservice<I3RandomService>("I3RandomServiceBase", "abstract base class for random services", bp::no_init);
 }
