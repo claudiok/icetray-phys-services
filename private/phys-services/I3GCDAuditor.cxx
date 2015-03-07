@@ -202,14 +202,14 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 		continue;
 	    for (int chan = 0; chan < 3; chan++)
 		for (int bin = 0; bin < 128; bin++) {
-			if (!std::isfinite(cal.GetATWDBinCalibFit(chip, chan,
-			    bin).slope) ||
-			    cal.GetATWDBinCalibFit(chip, chan, bin).slope >= 0)
+			if (!std::isfinite(cal.GetATWDBinCalibSlope(chip, chan,
+			    bin)) ||
+			    cal.GetATWDBinCalibSlope(chip, chan, bin) >= 0)
 				bad_dom("Invalid bin calibration for OM%s "
 				    "ATWD chip %d, channel %d, bin %d (%e)",
 				    om.str().c_str(), chip, chan, bin,
-				    cal.GetATWDBinCalibFit(chip, chan,
-				    bin).slope);
+				    cal.GetATWDBinCalibSlope(chip, chan,
+				    bin));
 		}
 	}
 
@@ -226,10 +226,6 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 	    cal.GetFrontEndImpedance() > 100*I3Units::ohm)
 		bad_dom("Invalid front end impedance for OM%s (%f Ohm)",
 		    om.str().c_str(), cal.GetFrontEndImpedance()/I3Units::ohm);
-	if (!std::isfinite(cal.GetATWDResponseWidth()) ||
-	    cal.GetATWDResponseWidth() <= 0 || cal.GetATWDResponseWidth() > 1)
-		bad_dom("Invalid ATWD response width for OM%s (%f ns)",
-		    om.str().c_str(), cal.GetATWDResponseWidth()/I3Units::ns);
 
 	// Check Detector Status
 	if (!std::isfinite(status.pmtHV) || status.pmtHV < 100.*I3Units::V ||
