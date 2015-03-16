@@ -3,6 +3,16 @@
 # $Date: $
 #
 
+March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+Release V15-03-00 - Bugfix release
+
+ o I3GCDAuditor knows about the new calibration SPE corrections.
+ o GSLRandomService is able to save its state too.  Welcome to the club!
+ o New I3ScaleCalculator::I3ScaleIceCubeDetectorPolygon, which scales 
+   the area of the boundary polygon of IceCube?, similar to 
+   I3ScaleCalculator::I3ScaleInIceCascade
+
 November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
 Release V14-11-00 - Bugfix release
