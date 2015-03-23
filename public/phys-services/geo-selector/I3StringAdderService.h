@@ -19,7 +19,7 @@
 #include <interfaces/I3GeometryService.h>
 #include "icetray/I3Context.h"
 
-struct I3OMGeo;
+class I3OMGeo;
 
 
 /**

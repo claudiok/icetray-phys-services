@@ -4,7 +4,7 @@
 #include "icetray/I3ServiceFactory.h"
 
 class I3StringAdderService;
-struct I3OMGeo;
+class I3OMGeo;
 /**
  * @brief IceTray module that selects the strings to use.
 
