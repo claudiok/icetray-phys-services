@@ -1,4 +1,5 @@
 import json
+import numpy
 
 from copy import deepcopy
 
@@ -29,8 +30,10 @@ class I3SPEFitInjector(icetray.I3Module):
             if key == 'valid_date':
                 continue
 
-            # we've decided to skip entries that contain invalid data altogether
-            if bool(data['JOINT_fit']['valid']) == False:
+            # if none of the data is valid it's OK to skip entries.
+            if bool(data['JOINT_fit']['valid']) == False and \
+              bool(data['ATWD_fit']['valid']) == False and \
+              bool(data['FADC_fit']['valid']) == False :
                 continue
                 
             string = int(key.split(",")[0])
@@ -38,8 +41,16 @@ class I3SPEFitInjector(icetray.I3Module):
 
             omkey = icetray.OMKey(string, om)
 
-            atwd_mean = float(data['ATWD_fit']['gaus_mean'])
-            fadc_mean = float(data['FADC_fit']['gaus_mean'])
+            # set atwd/fadc means to NaN, consistent with
+            # the treatment in dataclasses, if they're invalid
+            atwd_mean = float(data['ATWD_fit']['gaus_mean']) \
+                if bool(data['ATWD_fit']['valid']) == True \
+                else numpy.nan
+                
+            fadc_mean = float(data['FADC_fit']['gaus_mean']) \
+                if bool(data['FADC_fit']['valid']) == True \
+                else numpy.nan
+
             exp_amp = float(data['JOINT_fit']['exp_norm'])
             exp_width = float(data['JOINT_fit']['exp_scale']) 
             gaus_amp = float(data['JOINT_fit']['gaus_norm'])

@@ -19,8 +19,8 @@ values for the FADC and ATWD channels and accessed via C++ as follows :
 Caveats
 !!!!!!! 
 
-* Invalid fits are simply skipped and no record of them will exist in the I3Calibration: domCal map.
-* The mean ATWD and FADC charges are initialized to NAN, but should always be set to a valid number, typically 0.  So downstream code (to be doubly-safe) should check std::isfinite(value) is *true*.  The following methods are provided as a convenience :
+* Missing entries in the I3Calibration::domCal map - This can happen if the combined fit, mean ATWD, **and** mean FADC charges are all marked invalid in the JSON file.
+* Downstream code should check that the mean ATWD and FADC charges are valid using the following convenience methods:
  - I3DOMCalibration::IsMeanATWDChargeValid
  - I3DOMCalibration::IsMeanFADCChargeValid
 
