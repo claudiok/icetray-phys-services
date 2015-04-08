@@ -32,8 +32,9 @@ class SPEFitTestModule(icetray.I3Module) :
 
         # there are 5050 valid entries out of 5085 in the file 'final-spe-fits-pole-run2015.json'
         if n_valid != 5050 :
-            print "N valid = ", n_valid
-            print "FAIL"
+            print("Expected 5050 valid entries.")
+            print("Got N valid = %d" % n_valid)
+            print("FAIL")
             sys.exit(1) # report back to the mothership
 
         self.PushFrame(frame)

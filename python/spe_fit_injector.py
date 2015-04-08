@@ -1,5 +1,7 @@
 import json
 
+from copy import deepcopy
+
 from icecube import icetray
 from icecube import dataclasses
 
@@ -12,21 +14,24 @@ class I3SPEFitInjector(icetray.I3Module):
         icetray.I3Module.__init__(self, context)
 
         self.AddOutBox("OutBox")
-        self.AddParameter("Filename", "JSON file with SPE fit data", "");
+        self.AddParameter("Filename", "JSON file with SPE fit data", "")
 
     def Configure(self):
+        ''' Give the filename, read and load the constants in this method.'''
         self.filename = self.GetParameter("Filename")
         f = open(self.filename)
-        fit_dict = json.load(f)
+        json_fit_values = json.load(f)
 
         self.fit_dict = dict()
-        for key, data in fit_dict.iteritems() :
+        for key, data in json_fit_values.iteritems():
 
             # we don't really use the validity date in offline anymore
-            if key == 'valid_date' : continue
+            if key == 'valid_date':
+                continue
 
             # we've decided to skip entries that contain invalid data altogether
-            if bool(data['JOINT_fit']['valid']) == False : continue;
+            if bool(data['JOINT_fit']['valid']) == False:
+                continue
                 
             string = int(key.split(",")[0])
             om = int(key.split(",")[1])
@@ -52,11 +57,14 @@ class I3SPEFitInjector(icetray.I3Module):
         
     def Calibration(self, frame):
 
-        cal = frame['I3Calibration']
-        domcal = cal.dom_cal
+        # make a deepcopy so we don't change objects expected
+        # to be const on the C++ side. 
+        cal = deepcopy(frame['I3Calibration'])
+        del frame['I3Calibration']
 
-        for omkey, i3domcal in domcal.iteritems() :
-            if omkey in self.fit_dict :
+        domcal = cal.dom_cal
+        for omkey, i3domcal in domcal.iteritems():
+            if omkey in self.fit_dict:
                 i3domcal.mean_atwd_charge = self.fit_dict[omkey]['atwd_mean']
                 i3domcal.mean_fadc_charge = self.fit_dict[omkey]['fadc_mean']
 
@@ -68,5 +76,6 @@ class I3SPEFitInjector(icetray.I3Module):
                 spe_charge_dist.gaus_width = self.fit_dict[omkey]['gaus_width']
 
                 cal.dom_cal[omkey].combined_spe_charge_distribution = spe_charge_dist
-                
+
+        frame['I3Calibration'] = cal
         self.PushFrame(frame)
