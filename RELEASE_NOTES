@@ -3,8 +3,8 @@
 # $Date: $
 #
 
-CHANGELOG
----------
+April 17, 2015, don la dieu  (nega@icecube.umd.edu)
+--------------------------------------------------------------------
  o New feature - Added module that loads SPE fit constants into the 
    calibration frame from a JSON file.
 
