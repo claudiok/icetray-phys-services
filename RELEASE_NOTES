@@ -3,7 +3,9 @@
 # $Date: $
 #
 
-Bug-fix
+April 22, 2015, Alex Olivas (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+Bug-fix Release V15-04-01
  o I3SPEFitInjector correctly sets the FADC and ATWD charges.
 
 April 17, 2015, don la dieu  (nega@icecube.umd.edu)
