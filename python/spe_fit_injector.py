@@ -86,7 +86,8 @@ class I3SPEFitInjector(icetray.I3Module):
                 spe_charge_dist.gaus_mean = self.fit_dict[omkey]['gaus_mean']
                 spe_charge_dist.gaus_width = self.fit_dict[omkey]['gaus_width']
 
-                cal.dom_cal[omkey].combined_spe_charge_distribution = spe_charge_dist
+                i3domcal.combined_spe_charge_distribution = spe_charge_dist
+                cal.dom_cal[omkey] = i3domcal
 
         frame['I3Calibration'] = cal
         self.PushFrame(frame)

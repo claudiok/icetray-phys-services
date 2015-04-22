@@ -3,6 +3,9 @@
 # $Date: $
 #
 
+Bug-fix
+ o I3SPEFitInjector correctly sets the FADC and ATWD charges.
+
 April 17, 2015, don la dieu  (nega@icecube.umd.edu)
 --------------------------------------------------------------------
  o New feature - Added module that loads SPE fit constants into the 
