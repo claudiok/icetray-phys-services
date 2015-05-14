@@ -3,7 +3,7 @@
 # $LastChangedDate$
 # $LastChangedBy$
 
-from icecube.icetray import pypick, I3Frame, logging
+from icecube.icetray import pypick, I3Frame
 
 def which_split(split_name=''):
     """
@@ -21,9 +21,7 @@ def which_split(split_name=''):
         if frame.Stop == I3Frame.Physics:
             eh=frame['I3EventHeader']
             ret = ( eh.sub_event_stream == split_name )
-            logging.log_trace( "stream=%s split=%s result=%s" % ( eh.sub_event_stream, split_name,ret), unit="which_split" )
             return ret
         else:
-            logging.log_trace( "Rejected: stop %s is not Physics" % frame.Stop, unit="which_split" )
             return False
     return pypick(f)
