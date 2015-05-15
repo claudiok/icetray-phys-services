@@ -3,6 +3,10 @@
 # $Date: $
 #
 
+May 15, 2015, don la dieu  (nega@icecube.umd.edu)
+--------------------------------------------------------------------
+ o remove the log_trace calls from which_split
+
 April 22, 2015, Alex Olivas (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
 Bug-fix Release V15-04-01
