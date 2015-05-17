@@ -31,10 +31,6 @@ endif(SPRNG_FOUND)
 
 if(USE_CINT)
   colormsg(HIYELLOW "*** CINT dictionaries are deprecated and will disappear November 1, 2015")
-  set(ROOTCINT ROOTCINT public/phys-services/I3Cuts.h
-      public/phys-services/I3Calculator.h
-      public/phys-services/I3CutValues.h
-      public/phys-services/I3CascadeCutValues.h)
 endif(USE_CINT)
 
 i3_add_library(phys-services 
@@ -88,7 +84,10 @@ i3_add_library(phys-services
 
   USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python
 
-  ${ROOTCINT}
+ ROOTCINT public/phys-services/I3Cuts.h
+ public/phys-services/I3Calculator.h
+ public/phys-services/I3CutValues.h
+ public/phys-services/I3CascadeCutValues.h
   )
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable
