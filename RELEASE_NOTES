@@ -3,6 +3,10 @@
 # $Date: $
 #
 
+June 19, 2015, mzoll  (marcel.zoll@fysik.su.se)
+--------------------------------------------------------------------
+ o Add convenience module 'CountEventID' for file inspection and debugging
+
 May 15, 2015, don la dieu  (nega@icecube.umd.edu)
 --------------------------------------------------------------------
  o remove the log_trace calls from which_split
