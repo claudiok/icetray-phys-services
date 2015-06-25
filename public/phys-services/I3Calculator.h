@@ -318,6 +318,23 @@ namespace I3Calculator
   void Rotate(const I3Direction &axis, I3Direction &dir, double angle );
 
 
+  /**
+   * Transform the input position into the shower coordinate system (SCS).
+   * Our SCS has its origin in the shower core, a z-direction parallel to the
+   * direction of shower origin, and the x-axis anti-parallel to the time flow
+   * of signals appearing in the event, meaning that early hits are located at
+   * x > 0, late hits at x < 0. The y-axis is parallel to the ground plane and
+   * perpendicular to the time flow of signals.
+   */
+  I3Position InShowerSystem(const I3Particle& shower, const I3Position& pos);
+
+  /**
+   * Same as InShowerSystem, but with core and propagation direction axis
+   * explicitly given.
+   */
+  I3Position InShowerSystem(const I3Position& core, const I3Direction& axis,
+                            const I3Position& pos);
+
 };
 
 #endif

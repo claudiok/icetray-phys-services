@@ -520,3 +520,24 @@ void I3Calculator::Rotate(const I3Direction &axis, I3Direction &dir, double angl
   dir = I3Direction(newX,newY,newZ);
 
 }
+
+//--------------------------------------------------------------
+I3Position I3Calculator::InShowerSystem(const I3Particle& particle,
+                                        const I3Position& pos)
+{
+  return InShowerSystem(particle.GetPos(), particle.GetDir(), pos);
+}
+
+//--------------------------------------------------------------
+I3Position I3Calculator::InShowerSystem(const I3Position& core,
+                                        const I3Direction& dir,
+                                        const I3Position& pos)
+{
+  const double theta = dir.GetZenith();
+  const double phi = dir.GetAzimuth();
+
+  I3Position v(pos - core);
+  v.RotateZ(-phi);
+  v.RotateY(-theta);
+  return v;
+}

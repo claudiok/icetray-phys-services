@@ -69,6 +69,8 @@ void register_I3Calculator()
       "Rotate a direction around the given axis");
   def("transverse_directions", GetTransverseDirections,
       "Return the directions transverse to the given direction");
-  
-
+  def("in_shower_system",
+      (I3Position (*)( const I3Position&, const I3Direction&, const I3Position&))
+        &I3Calculator::InShowerSystem,
+      "Return the position in the shower coordinate system (SCS).");
 }
