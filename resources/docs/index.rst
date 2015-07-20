@@ -21,6 +21,7 @@ Caveats
 
 * Missing entries in the I3Calibration::domCal map - This can happen if the combined fit, mean ATWD, **and** mean FADC charges are all marked invalid in the JSON file.
 * Downstream code should check that the mean ATWD and FADC charges are valid using the following convenience methods:
+
  - I3DOMCalibration::IsMeanATWDChargeValid
  - I3DOMCalibration::IsMeanFADCChargeValid
 
