@@ -1,46 +1,54 @@
-# $Id: $
-# $Author: $
-# $Date: $
-#
+
+Release Notes
+=============
 
 June 19, 2015, mzoll  (marcel.zoll@fysik.su.se)
 --------------------------------------------------------------------
- o Add convenience module 'CountEventID' for file inspection and debugging
+
+* Add convenience module 'CountEventID' for file inspection and debugging
 
 May 15, 2015, don la dieu  (nega@icecube.umd.edu)
 --------------------------------------------------------------------
- o remove the log_trace calls from which_split
+
+* remove the log_trace calls from which_split
 
 April 22, 2015, Alex Olivas (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
+
 Bug-fix Release V15-04-01
- o I3SPEFitInjector correctly sets the FADC and ATWD charges.
+
+* I3SPEFitInjector correctly sets the FADC and ATWD charges.
 
 April 17, 2015, don la dieu  (nega@icecube.umd.edu)
 --------------------------------------------------------------------
- o New feature - Added module that loads SPE fit constants into the 
-   calibration frame from a JSON file.
+
+* New feature - Added module that loads SPE fit constants into the 
+  calibration frame from a JSON file.
 
 March 15, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
+
 Release V15-03-00 - Bugfix release
 
- o I3GCDAuditor knows about the new calibration SPE corrections.
- o GSLRandomService is able to save its state too.  Welcome to the club!
- o New I3ScaleCalculator::I3ScaleIceCubeDetectorPolygon, which scales 
-   the area of the boundary polygon of IceCube?, similar to 
-   I3ScaleCalculator::I3ScaleInIceCascade
+* I3GCDAuditor knows about the new calibration SPE corrections.
+* GSLRandomService is able to save its state too.  Welcome to the club!
+* New I3ScaleCalculator::I3ScaleIceCubeDetectorPolygon, which scales 
+  the area of the boundary polygon of IceCube?, similar to 
+  I3ScaleCalculator::I3ScaleInIceCascade
 
 November 20, 2014, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
-Release V14-11-00 - Bugfix release
- o Added support for I3_TESTDATA
 
+Release V14-11-00 - Bugfix release
+
+* Added support for I3_TESTDATA
 
 September 30, 2014, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
+
 Release V14-09-00
 
 Feature:
-  - which_split was added and should be considered the standard now.
+
+* which_split was added and should be considered the standard now.
 

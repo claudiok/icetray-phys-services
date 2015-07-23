@@ -3,6 +3,11 @@ Phys-Services Documentation
 The phys-services project is a collection of IceTray services and other
 utilities common to all or most of icetray-based software.
 
+.. toctree::
+   :maxdepth: 1
+   
+   release_notes
+
 Also see the `doxygen <../../doxygen/phys-services/index.html>`_ docs.
 
 I3SPEFitInjector
