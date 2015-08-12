@@ -1,4 +1,6 @@
-#include <I3Test.h>
+#include <cstring>
+
+#include "I3Test.h"
 
 #include "icetray/OMKey.h"
 #include "dataclasses/physics/I3RecoPulse.h"
