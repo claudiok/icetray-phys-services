@@ -7,7 +7,7 @@ i3_project(phys-services
   DOCS_DIR resources/docs)
 
 
-if (USE_ROOT)
+if (ROOT_FOUND)
   # These are the parts of phys-services that absolutely need ROOT to work.
   # For TRandomService, this is intrinsic to being related to TRandom.
   # I3MediumService could perhaps be moved out of this section.
@@ -16,7 +16,7 @@ if (USE_ROOT)
 	private/phys-services/I3TRandomServiceFactory.cxx
   )
   set(OPTIONAL_TOOLS ${OPTIONAL_TOOLS} root)
-endif (USE_ROOT)
+endif (ROOT_FOUND)
 
 if (SPRNG_FOUND)
   colormsg(GREEN "+-- sprng found, adding SPRNGRandomService")
@@ -95,13 +95,13 @@ i3_executable(CreateXMLOMKey2MBIDConversionTable
   USE_PROJECTS phys-services
   USE_TOOLS gsl)
 
-if (USE_ROOT)
+if (ROOT_FOUND)
   # These tests require ROOT to run, so conditionally build them
   set(ROOT_TESTS
   	private/test/I3CalculatorTest.cxx
 	private/test/I3RandomServiceTest.cxx
   )
-endif (USE_ROOT)
+endif (ROOT_FOUND)
 
 if (SPRNG_FOUND)
   set(SPRNG_TESTS private/test/I3RandomServiceStateTest.cxx)
