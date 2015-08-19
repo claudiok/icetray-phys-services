@@ -2,6 +2,14 @@
 Release Notes
 =============
 
+trunk
+-----
+
+June 25, 2015, hdembinski  (hdembins@udel.edu)
+--------------------------------------------------------------------
+
+* Added function in_shower_system, which is used by IceTop
+
 June 19, 2015, mzoll  (marcel.zoll@fysik.su.se)
 --------------------------------------------------------------------
 
