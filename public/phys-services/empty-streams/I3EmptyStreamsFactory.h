@@ -18,13 +18,13 @@ class I3EmptyStreamsFactory : public I3ServiceFactory
  private:
   int nframes_;
 
-  shared_ptr<I3CalibrationService> calibrations_;
+  boost::shared_ptr<I3CalibrationService> calibrations_;
 
   // plural of status is status.  But pronounced with a long u
   // so though this looks like 'status', it's pronounced 
   // statoooos
-  shared_ptr<I3DetectorStatusService> status_;
-  shared_ptr<I3GeometryService> geometries_;
+  boost::shared_ptr<I3DetectorStatusService> status_;
+  boost::shared_ptr<I3GeometryService> geometries_;
 
   bool installCalibrations_;
   bool installStatus_;

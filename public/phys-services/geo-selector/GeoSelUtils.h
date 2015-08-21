@@ -59,8 +59,8 @@ namespace geo_sel_utils{
   bool good_input(const std::string& );
 
   template<class T>
-  shared_ptr<I3Map<OMKey,T> >
-    map_cleaner(shared_ptr<const I3Map<OMKey,T> >, std::vector<int>);
+  boost::shared_ptr<I3Map<OMKey,T> >
+    map_cleaner(boost::shared_ptr<const I3Map<OMKey,T> >, std::vector<int>);
 
   /**
    * Calculates the center of the detector in X-Y.

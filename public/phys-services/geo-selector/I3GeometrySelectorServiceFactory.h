@@ -51,7 +51,7 @@ private:
   I3GeometrySelectorServiceFactory(const I3GeometrySelectorServiceFactory& source);
   I3GeometrySelectorServiceFactory& operator=(const I3GeometrySelectorServiceFactory& source);
 
-  shared_ptr<I3GeometrySelectorService> geometry_;
+  boost::shared_ptr<I3GeometrySelectorService> geometry_;
   /**
    * Parameter - The strings to use.
    * Default value is "-19:80".

@@ -113,12 +113,12 @@ bool I3StringAdderServiceFactory::InstallService(I3Context& services)
 {
   if(!geometry_)
     geometry_ = 
-      shared_ptr<I3StringAdderService>
+      boost::shared_ptr<I3StringAdderService>
       (new I3StringAdderService(context_.Get<I3GeometryServicePtr>(geoServiceName_)));
 
-  dynamic_pointer_cast<I3StringAdderService>(geometry_)->SetDOMSpacing(domSpacing_);
-  dynamic_pointer_cast<I3StringAdderService>(geometry_)->SetNDOMsPerString(domsPerString_);
-  dynamic_pointer_cast<I3StringAdderService>(geometry_)->SetOMGeoList(omGeoList_);
+  boost::dynamic_pointer_cast<I3StringAdderService>(geometry_)->SetDOMSpacing(domSpacing_);
+  boost::dynamic_pointer_cast<I3StringAdderService>(geometry_)->SetNDOMsPerString(domsPerString_);
+  boost::dynamic_pointer_cast<I3StringAdderService>(geometry_)->SetOMGeoList(omGeoList_);
 
   return services.Put<I3GeometryService>(geoSelectorName_,geometry_);
 }

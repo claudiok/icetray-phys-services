@@ -27,7 +27,7 @@ using namespace boost::archive;
 
 std::istream& operator >>(std::istream &is, I3MapStringDouble& i3obj)
 {
-	shared_ptr<I3MapStringDouble> spt;
+	boost::shared_ptr<I3MapStringDouble> spt;
 	try { 
 			boost::archive::xml_iarchive xia(is);
 			xia >> BOOST_SERIALIZATION_NVP(i3obj);

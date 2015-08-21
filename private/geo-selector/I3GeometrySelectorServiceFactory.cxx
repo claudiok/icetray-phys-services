@@ -74,7 +74,7 @@ bool I3GeometrySelectorServiceFactory::InstallService(I3Context& services)
 {
   if(!geometry_)
     geometry_ = 
-      shared_ptr<I3GeometrySelectorService>
+      boost::shared_ptr<I3GeometrySelectorService>
       (new I3GeometrySelectorService(context_.Get<I3GeometryServicePtr>(geoServiceName_),
        shiftX_, shiftY_, shiftZ_));
 
@@ -90,9 +90,9 @@ bool I3GeometrySelectorServiceFactory::InstallService(I3Context& services)
   goodStrings_ = geo_sel_utils::make_good_strings(stringsToUse_, stringsToExclude_);
   goodStations_ = geo_sel_utils::make_good_strings(stationsToUse_, stationsToExclude_);
 
-  dynamic_pointer_cast<I3GeometrySelectorService>(geometry_)->SetGoodStrings(goodStrings_);
-  dynamic_pointer_cast<I3GeometrySelectorService>(geometry_)->SetGoodStations(goodStations_);
-  dynamic_pointer_cast<I3GeometrySelectorService>(geometry_)->ShiftToCenter(shiftToCenter_);
+  boost::dynamic_pointer_cast<I3GeometrySelectorService>(geometry_)->SetGoodStrings(goodStrings_);
+  boost::dynamic_pointer_cast<I3GeometrySelectorService>(geometry_)->SetGoodStations(goodStations_);
+  boost::dynamic_pointer_cast<I3GeometrySelectorService>(geometry_)->ShiftToCenter(shiftToCenter_);
 
   return services.Put<I3GeometryService>(geoSelectorName_,geometry_);
 }

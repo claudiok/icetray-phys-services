@@ -157,10 +157,10 @@ namespace geo_sel_utils{
   }
 
   template<class T>
-  shared_ptr<I3Map<OMKey,T> >
-  map_cleaner(shared_ptr<const I3Map<OMKey,T> > m, vector<int> s){
+  boost::shared_ptr<I3Map<OMKey,T> >
+  map_cleaner(boost::shared_ptr<const I3Map<OMKey,T> > m, vector<int> s){
     vector<int>::iterator j;
-    shared_ptr<I3Map<OMKey,T> > new_map; 
+    boost::shared_ptr<I3Map<OMKey,T> > new_map; 
     typename I3Map<OMKey,T>::iterator i = m.begin();
     for(; i!=m.end();i++){
       bool good(false);

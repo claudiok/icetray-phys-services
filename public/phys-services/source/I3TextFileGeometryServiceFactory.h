@@ -36,7 +36,7 @@ class I3TextFileGeometryServiceFactory
 
  private:
 
-  shared_ptr<I3TextFileGeometryService> geometry_;
+  boost::shared_ptr<I3TextFileGeometryService> geometry_;
 
   std::string amandaFile_;
   std::string icecubeFile_;

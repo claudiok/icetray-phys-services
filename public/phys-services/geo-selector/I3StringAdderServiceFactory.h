@@ -52,7 +52,7 @@ private:
   I3StringAdderServiceFactory(const I3StringAdderServiceFactory& source);
   I3StringAdderServiceFactory& operator=(const I3StringAdderServiceFactory& source);
 
-  shared_ptr<I3StringAdderService> geometry_;
+  boost::shared_ptr<I3StringAdderService> geometry_;
 
   /**
    * List of top (i.e. OMNumber = 1) DOM positions.

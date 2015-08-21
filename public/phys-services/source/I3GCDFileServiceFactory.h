@@ -32,9 +32,9 @@ class I3GCDFileServiceFactory
 
  private:
 
-  shared_ptr<I3GCDFileGeometryService> geometry_;
-  shared_ptr<I3GCDFileCalibrationService> calibration_;
-  shared_ptr<I3GCDFileDetectorStatusService> status_;
+  boost::shared_ptr<I3GCDFileGeometryService> geometry_;
+  boost::shared_ptr<I3GCDFileCalibrationService> calibration_;
+  boost::shared_ptr<I3GCDFileDetectorStatusService> status_;
 
   std::string filename_;
 

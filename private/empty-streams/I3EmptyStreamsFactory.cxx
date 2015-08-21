@@ -60,13 +60,13 @@ void I3EmptyStreamsFactory::Configure()
 
   if(installCalibrations_)
     calibrations_ = 
-      shared_ptr<I3CalibrationService>(new I3EmptyCalibrationService());
+      boost::shared_ptr<I3CalibrationService>(new I3EmptyCalibrationService());
   if(installStatus_)
     status_ = 
-      shared_ptr<I3DetectorStatusService>(new I3EmptyDetectorStatusService());
+      boost::shared_ptr<I3DetectorStatusService>(new I3EmptyDetectorStatusService());
   if(installGeometries_)
     geometries_ = 
-      shared_ptr<I3GeometryService>(new I3EmptyGeometryService());
+      boost::shared_ptr<I3GeometryService>(new I3EmptyGeometryService());
 }
 
 bool I3EmptyStreamsFactory::InstallService(I3Context& services)

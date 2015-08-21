@@ -27,7 +27,7 @@ bool I3TextFileGeometryServiceFactory::InstallService(I3Context& services)
 {
   if(!geometry_)
     geometry_ = 
-      shared_ptr<I3TextFileGeometryService>
+      boost::shared_ptr<I3TextFileGeometryService>
       (new I3TextFileGeometryService(amandaFile_,
 				    icecubeFile_));
 

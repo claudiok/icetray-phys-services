@@ -30,7 +30,7 @@ public:
     
 private:
     
-    shared_ptr<I3VEMCalManipulator> vemCalService_;
+    boost::shared_ptr<I3VEMCalManipulator> vemCalService_;
     
     std::string inCalServiceName_;
     std::string outCalServiceName_;
