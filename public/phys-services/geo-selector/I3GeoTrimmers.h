@@ -1,3 +1,6 @@
+#ifndef I3GEOTRIMMERS_H_INCLUDED
+#define I3GEOTRIMMERS_H_INCLUDED
+
 /// This file contains tools for manipulating Geometries, to take out various
 /// bad/good/desired/notdesired OM's.
 
@@ -95,3 +98,5 @@ namespace I3GeoTrimmers
                                             double margin = 0. );
 
 } //end of namespace
+
+#endif  // I3GEOTRIMMERS_H_INCLUDED

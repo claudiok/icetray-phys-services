@@ -1,3 +1,6 @@
+#ifndef I3CUTVALUESCONVERTER_H_INCLUDED
+#define I3CUTVALUESCONVERTER_H_INCLUDED
+
 /**
  * copyright  (C) 2010
  * The Icecube Collaboration
@@ -19,3 +22,5 @@ private:
     size_t FillRows(const I3CutValues& cv, I3TableRowPtr rows);
     
 };
+
+#endif  // I3CUTVALUESCONVERTER_H_INCLUDED

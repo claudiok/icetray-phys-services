@@ -1,3 +1,6 @@
+#ifndef I3RECOINFOCONVERTER_H_INCLUDED
+#define I3RECOINFOCONVERTER_H_INCLUDED
+
 /**
  * copyright  (C) 2010
  * The Icecube Collaboration
@@ -34,3 +37,5 @@ private:
 
     SET_LOGGER("I3RecoInfoConverter");
 };
+
+#endif  // I3RECOINFOCONVERTER_H_INCLUDED

@@ -1,3 +1,6 @@
+#ifndef I3EVENTINFOCONVERTER_H_INCLUDED
+#define I3EVENTINFOCONVERTER_H_INCLUDED
+
 /**
  * copyright  (C) 2010
  * The Icecube Collaboration
@@ -79,3 +82,5 @@ private:
 };
     
 typedef I3EventInfoConverter<I3RecoPulse> I3EventInfoConverterFromRecoPulses;
+
+#endif  // I3EVENTINFOCONVERTER_H_INCLUDED
