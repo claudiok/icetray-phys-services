@@ -4,20 +4,14 @@ Release Notes
 
 trunk
 -----
-
-June 25, 2015, hdembinski  (hdembins@udel.edu)
---------------------------------------------------------------------
-
-* Added function in_shower_system, which is used by IceTop
-
-June 19, 2015, mzoll  (marcel.zoll@fysik.su.se)
---------------------------------------------------------------------
-
+* Added function in_shower_system, which is used by IceTop 
+  -- hdembinski
 * Add convenience module 'CountEventID' for file inspection and debugging
+  -- mzoll
 
 May 15, 2015, don la dieu  (nega@icecube.umd.edu)
 --------------------------------------------------------------------
-
+Bug-fix Release V15-05-00
 * remove the log_trace calls from which_split
 
 April 22, 2015, Alex Olivas (olivas@icecube.umd.edu)
