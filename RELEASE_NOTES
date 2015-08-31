@@ -13,6 +13,11 @@ trunk
 * Add convenience module 'CountEventID' for file inspection and debugging
 
   -- mzoll
+* Refactor Surface classes from MuonGun into phys-services, separating the
+  general functionality (calculating areas and finding intersections) with
+  MuonGun specific bits (equality comparison and flux integration)
+
+  -- jvansanten
 
 May 15, 2015, don la dieu  (nega@icecube.umd.edu)
 --------------------------------------------------------------------
