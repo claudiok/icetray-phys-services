@@ -4,9 +4,14 @@ Release Notes
 
 trunk
 -----
+* Added event_hunter example, moved from dataio.
+
+  -- david.schultz
 * Added function in_shower_system, which is used by IceTop 
+
   -- hdembinski
 * Add convenience module 'CountEventID' for file inspection and debugging
+
   -- mzoll
 
 May 15, 2015, don la dieu  (nega@icecube.umd.edu)
