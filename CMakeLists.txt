@@ -73,6 +73,13 @@ i3_add_library(phys-services
   private/phys-source/I3GCDFileServiceFactory.cxx
   private/phys-source/I3TextFileGeometryService.cxx
   private/phys-source/I3TextFileGeometryServiceFactory.cxx
+  private/surfaces/Surface.cxx
+  private/surfaces/SamplingSurface.cxx
+  private/surfaces/Cylinder.cxx
+  private/surfaces/ExtrudedPolygon.cxx
+  private/surfaces/AxialCylinder.cxx
+  private/surfaces/Sphere.cxx
+  private/surfaces/polygon.cxx
   ${ROOT_SOURCES}
   ${SPRNG_SOURCES}
 
@@ -132,6 +139,7 @@ i3_add_pybindings(phys_services
   private/pybindings/I3Splitter.cxx
   private/pybindings/I3XMLOMKey2MBID.cxx
   private/pybindings/I3GCDFileService.cxx
+  private/pybindings/Surface.cxx
   private/pybindings/module.cxx
   USE_TOOLS boost python 
   USE_PROJECTS phys-services interfaces
