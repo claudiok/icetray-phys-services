@@ -6,13 +6,38 @@ those events.
 
 import logging
 import math
+import sys
+
+if sys.version_info.major < 3:
+    from itertools import ifilterfalse as filterfalse
+else:
+    from itertools import filterfalse
 
 from icecube import icetray,dataio,dataclasses
 
+def unique_everseen(iterable, key=None):
+    """
+    List unique elements, preserving order. Remember all elements ever seen.
+    (from itertools recipes)
+    """
+    # unique_everseen('AAAABBBCCDAABBB') --> A B C D
+    # unique_everseen('ABBCcAD', str.lower) --> A B C D
+    seen = set()
+    seen_add = seen.add
+    if key is None:
+        for element in filterfalse(seen.__contains__, iterable):
+            seen_add(element)
+            yield element
+    else:
+        for element in iterable:
+            k = key(element)
+            if k not in seen:
+                seen_add(k)
+                yield element
 
 def hunt(events,input_files):
     """Return the necessary frames for the list of events."""
-    input_files = [{'filename':f,'start_event':None} for f in sorted(input_files)]
+    input_files = [{'filename':f,'start_event':None} for f in input_files]
     open_file = {'filename':None,'file':None}
     frame = None
     for event in sorted(events):
@@ -34,6 +59,10 @@ def hunt(events,input_files):
                                 f['I3EventHeader'].run_id if event[0] != -1 else -1,
                                 f['I3EventHeader'].event_id
                             )
+                            if index > 0 and input_files[index-1]['start_event'] is not None:
+                                assert input_files[index]['start_event'] > input_files[index-1]['start_event'], "Filenames must be sorted in ascending order"
+                            if index < len(input_files)-2 and input_files[index+1]['start_event'] is not None:
+                                assert input_files[index]['start_event'] < input_files[index+1]['start_event'], "Filenames must be sorted in ascending order"
                             break
                 if input_files[index]['start_event']:
                     logging.info('index %d has run %d event %d',index,input_files[index]['start_event'][0],input_files[index]['start_event'][1])
@@ -52,7 +81,7 @@ def hunt(events,input_files):
                         index = new_index
                     continue
                 if event == input_files[index]['start_event']:
-                    logging.debug('found event')
+                    logging.debug('found event %s' % (event,))
                     break
                 elif event < input_files[index]['start_event']:
                     new_index = int(math.floor((index_min+index)/2))
@@ -93,21 +122,25 @@ def hunt(events,input_files):
                     open_file['file'] = dataio.I3File(open_file['filename'])
                 except Exception:
                     raise Exception('cannot open file %s'%open_file['filename'])
-            while open_file['file'].more():
+            while True:
                 if not frame:
                     logging.debug('first pop_frame')
                     frame = open_file['file'].pop_frame()
-                if ('I3EventHeader' in frame and
-                    (event[0] == -1 or frame['I3EventHeader'].run_id == event[0]) and
-                    frame['I3EventHeader'].event_id == event[1]):
-                    logging.info('yielding frame')
-                    yield frame
-                    flag = True
-                elif flag:
-                    logging.debug('break from flag')
-                    break
+                if 'I3EventHeader' in frame:
+                    if ((event[0] == -1 or frame['I3EventHeader'].run_id == event[0]) and
+                        frame['I3EventHeader'].event_id == event[1]):
+                        logging.info('yielding %s frame %s' % (frame.Stop, event,))
+                        yield frame
+                        flag = True
+                    elif flag:
+                        logging.debug('break from flag')
+                        break
                 #logging.debug('second pop_frame')
-                frame = open_file['file'].pop_frame()
+                if open_file['file'].more(): 
+                    frame = open_file['file'].pop_frame()
+                    frame.purge()
+                else:
+                    break
             if flag is False:
                 logging.debug('did not find event in %s',input_files[0]['filename'])
                 del input_files[0]
@@ -149,10 +182,11 @@ def main():
     if options.input_file and args:
         raise Exception('Specify either a file of input filenames or file arguments, not both')
     
-    logging.basicConfig(level='INFO' if options.debug else 'WARN')
+    # logging.basicConfig(level='INFO' if options.debug else 'WARN')
+    logging.basicConfig(level='DEBUG')
     
     events = set()
-    input_files = set()
+    input_files = []
     
     if options.event_file:
         for line in open(options.event_file):
@@ -169,10 +203,10 @@ def main():
             line = line.strip()
             if line and not line.startswith('#'):
                 for part in line.split():
-                    input_files.add(part)
+                    input_files.append(part)
     elif args:
-        for f in args:
-            input_files.add(f)
+        input_files += args
+    input_files = list(unique_everseen(input_files))
     
     output_file = dataio.I3File(options.output,'w')
     try:
