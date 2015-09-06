@@ -41,11 +41,11 @@ def hunt(events,input_files):
     open_file = {'filename':None,'file':None}
     frame = None
     for event in sorted(events):
-        logging.warn('now hunting event %r',event)
+        logging.info('now hunting event %r',event)
         if (len(input_files) > 5 and
             (input_files[1]['start_event'] is None or
              event > input_files[1]['start_event'])):
-            logging.info('binary search for correct file')
+            logging.debug('binary search for correct file')
             index = int(math.floor(len(input_files)/2))
             index_max = len(input_files)
             index_min = 0
@@ -59,15 +59,20 @@ def hunt(events,input_files):
                                 f['I3EventHeader'].run_id if event[0] != -1 else -1,
                                 f['I3EventHeader'].event_id
                             )
-                            if index > 0 and input_files[index-1]['start_event'] is not None:
-                                assert input_files[index]['start_event'] > input_files[index-1]['start_event'], "Filenames must be sorted in ascending order"
-                            if index < len(input_files)-2 and input_files[index+1]['start_event'] is not None:
-                                assert input_files[index]['start_event'] < input_files[index+1]['start_event'], "Filenames must be sorted in ascending order"
+                            # check ordering
+                            for prev_index in range(index-1, -1, -1):
+                                if input_files[prev_index]['start_event']:
+                                    assert input_files[index]['start_event'] > input_files[prev_index]['start_event'], "Filenames must be sorted in ascending order"
+                                    break
+                            for next_index in range(index+1, len(input_files)):
+                                if input_files[next_index]['start_event']:
+                                    assert input_files[index]['start_event'] < input_files[next_index]['start_event'], "Filenames must be sorted in ascending order"
+                                    break
                             break
                 if input_files[index]['start_event']:
-                    logging.info('index %d has run %d event %d',index,input_files[index]['start_event'][0],input_files[index]['start_event'][1])
+                    logging.debug('index %d has run %d event %d',index,input_files[index]['start_event'][0],input_files[index]['start_event'][1])
                 else:
-                    logging.info('index is empty. should be file %s',input_files[index]['filename'])
+                    logging.warn('index is empty. should be file %s',input_files[index]['filename'])
                     input_files[index]['start_event'] = False
                     new_index = index + 1
                     if new_index > index_max:
@@ -107,7 +112,7 @@ def hunt(events,input_files):
                 logging.debug('stripping input_files to [%d:]',index)
                 input_files = input_files[index:]
                 
-        logging.info('check input_files linearly')
+        logging.debug('check input_files linearly')
         flag = False
         while not flag and input_files:
             if open_file['filename'] != input_files[0]['filename']:
@@ -129,7 +134,7 @@ def hunt(events,input_files):
                 if 'I3EventHeader' in frame:
                     if ((event[0] == -1 or frame['I3EventHeader'].run_id == event[0]) and
                         frame['I3EventHeader'].event_id == event[1]):
-                        logging.info('yielding %s frame %s' % (frame.Stop, event,))
+                        logging.debug('yielding %s frame %s' % (frame.Stop, event,))
                         yield frame
                         flag = True
                     elif flag:
@@ -145,7 +150,7 @@ def hunt(events,input_files):
                 logging.debug('did not find event in %s',input_files[0]['filename'])
                 del input_files[0]
             else:
-                logging.info('done with event')
+                logging.info('found with event %s' % (event,))
                 break
             
     try:
@@ -182,8 +187,7 @@ def main():
     if options.input_file and args:
         raise Exception('Specify either a file of input filenames or file arguments, not both')
     
-    # logging.basicConfig(level='INFO' if options.debug else 'WARN')
-    logging.basicConfig(level='DEBUG')
+    logging.basicConfig(level='DEBUG' if options.debug else 'INFO')
     
     events = set()
     input_files = []
