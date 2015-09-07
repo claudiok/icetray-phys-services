@@ -39,4 +39,12 @@ Code Review
    :titlesonly:
 
    spe_fit_injector_code_review
+   
+I3NullSplitter
+^^^^^^^^^^^^^^
+I3Nullsplitter is the trivial event splitter; for each Q frame, it emits a
+single P frame containing nothing but an I3EventHeader with the SubEventStream
+set to the name of the module. This can be useful for passing untriggered or
+generator-level data to segments like I3HDFWriter that expect to operate on P
+frames.
 
