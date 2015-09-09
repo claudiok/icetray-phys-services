@@ -46,8 +46,8 @@ make_ordered_pair(double a, double b)
 inline double
 integrate_area(double a, double b, double cap, double sides)
 {
-	return 2*M_PI*(cap*(b*b-a*a) +
-	    (sides/2.)*(acos(a) - acos(b) + sqrt(1-a*a)*a + sqrt(1-b*b)*b));
+	return M_PI*(cap*(b*b-a*a) +
+	    sides*(acos(a) - acos(b) - sqrt(1-a*a)*a + sqrt(1-b*b)*b));
 }
 
 }
