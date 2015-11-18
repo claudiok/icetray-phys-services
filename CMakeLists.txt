@@ -86,10 +86,6 @@ i3_add_library(phys-services
   USE_PROJECTS icetray dataclasses interfaces tableio
 
   USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python
-
- public/phys-services/I3Calculator.h
- public/phys-services/I3CutValues.h
- public/phys-services/I3CascadeCutValues.h
   )
 
 i3_executable(CreateXMLOMKey2MBIDConversionTable
