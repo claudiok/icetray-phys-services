@@ -2,6 +2,10 @@
 Release Notes
 =============
 
+December 14, 2015, don la dieu  (nega@icecube.umd.edu)
+------------------------------------------------------
+Release V15-12-00
+
 * remove deprecated cint dictionary generation
 * flip a sign and add a missing factor of 1/2 in the acceptance calculation
 * document I3NullSPlitter
