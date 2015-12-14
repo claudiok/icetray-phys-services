@@ -2,8 +2,11 @@
 Release Notes
 =============
 
-trunk
------
+* remove deprecated cint dictionary generation
+* flip a sign and add a missing factor of 1/2 in the acceptance calculation
+* document I3NullSPlitter
+* fix file ordering
+* fix a bug that cause event_hunter.py to mis the last P frame in every file
 
 August 31, 2015, Alex Olivas  (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
