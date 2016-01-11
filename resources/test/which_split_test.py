@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-# $Id$
-# $Revision$
-# $LastChangedDate$
-# $LastChangedBy$
+# $Id: which_split_test.py 125167 2014-10-29 01:16:40Z jvansanten $
+# $Revision: 125167 $
+# $LastChangedDate: 2014-10-28 21:16:40 -0400 (Tue, 28 Oct 2014) $
+# $LastChangedBy: jvansanten $
 
 from I3Tray import *
 from icecube import icetray, dataclasses, dataio
