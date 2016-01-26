@@ -7,7 +7,8 @@ trunk
 
 * Add goodrunlist interpretor script
   -- Marcel Zoll
-
+* Add module for adding GCD-frames to the event stream on the fly according to goodrunlist
+  -- Marcel Zoll
 
 December 14, 2015, don la dieu  (nega@icecube.umd.edu)
 ------------------------------------------------------
