@@ -145,7 +145,7 @@ TEST(CherenkovPosition)
 TEST(CherenkovTime)
 { 
   a1=I3Position(0,0,0,I3Position::car);
-  ENSURE(isnan(CherenkovTime(starttrack(),a1)));
+  ENSURE(std::isnan(CherenkovTime(starttrack(),a1)));
 
   a1=I3Position(1,0,-1,I3Position::car);
   ENSURE_DISTANCE(CherenkovTime(starttrack(),a1)/I3Units::ns,9.731156,0.0001);
@@ -160,7 +160,7 @@ TEST(CherenkovTime)
 TEST(CherenkovDistance)
 {
   a1=I3Position(1,0,0,I3Position::car);
-  ENSURE(isnan(CherenkovDistance(starttrack(),a1)));
+  ENSURE(std::isnan(CherenkovDistance(starttrack(),a1)));
 
   a1=I3Position(1,0,-1,I3Position::car);
   ENSURE_DISTANCE(CherenkovDistance(starttrack(),a1),1.532769,0.0001);
@@ -237,10 +237,10 @@ TEST(garbage)
       double changle;
       CherenkovCalc(particle, position, chpos, chtime, chdist, changle);
 
-      ENSURE(isnan(chpos.GetX()));
-      ENSURE(isnan(chtime));
-      ENSURE(isnan(chdist));
-      ENSURE(isnan(changle));
+      ENSURE(std::isnan(chpos.GetX()));
+      ENSURE(std::isnan(chtime));
+      ENSURE(std::isnan(chdist));
+      ENSURE(std::isnan(changle));
 
       I3Position appos;
       double apdist;
@@ -248,43 +248,43 @@ TEST(garbage)
       double apdist2;
       ClosestApproachCalc(particle, position, appos, apdist, appos2, apdist2);
 
-      ENSURE(isnan(appos.GetX()));
-      ENSURE(isnan(apdist));
-      ENSURE(isnan(appos2.GetX()));
-      ENSURE(isnan(apdist2));
+      ENSURE(std::isnan(appos.GetX()));
+      ENSURE(std::isnan(apdist));
+      ENSURE(std::isnan(appos2.GetX()));
+      ENSURE(std::isnan(apdist2));
 
       particle.SetPos(0,0,0);
       particle.SetDir(0,0,1);
       position=I3Position(2,2,2,I3Position::car);
       CherenkovCalc(particle, position, chpos, chtime, chdist, changle);
 
-      ENSURE(isnan(chpos.GetX()));
-      ENSURE(isnan(chtime));
-      ENSURE(isnan(chdist));
-      ENSURE(isnan(changle));
+      ENSURE(std::isnan(chpos.GetX()));
+      ENSURE(std::isnan(chtime));
+      ENSURE(std::isnan(chdist));
+      ENSURE(std::isnan(changle));
 
       ClosestApproachCalc(particle, position, appos, apdist, appos2, apdist2);
 
-      ENSURE(!isnan(appos.GetX()));
-      ENSURE(!isnan(apdist));
-      ENSURE(!isnan(appos2.GetX()));
-      ENSURE(!isnan(apdist2));
+      ENSURE(!std::isnan(appos.GetX()));
+      ENSURE(!std::isnan(apdist));
+      ENSURE(!std::isnan(appos2.GetX()));
+      ENSURE(!std::isnan(apdist2));
 
       particle.SetShape(I3Particle::InfiniteTrack);
       CherenkovCalc(particle, position, chpos, chtime, chdist, changle);
 
-      ENSURE(!isnan(chpos.GetX()));
-      ENSURE(!isnan(chtime));
-      ENSURE(!isnan(chdist));
-      ENSURE(!isnan(changle));
+      ENSURE(!std::isnan(chpos.GetX()));
+      ENSURE(!std::isnan(chtime));
+      ENSURE(!std::isnan(chdist));
+      ENSURE(!std::isnan(changle));
 
       particle.SetDir(NAN,NAN);
       ClosestApproachCalc(particle, position, appos, apdist, appos2, apdist2);
 
-      ENSURE(isnan(appos.GetX()));
-      ENSURE(isnan(apdist));
-      ENSURE(isnan(appos2.GetX()));
-      ENSURE(isnan(apdist2));
+      ENSURE(std::isnan(appos.GetX()));
+      ENSURE(std::isnan(apdist));
+      ENSURE(std::isnan(appos2.GetX()));
+      ENSURE(std::isnan(apdist2));
 
       //ENSURE(0,"That should have thrown");
       //}

@@ -160,7 +160,7 @@ TEST(nohits)
   I3Geometry geometry;
   I3RecoPulseSeriesMap hitsmap;
 
-  ENSURE(isnan(SmoothAll(bt,geometry,hitsmap,-10,10)),
+  ENSURE(std::isnan(SmoothAll(bt,geometry,hitsmap,-10,10)),
 	 "should get NAN if there are no hits");
 
 
@@ -178,7 +178,7 @@ TEST(onehits)
 
   SmoothnessDirTest::AddHitAtDepth(0,geometry,hitsmap,1);
 
-  ENSURE(isnan(SmoothAll(bt,geometry,hitsmap,-10,10)),
+  ENSURE(std::isnan(SmoothAll(bt,geometry,hitsmap,-10,10)),
 	 "should get NAN if there are no hits");
 
 
@@ -197,7 +197,7 @@ TEST(twohits)
   SmoothnessDirTest::AddHitAtDepth(0,geometry,hitsmap,1);
   SmoothnessDirTest::AddHitAtDepth(10,geometry,hitsmap,2);
 
-  ENSURE(isnan(SmoothAll(bt,geometry,hitsmap,-10,10)),
+  ENSURE(std::isnan(SmoothAll(bt,geometry,hitsmap,-10,10)),
 	 "should get NAN if there are no hits");
 
 

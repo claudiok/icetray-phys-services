@@ -90,7 +90,7 @@ bool I3Calculator::IsOnTrack(const I3Particle& track, const I3Position& position
     I3Position appos,appos2;
     double apdist,apdist2;
     ClosestApproachCalc(track,position,appos2,apdist2,appos,apdist);
-    if (!isnan(apdist) && apdist<=Precision) return true;
+    if (!std::isnan(apdist) && apdist<=Precision) return true;
     else return false;
   }
   else {
@@ -342,7 +342,7 @@ double I3Calculator::FourDistance(const I3Particle& p1, const I3Particle& p2)
   // 4-distance here is defined as:
   //   sqrt( (ct1-ct2)^2 - (x1-x2)^2 + (y1-y2)^2 + (z1-z2)^2 )
   if (p1.HasPosition() && p2.HasPosition() && 
-      !isnan(p1.GetTime()) && !isnan(p2.GetTime())) {
+      !std::isnan(p1.GetTime()) && !std::isnan(p2.GetTime())) {
     return sqrt(abs(pow(I3Constants::c*(p1.GetTime()-p2.GetTime()),2) - 
 		    pow(p1.GetX()-p2.GetX(),2) -
 		    pow(p1.GetY()-p2.GetY(),2) -

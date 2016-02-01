@@ -261,7 +261,7 @@ I3Position COGImpl(const I3Geometry& geometry,
     for (unsigned i=0; i < pulsevect.size(); i++) {
       I3RecoPulse pulse = pulsevect[i];
       double amp_tmp;
-      if(isnan(pulse.GetCharge()) > 0 || std::isinf(pulse.GetCharge())> 0) {
+      if(std::isnan(pulse.GetCharge()) > 0 || std::isinf(pulse.GetCharge())> 0) {
 	log_warn("Got a nan or inf pulse charge.  Setting it to 0 instead.  Something could be screwy with a DOM calibration!!");
   	amp_tmp=0;
       }
@@ -547,7 +547,7 @@ double I3Cuts::CylinderSize(const I3Particle& track,
 
   // Which is smaller?
   
-  if ((bestcorner<bestcyl)||isnan(bestcyl)) {
+  if ((bestcorner<bestcyl)||std::isnan(bestcyl)) {
     return bestcorner;
   } else {
     return bestcyl;
@@ -675,7 +675,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
     // For such a track the "best" size is infinitely far away. 
     // So it's okay to just skip it; the best size will come from 
     // some other plane.  So skip any planes for which this occurs. 
-    if (!isnan(P.GetX())&&!isnan(P.GetY())&&!isnan(P.GetZ())) { 
+    if (!std::isnan(P.GetX())&&!std::isnan(P.GetY())&&!std::isnan(P.GetZ())) { 
 
     // Reset coordinate system to CM
     B -= CM;
@@ -769,7 +769,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
       double di = hypot(dix,diy);
 
       // Hooray!  We did it!  Is it the best one?
-      if (isnan(bestanswer) || dprime/di < bestanswer)
+      if (std::isnan(bestanswer) || dprime/di < bestanswer)
 	bestanswer = dprime/di;
       log_debug("New Answer: %f/%f = %f", dprime, di, bestanswer);
     
@@ -793,7 +793,7 @@ double I3Cuts::ContainmentVolumeSize(const I3Particle& track,
 
 
   log_debug("THIS SERIES BEST C: %f", best_this_series);
-  if (best_this_series<bestanswer || isnan(bestanswer)) bestanswer = best_this_series;
+  if (best_this_series<bestanswer || std::isnan(bestanswer)) bestanswer = best_this_series;
 
   }  //end loop over the three series
 
@@ -835,7 +835,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
   //double xprime = track.GetX();
   //double yprime = track.GetY();
 
-  if (isnan(xprime) || isnan(yprime)) {
+  if (std::isnan(xprime) || std::isnan(yprime)) {
     log_warn("Input core was NAN. Will return a NAN.");
     return NAN;
   }
