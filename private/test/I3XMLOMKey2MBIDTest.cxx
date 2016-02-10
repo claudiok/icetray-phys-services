@@ -80,7 +80,7 @@ TEST(b_operations)
 
   key = OMKey(1, 33);
   try { 
-    mbid = omkey2mbid->GetMBID(key); 
+    omkey2mbid->GetMBID(key); 
     FAIL("didn't throw!");
   } catch(...) { }
 }

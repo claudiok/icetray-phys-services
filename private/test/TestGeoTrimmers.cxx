@@ -328,7 +328,6 @@ TEST(MinimumBall3point)
         double rm2 = rm*rm;
         log_info( "M(%.1f,%.1f,%.1f), r=%.2f, r2=%.2f, rm=%.2f, rm2=%.2f",
                   xM, yM, zM, radius, radius2, rm, rm2);
-        radius = rm;
         radius2 = rm2;
 
         // add the three hits to the pulsemap
