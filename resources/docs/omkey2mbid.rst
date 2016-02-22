@@ -1,7 +1,8 @@
-/**
-@page omkey2mbid The OMKey2MBID Service
+The OMKey2MBID Service
+----------------------
 
-@section omkey2mbid-intro Introduction
+Introduction
+&&&&&&&&&&&&
 
 The IceCube DAQ prefers to use a DOM's main board id (MBID) to refer to 
 individual DOMs.  In the IceCube offline environment, we prefer to 
@@ -18,7 +19,3 @@ Check the file @ref omkey2mbidformat to see the expected format.  The
 installer for this service the I3FileOMKey2MBIDFactory takes one parameter
 'Infile' which is the path to the required input file.
 
-
-
-
-*/
