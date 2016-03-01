@@ -62,7 +62,7 @@ I3FileOMKey2MBID::~I3FileOMKey2MBID()
  */
 OMKey I3FileOMKey2MBID::OMKeyize(const std::string& key) 
 {
-  if(key.size()==4){
+  if(key.size()==4 && key.find('-') == key.npos){
     //preserve mysterious old logic
     char om_string_array[3];
     om_string_array[0] = key[0];
