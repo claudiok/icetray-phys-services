@@ -13,6 +13,7 @@
 // class header files
 
 #include <phys-services/I3XMLOMKey2MBID.h>
+#include <icetray/open.h>
 
 #include <utility>
 #include <boost/archive/xml_iarchive.hpp>
@@ -41,15 +42,7 @@ void I3XMLOMKey2MBID::Dump(const string& outfile,
   if(outfile.empty()) log_fatal("undefined file name");
   
   boost::iostreams::filtering_ostream ofs;
-  log_info("opening file \"%s\"", outfile.c_str());
-  ofs.push(boost::iostreams::file_sink(outfile));
-  if(!ofs.good()) log_fatal("cannot open file \"%s\"", outfile.c_str());
-
-  if(ba::ends_with(outfile, ".gz"))
-  {
-    ofs.push(boost::iostreams::gzip_compressor());
-    log_info("file \"%s\" ends in .gz - using gzip compressor", outfile.c_str());
-  }
+  I3::dataio::open(ofs, outfile);
   boost::archive::xml_oarchive oa(ofs);
   
   oa << boost::serialization::make_nvp("MBID_OMKey", conversionTable);
@@ -65,14 +58,8 @@ I3XMLOMKey2MBID::I3XMLOMKey2MBID(const string& infile)
     log_fatal("cannot find file \"%s\"", infile.c_str());
   
   boost::iostreams::filtering_istream ifs;
-  if(ba::ends_with(infile, ".gz"))
-  {
-    ifs.push(boost::iostreams::gzip_decompressor());
-    log_info("file \"%s\" ends in .gz - using gzip decompressor", infile.c_str());
-  }
+  I3::dataio::open(ifs, infile);
 
-  log_info("opening file \"%s\"", infile.c_str());
-  ifs.push(boost::iostreams::file_source(infile));
   if(!ifs.good()) log_fatal("cannot open file \"%s\"", infile.c_str());
   boost::archive::xml_iarchive ia(ifs);
   
