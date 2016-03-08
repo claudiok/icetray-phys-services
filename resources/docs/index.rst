@@ -1,3 +1,5 @@
+.. _phys-services:
+
 Phys-Services Documentation
 ===========================
 The phys-services project is a collection of IceTray services and other
