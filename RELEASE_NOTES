@@ -3,8 +3,14 @@ Release Notes
 =============
 
 trunk
-------------------------------------------------------
+-----
 
+March 18, 2016, don la dieu  (nega@icecube.umd.edu)
+---------------------------------------------------
+Release V16-03-00
+
+* documentation udpates
+* mainboard id updates
 * Add goodrunlist interpretor script
   -- Marcel Zoll
 * Add module for adding GCD-frames to the event stream on the fly according to goodrunlist
