@@ -1,15 +1,14 @@
 #!/usr/bin/env python 
 
-from I3Tray import *
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option('-i','--infile',
+                  dest='INFILE',
+                  help='I3File to read.')
+(options,args) = parser.parse_args()
+
+from I3Tray import I3Units
 from os.path import expandvars
-
-import sys
-
-if len(sys.argv) == 2:
-        infile = sys.argv[1]
-else:
-        print('Usage: CountEvents <filename>')
-        sys.exit(1)
         
 from icecube import icetray 
 from icecube import dataclasses 
@@ -18,13 +17,11 @@ from icecube import dataio
 
 tray = I3Tray()
 
-tray.AddModule("I3Reader","reader",FileName=infile)
+tray.AddModule("I3Reader","reader",FileName = options.INFILE)
 
-tray.AddModule("I3EventCounter","counter")(
-    ("EventHeaderName","I3EventHeader"),
-    ("CounterStep",100))
-
-tray.AddModule("TrashCan","last")
+tray.AddModule("I3EventCounter",
+    EventHeaderName = "I3EventHeader",
+    CounterStep = 100)
 
 tray.Execute()
 tray.Finish()
