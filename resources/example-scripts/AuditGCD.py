@@ -5,9 +5,8 @@ from icecube import icetray, dataio, phys_services
 import sys
 
 tray = I3Tray()
-tray.AddModule('I3Reader', 'reader', Filename=sys.argv[1])
-tray.AddModule('I3GCDAuditor', 'audit')#, AMANDAIsAnError=False)
-tray.AddModule('TrashCan', 'can')
+tray.AddModule('I3Reader', Filename=sys.argv[1])
+tray.AddModule('I3GCDAuditor')
 
 tray.Execute()
 tray.Finish()
