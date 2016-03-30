@@ -3,6 +3,14 @@
 # $Date: $
 #
 
+March 30, 2016, Alex Olivas (olivas@icecube.umd.edu)
+--------------------------------------------------------------------
+Incremental Release V15-04-04
+ o patch r143803 - Tweaks to I3GCDAuditor. Ignore the transit time
+   of scintillator channels.
+ o patch r143909 - Tweaks to I3BadDOMAuditor.  Add the open to ignore
+   scintillator channels.
+
 March 1, 2016, Alex Olivas (olivas@icecube.umd.edu)
 --------------------------------------------------------------------
 Bug-fix Release V15-04-03

@@ -27,6 +27,7 @@ class I3BadDOMAuditor : public I3Module
 		boost::shared_ptr<const I3Vector<OMKey> > bad_doms_;
 		I3GeometryConstPtr geo_;
 		std::vector<std::string> pulses_;
+		std::vector<OMKey> ignore_oms_;
 		std::string bad_dom_list_;
 		std::map<OMKey, int> pulse_counts_;
 		bool bad_doms_dont_trigger_, icetop_always_triggers_;
@@ -43,6 +44,7 @@ I3BadDOMAuditor::I3BadDOMAuditor(const I3Context& context) : I3Module(context)
 	    "produces any pulses", true);
 	AddParameter("IceTopAlwaysTriggers", "Fail if any good IceTop DOM "
 	    "fails to produce any pulses", true);
+	AddParameter("IgnoreOMs", "A list of OMs that are excludet from the audit", std::vector<OMKey>());
 	AddOutBox("OutBox");
 }
 
@@ -52,6 +54,7 @@ I3BadDOMAuditor::Configure()
 	GetParameter("BadDOMList", bad_dom_list_);
 	GetParameter("BadDOMsDontTrigger", bad_doms_dont_trigger_);
 	GetParameter("IceTopAlwaysTriggers", icetop_always_triggers_);
+	GetParameter("IgnoreOMs", ignore_oms_);
 
 	try {
 		std::string simple_name;
@@ -81,26 +84,30 @@ I3BadDOMAuditor::CheckResults()
 
 	for (I3OMGeoMap::const_iterator i = geo_->omgeo.begin();
 	    i != geo_->omgeo.end(); i++) {
-		if (std::find(bad_doms_->begin(), bad_doms_->end(), i->first)
-		    == bad_doms_->end()) {
-			// Don't check for unhit IceTop DOMs if asked not to
-			if (i->second.omtype == I3OMGeo::IceTop &&
-			    !icetop_always_triggers_)
-				continue;
+		if (std::find(ignore_oms_.begin(), ignore_oms_.end(), i->first) != ignore_oms_.end()) {
+			log_info("Skipped bad dom audit for OM: %s", i->first.str().c_str());
+		} else {
+			if (std::find(bad_doms_->begin(), bad_doms_->end(), i->first)
+			    == bad_doms_->end()) {
+				// Don't check for unhit IceTop DOMs if asked not to
+				if (i->second.omtype == I3OMGeo::IceTop &&
+				    !icetop_always_triggers_)
+					continue;
 
-			// DOM is not marked bad -- make sure it triggered
-			if (pulse_counts_.find(i->first) == pulse_counts_.end())
-				bad_dom("OM%s not marked bad but not present "
-				    "in pulse map.", i->first.str().c_str());
-			if (pulse_counts_.find(i->first)->second == 0)
-				bad_dom("OM%s present in pulse map but never "
-				    "produced any pulses. Check calibration "
-				    "constants.", i->first.str().c_str());
-		} else if (bad_doms_dont_trigger_) {
-			// DOM is marked bad -- make sure it did *not* trigger
-			if (pulse_counts_.find(i->first) != pulse_counts_.end())
-				bad_dom("OM%s marked bad but present in "
-				    "pulse map.", i->first.str().c_str());
+				// DOM is not marked bad -- make sure it triggered
+				if (pulse_counts_.find(i->first) == pulse_counts_.end())
+					bad_dom("OM%s not marked bad but not present "
+					    "in pulse map.", i->first.str().c_str());
+				if (pulse_counts_.find(i->first)->second == 0)
+					bad_dom("OM%s present in pulse map but never "
+					    "produced any pulses. Check calibration "
+					    "constants.", i->first.str().c_str());
+			} else if (bad_doms_dont_trigger_) {
+				// DOM is marked bad -- make sure it did *not* trigger
+				if (pulse_counts_.find(i->first) != pulse_counts_.end())
+					bad_dom("OM%s marked bad but present in "
+					    "pulse map.", i->first.str().c_str());
+			}
 		}
 	}
 
