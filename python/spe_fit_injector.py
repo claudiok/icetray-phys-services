@@ -22,7 +22,7 @@ class I3SPEFitInjector(icetray.I3Module):
         ''' Give the filename, read and load the constants in this method.'''
         self.filename = self.GetParameter("Filename")
 
-        if self.filename[-4:] == '.bz2':
+        if self.filename.endswith('.bz2'):
             json_fit_values = json.loads(bz2.BZ2File(self.filename).read())
         else:
             f = open(self.filename)
