@@ -1,4 +1,5 @@
 import json
+import bz2
 import numpy
 
 from copy import deepcopy
@@ -15,13 +16,17 @@ class I3SPEFitInjector(icetray.I3Module):
         icetray.I3Module.__init__(self, context)
 
         self.AddOutBox("OutBox")
-        self.AddParameter("Filename", "JSON file with SPE fit data", "")
+        self.AddParameter("Filename", "JSON (may bz2 compressed) file with SPE fit data", "")
 
     def Configure(self):
         ''' Give the filename, read and load the constants in this method.'''
         self.filename = self.GetParameter("Filename")
-        f = open(self.filename)
-        json_fit_values = json.load(f)
+
+        if self.filename[-4:] == '.bz2':
+            json_fit_values = json.loads(bz2.BZ2File(self.filename).read())
+        else:
+            f = open(self.filename)
+            json_fit_values = json.load(f)
 
         self.fit_dict = dict()
         for key, data in json_fit_values.iteritems():
