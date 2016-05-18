@@ -7,7 +7,8 @@ please report any errors and possible improvements to the author
 script to read and process information in the plain-tabulated Goodrun-list in the new format:
 format is #(RunNum/Good_i3/Good_it/LiveTime(s)/ActiveStrings/ActiveDoms/ActiveInIceDoms/OutDir/Comment(s))
 
-use this like this:
+use this like this: ::
+
   from goodrunlist import *
   g = good_run_list()
   g.add_good_run_list('/data/exp/IceCube/2011/filtered/level2/IC86_2011_GoodRunInfo.txt')
@@ -17,7 +18,8 @@ use this like this:
     if not g.get_run_info(i).inice_ok:
       g.pop(i)
 
-or load the standart-set of goodrun-files:
+or load the standart-set of goodrun-files: ::
+
   import goodrunlist
   g = goodrunlist.GRL()
   ...

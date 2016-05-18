@@ -6,7 +6,7 @@ trunk
 -----
 
 April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
----------------------------------------------------
+-----------------------------------------------------
 Release V16-04-00
 
 * r145068 - SPEFitInjector can now read compressed files.
