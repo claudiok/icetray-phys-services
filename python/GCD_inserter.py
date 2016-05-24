@@ -43,7 +43,7 @@ class GCD_inserter(icetray.I3PacketModule):
     ri = self.GRL.get_run_info(eh.run_id)
     
     if ri.run_id == -1:
-      icetray.logging.log_fatal"Goodrun-lists do not contain an entry for this run (%d); cannot infer GCD-file path"%(eh.run_id))
+      icetray.logging.log_fatal("Goodrun-lists do not contain an entry for this run (%d); cannot infer GCD-file path"%(eh.run_id))
 
     icetray.logging.log_trace("searching GCD : %s", os.path.join(ri.path,'*%s*GCD*.i3*'%(eh.run_id)))
     gcd_path = glob.glob(os.path.join(ri.path,'*%s*GCD*.i3*'%(eh.run_id)))
