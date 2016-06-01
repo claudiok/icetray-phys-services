@@ -30,7 +30,7 @@ class I3CutValuesBase : public I3FrameObject {
                          const double& endTWindow = I3Constants::dt_window_h) = 0;
 
  private:
-  friend class boost::serialization::access;
+  friend class icecube::serialization::access;
   template <class Archive> void serialize(Archive & ar, unsigned version);
 };
 

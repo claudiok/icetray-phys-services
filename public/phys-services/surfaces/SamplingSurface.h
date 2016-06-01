@@ -45,7 +45,7 @@ public:
 	  */
 	virtual double SampleImpactRay(I3Position &pos, I3Direction &dir, I3RandomService &rng, double cosMin=0, double cosMax=1) const;
 private:
-	friend class boost::serialization::access;
+	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &, unsigned);
 };
@@ -54,6 +54,6 @@ I3_POINTER_TYPEDEFS(SamplingSurface);
 
 }
 
-BOOST_CLASS_VERSION(I3Surfaces::SamplingSurface, 0);
+I3_CLASS_VERSION(I3Surfaces::SamplingSurface, 0);
 
 #endif // I3SURFACES_SAMPLINGSURFACE_H_INCLUDED

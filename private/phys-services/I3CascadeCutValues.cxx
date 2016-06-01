@@ -42,5 +42,5 @@ void I3CascadeCutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("cog",cog);
 }
   
-BOOST_CLASS_VERSION(I3CascadeCutValues, current_i3cascadecutvalues_version);
+I3_CLASS_VERSION(I3CascadeCutValues, current_i3cascadecutvalues_version);
 I3_SERIALIZABLE(I3CascadeCutValues);

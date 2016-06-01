@@ -27,7 +27,7 @@ public:
 private:
 	Cylinder() {}
 	
-	friend class boost::serialization::access;
+	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &, unsigned);
 };
@@ -36,6 +36,6 @@ I3_POINTER_TYPEDEFS(Cylinder);
 
 }
 
-BOOST_CLASS_VERSION(I3Surfaces::Cylinder, 0);
+I3_CLASS_VERSION(I3Surfaces::Cylinder, 0);
 
 #endif // I3SURFACES_CYLINDER_H_INCLUDED

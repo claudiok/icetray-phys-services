@@ -43,7 +43,7 @@ void I3CutValues::serialize(Archive& ar, unsigned version)
   ar & make_nvp("cog",cog);
 }
   
-BOOST_CLASS_VERSION(I3CutValues, current_i3cutvalues_version);
+I3_CLASS_VERSION(I3CutValues, current_i3cutvalues_version);
 I3_SERIALIZABLE(I3CutValues);
 
 template <class Archive>
@@ -52,5 +52,5 @@ void I3CutValuesBase::serialize(Archive& ar, unsigned version)
 	ar & make_nvp("I3FrameObject", base_object<I3FrameObject>(*this));
 }
 
-BOOST_CLASS_VERSION(I3CutValuesBase, 0);
+I3_CLASS_VERSION(I3CutValuesBase, 0);
 I3_SERIALIZABLE(I3CutValuesBase);

@@ -14,8 +14,8 @@
 #include <fstream>
 
 #include <phys-services/I3XMLSummaryService.h>
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/xml_iarchive.hpp>
+#include <archive/xml_oarchive.hpp>
+#include <archive/xml_iarchive.hpp>
 
 /**
  * @brief This class provides an interface to write job statistics
@@ -23,15 +23,15 @@
  *
  */
 
-using namespace boost::archive;
+using namespace icecube::archive;
 
 std::istream& operator >>(std::istream &is, I3MapStringDouble& i3obj)
 {
 	boost::shared_ptr<I3MapStringDouble> spt;
 	try { 
-			boost::archive::xml_iarchive xia(is);
-			xia >> BOOST_SERIALIZATION_NVP(i3obj);
-	} catch (const boost::archive::archive_exception& e) { 
+			icecube::archive::xml_iarchive xia(is);
+			xia >> I3_SERIALIZATION_NVP(i3obj);
+	} catch (const icecube::archive::archive_exception& e) {
 			log_fatal("Archive error: %s ", e.what() ); 
 	} 
 	return is;
@@ -48,9 +48,9 @@ std::ostream& operator <<(std::ostream &os, const I3MapStringDouble& i3obj)
 {
 	try { 
 			const I3MapStringDouble *tobj_p = &i3obj;
-			boost::archive::xml_oarchive xoa(os);
+			icecube::archive::xml_oarchive xoa(os);
 			xoa << make_nvp("I3XMLSummaryService", tobj_p); 
-	} catch (const boost::archive::archive_exception& e) { 
+	} catch (const icecube::archive::archive_exception& e) { 
 			log_fatal("Archive error: %s ", e.what() ); 
 	} 
 	return os;

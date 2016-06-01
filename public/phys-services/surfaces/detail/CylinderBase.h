@@ -192,7 +192,7 @@ private:
 		return cap*fabs(coszen) + sides*sqrt(1.-coszen*coszen);
 	}
 
-	friend class boost::serialization::access;
+	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &ar, unsigned version)
 	{

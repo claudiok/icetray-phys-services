@@ -83,7 +83,7 @@ i3_add_library(phys-services
   ${ROOT_SOURCES}
   ${SPRNG_SOURCES}
 
-  USE_PROJECTS icetray dataclasses interfaces tableio
+  USE_PROJECTS serialization icetray dataclasses interfaces tableio
 
   USE_TOOLS ${OPTIONAL_TOOLS} gsl boost python
   )

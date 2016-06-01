@@ -77,7 +77,7 @@ struct I3GSLRandomServiceState : public I3FrameObject {
   uint64_t icalls_;
   uint64_t dcalls_;
   
-  friend class boost::serialization::access;
+  friend class icecube::serialization::access;
   template <typename Archive>
   void serialize(Archive &ar, unsigned version)
   {
@@ -90,7 +90,7 @@ struct I3GSLRandomServiceState : public I3FrameObject {
   }
 };
 
-BOOST_CLASS_VERSION(I3GSLRandomServiceState, 0);
+I3_CLASS_VERSION(I3GSLRandomServiceState, 0);
 I3_SERIALIZABLE(I3GSLRandomServiceState);
 
 I3FrameObjectPtr I3GSLRandomService::GetState() const

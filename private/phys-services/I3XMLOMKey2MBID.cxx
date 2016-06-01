@@ -16,14 +16,14 @@
 #include <icetray/open.h>
 
 #include <utility>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
+#include <archive/xml_iarchive.hpp>
+#include <archive/xml_oarchive.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/device/file.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
-#include <boost/serialization/map.hpp>
-#include <boost/serialization/utility.hpp>
+#include <serialization/map.hpp>
+#include <serialization/utility.hpp>
 #include "boost/algorithm/string.hpp"
 
 // definitions
@@ -43,9 +43,9 @@ void I3XMLOMKey2MBID::Dump(const string& outfile,
   
   boost::iostreams::filtering_ostream ofs;
   I3::dataio::open(ofs, outfile);
-  boost::archive::xml_oarchive oa(ofs);
+  icecube::archive::xml_oarchive oa(ofs);
   
-  oa << boost::serialization::make_nvp("MBID_OMKey", conversionTable);
+  oa << icecube::serialization::make_nvp("MBID_OMKey", conversionTable);
 }
 
 
@@ -61,9 +61,9 @@ I3XMLOMKey2MBID::I3XMLOMKey2MBID(const string& infile)
   I3::dataio::open(ifs, infile);
 
   if(!ifs.good()) log_fatal("cannot open file \"%s\"", infile.c_str());
-  boost::archive::xml_iarchive ia(ifs);
+  icecube::archive::xml_iarchive ia(ifs);
   
-  ia >> boost::serialization::make_nvp("MBID_OMKey", mbid2omkey_);
+  ia >> icecube::serialization::make_nvp("MBID_OMKey", mbid2omkey_);
 
   map<long long int, OMKey>::const_iterator iter;
   for(iter = mbid2omkey_.begin(); iter != mbid2omkey_.end(); ++iter)

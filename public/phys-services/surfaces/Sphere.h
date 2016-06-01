@@ -25,7 +25,7 @@ public:
 private:
 	Sphere() {}
 	
-	friend class boost::serialization::access;
+	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &, unsigned);
 	
@@ -36,6 +36,6 @@ I3_POINTER_TYPEDEFS(Sphere);
 
 }
 
-BOOST_CLASS_VERSION(I3Surfaces::Sphere, 0);
+I3_CLASS_VERSION(I3Surfaces::Sphere, 0);
 
 #endif

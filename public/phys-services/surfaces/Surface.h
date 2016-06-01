@@ -43,7 +43,7 @@ public:
 	}
 
 private:
-	friend class boost::serialization::access;
+	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &, unsigned);
 };
@@ -52,6 +52,6 @@ I3_POINTER_TYPEDEFS(Surface);
 
 }
 
-BOOST_CLASS_VERSION(I3Surfaces::Surface, 0);
+I3_CLASS_VERSION(I3Surfaces::Surface, 0);
 
 #endif

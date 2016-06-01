@@ -22,7 +22,7 @@ struct I3SPRNGRandomServiceState : public I3FrameObject {
 	int seed_, nstreams_, streamnum_;
 	uint64_t icalls_, dcalls_;
 	
-	friend class boost::serialization::access;
+	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &ar, unsigned version)
 	{
@@ -35,7 +35,7 @@ struct I3SPRNGRandomServiceState : public I3FrameObject {
 	}
 };
 
-BOOST_CLASS_VERSION(I3SPRNGRandomServiceState, 0);
+I3_CLASS_VERSION(I3SPRNGRandomServiceState, 0);
 I3_SERIALIZABLE(I3SPRNGRandomServiceState);
 
 I3SPRNGRandomService::I3SPRNGRandomService() : seed_(0), streamnum_(1), nstreams_(0)

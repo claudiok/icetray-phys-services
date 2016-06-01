@@ -324,7 +324,7 @@ private:
 		return (cap_z-p.GetZ())/dir.GetZ();
 	}
 	
-	friend class boost::serialization::access;
+	friend class icecube::serialization::access;
 	template <typename Archive>
 	void save(Archive &ar, unsigned version) const
 	{
@@ -352,7 +352,7 @@ private:
 		ar & make_nvp("HullZ", z_range);
 		initWithHull(hull, z_range);
 	}
-	BOOST_SERIALIZATION_SPLIT_MEMBER();
+	I3_SERIALIZATION_SPLIT_MEMBER();
 };
 
 }

@@ -24,7 +24,7 @@ struct vec2 {
 
 private:
 	vec2() {};
-	friend class boost::serialization::access;
+	friend class icecube::serialization::access;
 	template <typename Archive>
 	void serialize(Archive &, unsigned);
 };

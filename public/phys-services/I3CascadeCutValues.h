@@ -53,7 +53,7 @@ class I3CascadeCutValues : public I3CutValuesBase
 
  private:
 
-  friend class boost::serialization::access;
+  friend class icecube::serialization::access;
   template <class Archive> void serialize(Archive & ar, unsigned version);
 
 };
