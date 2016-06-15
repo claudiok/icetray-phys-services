@@ -11,6 +11,8 @@
 #include <icetray/I3Units.h>
 #include <dataclasses/geometry/I3Geometry.h>
 #include <dataclasses/physics/I3RecoPulse.h>
+#include <dataclasses/physics/I3EventHeader.h>
+#include <dataclasses/I3Time.h>
 
 #include <boost/foreach.hpp>
 
@@ -30,6 +32,11 @@ class I3BadDOMAuditor : public I3Module
 		std::vector<OMKey> ignore_oms_;
 		std::string bad_dom_list_;
 		std::map<OMKey, int> pulse_counts_;
+        boost::shared_ptr<const I3Time> good_run_start_time_;
+        boost::shared_ptr<const I3Time> good_run_end_time_;
+        bool use_good_run_times_;
+        bool out_of_good_time_range_;
+        bool skip_check;
 		bool bad_doms_dont_trigger_, icetop_always_triggers_;
 };
 
@@ -44,7 +51,8 @@ I3BadDOMAuditor::I3BadDOMAuditor(const I3Context& context) : I3Module(context)
 	    "produces any pulses", true);
 	AddParameter("IceTopAlwaysTriggers", "Fail if any good IceTop DOM "
 	    "fails to produce any pulses", true);
-	AddParameter("IgnoreOMs", "A list of OMs that are excludet from the audit", std::vector<OMKey>());
+	AddParameter("IgnoreOMs", "A list of OMs that are excluded from the audit", std::vector<OMKey>());
+	AddParameter("UseGoodRunTimes", "Use GoodRunStartTime and GoodRunEndTime from D frame if available", false);
 	AddOutBox("OutBox");
 }
 
@@ -55,6 +63,7 @@ I3BadDOMAuditor::Configure()
 	GetParameter("BadDOMsDontTrigger", bad_doms_dont_trigger_);
 	GetParameter("IceTopAlwaysTriggers", icetop_always_triggers_);
 	GetParameter("IgnoreOMs", ignore_oms_);
+	GetParameter("UseGoodRunTimes", use_good_run_times_);
 
 	try {
 		std::string simple_name;
@@ -64,6 +73,8 @@ I3BadDOMAuditor::Configure()
 		PyErr_Clear();
 		GetParameter("Pulses", pulses_);
 	}
+
+    out_of_good_time_range_ = false;
 }
 
 void
@@ -78,6 +89,10 @@ I3BadDOMAuditor::Finish()
 void
 I3BadDOMAuditor::CheckResults()
 {
+    if(skip_check) {
+        return;
+    }
+
 	bool err = false;
 
 	#define bad_dom(...) { log_error(__VA_ARGS__); err = true; continue; }
@@ -143,6 +158,11 @@ I3BadDOMAuditor::DetectorStatus(I3FramePtr frame)
 	bad_doms_ = new_bad_doms;
 	geo_ = frame->Get<I3GeometryConstPtr>();
 
+    if(use_good_run_times_) {
+        good_run_start_time_ = frame->Get<boost::shared_ptr<const I3Time> >("GoodRunStartTime");
+        good_run_end_time_ = frame->Get<boost::shared_ptr<const I3Time> >("GoodRunEndTime");
+    }
+
 	PushFrame(frame);
 }
 
@@ -152,16 +172,48 @@ I3BadDOMAuditor::DAQ(I3FramePtr frame)
 	if (!bad_doms_)
 		log_fatal("DAQ frame but no bad DOM list so far");
 
-	BOOST_FOREACH(const std::string &pulses_name, pulses_) {
-		I3RecoPulseSeriesMapConstPtr pulses =
-		    frame->Get<I3RecoPulseSeriesMapConstPtr>(pulses_name);
-		if (!pulses)
-			continue;
+    I3Time start_time;
 
-		for (I3RecoPulseSeriesMap::const_iterator i = pulses->begin();
-		    i != pulses->end(); i++)
-			pulse_counts_[i->first] += i->second.size();
-	}
+    // Skip check if we're already after the good run end time
+    skip_check = out_of_good_time_range_;
+
+    // If the good run times should be considered, try to get the start time of the event
+    // from the eader
+    if(use_good_run_times_ && !skip_check && good_run_end_time_ && good_run_end_time_) {
+        boost::shared_ptr<const I3EventHeader> header = frame->Get<boost::shared_ptr<const I3EventHeader> >("I3EventHeader");
+
+        if(header) {
+            start_time = header->GetStartTime();
+
+            if(start_time != I3Time()) {
+                if(start_time <= *good_run_start_time_) {
+                    // If the event time is earlier than the good start time,
+                    // it can still happen that we reach an event within the
+                    // good times.
+                    skip_check = true;
+                } else if(start_time >= *good_run_end_time_) {
+                    // Since we're now after the good run end time, there should
+                    // not come an event that is within the good run times again.
+                    // Therefore, skip all other events
+                    out_of_good_time_range_ = true;
+                    skip_check = true;
+                }
+            }
+        }
+    }
+
+    if(!skip_check) {
+    	BOOST_FOREACH(const std::string &pulses_name, pulses_) {
+    		I3RecoPulseSeriesMapConstPtr pulses =
+    		    frame->Get<I3RecoPulseSeriesMapConstPtr>(pulses_name);
+    		if (!pulses)
+    			continue;
+    
+    		for (I3RecoPulseSeriesMap::const_iterator i = pulses->begin();
+    		    i != pulses->end(); i++)
+    			pulse_counts_[i->first] += i->second.size();
+    	}
+    }
 
 	PushFrame(frame);
 }
