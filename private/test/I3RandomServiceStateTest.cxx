@@ -12,6 +12,7 @@ TEST_GROUP(RandomServiceState);
 
 TEST(SPRNGInMemory)
 {
+	{
 	I3SPRNGRandomServicePtr rng(new I3SPRNGRandomService(1,1,0, "", "sprng_outstate"));
 	
 	typedef std::pair<double, I3FrameObjectPtr> sample_t;
@@ -53,6 +54,7 @@ TEST(SPRNGInMemory)
 		ENSURE_EQUAL(sample.first, rng->Exp(M_PI), "Restored RNG returns the same sample");
 	}
 	
+	}
 	std::remove("sprng_outstate");
 }
 

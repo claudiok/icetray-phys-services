@@ -55,3 +55,7 @@ tray.AddModule("TrashCan","trash")
 
 tray.Execute(10)
 tray.Finish()
+
+import os
+os.remove("string_add_example.i3")
+

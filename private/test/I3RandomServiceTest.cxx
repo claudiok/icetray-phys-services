@@ -19,6 +19,7 @@
 
 #include "boost/random/uniform_real.hpp"
 #include "boost/random/lognormal_distribution.hpp"
+#include "boost/filesystem.hpp"
 
 #include <string>
 #include <vector>
@@ -174,6 +175,7 @@ TEST(I3GSLRandomService)
 #ifdef I3_USE_SPRNG
 TEST(I3SPRNGRandomService)
 {
+  {
   int nstreams = 2;
   int streamnum = 0;
 
@@ -190,6 +192,9 @@ TEST(I3SPRNGRandomService)
   
   randomServiceTest::testStateRestoration(random1);
   randomServiceTest::testStateRestoration(random3);
+
+  }
+  boost::filesystem::remove("sprngsaved");
 }
 #endif
 

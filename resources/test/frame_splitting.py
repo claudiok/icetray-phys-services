@@ -94,4 +94,8 @@ tray.AddModule('TrashCan', "yeswecan")
 tray.Execute()
 tray.Finish()
 
+if os.path.exists(fname):
+	os.unlink(fname)
+
+
 
