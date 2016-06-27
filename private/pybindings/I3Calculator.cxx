@@ -73,4 +73,20 @@ void register_I3Calculator()
       (I3Position (*)( const I3Position&, const I3Direction&, const I3Position&))
         &I3Calculator::InShowerSystem,
       "Return the position in the shower coordinate system (SCS).");
+  def("cherenkov_position",I3Calculator::CherenkovPosition,
+      "Obtain the Cherenkov position",
+      (bp::arg("particle"), bp::arg("position"),
+       bp::arg("n_group")=I3Constants::n_ice_group, bp::arg("n_phase")=I3Constants::n_ice_phase));
+  def("cherenkov_time", I3Calculator::CherenkovTime,
+      "Obtain the Cherenkov time",
+      (bp::arg("particle"), bp::arg("position"), 
+       bp::arg("n_group")=I3Constants::n_ice_group, bp::arg("n_phase")=I3Constants::n_ice_phase));
+  def("cherenkov_distance", I3Calculator::CherenkovDistance,
+      "Obtain the Cherenkov distance traveled by a photon",
+      (bp::arg("particle"), bp::arg("position"), 
+       bp::arg("n_group")=I3Constants::n_ice_group, bp::arg("n_phase")=I3Constants::n_ice_phase));
+  def("cherenkov_approach_angle",I3Calculator::CherenkovApproachAngle,
+      "Obtain the Cherenkov approach angle",
+      (bp::arg("track"), bp::arg("position"), bp::arg("direction"),
+       bp::arg("n_group")=I3Constants::n_ice_group, bp::arg("n_phase")=I3Constants::n_ice_phase));  
 }
