@@ -58,13 +58,6 @@ Source
 * `I3GCDFileServiceFactory <../../doxygen/phys-services/classI3GCDFileServiceFactory.html>`_
 * `I3TextFileGeometryService <../../doxygen/phys-services/classI3TextFileGeometryService.html>`_
 
-Empty Streams
-%%%%%%%%%%%%%
-* `I3EmptyGeometryService <../../doxygen/phys-services/classI3EmptyGeometryService.html>`_
-* `I3EmptyCalibrationService <../../doxygen/phys-services/classI3EmptyCalibrationService.html>`_
-* `I3EmptyStreamsFactory <../../doxygen/phys-services/classI3EmptyStreamsFactory.html>`_
-* `I3EmptyDetectorStatusService <../../doxygen/phys-services/classI3EmptyDetectorStatusService.html>`_
-
 Surfaces
 %%%%%%%%
 * `Sphere <../../doxygen/phys-services/classI3Surfaces_1_1Sphere.html>`_

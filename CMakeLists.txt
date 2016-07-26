@@ -33,10 +33,6 @@ i3_add_library(phys-services
   private/converter/I3EventInfoConverter.cxx
   private/converter/I3RecoInfoConverter.cxx
   private/converter/I3CutValuesConverter.cxx
-  private/empty-streams/I3EmptyCalibrationService.cxx
-  private/empty-streams/I3EmptyDetectorStatusService.cxx
-  private/empty-streams/I3EmptyGeometryService.cxx
-  private/empty-streams/I3EmptyStreamsFactory.cxx
   private/geo-selector/GeoSelUtils.cxx
   private/geo-selector/I3GeoTrimmers.cxx
   private/geo-selector/I3GeometrySelectorService.cxx
