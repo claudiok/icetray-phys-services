@@ -24,11 +24,25 @@ class I3Splitter
 		~I3Splitter();
 
 		I3FramePtr GetNextSubEvent(I3FramePtr daq);
-
+		
 	private:
 		I3FramePtr last_daq;
 		const I3Configuration& config_;
 		int last_subevent_id;
+
+        protected:
+		/**
+		 * The name of the SubEvent stream.  This should be set by
+		 * derived modules, which is why it's protected.
+		 * 
+		 * Modules where this is used as a mix-in simply need to add
+		 * the following lines to the constructor and Configure method, 
+		 * respectively:
+		 * 
+		 *   AddParameter("SubEventStreamName", "The name of the SubEvent stream.", "SplitSubStreamDefault");
+		 *   GetParameter("SubEventStreamName", sub_event_stream_name_);
+		 */
+		std::string sub_event_stream_name_;
 };
 
 #endif

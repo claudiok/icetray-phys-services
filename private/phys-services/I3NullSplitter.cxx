@@ -32,7 +32,9 @@ I3NullSplitter::I3NullSplitter(const I3Context& context) :
 	    "(optional)", "");
 	AddParameter("OutputPulseSeriesMask", "The name of the output pulse "
 	    "series mask (optional)", "");
-
+	AddParameter("SubEventStreamName",
+		     "The name of the SubEvent stream.",
+		     configuration_.InstanceName());
 	AddOutBox("OutBox");
 }
 
@@ -41,6 +43,7 @@ I3NullSplitter::Configure()
 {
 	GetParameter("InputPulseSeries", input_);
 	GetParameter("OutputPulseSeriesMask", output_);
+	GetParameter("SubEventStreamName", sub_event_stream_name_);
 }
 
 void
