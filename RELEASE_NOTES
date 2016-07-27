@@ -4,7 +4,7 @@ Release Notes
 
 trunk
 -----
-* I3Splitter is now able to set the subevent stream name by hand.  This will allow us to stop using the I3Configuration instance name.
+* Splitters should set sub_event_stream_name_ by hand.  This will allow us to stop using the I3Configuration instance name.
 
 April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
