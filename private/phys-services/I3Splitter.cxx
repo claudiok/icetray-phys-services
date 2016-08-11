@@ -14,7 +14,10 @@
 #include "phys-services/I3Splitter.h"
 
 I3Splitter::I3Splitter(const I3Configuration& config) :
-  last_daq(I3FramePtr((I3Frame *)(NULL))), config_(config), sub_event_stream_name_("")
+  last_daq(I3FramePtr((I3Frame *)(NULL))),
+  config_(config),
+  print_warning_(true),
+  sub_event_stream_name_("")
 {
 }
 
@@ -36,9 +39,15 @@ I3Splitter::GetNextSubEvent(I3FramePtr daq) {
 	// Rewrite event header
 	I3EventHeaderPtr header(new I3EventHeader(frame->Get<I3EventHeader>()));
 	if(sub_event_stream_name_.empty()){
-	  log_warn("Using the I3Configuration instance name for the subevent stream name "
-		   "is deprecated.");
-	  log_warn("Derived modules should set sub_event_stream_name_ explicitly.");
+	  if(print_warning_){
+	    log_warn("Using the I3Configuration instance name for the subevent stream name "
+		     "is deprecated.");
+	    log_warn("Derived modules should set sub_event_stream_name_ explicitly.");
+	    log_warn("Users should set SubEventStreamName in the splitting module %s.",
+		     config_.InstanceName().c_str());
+	    // only print this once.
+	    print_warning_ = false;
+	  }
 	  header->SetSubEventStream(config_.InstanceName());
 	}else{
 	  header->SetSubEventStream(sub_event_stream_name_);

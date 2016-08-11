@@ -29,6 +29,7 @@ class I3Splitter
 		I3FramePtr last_daq;
 		const I3Configuration& config_;
 		int last_subevent_id;
+		bool print_warning_;
 
         protected:
 		/**
