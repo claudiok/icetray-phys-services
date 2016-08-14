@@ -87,23 +87,12 @@ void TRAFO(double *Xdir, double trafo[3][3]);
 
 TEST_GROUP(I3Calculator)
 
-TEST(ShiftAlongTrack)
-{
-  I3Position n = inftrack().ShiftAlongTrack(sqrt(2.));
-
-  ENSURE_DISTANCE(n.GetX(),0.,0.0001);
-  ENSURE_DISTANCE(n.GetY(),1.,0.0001);
-  ENSURE_DISTANCE(n.GetZ(),1.,0.0001);
-
-  ENSURE_DISTANCE(muon().ShiftAlongTrack(15).GetX(),-5.,0.0001);
-}
-
 TEST(IsOnTrack)
 {
   I3Position on(2,0.09*I3Units::m,0);
   ENSURE(IsOnTrack(muon(),on,0.1*I3Units::m));
 
-  I3Position n = inftrack().ShiftAlongTrack(2.38);
+  I3Position n = inftrack().GetPos() + 2.38*inftrack.GetDir()();
   ENSURE(IsOnTrack(inftrack(),n,0.1*I3Units::m));
 
   ENSURE(!IsOnTrack(starttrack(),on,0.1*I3Units::m));

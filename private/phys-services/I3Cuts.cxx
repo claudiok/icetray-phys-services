@@ -829,7 +829,7 @@ double I3Cuts::ContainmentAreaSize(const I3Particle& track,
     dist = NAN;  ///WHAT TO DO??
   } else 
     dist = (track.GetZ()-z)/cos(track.GetZenith());
-  I3Position p = track.ShiftAlongTrack(dist);
+  I3Position p = track.GetPos() + dist*track.GetDir();
   double xprime = p.GetX();
   double yprime = p.GetY();
   //double xprime = track.GetX();
