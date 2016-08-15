@@ -92,7 +92,7 @@ TEST(IsOnTrack)
   I3Position on(2,0.09*I3Units::m,0);
   ENSURE(IsOnTrack(muon(),on,0.1*I3Units::m));
 
-  I3Position n = inftrack().GetPos() + 2.38*inftrack().GetDir()();
+  I3Position n = inftrack().GetPos() + 2.38*inftrack().GetDir();
   ENSURE(IsOnTrack(inftrack(),n,0.1*I3Units::m));
 
   ENSURE(!IsOnTrack(starttrack(),on,0.1*I3Units::m));
