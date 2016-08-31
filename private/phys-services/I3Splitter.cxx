@@ -32,6 +32,8 @@ I3Splitter::GetNextSubEvent(I3FramePtr daq) {
 
 	last_subevent_id++;
 
+	if (daq->GetStop() != I3Frame::DAQ)
+		log_fatal_stream(daq->GetStop() << " frames cannot be split");
 	I3FramePtr frame(new I3Frame(*daq));
 	frame->purge(I3Frame::Physics); // Kill mixed-in P keys from earlier
 	frame->SetStop(I3Frame::Physics);

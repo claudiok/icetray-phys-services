@@ -44,6 +44,7 @@ class I3Splitter
 		 *   GetParameter("SubEventStreamName", sub_event_stream_name_);
 		 */
 		std::string sub_event_stream_name_;
+	SET_LOGGER("I3Splitter");
 };
 
 #endif
