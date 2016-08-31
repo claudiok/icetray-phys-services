@@ -136,7 +136,7 @@ I3MapModuleKeyStringPtr
 I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
 {
     I3MapModuleKeyStringPtr output(new I3MapModuleKeyString());
-    
+
     BOOST_FOREACH(const I3OMGeoMap::value_type &pair, omgeo)
     {
         const OMKey &input_key = pair.first;
@@ -146,15 +146,17 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
         }
 
         const ModuleKey key(input_key.GetString(), input_key.GetOM());
-        
+
         if (key.GetString() < 0) {
             (*output)[key] = "AMANDA";
             continue;
         }
 
         if (key.GetString() == 0)
-            log_fatal("This module assumes an IceCube geometry as input. It may not contain string number 0!");
-        
+            (*output)[key] = "IceACT";
+            continue;
+        }
+
         if ((key.GetOM() > 60) && (key.GetString() <= 86)) {
             // note: string 79 is a DeepCore string, but *does* have IceTop DOMs!
             // to be sage, just assign everything in the IceCube string number
@@ -167,7 +169,7 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
             (*output)[key] = "DeepCore";
             continue;
         }
-        
+
         if (key.GetString() <= 78) {
             (*output)[key] = "IceCube";
             continue;
@@ -175,7 +177,7 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
 
         (*output)[key] = "PINGU";
     }
-    
+
     return output;
 }
 
