@@ -153,7 +153,7 @@ I3GeometryDecomposer::GenerateSubdetectorMap(const I3OMGeoMap &omgeo) const
         }
 
         if (key.GetString() == 0){
-            (*output)[key] = "IceACT";
+            (*output)[key] = "ICL";
             continue;
         }
 
