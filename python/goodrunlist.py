@@ -96,7 +96,7 @@ class good_run_list():
   def add_good_run_list(self, filepath, detector, format='new_v1'):
     """ add the info from a goodrun_list file """
     if (not detector in self.detectors):
-      print detector
+      print (detector)
       raise ValueError("configure a proper detector from this list : %s"%(str(self.detectors)))
 
     infile = open(filepath, 'r')
@@ -187,7 +187,7 @@ class good_run_list():
     if run_id in self.run_info_dict.keys():
       return self.run_info_dict[run_id]
     else:
-      print "ATTENTION: run not found in goodrunlist!"
+      print("ATTENTION: run not found in goodrunlist!")
       return run_info()
 
     

@@ -99,7 +99,7 @@ class schizzoparanoia(icetray.I3ConditionalModule):
                     icetray.logging.log_error("(%s) SHOULD have run on sub=%s subid=%d" % (self.name,name,i))
             forbidden = self.did_run_on - self.should_run_on
             if len(forbidden)>0:
-                print "FORBIDDEN %s" % forbidden
+                prinr("FORBIDDEN %s" % forbidden)
                 for name,i in forbidden:
                     icetray.logging.log_error("(%s) SHOULD NOT have run on sub=%s subid=%d" % (self.name,name,i))
 

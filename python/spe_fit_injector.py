@@ -29,7 +29,7 @@ class I3SPEFitInjector(icetray.I3Module):
             json_fit_values = json.load(f)
 
         self.fit_dict = dict()
-        for key, data in json_fit_values.iteritems():
+        for key, data in json_fit_values.items():
 
             # we don't really use the validity date in offline anymore
             if key == 'valid_date':
@@ -79,7 +79,7 @@ class I3SPEFitInjector(icetray.I3Module):
         del frame['I3Calibration']
 
         domcal = cal.dom_cal
-        for omkey, i3domcal in domcal.iteritems():
+        for omkey, i3domcal in domcal.items():
             if omkey in self.fit_dict:
                 i3domcal.mean_atwd_charge = self.fit_dict[omkey]['atwd_mean']
                 i3domcal.mean_fadc_charge = self.fit_dict[omkey]['fadc_mean']
