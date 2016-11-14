@@ -126,7 +126,6 @@ void I3VEMCalManipulator::CheckVEMCalibration(I3Calibration& calib)
     for(dom_iter=calib.domCal.begin(); dom_iter!=calib.domCal.end(); dom_iter++)
     {
 	const OMKey& omKey = dom_iter->first;
-	if(!omKey.IsIceTop()) continue;
 	
 	if(calib.vemCal.find(omKey)==calib.vemCal.end())
 	{
@@ -304,11 +303,6 @@ bool I3VEMCalManipulator::AddVEMCalibration(const std::string& filename)
 	    }
 	    
 	    OMKey omKey(str,om);
-	    if(!omKey.IsIceTop())
-	    {
-		log_error("Module %s is not an IceTop DOM!", omKey.str().c_str());
-		continue;
-	    }
 	    
 	    if(!finite(pePerVEM))
 	    {

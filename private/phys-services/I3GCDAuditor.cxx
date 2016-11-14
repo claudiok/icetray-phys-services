@@ -238,15 +238,15 @@ bool I3GCDAuditor::CheckDOM(OMKey om, const I3OMGeo &omgeo,
 		bad_dom("Invalid mean SPE charge for OM%s (%f pC)",
 		    om.str().c_str(), SPEMean(status, cal)/I3Units::pC);
 
-    if (!om.IsScintillator()) {
+	if (omgeo.omtype!=I3OMGeo::Scintillator) {
 	    if (!std::isfinite(TransitTime(status, cal)) ||
 	        TransitTime(status, cal) <= 0 ||
 	        TransitTime(status, cal) > 200*I3Units::ns)
 		    bad_dom("Invalid transit time for OM%s (%f ns)",
     		    om.str().c_str(), TransitTime(status, cal)/I3Units::ns);
-    } else {
-        log_info("Transit time check skipped for scintillator OM: %s", om.str().c_str());
-    }
+	} else {
+	  log_info("Transit time check skipped for scintillator OM: %s", om.str().c_str());
+	}
 
 	if (!std::isfinite(PMTGain(status, cal)) || PMTGain(status, cal) <= 0 ||
 	    PMTGain(status, cal) > 5e7)
