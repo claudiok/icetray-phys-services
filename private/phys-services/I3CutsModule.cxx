@@ -3,8 +3,8 @@
  * (c) 2005 IceCube Collaboration
  */
 
+
 #include "icetray/I3TrayHeaders.h"
-#include "icetray/I3Deprecation.h"
 #include "dataclasses/physics/I3RecoPulse.h"
 #include "dataclasses/geometry/I3Geometry.h"
 #include "I3CutsModule.h"
@@ -22,7 +22,7 @@ using boost::algorithm::is_any_of;
 using namespace std;
 using namespace I3Units;
 
-I3_DEPRECATED_MODULE(I3CutsModule);
+I3_MODULE(I3CutsModule);
 
 //--------------------------------------------------------------
 I3CutsModule::I3CutsModule(const I3Context& ctx) : I3ConditionalModule(ctx)
@@ -60,6 +60,7 @@ I3CutsModule::I3CutsModule(const I3Context& ctx) : I3ConditionalModule(ctx)
 //--------------------------------------------------------------
 void I3CutsModule::Configure()
 {
+  log_warn("This module is deprecated.");
   GetParameter("ParticleNames",particleName_);
   GetParameter("ParticleNameList",particleNameList_);
   GetParameter("HitsName",hitsName_);
