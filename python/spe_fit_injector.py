@@ -34,6 +34,8 @@ class I3SPEFitInjector(icetray.I3Module):
             # we don't really use the validity date in offline anymore
             if key == 'valid_date':
                 continue
+            if key == 'year':
+                continue
 
             # if none of the data is valid it's OK to skip entries.
             if bool(data['JOINT_fit']['valid']) == False and \
