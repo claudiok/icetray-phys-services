@@ -4,7 +4,14 @@ Release Notes
 
 trunk
 -----
-* Splitters should set `sub_event_stream_name_` by hand.  This will allow us to stop using the I3Configuration instance name.
+
+March 23, 2017, Alex Olivas  (olivas@icecube.umd.edu)
+-----------------------------------------------------
+Release V17-03-00
+
+* r148815 - Splitters should set `sub_event_stream_name_` by hand.  This will allow us to stop using the I3Configuration instance name.
+* r148776 - Empty streams are gone.
+* r147881 - Exposing Cherenkov functions so that they can be used from python.
 
 April 29, 2016, Alex Olivas  (olivas@icecube.umd.edu)
 -----------------------------------------------------
