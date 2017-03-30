@@ -32,7 +32,7 @@ std::istream& operator >>(std::istream &is, I3MapStringDouble& i3obj)
 			icecube::archive::xml_iarchive xia(is);
 			xia >> I3_SERIALIZATION_NVP(i3obj);
 	} catch (const icecube::archive::archive_exception& e) {
-			log_fatal("Archive error: %s ", e.what() ); 
+			log_error("Archive error: %s ", e.what() ); 
 	} 
 	return is;
 }
@@ -51,7 +51,7 @@ std::ostream& operator <<(std::ostream &os, const I3MapStringDouble& i3obj)
 			icecube::archive::xml_oarchive xoa(os);
 			xoa << make_nvp("I3XMLSummaryService", tobj_p); 
 	} catch (const icecube::archive::archive_exception& e) { 
-			log_fatal("Archive error: %s ", e.what() ); 
+			log_error("Archive error: %s ", e.what() ); 
 	} 
 	return os;
 }
