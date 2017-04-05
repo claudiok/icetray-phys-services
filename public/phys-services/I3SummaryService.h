@@ -15,6 +15,7 @@
 #include <icetray/I3Logging.h>
 #include <icetray/I3DefaultName.h>
 #include <icetray/I3PointerTypedefs.h>
+#include <dataclasses/I3Map.h>
 
 /**
  * @brief This is an interface for services which allow modules to store 
@@ -23,7 +24,7 @@
  * collecting statistics in production runs.
  */
 
-class I3SummaryService
+class I3SummaryService: public I3Map<std::string,double>
 {
  public:
   /**
