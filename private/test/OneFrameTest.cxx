@@ -12,7 +12,6 @@ public:
     ENSURE(!instance);
     instance = this;
     physicsCalls = 0;
-    AddOutBox("OutBox");
   }
 
   virtual ~I3OneFrameTester()
@@ -23,7 +22,7 @@ public:
   void Physics(I3FramePtr frame)
   {
     physicsCalls++;
-    PushFrame(frame,"OutBox");
+    PushFrame(frame);
   }
 
   int physicsCalls;
@@ -38,12 +37,10 @@ I3OneFrameTester* I3OneFrameTester::instance = 0;
 TEST(oneframe)
 {
   I3Tray tray;
-  tray.AddModule("I3InfiniteSource","empty_streams")
+  tray.AddModule("I3InfiniteSource")
     ("Stream",I3Frame::Physics);
 
-  tray.AddModule("I3OneFrameTester","test");
-
-  tray.AddModule("TrashCan","trash");
+  tray.AddModule("I3OneFrameTester");
 
   tray.Execute(1);
   tray.Finish();

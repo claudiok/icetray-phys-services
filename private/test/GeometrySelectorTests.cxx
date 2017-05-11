@@ -176,10 +176,8 @@ TEST(icetray_test){
   tray.AddModule("I3GeoSelTestModule","geo_test") 
     ("StringsToUse",strings_to_use.c_str())
     ("StationsToUse",stations_to_use.c_str());
-  tray.AddModule("TrashCan","trash");
 
   tray.Execute(4);
-  tray.Finish();
 }
 
 TEST(icetray_test_shift){
@@ -223,10 +221,7 @@ TEST(icetray_test_shift){
     ("ShiftY",100*I3Units::m)
     ("ShiftZ",100*I3Units::m);
 
-  tray.AddModule("TrashCan","trash");
-
   tray.Execute(4);
-  tray.Finish();
 }
 
 TEST(detector_shift){
@@ -306,8 +301,5 @@ TEST(icetray_test_center_shift){
     ("StationsToExclude",stations_to_exclude.c_str())
     ("DetectorCentered",true);
 
-  tray.AddModule("TrashCan","trash");
-
   tray.Execute(4);
-  tray.Finish();
 }
