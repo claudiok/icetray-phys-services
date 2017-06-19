@@ -91,7 +91,7 @@ class good_run_list():
   #___________________________________________________________________________
   def __init__(self):
     self.run_info_dict = {} #format (run_id: run_info)
-    self.detectors = ['IC79.2010', 'IC86.2011', 'IC86.2012', 'IC86.2013', 'IC86.2014', 'IC86.2015']
+    self.detectors = ['IC79.2010', 'IC86.2011', 'IC86.2012', 'IC86.2013', 'IC86.2014', 'IC86.2015', 'IC86.2016']
   #___________________________________________________________________________
   def add_good_run_list(self, filepath, detector, format='new_v1'):
     """ add the info from a goodrun_list file """
@@ -201,5 +201,6 @@ def GRL():
   g.add_good_run_list(os.path.join("/data/exp/IceCube/2013/filtered/level2/IC86_2013_GoodRunInfo.txt"), 'IC86.2013')
   g.add_good_run_list(os.path.join("/data/exp/IceCube/2014/filtered/level2/IC86_2014_GoodRunInfo.txt"), 'IC86.2014')
   g.add_good_run_list(os.path.join("/data/exp/IceCube/2015/filtered/level2/IC86_2015_GoodRunInfo.txt"), 'IC86.2015')
+  g.add_good_run_list(os.path.join("/data/exp/IceCube/2016/filtered/level2/IC86_2016_GoodRunInfo.txt"), 'IC86.2016')
   return g
 
